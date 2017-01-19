@@ -4,10 +4,10 @@
 %
 % Author:  L. De Siena.
 %
-%           October 2016 - Lavorare su inblocchi per spike test
+%           January 2017
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-addpath('/Users/lucadesiena/Documents/Utilities_Matlab')
+addpath('./Utilities_Matlab')
 clear
 
 %==========================================================================
