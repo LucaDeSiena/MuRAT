@@ -1,2 +1,2 @@
 # MuRAT
-Attenuation tomography code using the coda-normalisation method (Matlab)
+Attenuation tomography using direct and coda waves (Matlab)
