@@ -1,2 +1,3 @@
 # MuRAT
 Attenuation tomography using direct and coda waves (Matlab)
+Two sample datasets have to be downloaded before running the code. They can be found as zipped folders at...
