@@ -3,7 +3,7 @@
 % PROGRAM FOR: 3D direct- and 2D peak delay and coda-wave (with and without
 % kernels) attenuation tomography
 %
-% Author:  L. De Siena, August 2018 
+% Author:  L. De Siena, September 2018 
 % 
 % Some reference papers:
 %
@@ -37,21 +37,19 @@ close all
 clc
 
 disp('Input Section')
-
+tic
 % Write the name of the input file in the command window
 input('Name of .m input file ')
 
 % The following prompts will measure peak-delays (pd) ad Qc depending on
 % the input files.
-%
-% RAY TRACING METHOD: RAY BENDING
+%% RAY TRACING METHOD: RAY BENDING - for evst=1
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 % With option evst=1, we use two external files for event and station
 % locations. The SAC file name must have a specified format for recognition
            
 if evst==1 
-    
+%     tic
     disp('Inversion Section for evst=1')
     
 %Predefine the inversion matrix for pd and Qc imaging
@@ -79,8 +77,7 @@ if evst==1
             ma1=zeros(100,5,lls);
         end
     end
-    
-% Loop over events in even.txt file
+    % Loop over events in even.txt file
     for ii=1:numev
         ray(1,1)=even(ii,1);
         ray(2,1)=even(ii,2);
@@ -153,7 +150,7 @@ if evst==1
                 if pa==3
                     
                     % Function for ray-bending
-                    rma=minima(ray,ngrid,gridD,pvel);
+                    rma=tracing(ray,gridD,pvel);
                     
                     % Set this to create reay-files
                     if createrays ==1
@@ -192,8 +189,8 @@ if evst==1
     %===================================================================
 
                     
-                    [lunpar, blocch, lunto, s, modvPS] =...
-                        segments_single(modvPS,originz,um,rma);
+                    [lunpar, blocch, lunto, s, modv] =...
+                        segments_single(modv,originz,um,rma);
                     lunparz(1:length(lunpar),indexray)=lunpar;
                     blocchi(1:length(blocch),indexray)=blocch;
                     luntot(indexray,1)=lunto;
@@ -203,7 +200,6 @@ if evst==1
             end
         end
     end
-        
     save(inputinv,'Apd', 'Ac', 'D');
         
     if pa<3
@@ -259,8 +255,8 @@ if evst==1
         hold off
         
         % Only solve for the blocks crossed by at least 1 ray
-        fover = modvPS(:,5)>=1; 
-        inblocchi = modvPS(fover,:);
+        fover = modv(:,5)>=1; 
+        inblocchi = modv(fover,:);
         inblocchi(:,5)=find(fover);
 
         %INVERSION MATRIX for direct waves: A
@@ -321,9 +317,10 @@ if evst==1
         saveas(Qcsen,fullfile(FPath, FLabel, FName), fformat);
     end
 end
-
+% rtoc=toc;
 %% Seismic attributes for peak delay, Qc and Qp,s imaging
 clear
+% tic
 disp('Data Section')
 load inputs.mat
 
@@ -375,10 +372,10 @@ elseif evst==2
     rays=figure('Name','Rays','NumberTitle','off','visible',visib);
         
     if pa==3
-        lunparz = zeroes(100,lls);
-        blocchi = zeroes(100,lls);
-        sb = zeroes(100,lls);
-        luntot = zeroes(lls,1);
+        lunparz = zeros(100,lls);
+        blocchi = zeros(100,lls);
+        sb = zeros(100,lls);
+        luntot = zeros(lls,1);
         if createrays ==1
             ma1=zeros(100,5,lls);
         end
@@ -441,9 +438,13 @@ for i=1:lls
         evestaz(i,1:4)=sst;
         D(i,1)=sqrt((sst(3)-sst(1))^2+(sst(4)-sst(2))^2);
         if pa==1
+            
+            % Same pd and Qc inversion matrix
             Ac=Apd;
+            
         elseif pa>1
-            %Inversion matrix for Qc
+            
+            % Operations to calculate normalised kernels
             D1=sqrt((sst(3)-sst(1))^2+(sst(4)-sst(2))^2);
             deltaxy=0.2;
             F1=1/2/pi/deltaxy^2/D1^2;
@@ -459,13 +460,16 @@ for i=1:lls
             else
                 F=F3;
             end
-            no=F<0.0001; %removing sensitivities lower than 1/10.000
+            no=F<0.0001;
             F(no)=0;
+            
+            %Inversion matrix for Qc
             Ac(i,:)=F;
+            
         end
         
         if pa==3
-            rma=minima(ray,ngrid,gridD,pvel);
+            rma=tracing(ray,gridD,pvel);
             if createrays ==1
                 lrma=length(rma(:,1));
                 ma1(1:lrma,:,i) = rma;
@@ -494,8 +498,8 @@ for i=1:lls
             hold off
             
             %Function creating the parameters for the inversion matrix
-            [lunpar, blocch, lunto, s, modvPS] =...
-                segments_single(modvPS,originz,um,ma1);
+            [lunpar, blocch, lunto, s, modv] =...
+                segments_single(modv,originz,um,ma1);
             lunparz(1:length(lunpar),i)=lunpar;
             blocchi(1:length(blocch),i)=blocch;
             luntot(i)=lunto;
@@ -508,12 +512,16 @@ for i=1:lls
     
     if pa<3
         if SAChdr.times.o == -12345
-            if evst==1
-                ttheory(i,1)=D(i)/vth;
-            elseif evst==2
-                ttheory(i,1)=D(i)*111/vth;
-            end
-            tempi(i,1)=pktime-ttheory(i,1);
+            if SAChdr.times.b == -12345
+                if evst==1
+                    ttheory(i,1)=D(i)/vth;
+                elseif evst==2
+                    ttheory(i,1)=D(i)*degorutm/vth;
+                end
+                tempi(i,1)=pktime-ttheory(i,1);
+            else
+                tempi(i,1)=SAChdr.times.b;
+            end   
         elseif SAChdr.times.o ~= -12345
             tempi(i,1)=SAChdr.times.o;
         end
@@ -556,7 +564,7 @@ for i=1:lls
     tm = (tCm+1/srate:1/srate:tCm+lspm/srate)';
     
     %Only evaluate central time series
-    edgeno=0.05*length(tm);
+    edgeno=floor(0.05*length(tm));
     tm1=tm(edgeno:end-edgeno);
     spcm1=spcm(edgeno:end-edgeno);
     
@@ -676,7 +684,13 @@ else
 end
     
 if evst==2
-    
+    figure(rays)
+    if degorutm==111
+        load coastlines
+        hold on
+        geoshow(coastlat,coastlon);
+        xlim([8 18]);ylim([36 46]);
+    end
     if pa<3
         
         for nn=1:lls
@@ -733,8 +747,8 @@ if evst==2
     
     %INVERSION MATRIX for direct waves: A - in case of event-station in SAC
     % Only store the blocks crossed by at least 1 ray
-        fover = modvPS(:,5)>=1; 
-        inblocchi = modvPS(fover,:);
+        fover = modv(:,5)>=1; 
+        inblocchi = modv(fover,:);
         inblocchi(:,5)=find(fover);
 
         A = zeros(length(Ac(:,1)),length(inblocchi(:,1)));
@@ -766,7 +780,7 @@ if evst==2
         
         Qcsen=figure('Name','Qc sensitivity, first source-station pair',...
             'NumberTitle','off','visible',visib);
-        Qcss=Ac(10,:);
+        Qcss=Ac(30,:);
         Qcs=zeros(nxc,nyc);
 
         index=0;
@@ -787,6 +801,9 @@ if evst==2
         ax.GridColor = 'k';
         ax.GridAlpha = 1;
         ax.LineWidth = 1;
+        hold on
+        geoshow(coastlat,coastlon);
+        xlim([8 18]);ylim([36 46]);
         
         FName = 'Qc_sensitivity';
         saveas(Qcsen,fullfile(FPath, FLabel, FName), fformat);
@@ -869,7 +886,7 @@ if pa<3
     if evst==1
         time0=D/vth;
     elseif evst==2
-        time0=D*111/vth;
+        time0=D*degorutm/vth;
     end
     
 elseif pa==3
@@ -1066,7 +1083,7 @@ if pa==3
 end
 % END PLOTS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+% rtoc=toc;
 %%  2D peak-delay and Qc and 3D CN TOMOGRAPHIC INVERSIONS
 clear
 load inputs.mat
@@ -1230,62 +1247,62 @@ if pa==3
     % doubled with respect to the grid.
 
     %Depth
-    passox = find(modvPS(:,1)~=modvPS(1,1),1,'first')-1;
-    passoy = find(modvPS(:,2)~=modvPS(1,2),1,'first')-1;
+    passox = find(modv(:,1)~=modv(1,1),1,'first')-1;
+    passoy = find(modv(:,2)~=modv(1,2),1,'first')-1;
 
     sizea2=2*sizea;
     sizeap=sizea*passoy;
     sizeap1=(sizea+1)*passoy;
 
     for k=1:sizea
-        modvPS(k:sizea2:passoy-sizea+k,6)=hatt;
-        modvPS(sizea+k:sizea2:passoy-sizea+k,6)=latt;
+        modv(k:sizea2:passoy-sizea+k,6)=hatt;
+        modv(sizea+k:sizea2:passoy-sizea+k,6)=latt;
     end
     for k=1:sizea-1
-        modvPS(k*passoy+1:(k+1)*passoy,6)=modvPS(1:passoy,6);
+        modv(k*passoy+1:(k+1)*passoy,6)=modv(1:passoy,6);
     end
     for k=1:sizea
-        modvPS(sizeap+k:sizea2:sizeap1-sizea+k,6)=latt;
-        modvPS(sizeap+sizea+k:sizea2:sizeap1-sizea+k,6)=hatt;
+        modv(sizeap+k:sizea2:sizeap1-sizea+k,6)=latt;
+        modv(sizeap+sizea+k:sizea2:sizeap1-sizea+k,6)=hatt;
     end
 
     py4  = 2*sizeap;
     for k=1:sizea-1
-        modvPS((sizea+k)*passoy+1:(sizea+k+1)*passoy,6)=modvPS(sizeap+1:sizeap1,6);
+        modv((sizea+k)*passoy+1:(sizea+k+1)*passoy,6)=modv(sizeap+1:sizeap1,6);
     end
     z = (passox-mod(passox,py4))/py4;
     for i = 1:(z-1)
-        modvPS(i*py4+1:(i+1)*py4,6)=modvPS(1:py4,6);
+        modv(i*py4+1:(i+1)*py4,6)=modv(1:py4,6);
     end
     if ~isequal(mod(passox,py4),0)
-        modvPS(z*py4+1:z*py4+mod(passox,py4),6)= modvPS(1:mod(passox,py4),6);
+        modv(z*py4+1:z*py4+mod(passox,py4),6)= modv(1:mod(passox,py4),6);
     end
 
     %Along y
     sizeapx=sizea*passox;
 
     for k=1:sizea-1
-        modvPS(k*passox+1:(k+1)*passox,6)=modvPS(1:passox,6);
+        modv(k*passox+1:(k+1)*passox,6)=modv(1:passox,6);
     end
 
     for k = 1:sizeapx
-        if modvPS(k,6)==hatt
-            modvPS(sizeapx+k,6)=latt;
-        elseif modvPS(k,6)==latt
-            modvPS(sizeapx+k,6)=hatt;
+        if modv(k,6)==hatt
+            modv(sizeapx+k,6)=latt;
+        elseif modv(k,6)==latt
+            modv(sizeapx+k,6)=hatt;
         end
     end
 
     %Along x
     px4  = 2*sizea*passox;
 
-    z2= (length(modvPS(:,1))-mod(length(modvPS(:,1)),px4))/px4;
+    z2= (length(modv(:,1))-mod(length(modv(:,1)),px4))/px4;
     for i = 1:(z2-1)
-        modvPS(i*px4+1:(i+1)*px4,6)=modvPS(1:px4,6);
+        modv(i*px4+1:(i+1)*px4,6)=modv(1:px4,6);
     end
     if ~isequal(mod(passox,py4),0)
-        modvPS(z*px4+1:z*px4+mod(length(modvPS(:,1)),px4),6)=...
-            modvPS(1:mod(length(modvPS(:,1)),px4),6);
+        modv(z*px4+1:z*px4+mod(length(modv(:,1)),px4),6)=...
+            modv(1:mod(length(modv(:,1)),px4),6);
     end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1294,26 +1311,26 @@ if pa==3
 % In the original UTM reference system we put the quality factors in
 % the center of each block. The average quality factor characterizes the
 % blocks not solved in the inversion.
-    Q3D=modvPS(:,1:3);
+    Q3D=modv(:,1:3);
     Q3D(:,4)=constQmean(1,2);
     % create a file of input
     in1=zeros(length(mtik0),1);
     input01 = zeros(length(mtik0),1);
 
     for i = 1:length(in1)
-        in1(i)=find(modvPS(:,1)==inblocchi(i,1)  & modvPS(:,2)==inblocchi(i,2)...
-            & modvPS(:,3)==inblocchi(i,3));
+        in1(i)=find(modv(:,1)==inblocchi(i,1)  & modv(:,2)==inblocchi(i,2)...
+            & modv(:,3)==inblocchi(i,3));
         Q3D(in1(i),4)=mtik0(i)+constQmean(1,2);
-        input01(i)=modvPS(in1(i),6);
+        input01(i)=modv(in1(i),6);
     end
 
     % result in the original reference system
-    Q3D(:,1)=modvPS(:,1)+resol2;
-    Q3D(:,2)=modvPS(:,2)+resol2;
-    Q3D(:,3)=modvPS(:,3)+resol2;
+    Q3D(:,1)=modv(:,1)+resol2;
+    Q3D(:,2)=modv(:,2)+resol2;
+    Q3D(:,3)=modv(:,3)+resol2;
 
     % input save
-    Qin=[Q3D(:,1:3) modvPS(:,6)];
+    Qin=[Q3D(:,1:3) modv(:,6)];
 
     A1=W*A;
     % output file and save
@@ -1422,6 +1439,7 @@ end
 load inputs.mat
 load(inputinv)
 load(inputdata)
+load coastlines
 
 Qc=load('Qc.txt');
 pd=load('peakdelay.txt');
@@ -1460,8 +1478,12 @@ scatter(even(:,1),even(:,2),sz,'c','MarkerEdgeColor',...
 hold on
 scatter(staz(:,1),staz(:,2),sz,'^','MarkerEdgeColor',...
     [1 1 1], 'MarkerFaceColor',[0.5 .5 .5], 'LineWidth',1.5)
+if degorutm==111
+    hold on
+    geoshow(coastlat,coastlon);
+    xlim([8 18]);ylim([36 46]);
+end
 hold off
-
 FName = 'Peak_delay_map';
 saveas(pdmap,fullfile(FPath, FLabel, FName), fformat);
 
@@ -1480,8 +1502,12 @@ scatter(even(:,1),even(:,2),sz,'c','MarkerEdgeColor',...
 hold on
 scatter(staz(:,1),staz(:,2),sz,'^','MarkerEdgeColor',...
     [1 1 1], 'MarkerFaceColor',[0.5 .5 .5], 'LineWidth',1.5)
+if degorutm==111
+    hold on
+    geoshow(coastlat,coastlon);
+    xlim([8 18]);ylim([36 46]);
+end
 hold off
-
 FName = 'Qc_map';
 saveas(Qcmap,fullfile(FPath, FLabel, FName), fformat);
 
@@ -1497,7 +1523,9 @@ if pa ==1
 
 elseif pa>=2
     
-    Qcimap=figure('Name','Qc check input','NumberTitle','off','visible',visib);
+    Qccheck=figure('Name','Qc checkerboard test','NumberTitle',...
+        'off','visible',visib);
+    subplot(1,2,1)
     contourf(X,Y,QQchi');
     axis equal
     view(2)
@@ -1514,12 +1542,13 @@ elseif pa>=2
     hold on
     scatter(staz(:,1),staz(:,2),sz,'^','MarkerEdgeColor',...
         [1 1 1], 'MarkerFaceColor',[0.5 .5 .5], 'LineWidth',1.5)
+    if degorutm==111
+        hold on
+        geoshow(coastlat,coastlon);
+        xlim([8 18]);ylim([36 46]);
+    end
     hold off
-
-    FName = 'Qc_checkerboard_input';
-    saveas(Qcimap,fullfile(FPath, FLabel, FName), fformat);
-    
-    Qcomap=figure('Name','Qc check output','NumberTitle','off','visible',visib);
+    subplot(1,2,2)
     contourf(X,Y,QQcho');
     axis equal
     view(2)
@@ -1536,10 +1565,15 @@ elseif pa>=2
     hold on
     scatter(staz(:,1),staz(:,2),sz,'^','MarkerEdgeColor',...
         [1 1 1], 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1.5)
+    if degorutm==111
+        hold on
+        geoshow(coastlat,coastlon);
+        xlim([8 18]);ylim([36 46]);
+    end
     hold off
     
-    FName = 'Qc_checkerboard_output';
-    saveas(Qcomap,fullfile(FPath, FLabel, FName), fformat);
+    FName = 'Qc_checkerboard';
+    saveas(Qccheck,fullfile(FPath, FLabel, FName), fformat);
     
     %Parameter analysis
     pdd =  pd(:,4)~=0;
@@ -1572,6 +1606,12 @@ c=Qps<-treQc & pdps<-trepd;
 par(c,4)=1;
 scatter(Qps(c),pdps(c),65,'filled','MarkerFaceColor',[0 0.8 0])
 hold on
+line([0 0],[mipdm-trepd mapdm+trepd],'Color',[0 0 0],...
+    'LineWidth',3)
+hold on
+line([miQcm-treQc maQcm+treQc],[0 0],'Color',[0 0 0],...
+    'LineWidth',3)
+hold on
 c=Qps<-treQc & pdps>trepd;
 par(c,4)=2;
 scatter(Qps(c),pdps(c),65,'filled','MarkerFaceColor',[0 0.6 1])
@@ -1588,12 +1628,6 @@ c=(Qps>-treQc & Qps<treQc) | (pdps>-trepd & pdps<trepd);
 par(c,4)=0;
 scatter(Qps(c),pdps(c),85,'filled','MarkerFaceColor',[0.7 0.7 0.7],...
     'MarkerEdgeColor',[1 1 1],'LineWidth',2)
-hold on
-line([0 0],[mipdm-trepd mapdm+trepd],'Color',[0 0 0],...
-    'LineWidth',3)
-hold on
-line([miQcm-treQc maQcm+treQc],[0 0],'Color',[0 0 0],...
-    'LineWidth',3)
 hold off 
 xlim([miQcm-treQc maQcm+treQc])
 ylim([mipdm-trepd mapdm+trepd])
@@ -1601,13 +1635,6 @@ xlabel('Qc','FontSize',12,'FontWeight','bold','Color','k')
 ylabel('Log. peak delay','FontSize',12,'FontWeight','bold','Color','k')
 title('Parameter space plot',...
     'FontSize',12,'FontWeight','bold','Color','k');
-
-h_legend=legend('Low scattering and absorption',...
-    'High scattering and low absorption',...
-    'Low scattering and high absorption',...
-    'High scattering and absorption');
-set(h_legend,'FontSize',10,'FontWeight','bold','Location','best');
-
 FName = 'Parameter_space_variations';
 saveas(param_plot,fullfile(FPath, FLabel, FName), fformat);
 
@@ -1638,17 +1665,11 @@ un_X = unique(param);
 fu=find(un_X==-1);
 if isempty(fu)
     cmap = [0.7 0.7 0.7;  0 0.8 0; 0 0.6 1; 1 0.6 0];
-    HTick={'Average','Low scattering and absorption',...
-        'High scattering and low absorption',...
-        'Low scattering and high absorption'};
+    HTick={'Average','Ls La','Hs La','Ls Ha'};
 else
     cmap = [0.7 0.7 0.7;  0 0.8 0; 0 0.6 1; 1 0.6 0; 1 0 0];
-    HTick={'Average','Low scattering and absorption',...
-        'High scattering and low absorption',...
-        'Low scattering and high absorption',...
-        'High scattering and absorption'};
+    HTick={'Average','Ls La','Hs La','Ls Ha','Hs Ha'};
 end
-
 colormap(cmap)
 
 colorbar('Ticks',un_X,'TickLabels',HTick);
@@ -1659,6 +1680,11 @@ scatter(even(:,1),even(:,2),sz,'c','MarkerEdgeColor',...
 hold on
 scatter(staz(:,1),staz(:,2),sz,'^','MarkerEdgeColor',...
     [1 1 1], 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1.5)
+if degorutm==111
+    hold on
+    geoshow(coastlat,coastlon);
+    xlim([8 18]);ylim([36 46]);
+end
 hold off
 xlabel('WE UTM (WGS84)','FontSize',12,'FontWeight','bold','Color','k')
 ylabel('SN UTM (WGS84)','FontSize',12,'FontWeight','bold','Color','k')
@@ -1666,4 +1692,125 @@ ylabel('SN UTM (WGS84)','FontSize',12,'FontWeight','bold','Color','k')
 title('Parameter separation','FontSize',12,'FontWeight','bold','Color','k');
 FName = 'Parameter_map';
 saveas(mparam,fullfile(FPath, FLabel, FName), fformat);
-axis equal
+
+%Image velocity model
+if pa==3
+    xD=unique(modv(:,1));
+    yD=unique(modv(:,2));
+    zD=sort(unique(modv(:,3)),'descend');
+    
+    ix=length(xD);%numer of x layers,given the step of the grid
+    iy=length(yD);%numer of y layers,given the step of the grid
+    iz=length(zD);%numer of depths layers,given the step of the grid
+    
+    V=zeros(iy,ix,iz);
+    Q=zeros(iy,ix,iz);
+    Qi=zeros(iy,ix,iz);
+    Qo=zeros(iy,ix,iz);
+    index=0;
+    for i=1:ix
+        for j=1:iy
+            for k=1:iz
+                index=index+1;
+                V(j,i,k)=modv(index,4);
+                Q(j,i,k)=Q3D(index,4);
+                Qi(j,i,k)=Q3D(index,5);
+                Qo(j,i,k)=Q3D(index,6);
+            end
+        end
+    end
+    
+    [X,Y,Z]=meshgrid(xD,yD,zD);
+    
+    V_Q=figure('Name','Velocity Model','NumberTitle','off','visible',visib);
+    
+    %Velocity model
+    subplot(1,2,1)
+    slice(X,Y,Z,V,WEi,SNi,zi,'spline');
+    colormap(cool)
+    colorbar
+    axis equal
+    view(2)
+    hold on
+    scatter(even(:,1),even(:,2),sz,'c','MarkerEdgeColor',...
+        [1 1 1], 'MarkerFaceColor',[0.5 .5 .5], 'LineWidth',1.5)
+    hold on
+    scatter(staz(:,1),staz(:,2),sz,'^','MarkerEdgeColor',...
+        [1 1 1], 'MarkerFaceColor',[0.5 .5 .5], 'LineWidth',1.5)
+    hold off
+    xlabel('WE UTM (WGS84)','FontSize',12,'FontWeight','bold','Color','k')
+    ylabel('SN UTM (WGS84)','FontSize',12,'FontWeight','bold','Color','k')
+    zlabel('Depth (m)','FontSize',12,'FontWeight','bold','Color','k')
+    title('Velocity model',...
+        'FontSize',12,'FontWeight','bold','Color','k');
+    
+    %Attenuation model
+    subplot(1,2,2)
+    slice(X,Y,Z,Q,WEi,SNi,zi,'spline');
+    colormap(autumn)
+    colorbar
+    axis equal
+    view(2)
+    hold on
+    scatter(even(:,1),even(:,2),sz,'c','MarkerEdgeColor',...
+        [1 1 1], 'MarkerFaceColor',[0.5 .5 .5], 'LineWidth',1.5)
+    hold on
+    scatter(staz(:,1),staz(:,2),sz,'^','MarkerEdgeColor',...
+        [1 1 1], 'MarkerFaceColor',[0.5 .5 .5], 'LineWidth',1.5)
+    hold off
+    xlabel('WE UTM (WGS84)','FontSize',12,'FontWeight','bold','Color','k')
+    ylabel('SN UTM (WGS84)','FontSize',12,'FontWeight','bold','Color','k')
+    zlabel('Depth (m)','FontSize',12,'FontWeight','bold','Color','k')
+    title('Attenuation model',...
+        'FontSize',12,'FontWeight','bold','Color','k');
+    
+    FName = 'V_Q_models';
+    savefig(V_Q,fullfile(FPath, FLabel, FName));
+    
+    Qcheck =...
+        figure('Name','Checkerboard 3D','NumberTitle','off','visible',visib);
+    
+    %3D checkerboard input
+    subplot(1,2,1)
+    slice(X,Y,Z,Qi,WEi,SNi,zi,'spline');
+    colormap(gray)
+    colorbar
+    axis equal
+    view(2)
+    hold on
+    scatter(even(:,1),even(:,2),sz,'c','MarkerEdgeColor',...
+        [1 1 1], 'MarkerFaceColor',[0.5 .5 .5], 'LineWidth',1.5)
+    hold on
+    scatter(staz(:,1),staz(:,2),sz,'^','MarkerEdgeColor',...
+        [1 1 1], 'MarkerFaceColor',[0.5 .5 .5], 'LineWidth',1.5)
+    hold off
+    xlabel('WE UTM (WGS84)','FontSize',12,'FontWeight','bold','Color','k')
+    ylabel('SN UTM (WGS84)','FontSize',12,'FontWeight','bold','Color','k')
+    zlabel('Depth (m)','FontSize',12,'FontWeight','bold','Color','k')
+    title('Q 3D checkerboard input',...
+        'FontSize',12,'FontWeight','bold','Color','k');
+    
+    %3D checkerboard output
+    subplot(1,2,2)
+    slice(X,Y,Z,Qo,WEi,SNi,zi,'spline');
+    colormap(gray)
+    colorbar
+    axis equal
+    view(2)
+    hold on
+    scatter(even(:,1),even(:,2),sz,'c','MarkerEdgeColor',...
+        [1 1 1], 'MarkerFaceColor',[0.5 .5 .5], 'LineWidth',1.5)
+    hold on
+    scatter(staz(:,1),staz(:,2),sz,'^','MarkerEdgeColor',...
+        [1 1 1], 'MarkerFaceColor',[0.5 .5 .5], 'LineWidth',1.5)
+    hold off
+    xlabel('WE UTM (WGS84)','FontSize',12,'FontWeight','bold','Color','k')
+    ylabel('SN UTM (WGS84)','FontSize',12,'FontWeight','bold','Color','k')
+    zlabel('Depth (m)','FontSize',12,'FontWeight','bold','Color','k')
+    title('3D checkerboard output',...
+        'FontSize',12,'FontWeight','bold','Color','k');
+    
+    FName = '3DQ_check';
+    savefig(Qcheck,fullfile(FPath, FLabel, FName));
+end
+

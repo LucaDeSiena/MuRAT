@@ -1,5 +1,6 @@
 %% INPUTS
 addpath('/Users/lucadesiena/Documents/Utilities_Matlab')
+
 clear
 close all
 clc
@@ -8,26 +9,27 @@ disp('Input Section')
 
 % The following prompts are included TO BE  EDITED before running!
 
-% Which analysis do you want to perform?
-% Pick delay and Qc without kernels: pa=1
-% Pick delay and Qc with kernels: pa=2
-% Pick delay, kernel-Qc and P/S wave attenuation with the CN method: pa=3
+%Which analysis do you want to perform?
+%Pick delay and Qc without kernels: pa=1
+%Pick delay and Qc with kernels: pa=2
+%Pick delay, kernel-Qc and P/S wave attenuation with the CN method: pa=3
 pa=2;
 
-% Folder containing data
-DFolder = '/Users/lucadesiena/Documents/Datasets/Romania/*.sac';
+%Folder containing data
+DFolder = 'sac_Tirreno/*.sac';
 
-% Creates folders and paths to store results and figures
-FLabel = 'Romania';
-FPath = '/Users/lucadesiena/Documents/MATLAB/MURAT5_3_6';
 
-% mkdir(FLabel)
+%Creates folders and paths to store results and figures
+FLabel = 'Tirreno';
+FPath = '.';
+
+%mkdir(FLabel)
 
 % Storing inversion parameters
 inputinv = 'inversion.mat';
 inputdata = 'data.mat';
 
-% Output figure format 
+%Output figure format 
 fformat='jpeg';
 
 % Figure visibility - pick 'on' or 'off'
@@ -48,25 +50,25 @@ compon = 1;
 fin1 = 1;%edit
 
 % To see spectrogram (set=1) of the seismogram seisi: set seisi='number of
-% seismogram to see spectrogram'
+% seismogram to be investigated'
 seesp=0;
-seisi=100;
+seisi=1;
 
 % Central frequency - set it according to your spectrograms
 cf = 1;
 
 % Maximum window to pick pick-delays in seconds
-maxtpde = 25;
+maxtpde = 10;
 
 % Minimum peak delay considering scattering in the area and frequency
-mintpde = 0.5;%1/cf;
+mintpde = 1/cf;
 
 % Lapse time for the start of the window used to measure and calculate the
 % normalization energy
-tCm = 90;
+tCm = 600;
 
 % Total coda window length for Qc and normalization
-tWm = 30;
+tWm = 300;
 
 % Parameter for smoothing - must be > 2
 nf=8;
@@ -80,12 +82,12 @@ tresholdnoise = 5;
 sizea=2;
 
 % The sped coefficient sets the spectral energy decay of the coda
-% wavefield
-sped=1.5;
+% wavefield, either set 1 (body) or 1.5 (surface)
+sped=0.5;
 
 % Number of nodes along x and y
 nxc = 10;
-nyc = 6;
+nyc = 10;
 
 % How big are markers for stations and events
 sz=60;
@@ -204,8 +206,8 @@ if evst==1
 elseif evst==2
     
     %Latitude and longitude, as usually in Sac Haeder. Stepg in degrees.  
-    originWE=20;
-    originSN=43;
+    originWE=8;
+    originSN=36;
     originz=0;
     stepg=1;
     degorutm=111;%set to 111 if working with degrees, 1 if in UTM

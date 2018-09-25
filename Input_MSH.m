@@ -16,12 +16,11 @@ disp('Input Section')
 pa=3;
 
 %Folder containing data
-DFolder = 'sac_MSH/*.SAC';
-
+DFolder = '/Users/lucadesiena/Documents/Datasets/MSH_2000_2003/*.SAC';
 
 %Creates folders and paths to store results and figures
 FLabel = 'MSH';
-FPath = '.';
+FPath = '/Users/lucadesiena/Documents/MATLAB/MURAT5_3_6';
 
 %mkdir(FLabel)
 
@@ -32,6 +31,8 @@ inputdata = 'data.mat';
 %Output figure format 
 fformat='jpeg';
 
+%Figure visibility - pick 'on' or 'off'
+visib='on';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Inputs necessary for all the analyses
 % Choose between P- (2) and S- (3) waves for peak delay
@@ -48,7 +49,7 @@ compon = 1;
 fin1 = 1;%edit
 
 % To see spectrogram (set=1) of the seismogram seisi: set seisi='number of
-% seismogram to be investigated'
+% seismogram to see spectrogram'
 seesp=0;
 seisi=100;
 
@@ -80,14 +81,14 @@ tresholdnoise = 10;
 sizea=2;
 
 % The sped coefficient sets the spectral energy decay of the coda
-% wavefield, either set 1 (body) or 1.5 (surface)
-sped=1.5;
+% wavefield
+sped=0.5;
 
 % Number of nodes along x and y - must be even for checkerboard to work!
 nxc = 10;
 nyc = 12;
 
-% How big are markers for stations and events
+% Size of markers for stations and events on maps
 sz=60;
         
 % If the origin time is unknown, you can set a theoretichal velocity for
@@ -102,7 +103,7 @@ evst = 1;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %TO BE EDITED IF pa>1
-% Values of attenuation for testing
+% Values of attenuation for testing in checkerboard
 hatt =.02;
 latt =.001;
 
@@ -121,7 +122,6 @@ elseif nonlinear==1
     %Grid search
     L1 = 1001;
     m1min=0;
-    %m1max = 0.0000000001; % By trial an error
     m1max = 0.01;
 
     Dmm = (m1max-m1min)/(L1-1);
@@ -131,15 +131,17 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Name of the file containing the seismograms and rays - in folder "traces"
 % creates a list of the waveforms and calculates their number.
-% RULE: This is necessary for the option evst =1, where event and
-% station infos are in two separate files. The SAC file-name must have a
-% specific format: first 12 characters are the origin time of the event
-% (as per event-location file.
-% Characters 18:20 are the name of station as per station file.
-% For evst = 2, there is not this
-% requirement, eventual ray-names will be identical to file names.
+% RULE: This is necessary for the option evst = 1, where event and
+% station infos are in two separate files. In this case,
+% The SAC file-name must have a specific format:
+% the first 12 characters are the origin time of the event, as per
+% event-location file). Characters 18:20 are the name of station as per
+% station file.
+%
+% For evst = 2, there is no requirement on SAC filenames. In case of pa=3
+% the names of rays (if createrays=1) will be identical to file names.
 
-% Get name of files in current folder traces
+% Get name of files in traces' folder
 list = dir(DFolder);
 filenames = {list.name}'; %create cell array of file names
 filedir = {list.folder}'; %create cell array of file folder
@@ -149,11 +151,13 @@ lista = filenames; %This will be the name of the file listing rays
 
 for i = 1:lls
     listasac{i,1} = cat(2,filedir{i},'/',filenames{i});
-    li = lista{i,1};
     %Here it takes the event/station name. It is necessary to adapt the
     %numbers to where even name and station name are
-    li1 = cat(2,li(1:12),li(18:20)); 
-    lista{i,1} = li1;
+    if evst==1
+        li = lista{i,1};
+        li1 = cat(2,li(1:12),li(18:20));
+        lista{i,1} = li1;
+    end
 end
 
 if evst==1
@@ -175,7 +179,6 @@ if evst==1
     % column (2) = UTM (WE) or latitude
     % column (3) = UTM (SN) or longitude
     % column (4) = Altitude above sea level in meters
-
     event=fopen('even.txt');
     name= textscan(event,'%s %f %f %f');
     nameeven=name{1}; even(:,1)=name{2}; even(:,2)=name{3};...
@@ -186,8 +189,7 @@ if evst==1
     % column (1) = Name of station (3 characters)
     % column (2) = UTM (WE) or latitude
     % column (3) = UTM (SN) or longitude
-    % column (4) = Altitude above sea level in meters
-    
+    % column (4) = Altitude above sea level in meters    
     station=fopen('staz.txt');
     name1= textscan(event,'%s %f %f %f');
     namesta=name1{1}; staz(:,1)=name1{2}; staz(:,2)=name1{3};...
@@ -197,7 +199,7 @@ if evst==1
     numev=length(nameeven); %number of events
     numst=length(namesta); %number of stations
 
-    %Step of the grid for Qc
+    %Step of the grid for Qc imaging
     stepg=4000; 
 
 elseif evst==2
@@ -229,9 +231,6 @@ lxy=length(XY(:,1));
 halfres=+stepg/2;
 x=originWE+halfres:stepg:stepg*(nxc-1)+originWE+halfres;
 y=originSN+halfres:stepg:stepg*(nyc-1)+originSN+halfres;
-
-%Figure visibility - pick 'on' or 'off'
-visib='on';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Inputs necessary for the direct-wave CN attenuation tomography
@@ -244,28 +243,48 @@ if pa==3
     um = 1000;
 
     %This works in [x,y,z] or better UTM WGS84, setting origins to zero
-    modvPS=load('modv.txt');
-    modvPS(:,5)=0;
-    modvPS(:,1)=modvPS(:,1)+originWE; 
-    modvPS(:,2)=modvPS(:,2)+originSN; 
-
-    %Steps of the velocity models
-    passox=max(modvPS(:,1))-min(modvPS(:,1));
-    passoy=max(modvPS(:,2))-min(modvPS(:,2));
-    passoz=max(modvPS(:,3))-min(modvPS(:,3));
-
-    %set createrays to 1 if you want to create files for rays
-    %WARNING: This will create A BIG .mat file
-    createrays=0;
+    modv=load('modv.txt');
+    modv(:,5)=0;%Only P-wave info here
+    modv(:,1)=modv(:,1)+originWE; 
+    modv(:,2)=modv(:,2)+originSN; 
     
+    lmod=length(modv(:,3));
+    v0= mean(modv(:,4));
+    resol2 = abs(modv(2,3)-modv(1,3))/2;
+    
+    %Steps of the velocity models
+    passox=max(modv(:,1))-min(modv(:,1));
+    passoy=max(modv(:,2))-min(modv(:,2));
+    passoz=max(modv(:,3))-min(modv(:,3));
+    
+    passo=[passox passoy passoz];
     
     %Creates grid for direct waves and check for zeroes
-    [gridD,ngrid,pvel]=gridcheck(passox,passoy,passoz,modvPS,PorS);
-
-    %Setting the grid for peak-delays and Qc with right origin
-    gridD(1,:)=gridD(1,:)+originWE;
-    gridD(2,:)=gridD(2,:)+originSN;
-    gridD(3,:)=gridD(3,:)-originz;
+    gridD=zeros(3,max(passo/resol2));
+    gridD(1,1:passox/resol2)=originWE:resol2:originWE+passox-resol2;
+    gridD(2,1:passoy/resol2)=originSN:resol2:originSN+passoy-resol2;
+    gridD(3,1:passoz/resol2)=-originz:resol2:-originz+passoz-resol2;
+    
+    %Regular step of the gridD for interpolation - half of step of modv
+    
+    ixD=passox/resol2;%numer of x layers,given the step of the gridD
+    iyD=passoy/resol2;%numer of y layers,given the step of the gridD
+    izD=passoz/resol2;%numer of depths layers,given the step of the gridD
+    
+    % gridD dimensions
+    pvel = zeros(ixD,iyD,izD);
+    
+    %NUMBER OF X, Y, AND Z LAYERS
+    for k=1:izD
+        m1=[modv(:,1:3) modv(:,PorS+2)];
+        index=0;
+        for i=1:ixD
+            for j=1:iyD
+                index=index+1;
+                pvel(i,j,k) = m1(index,4);
+            end
+        end
+    end
 
     %Sets the number of nodes from the origin
     nx=passox/stepg; %how many nodes to change x
@@ -274,13 +293,16 @@ if pa==3
     bs=zeros(nx*ny,2);
     bst=zeros(nx*ny,2);
     lung=zeros(lls,1);
-
-    lmod=length(modvPS(:,3));
-    v0= mean(modvPS(:,4));
-    resol2 = abs(modvPS(2,3)-modvPS(1,3))/2;
+    
+    %set createrays to 1 if you want to create files for rays
+    %WARNING: This will create A BIG .mat file
+    createrays=0;
     
     dtreshold=-3500; %depth treshold for synthetic testing (layers)
-
+    
+    WEi=565000;
+    SNi=5115000;
+    zi=-2000;
 end
 
 save('inputs.mat');
