@@ -1,6 +1,5 @@
 %% INPUTS
 addpath('/Users/lucadesiena/Documents/Utilities_Matlab')
-
 clear
 close all
 clc
@@ -9,18 +8,19 @@ disp('Input Section')
 
 % The following prompts are included TO BE  EDITED before running!
 
-%Which analysis do you want to perform?
-%Pick delay and Qc without kernels: pa=1
-%Pick delay and Qc with kernels: pa=2
-%Pick delay, kernel-Qc and P/S wave attenuation with the CN method: pa=3
-pa=3;
+% Which analysis do you want to perform?
+% Pick delay and Qc without kernels: pa=1
+% Pick delay and Qc with kernels: pa=2
+% Pick delay, kernel-Qc and P/S wave attenuation with the CN method: pa=3
+pa=2;
 
-%Folder containing data
-DFolder = './sac_MSH/*.SAC';
+% Folder containing data
+DFolder = './sac_Romania/*.sac';
 
-%Creates folders and paths to store results and figures
-FLabel = 'MSH';
+% Creates folders and paths to store results and figures
+FLabel = 'Romania';
 FPath = './';
+
 if exist(FLabel,'dir')~=7
     mkdir(FLabel)
 end
@@ -29,10 +29,10 @@ end
 inputinv = 'inversion.mat';
 inputdata = 'data.mat';
 
-%Output figure format 
+% Output figure format 
 fformat='jpeg';
 
-%Figure visibility - pick 'on' or 'off'
+% Figure visibility - pick 'on' or 'off'
 visib='on';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Inputs necessary for all the analyses
@@ -55,26 +55,26 @@ seesp=0;
 seisi=100;
 
 % Central frequency - set it according to your spectrograms
-cf = 6;
+cf = 1;
 
 % Maximum window to pick pick-delays in seconds
-maxtpde = 10;
+maxtpde = 25;
 
 % Minimum peak delay considering scattering in the area and frequency
-mintpde = 1/cf;
+mintpde = 0.5;%1/cf;
 
 % Lapse time for the start of the window used to measure and calculate the
 % normalization energy
-tCm = 30;
+tCm = 90;
 
 % Total coda window length for Qc and normalization
-tWm = 15;
+tWm = 30;
 
 % Parameter for smoothing - must be > 2
 nf=8;
 
 % The minimum coda-to-noise energy ratio for the weighted inversion
-tresholdnoise = 10;
+tresholdnoise = 5;
 
 % Size anomaly for testing: twice(2). Might be set to four(4). The input of
 % the checkerboard must be always visually checked visually at the end of
@@ -83,35 +83,35 @@ sizea=2;
 
 % The sped coefficient sets the spectral energy decay of the coda
 % wavefield
-sped=0.5;
+sped=1.5;
 
-% Number of nodes along x and y - must be even for checkerboard to work!
+% Number of nodes along x and y
 nxc = 10;
-nyc = 12;
+nyc = 6;
 
-% Size of markers for stations and events on maps
+% How big are markers for stations and events
 sz=60;
         
 % If the origin time is unknown, you can set a theoretichal velocity for
 % the whole area and evaluate it from picking. It must be the velocity of
-% the phase you are mapping. 
+% the phase you are mapping
 vth=3;%in km/s
 
 % Import event origin time and coords of event and station (evst=1)
 % from files.
 % Ideal is to have both in the SAC header (evst=2) and do it in lat/long.
-evst = 1;
+evst = 2;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %TO BE EDITED IF pa>1
-% Values of attenuation for testing in checkerboard
+% Values of attenuation for testing
 hatt =.02;
 latt =.001;
 
 % Seconds of time-windows for non-linear inversion and corresponding
 % number, set nonlinear=1 to activate;
 nonlinear=1;
-nW=3;
+nW=5;
 ntW=tWm/nW;
 
 % Uncertainty on Qc estimation
@@ -119,7 +119,7 @@ if nonlinear==0
     % Minimum R-squared for Qc fitting
     RZZ2 = 0.1;
 elseif nonlinear==1
-    RZZ2 = 5;
+    RZZ2 = 2;
     %Grid search
     L1 = 1001;
     m1min=0;
@@ -163,7 +163,7 @@ end
 
 if evst==1
     
-    % UTM coordinates of the origin of the model - this must be put at
+   % UTM coordinates of the origin of the model - this must be put at
     % least one cell before the westernmost and southernmost
     % earthquakes/station
     %
@@ -190,7 +190,7 @@ if evst==1
     % column (1) = Name of station (3 characters)
     % column (2) = UTM (WE) or latitude
     % column (3) = UTM (SN) or longitude
-    % column (4) = Altitude above sea level in meters    
+    % column (4) = Altitude above sea level in meters
     station=fopen('staz.txt');
     name1= textscan(event,'%s %f %f %f');
     namesta=name1{1}; staz(:,1)=name1{2}; staz(:,2)=name1{3};...
@@ -206,19 +206,17 @@ if evst==1
 
 elseif evst==2
     
-    %Latitude and longitude, as usually in Sac Haeder. Stepg in degrees.
-    
+    %Latitude and longitude, as usually in Sac Haeder. Stepg in degrees.  
     originWE=20;
     originSN=43;
     originz=0;
-    degorutm=1;
-    stepg=1;% degrees
-    
+    stepg=1;
+    degorutm=111;%set to 111 if working with degrees, 1 if in UTM
 end
 
 % Build the nodes for peak-delay and Qc imaging -
 % they are your parameter-model locations
-XY=zeros(nxc*nyc,2);%pre-define 2D matrix in space
+XY=zeros(floor(nxc)*floor(nyc),2);%pre-define 2D matrix in space
 
 index=0;
 for i=1:nxc
@@ -237,6 +235,8 @@ y=originSN+halfres:stepg:stepg*(nyc-1)+originSN+halfres;
 
 % Inputs necessary for the direct-wave CN attenuation tomography
 if pa==3
+    %1D (1) or 3D (3) velocity model
+    dimv=1;
     
     %start time to consider noise - before P-arrival
     sn=5;
@@ -244,15 +244,52 @@ if pa==3
     %Rays measured in meters. If the ray length is already in km set um =1;
     um = 1000;
 
-    %This works in [x,y,z] or better UTM WGS84, setting origins to zero
-    modv=load('modv.txt');
-    modv(:,5)=0;%Only P-wave info here
-    modv(:,1)=modv(:,1)+originWE; 
-    modv(:,2)=modv(:,2)+originSN; 
+    % This works in [x,y,z], created for UTM WGS84 and origins to zero.
+    % In the new version if a 3D velocity model is unavailable a false 3D
+    % is created from iasp91
+    if dimv==1
+        
+        modv1=load('iasp91.txt'); %1D velocity model iasp91
+        dend=-34000; %select maximum depth range
+        
+        li=length(modv1(:,1));
+        modv=zeros(lxy*li,5);
+        index=0;
+        for i=1:nxc
+            for j=1:nyc
+                index1=index;
+                index=index+1;
+                modv(index1*li+1:index1*li+li,1)=XY(index,1)*1000;
+                modv(index1*li+1:index1*li+li,2)=XY(index,2)*1000;
+                modv(index1*li+1:index1*li+li,3)=...
+                    -modv1(1:li,1)*1000;
+                modv(index1*li+1:index1*li+li,4)=...
+                    modv1(1:li,PorS+1);
+            end
+        end
+        
+        modv(:,1)=(modv(:,1)-modv(1,1));
+        modv(:,2)=(modv(:,2)-modv(1,2));
+        modv(modv(:,3)<dend,:)=[];
+        
+    elseif dimv==3
+        
+        modv=load('modv.txt'); %3D velocity model from text file
+        modv(:,5)=0;%Only P-wave info here
+        modv(:,1)=modv(:,1)+originWE;
+        modv(:,2)=modv(:,2)+originSN;
+        
+    end
     
     lmod=length(modv(:,3));
     v0= mean(modv(:,4));
-    resol2 = abs(modv(2,3)-modv(1,3))/2;
+    
+    chx=find(modv(:,1)~=modv(1,1),1);
+    chy=find(modv(:,2)~=modv(1,2),1);
+    resol2x = abs(modv(chx,1)-modv(1,1))/2;
+    resol2y = abs(modv(chy,2)-modv(1,2))/2;
+    resol2z = abs(modv(2,3)-modv(1,3))/2;
+    
     
     %Steps of the velocity models
     passox=max(modv(:,1))-min(modv(:,1));
@@ -260,34 +297,35 @@ if pa==3
     passoz=max(modv(:,3))-min(modv(:,3));
     
     passo=[passox passoy passoz];
+    resol=[resol2x resol2y resol2z];
+    resol2=min(resol);
     
     %Creates grid for direct waves and check for zeroes
-    gridD=zeros(3,max(passo/resol2));
-    gridD(1,1:passox/resol2)=originWE:resol2:originWE+passox-resol2;
-    gridD(2,1:passoy/resol2)=originSN:resol2:originSN+passoy-resol2;
-    gridD(3,1:passoz/resol2)=-originz:resol2:-originz+passoz-resol2;
-    
     %Regular step of the gridD for interpolation - half of step of modv
     
-    ixD=passox/resol2;%numer of x layers,given the step of the gridD
-    iyD=passoy/resol2;%numer of y layers,given the step of the gridD
-    izD=passoz/resol2;%numer of depths layers,given the step of the gridD
+    ixD=floor(passox/resol2x);%numer of x layers,given the step of the gridD
+    iyD=floor(passoy/resol2y);%numer of y layers,given the step of the gridD
+    izD=floor(passoz/resol2z);%numer of depths layers,given the step of the gridD
+    
+    gridD=zeros(3,max(passo./resol));
+    gridD(1,1:ixD)=originWE:resol2x:originWE+passox-resol2x;
+    gridD(2,1:iyD)=originSN:resol2y:originSN+passoy-resol2y;
+    gridD(3,1:izD)=-originz:resol2z:-originz+passoz-resol2z;
     
     % gridD dimensions
     pvel = zeros(ixD,iyD,izD);
     
     %NUMBER OF X, Y, AND Z LAYERS
     for k=1:izD
-        m1=[modv(:,1:3) modv(:,PorS+2)];
         index=0;
         for i=1:ixD
             for j=1:iyD
                 index=index+1;
-                pvel(i,j,k) = m1(index,4);
+                pvel(i,j,k) = modv(index,4);
             end
         end
     end
-
+    
     %Sets the number of nodes from the origin
     nx=passox/stepg; %how many nodes to change x
     ny=passoy/stepg;
@@ -301,10 +339,6 @@ if pa==3
     createrays=0;
     
     dtreshold=-3500; %depth treshold for synthetic testing (layers)
-    
-    WEi=565000;
-    SNi=5115000;
-    zi=-2000;
 end
 
 save('inputs.mat');
