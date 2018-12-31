@@ -68,3 +68,15 @@ Licence
 -------
 
 MuRAT is released under EUPL v1.1
+
+
+Input file fields
+-------
+
+Analysis
+
+Which analysis do you want to perform?
+Pick delay and Qc without kernels: pa=1 
+Pick delay and Qc with kernels: pa=2
+Pick delay, kernel-Qc and P/S wave attenuation with the CN method: pa=3
+
