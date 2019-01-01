@@ -73,10 +73,13 @@ MuRAT is released under EUPL v1.1
 Input file fields
 -------
 
-Analysis
+**Analysis; 1, 2, or 3**
 
-Which analysis do you want to perform?
-Pick delay and Qc without kernels: pa=1 
-Pick delay and Qc with kernels: pa=2
-Pick delay, kernel-Qc and P/S wave attenuation with the CN method: pa=3
+Which analysis do you want to perform? Three choices with referred papers.
 
+-pa=1 - Pick delay and Qc without kernels - **De Siena et al. 2016 (EPSL)**
+
+
+-pa=2 - Pick delay and Qc with kernels - **De Siena et al. 2017 (GRL)**
+
+-pa=3 - Pick delay, Qc with kernels, and P/S wave attenuation with the coda normalisation method - **De Siena et al. 2017 (GRL) and 2017 (Scientific Reports)
