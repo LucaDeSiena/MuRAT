@@ -56,7 +56,9 @@ INSTRUCTIONS:
 Citing MuRAT
 --------------
 
-If you use MuRAT for your research and publications, please consider citing it:
+If you use MuRAT for your research and publications, please consider citing the first release of the code, published as:
+
+*De Siena, L., C. Thomas, and R. Aster. "Multi-scale reasonable attenuation tomography analysis (MuRAT): An imaging algorithm designed for volcanic regions." Journal of volcanology and geothermal research 277 (2014): 22-35.*
 
 
 Disclaimer
@@ -69,227 +71,245 @@ Licence
 
 MuRAT is released under EUPL v1.1
 
+INSTRUCTIONS
+========
 
-Input file fields
--------
+**Analysis = 1, 2, or 3**
 
-**Analysis = 1, 2, or 3**\n
+-pa=1 - Pick delay and Qc without kernels - *De Siena et al. 2016 (EPSL)*
 
--pa=1 - Pick delay and Qc without kernels - **De Siena et al. 2016 (EPSL)**\n
+-pa=2 - Pick delay and Qc with kernels - *De Siena et al. 2017 (GRL)*
 
--pa=2 - Pick delay and Qc with kernels - **De Siena et al. 2017 (GRL)**\n
-
--pa=3 - Pick delay, Qc with kernels, and P/S wave attenuation with the coda normalisation method - **De Siena et al. 2017 (GRL) and 2017 (Scientific Reports)\n
+-pa=3 - Pick delay, Qc with kernels, and P/S wave attenuation with the coda normalisation method - *De Siena et al. 2017 (GRL) and 2017 (Scientific Reports)*
 
 ------------
 **Label**
-RULE: Name of the folder containing output files and figures** 
+
+Name of the folder containing output files and figures, will appear in the working directory
 
 ------------
 **Working Directory**
-RULE:  Directory where MuRAT.m is contained - Default = ./
+
+Directory where MuRAT.m is contained - *Default = ./*
 
 ------------
 **Data Folder**
-RULE: Directory containing the SAC files - Default = ./sac_Label
+RULE: Directory containing the SAC files - *Default = ./sac_Label*
 
 ------------
 **Figures Format**
-RULE: Figures' output format as per Matlab functions - Default -> jpeg
-RULE: Available formats: tiff,...
+
+Figures' output format as per Matlab functions - *Default -> jpeg*
 
 ------------
 **Figures Visibility**
-RULE: Set visibility during computation, set on or off - Default -> on
+
+Set visibility during computation, set on or off - *Default -> on*
 
 ------------
 **Figures Sections**
-RULE: Sections in the 3D V and Q models
-RULE: Only for Analysis=3
+
+Sections in the 3D V and Q models. Only available for Analysis=3
 
 ------------
 **P or S**
-RULE: Available indexes: 2 or 3 - Default -> 2
-RULE: Index one in time files contains the origin time of events
-RULE: Index two in time files contains the P-wave phase -> 2
-RULE: Index three in time files contains the S-wave phase -> 3
+
+*Available indexes: 2 or 3 - Default -> 2*
+
+Index one in the time files contains the origin time of events. Index two in the time files contains the P-wave phase. Index three in the time files contains the S-wave phase.
 
 ------------
 **Registration Components**
-RULE: Available indexes: 1, 2 or 3 - Default -> 1
-RULE: Works with one vertical (1) or two horizontal (2) recordings, or with the three components(3) of motion
+
+*Available indexes: 1, 2 or 3 - Default -> 1*
+
+Works with one vertical (1) or two horizontal (2) recordings, or with the three components(3) of motion.
 
 ------------
 **Spectrogram**
-RULE: Available indexes: 0 or any number n between the data range - Default -> 0
-RULE: n corresponds to the SAC recording of the spectrogram you want to visualize
+
+*Available indexes: 0 or any number n in the data range - Default -> 0*
+
+*n* corresponds to the SAC recording of the spectrogram you want to visualize.
 
 ------------
 **Central frequency**
-RULE: This is the frequency where the analyses will be carried on, depending on data recorded
+
+This is the frequency where the analyses will be carried on, depending on data recorded.
 
 ------------
 **Maximum Peak Delay Time**
-RULE: This is the maximum time from picking where the maximum of the envelope will be searched for in the peak delay analysis
+
+This is the maximum time from picking where the maximum of the envelope will be searched for in the peak delay analysis
 
 ------------
 **Minimum Peak Delay Time**
-RULE: This is the minimum time from picking where the maximum of the envelope will be searched for in the peak delay analysis
+
+This is the minimum time from picking where the maximum of the envelope will be searched for in the peak delay analysis
 
 ------------
 **Starting Lapse Time**
-RULE: This is the time where the coda window for the coda attenuation analysis starts
+
+This is the time where the coda window for the coda attenuation analysis starts.
 
 ------------
 **Coda Window Length**
-RULE: This is the length of the coda window for the coda attenuation analysis
+
+This is the length of the coda window for the coda attenuation analysis.
 
 ------------
 **Average Velocity**
-RULE: This is the average velocity of the medium, in case the origin time is absent from recordings or a velocity model is unavailable
-RULE: Default -> 0
+
+This is the average velocity of the medium, in the case that the origin time is absent from recordings or a velocity model is unavailable - *Default -> 0*
 
 ------------
 **SAC Origin Time**
-RULE: The origin time of the event
-RULE: As best practice, this should be saved in the SAC file as "o" variable -> "SAChdr.time.o"
-RULE: In case this is unavailable set it as "[]" (Default).
+
+The origin time of the event. As best practice, this should be saved in the SAC file as *o* variable -> *SAChdr.time.o*. If this is unavailable set it as *Default -> \[\]*
 
 ------------
 **SAC P Time**
-RULE: The P-wave time of the event - this parameter is compulsory.
-RULE: As best practice, this should be saved in the SAC file as "a" variable -> "SAChdr.time.a"
+
+The P-wave time of the event - this parameter is compulsory. As best practice, this should be saved in the SAC file as *a* variable -> *SAChdr.time.a*
 
 ------------
 **SAC S Time**
-RULE: The S-wave time of the event
-RULE: As best practice, this should be saved in the SAC file as "t0" variable -> "SAChdr.time.t0"
-RULE: In case this is unavailable set it as "[]" (Default).
+
+The S-wave time of the event. As best practice, this should be saved in the SAC file as *t0* variable -> *SAChdr.time.t0*. If this is unavailable set it as *Default -> \[\]*
 
 ------------
 **Length Window for Body Wave and Noise**
-RULE: Window length set to compute energy for P/S waves and noise
-RULE: Only for Analysis=3
+
+Window length set to compute energy for P or S waves and noise. Only available for Analysis=3
 
 ------------
 **Start Window Noise**
-RULE: Seconds before P-wave arrival, where the window to compute noise starts
-RULE: Only for Analysis=3
+
+Seconds before P-wave arrival, where the window to compute noise starts. Only available for Analysis=3
 
 ------------
 **Import Option for Events and Stations**
-RULE: Available indexes: 1 or 2 - Default -> 2
-RULE: It is necessary to define source and station locations for mapping: you can import event origin time and coords of event and station from and external .txt file (1) or from the SAC files directly (2).
-RULE: Index one is the original format of MuRAT 1.0 and requires even.txt and staz.txt files as per sample files.
+*Available indexes: 1 or 2 - Default -> 2*
 
-RULE: Index two is the ideal format, where event and station info are stored in the SAC header, in lat/long format.
+It is necessary to define source and station locations for mapping: you can import event origin time and coords of event and station from and external .txt file (1) or from the SAC files directly (2). Index one is the original format of MuRAT 1.0 and requires even.txt and staz.txt files as per sample files. Index two is the ideal format, where event and station info are stored in the SAC header, in lat/long format. The field that must be filled are:
 
 Event:
-% Name of station - SAChdr.event.kevnm
-% Station latitude - SAChdr.event.evla
-% Station longitude- SAChdr.event.evlo
-% Station depth - SAChdr.event.evdp
+
+Name of event - *SAChdr.event.kevnm*
+
+Station latitude - *SAChdr.event.evla*
+
+Station longitude- *SAChdr.event.evlo*
+
+Station depth - *SAChdr.event.evdp*
 
 Station:
-% Name of station - SAChdr.station.kstnm
-% Station latitude - SAChdr.station.stla
-% Station longitude- SAChdr.station.stlo
-% Station elevation - SAChdr.station.stel
+
+Name of station - *SAChdr.station.kstnm*
+
+Station latitude - *SAChdr.station.stla*
+
+Station longitude- *SAChdr.station.stlo*
+
+Station elevation - *SAChdr.station.stel*
 
 -------------
 **Origin of the Grid**
-RULE: The origin of the 2D or 3D grid for imaging is either in UTM or lat/long with depths in meters or km
+
+The origin of the 2D or 3D grid for imaging is either in UTM or lat/long with depths in meters or km
 
 -------------
 **Name Events File**
-RULE: Name of the file containing events' coordinates, for Import Option = 1. The format is:
+
+Name of the file containing events' coordinates, for Import Option = 1. The format is:
 
 even.txt:
-% column (1) = twelve numbers for the origin time of the event (date+time in seconds)
-% column (2) = UTM (WE) or latitude
-% column (3) = UTM (SN) or longitude
-% column (4) = Depth in meters
+
+Column (1) = twelve numbers for the origin time of the event (date+time in seconds)
+
+Column (2) = UTM (WE) or latitude
+
+Column (3) = UTM (SN) or longitude
+
+Column (4) = Depth in meters
 
 -------------
 **Name Stations File**
-RULE: Name of the file containing stations' coordinates, for Import Option = 1. The format is:
+
+Name of the file containing stations' coordinates, for Import Option = 1. The format is:
 
 staz.txt:
-% column (1) = Max four characters
-% column (2) = UTM (WE) or latitude
-% column (3) = UTM (SN) or longitude
-% column (4) = Depth in meters or km
+
+Column (1) = Max four characters
+
+Column (2) = UTM (WE) or latitude
+
+Column (3) = UTM (SN) or longitude
+
+Column (4) = Depth in meters or km
 
 -------------
-**Number of X Nodes**
-RULE: Number of X layers for the mapping grid
+**Number of X Nodes**, **Number of Y Nodes** and **Grid Step**
 
--------------
-**Number of Y Nodes**
-RULE: Number of Y layers for the mapping grid
-
--------------
-**Grid Step**
-RULE: Regular Step of the Grid in X/Y directions - in meters or degrees
+Number of X and Y layers and step of the mapping grid. Must be defined by the user to include all events' and stations' locations
 
 -------------
 **Meters or Degrees**
-RULE: Can be set to either 1 (meters) or 111 (meters in degrees)
+
+Can be set to either 1 (meters) or 111 (meters in degrees)
 
 -------------
 **Set 1 to Create Rays**
-RULE: Can be set to either 0 (does not create) or 1 (creates) to build a unique variable containing all rays in 3D. This will be stored in the Murat structure in the Murat.geometry.createrays field.
-RULE: NOT RECOMMENDED as the variable will become BIG for tomographic datasets, but can be useful as input for other programs.
+
+Can be set to either 0 (does not create) or 1 (creates) to build a unique variable containing all rays in 3D. This will be stored in the Murat structure in the Murat.geometry.createrays field. NOT RECOMMENDED as the variable will become BIG for tomographic datasets, but can be useful as input for other programs.
 
 -------------
 **Depth Synthetic Model Layer**
-RULE: Set the depth (in meters, negative) to create a two-layer synthetic test.
-RULE: Only available for Analysis=3.
+
+Set the depth (negative) to create a two-layer synthetic test. Only available for Analysis=3.
 
 -------------
 **Dimension V**
-RULE: Available indexes: 1 or 3 - Sets the dimension of the velocity model. In case no 3D model is available, iasp91 is used.
-RULE: Only available for Analysis=3.
+
+*Available indexes: 1 or 3*
+
+Sets the dimension of the velocity model. In the case no 3D model is available, *iasp91* is used. Only available for Analysis=3.
 
 -------------
 **Name Velocity Model**
-RULE: Name of the file containing the 3D velocity model, if avialable.
-RULE: Only available for Analysis=3.
+
+Name of the file containing the 3D velocity model, if avialable. Only available for Analysis=3.
 
 -------------
 **Size Checkerboard Anomalies**
-RULE: Available indexes: 2 or 4 - Sets the dimension of the checkerboard anomalies to either twice or four times that of the imaging grid.
+
+*Available indexes: 2 or 4*
+
+Sets the dimension of the checkerboard anomalies to either twice or four times that of the imaging grid.
 
 -------------
-**Highs Checkerboard Anomalies**
-RULE: Sets the high-attenuation values (as inverse Q and inverse Qc) for the checkerboard tests.
+**Highs Checkerboard Anomalies** and **Lows Checkerboard Anomalies**
 
--------------
-**Lows Checkerboard Anomalies**
-RULE: Sets the low-attenuation values (as inverse Q and inverse Qc) for the checkerboard tests.
-
--------------
-**Linear or Nonlinear**
-RULE: Inverts coda attenuation with either a linearised (0) or non-linear (1) approach.
-RULE: Default -> 0
+RULE: Sets the high-attenuation and low-attenuation values (as inverse Q and inverse Qc) for the checkerboard tests.
 
 -------------
 **Linear or Nonlinear**
-RULE: Inverts coda attenuation with either a linearised (0) or non-linear (1) approach.
-RULE: Default -> 0
+
+*Available indexes: 0 or 1 - Default -> 0*
+
+Inverts coda attenuation with either a linearised (0) or non-linear (1) approach.
 
 -------------
 **Treshold Linear Fit**
-RULE: The maximum inverse-Qc uncertainty used to weight the coda attenuation data.
-RULE: To be set to an appropriate parameter for the linearised inversion
+
+The maximum inverse-Qc uncertainty used to weight the coda attenuation data. To be set to an appropriate parameter for the linearised inversion
 
 -------------
 **Length Nonlinear Fit Window** and **Number Nonlinear Fit Window**
-RULE: The length and number of windows used to compute coda energies for the inversion. E.g. for a total coda window of 15 seconds, the user can set either 3 windows of 5 seconds each or 5 windows of 3 seconds each.
-RULE: To be set to appropriate parameters for the non-linear inversion
+
+The length and number of windows used to compute coda energies for the inversion. E.g., for a total coda window of 15 seconds, the user can set either 3 windows of 5 seconds each or 5 windows of 3 seconds each. To be set to appropriate parameters for the non-linear inversion
 
 -------------
-**Minimum Nonlinear Inverse Qc**, **Maximum Nonlinear Inverse Qc**, and **Total Nonlinear Inverse Qc*
-RULE: The search for the Qc minimising the inversion is done starting from a minimum inverse Q (e.g. 0) to a maximum inverse Qc (e.g. 0.01). The total number of Qc we search are equally-spaced and defined between minimum and maximum.
-RULE: To be set to appropriate parameters for the non-linear inversion
+**Minimum Nonlinear Inverse Qc**, **Maximum Nonlinear Inverse Qc**, and **Total Nonlinear Inverse Qc**
 
+The search for the Qc minimising the inversion is done starting from a minimum inverse Q (e.g. 0) to a maximum inverse Qc (e.g. 0.01). The total number of Qc we search are equally-spaced and defined between minimum and maximum. To be set to appropriate parameters for the non-linear inversion
