@@ -24,14 +24,14 @@ History
 
 Documentation
 -------------
-The full documentation can be found on: ???.
+The full documentation is under construction
 
 
 Installation
 ------------
 
 SYSTEM: The program works on a Macbook pro with High Sierra, Matlab R2017a.
-Necessary Toolboxes: Signal Processing and Mapping (for latitute-longitude coordinates - Romania example).
+Necessary Toolboxes: Signal Processing (compulsory) and Mapping (optional, for geolocalisation - Romania example).
 
 Two sample datasets (Mount St. Helens and Romania) can be downloaded at https://doi.pangaea.de/10.1594/PANGAEA.893893 to test the code. A third sample input (Pollino) is provided and the related dataset may be requested to Luca De Siena.
 
@@ -74,6 +74,7 @@ Input file fields
 -------
 
 **Analysis = 1, 2, or 3**
+-------
 
 -pa=1 - Pick delay and Qc without kernels - **De Siena et al. 2016 (EPSL)**
 
