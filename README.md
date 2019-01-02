@@ -180,18 +180,116 @@ RULE: Only for Analysis=3
 **Import Option for Events and Stations**
 RULE: Available indexes: 1 or 2 - Default -> 2
 RULE: It is necessary to define source and station locations for mapping: you can import event origin time and coords of event and station from and external .txt file (1) or from the SAC files directly (2).
-RULE: Index one is the original format of MuRAT 1.0 and requires even.txt and staz.txt files in the format of the sample files:
+RULE: Index one is the original format of MuRAT 1.0 and requires even.txt and staz.txt files as per sample files.
+
+RULE: Index two is the ideal format, where event and station info are stored in the SAC header, in lat/long format.
 
 Event:
+% Name of station - SAChdr.event.kevnm
+% Station latitude - SAChdr.event.evla
+% Station longitude- SAChdr.event.evlo
+% Station depth - SAChdr.event.evdp
+
+Station:
+% Name of station - SAChdr.station.kstnm
+% Station latitude - SAChdr.station.stla
+% Station longitude- SAChdr.station.stlo
+% Station elevation - SAChdr.station.stel
+
+-------------
+**Origin of the Grid**
+RULE: The origin of the 2D or 3D grid for imaging is either in UTM or lat/long with depths in meters or km
+
+-------------
+**Name Events File**
+RULE: Name of the file containing events' coordinates, for Import Option = 1. The format is:
+
+even.txt:
 % column (1) = twelve numbers for the origin time of the event (date+time in seconds)
 % column (2) = UTM (WE) or latitude
 % column (3) = UTM (SN) or longitude
-% column (4) = Altitude above sea level in meters
+% column (4) = Depth in meters
 
-Station:
-% column (1) = Name of station (3 characters)
+-------------
+**Name Stations File**
+RULE: Name of the file containing stations' coordinates, for Import Option = 1. The format is:
+
+staz.txt:
+% column (1) = Max four characters
 % column (2) = UTM (WE) or latitude
 % column (3) = UTM (SN) or longitude
-% column (4) = Altitude above sea level in meters
+% column (4) = Depth in meters or km
 
-RULE: Index two is the ideal format, where event and station info are stored in the SAC header, in lat/long format.
+-------------
+**Number of X Nodes**
+RULE: Number of X layers for the mapping grid
+
+-------------
+**Number of Y Nodes**
+RULE: Number of Y layers for the mapping grid
+
+-------------
+**Grid Step**
+RULE: Regular Step of the Grid in X/Y directions - in meters or degrees
+
+-------------
+**Meters or Degrees**
+RULE: Can be set to either 1 (meters) or 111 (meters in degrees)
+
+-------------
+**Set 1 to Create Rays**
+RULE: Can be set to either 0 (does not create) or 1 (creates) to build a unique variable containing all rays in 3D. This will be stored in the Murat structure in the Murat.geometry.createrays field.
+RULE: NOT RECOMMENDED as the variable will become BIG for tomographic datasets, but can be useful as input for other programs.
+
+-------------
+**Depth Synthetic Model Layer**
+RULE: Set the depth (in meters, negative) to create a two-layer synthetic test.
+RULE: Only available for Analysis=3.
+
+-------------
+**Dimension V**
+RULE: Available indexes: 1 or 3 - Sets the dimension of the velocity model. In case no 3D model is available, iasp91 is used.
+RULE: Only available for Analysis=3.
+
+-------------
+**Name Velocity Model**
+RULE: Name of the file containing the 3D velocity model, if avialable.
+RULE: Only available for Analysis=3.
+
+-------------
+**Size Checkerboard Anomalies**
+RULE: Available indexes: 2 or 4 - Sets the dimension of the checkerboard anomalies to either twice or four times that of the imaging grid.
+
+-------------
+**Highs Checkerboard Anomalies**
+RULE: Sets the high-attenuation values (as inverse Q and inverse Qc) for the checkerboard tests.
+
+-------------
+**Lows Checkerboard Anomalies**
+RULE: Sets the low-attenuation values (as inverse Q and inverse Qc) for the checkerboard tests.
+
+-------------
+**Linear or Nonlinear**
+RULE: Inverts coda attenuation with either a linearised (0) or non-linear (1) approach.
+RULE: Default -> 0
+
+-------------
+**Linear or Nonlinear**
+RULE: Inverts coda attenuation with either a linearised (0) or non-linear (1) approach.
+RULE: Default -> 0
+
+-------------
+**Treshold Linear Fit**
+RULE: The maximum inverse-Qc uncertainty used to weight the coda attenuation data.
+RULE: To be set to an appropriate parameter for the linearised inversion
+
+-------------
+**Length Nonlinear Fit Window** and **Number Nonlinear Fit Window**
+RULE: The length and number of windows used to compute coda energies for the inversion. E.g. for a total coda window of 15 seconds, the user can set either 3 windows of 5 seconds each or 5 windows of 3 seconds each.
+RULE: To be set to appropriate parameters for the non-linear inversion
+
+-------------
+**Minimum Nonlinear Inverse Qc**, **Maximum Nonlinear Inverse Qc**, and **Total Nonlinear Inverse Qc*
+RULE: The search for the Qc minimising the inversion is done starting from a minimum inverse Q (e.g. 0) to a maximum inverse Qc (e.g. 0.01). The total number of Qc we search are equally-spaced and defined between minimum and maximum.
+RULE: To be set to appropriate parameters for the non-linear inversion
+
