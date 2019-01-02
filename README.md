@@ -4,10 +4,11 @@ MuRAT - Multi-Resolution Seismic Attenuation Tomography
 Getting Started
 -------
 
+MuRAT is a Matlab Package for Seismic Attenuation Tomography at multiple Earth scales using Body and Coda Waves 
+
+
 *Features*
 --------
-
-* MuRAT is a Matlab Package for Seismic Attenuation Tomography at multiple Earth scales using Body and Coda Waves 
 
 * MuRAT is a complete software package for measuring seismic attenuation, scattering, and absorption from passive and active data, and map 2D and 3D variations of these parameters in space.
 
