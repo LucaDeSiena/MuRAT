@@ -20,7 +20,7 @@ MuRAT is a Matlab Package for Seismic Attenuation Tomography at multiple Earth s
 
 * The group of active users (providing questions, feedback, snippets of code) comprises De Siena's PhD students at the University of Aberdeen. It includes PhD students he co-supervises internationally. 
 
-History
+*History*
 -------
 
 * 2006-2010: The core of MuRAT (at the time named "Multi-scale reasonable attenuation tomography analysis") is based on Matlab, c++, csh and fortran codes developped at INGV-Osservatorio.
@@ -36,8 +36,7 @@ Documentation
 
 The full documentation for MuRAT2.0 is under construction. This README file and the linked internet sites are to be used as reference. 
 
-
-Installation and running
+*Installation and running*
 ------------
 
 SYSTEM: The program works on a Macbook pro with High Sierra, Matlab R2017a.
@@ -52,7 +51,7 @@ The current version works following these steps:
 
 2. Download the two sample datasets at https://doi.pangaea.de/10.1594/PANGAEA.893893. Unzip the MSH (Mount St. Helens) and Romania datasets and put the folders in Murat-master folder. Delete the zipped files.
 
-3. Build the Input file starting from the samples (either Input_MSH.xsl or Input_Romania.xsl). Read the instructions presented in the next sections.
+3. MuRAT works with a single input file in .xsl format (for now). Build the Input file starting from the samples (either Input_MSH.xsl or Input_Romania.xsl). Read the instructions presented in the next sections.
 
 4. Run MuRAT2.m.
 
@@ -60,11 +59,10 @@ The current version works following these steps:
 
 6. When building your example, use one of the Input files as template. Read attentively the comments and edit only the required parameters. Start with a “pa=1” or “pa=2” analysis. “pa=3” only works with a suitable velocity model.
 
+*Instructions - the input file*
+------------
 
-INSTRUCTIONS TO BUILD INPUT
-========
-
-**Analysis = 1, 2, or 3**
+**Analysis**
 
 *Available indexes: 1, 2, or 3 - Default -> 1*
 
@@ -306,7 +304,15 @@ The length and number of windows used to compute coda energies for the inversion
 
 The search for the Qc minimising the inversion is done starting from a minimum inverse Q (e.g. 0) to a maximum inverse Qc (e.g. 0.01). The total number of Qc we search are equally-spaced and defined between minimum and maximum. To be set to appropriate parameters for the non-linear inversion
 
-Citing MuRAT
+*Instructions - the output files and figures*
+------------
+
+*All the output files (.txt) and figures (in the format defined by the user) are stored in the **Label** folder, created in the **Working Directory**
+
+**Under construction**
+
+
+*Citing MuRAT*
 ------------
 
 If you use MuRAT for your research and publications, please consider citing the first release of the code, published as:
@@ -314,12 +320,12 @@ If you use MuRAT for your research and publications, please consider citing the 
 *De Siena, L., C. Thomas, and R. Aster. "Multi-scale reasonable attenuation tomography analysis (MuRAT): An imaging algorithm designed for volcanic regions." Journal of volcanology and geothermal research 277 (2014): 22-35.*
 
 
-Disclaimer
+*Disclaimer*
 ------------
 
 Although we have cross-checked the whole code, we cannot warranty it is exempt of bugs. The package is provided as-is, we will not be held responsible for any use you make of it, nor for the results and conclusions you may find using MuRAT.
 
-Licence
+*Licence*
 ------------
 
 MuRAT is released under EUPL v1.1
