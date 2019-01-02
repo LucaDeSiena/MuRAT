@@ -76,11 +76,13 @@ INSTRUCTIONS
 
 **Analysis = 1, 2, or 3**
 
--pa=1 - Pick delay and Qc without kernels - *De Siena et al. 2016 (EPSL)*
+*Available indexes: 1, 2, or 3 - Default -> 1*
 
--pa=2 - Pick delay and Qc with kernels - *De Siena et al. 2017 (GRL)*
+Analysis = 1 performs a pick-delay and Qc analysis without kernels, as *De Siena et al. 2016 (EPSL)*
 
--pa=3 - Pick delay, Qc with kernels, and P/S wave attenuation with the coda normalisation method - *De Siena et al. 2017 (GRL) and 2017 (Scientific Reports)*
+Analysis = 2 performs a pick-delay and Qc analysis with kernels, as *De Siena et al. 2017 (GRL)*
+
+Analysis = 3 performs a pick delay, Qc with kernels, and P/S wave attenuation with the coda normalisation method, as *De Siena et al. 2017 (GRL) and 2017 (Scientific Reports)* combined.
 
 ------------
 **Label**
