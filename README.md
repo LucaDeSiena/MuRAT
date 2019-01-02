@@ -1,77 +1,66 @@
 MuRAT - Multi-Resolution Seismic Attenuation Tomography
 =======
 
-A Matlab Package for Seismic Attenuation Tomography at multiple Earth scales using Body and Coda Waves 
+Getting Started
+-------
 
-MuRAT is a complete software package for measuring seismic attenuation, scattering, and absorption from passive and active data, and map 2D and 3D variations of these parameters in space.
+*Features*
+--------
 
-MuRAT also comes in Python and C++ versions (under development) to provide a a fully-integrated solution for seismic attenuation imaging. 
+* MuRAT is a Matlab Package for Seismic Attenuation Tomography at multiple Earth scales using Body and Coda Waves 
 
-MuRAT1.0 was first developed by Luca De Siena (Johannes Gutenberg University, Mainz, Germany) during its PhD at the INGV-Osservatorio Vesuviano, Italy, and published in 2014 while he was research assistant at the Westfälisches Wihelms Universität, Münster.
+* MuRAT is a complete software package for measuring seismic attenuation, scattering, and absorption from passive and active data, and map 2D and 3D variations of these parameters in space.
 
-MuRAT2.0 is the the result of the activity of the Volcano Imaging group, led by De Siea during his stint as permanent Lecturer at the University of Aberdeen, UK.
+* MuRAT also comes in Python and C++ versions (under development) to provide a a fully-integrated solution for seismic attenuation imaging. 
 
-The group of active users (providing questions, feedback, snippets of code) comprises De Siena's PhD students at the University of Aberdeen. It includes PhD students he co-supervises internationally. 
+* MuRAT1.0 was first developed by Luca De Siena (Johannes Gutenberg University, Mainz, Germany) during its PhD at the INGV-Osservatorio Vesuviano, Italy, and published in 2014 while he was research assistant at the Westfälisches Wihelms Universität, Münster.
+
+* MuRAT2.0 is the the result of the activity of the Volcano Imaging group, led by De Siea during his stint as permanent Lecturer at the University of Aberdeen, UK.
+
+* The group of active users (providing questions, feedback, snippets of code) comprises De Siena's PhD students at the University of Aberdeen. It includes PhD students he co-supervises internationally. 
 
 History
 -------
 
 * 2006-2010: The core of MuRAT (at the time named "Multi-scale reasonable attenuation tomography analysis") is based on Matlab, c++, csh and fortran codes developped at INGV-Osservatorio.
-* 2010-2013: MuRAT1.0 is developed as a 3D direct-wave attenuation imaging Matlab-only code with the contribution of Christine Thomas and Richard Aster.
-* 2014: MuRAT1.0 is published in De Siena et al. 2014, JVGR, with two sample datasets (Mount St. Helens and Vesuvius) [JVGR article](https://www.sciencedirect.com/science/article/abs/pii/S0377027314000961)
-* 2019: MuRAT2.0 is released including 2D scattering/absorption mapping and kernel-based inversion and re-branded Multi-Resolution Seismic Attenuation Tomography. [GitHub Repository] (https://github.com/LucaDeSiena/MuRAT)
 
+* 2010-2013: MuRAT1.0 is developed as a 3D direct-wave attenuation imaging Matlab-only code with the contribution of Christine Thomas and Richard Aster.
+
+* 2014: MuRAT1.0 is published in De Siena et al. 2014, JVGR, with two sample datasets (Mount St. Helens and Vesuvius) [JVGR article](https://www.sciencedirect.com/science/article/abs/pii/S0377027314000961)
+
+* 2019: MuRAT2.0 is released including 2D scattering/absorption mapping and kernel-based inversion and re-branded Multi-Resolution Seismic Attenuation Tomography. [GitHub Repository] (https://github.com/LucaDeSiena/MuRAT)
 
 Documentation
 -------------
-The full documentation is under construction
+
+The full documentation for MuRAT2.0 is under construction. This README file and the linked internet sites are to be used as reference. 
 
 
-Installation
+Installation and running
 ------------
 
 SYSTEM: The program works on a Macbook pro with High Sierra, Matlab R2017a.
+
 Necessary Toolboxes: Signal Processing (compulsory) and Mapping (optional, for geolocalisation - Romania example).
 
 Two sample datasets (Mount St. Helens and Romania) can be downloaded at https://doi.pangaea.de/10.1594/PANGAEA.893893 to test the code. A third sample input (Pollino) is provided and the related dataset may be requested to Luca De Siena.
 
 The current version works following these steps:
 
-1. Download the package at https://github.com/LucaDeSiena/MuRAT and unzip folder Utilities_Matlab.
+1. Download the package at https://github.com/LucaDeSiena/MuRAT.
 
-2. Download the two sample datasets at https://doi.pangaea.de/10.1594/PANGAEA.893893. Unzip the MSH (Mount St. Helens) and Romania datasets and put the folders in Murat-master folder.
+2. Download the two sample datasets at https://doi.pangaea.de/10.1594/PANGAEA.893893. Unzip the MSH (Mount St. Helens) and Romania datasets and put the folders in Murat-master folder. Delete the zipped files.
 
-3. Run MuRAT5_3_6.m.
+3. Build the Input file starting from the samples (either Input_MSH.xsl or Input_Romania.xsl). Read the instructions presented in the next sections.
 
+4. Run MuRAT2.m.
 
-INSTRUCTIONS:
+5. After the L curves are produced, pick the smoothing parameter.
 
-1. When asked insert the name of the input file desired (either Input_MSH.m or Input_Romania.m).
-
-2. After the L curves are produced, pick the smoothing parameter.
-
-3. When building your example, use one of the Input files as template. Read attentively the comments and edit only the required parameters. Start with a “pa=1” or “pa=2” analysis. “pa=3” only works with a suitable velocity model.
+6. When building your example, use one of the Input files as template. Read attentively the comments and edit only the required parameters. Start with a “pa=1” or “pa=2” analysis. “pa=3” only works with a suitable velocity model.
 
 
-Citing MuRAT
---------------
-
-If you use MuRAT for your research and publications, please consider citing the first release of the code, published as:
-
-*De Siena, L., C. Thomas, and R. Aster. "Multi-scale reasonable attenuation tomography analysis (MuRAT): An imaging algorithm designed for volcanic regions." Journal of volcanology and geothermal research 277 (2014): 22-35.*
-
-
-Disclaimer
-----------
-
-Although we have cross-checked the whole code, we cannot warranty it is exempt of bugs. The package is provided as-is, we will not be held responsible for any use you make of it, nor for the results and conclusions you may find using MuRAT.
-
-Licence
--------
-
-MuRAT is released under EUPL v1.1
-
-INSTRUCTIONS
+INSTRUCTIONS TO BUILD INPUT
 ========
 
 **Analysis = 1, 2, or 3**
@@ -315,3 +304,21 @@ The length and number of windows used to compute coda energies for the inversion
 **Minimum Nonlinear Inverse Qc**, **Maximum Nonlinear Inverse Qc**, and **Total Nonlinear Inverse Qc**
 
 The search for the Qc minimising the inversion is done starting from a minimum inverse Q (e.g. 0) to a maximum inverse Qc (e.g. 0.01). The total number of Qc we search are equally-spaced and defined between minimum and maximum. To be set to appropriate parameters for the non-linear inversion
+
+Citing MuRAT
+------------
+
+If you use MuRAT for your research and publications, please consider citing the first release of the code, published as:
+
+*De Siena, L., C. Thomas, and R. Aster. "Multi-scale reasonable attenuation tomography analysis (MuRAT): An imaging algorithm designed for volcanic regions." Journal of volcanology and geothermal research 277 (2014): 22-35.*
+
+
+Disclaimer
+------------
+
+Although we have cross-checked the whole code, we cannot warranty it is exempt of bugs. The package is provided as-is, we will not be held responsible for any use you make of it, nor for the results and conclusions you may find using MuRAT.
+
+Licence
+------------
+
+MuRAT is released under EUPL v1.1
