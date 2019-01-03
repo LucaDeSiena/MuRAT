@@ -280,21 +280,21 @@ The search for the Qc minimising the inversion is done starting from a minimum i
 All the output files (.txt) and figures (in the format defined by the user) are stored in the **Label** folder, created in the **Working Directory**. The first three columns of the output files correspond to WE, SN, and depth. The fourth column is the mapped parameter. 
 
 ------------
-**2D peak delays** - *peakdelay.txt*
+*peakdelay.txt*
 
 Variations of Log10 Peak delay with respect to the average - the parameter used to map scattering attenuation. The depth is set to -1000 m. Only four columns as the parameters are just regionalised, not inverted.
 
 ------------
-**2D coda attenuation** - *Qc.txt*
+*Qc.txt*
 
 Variations of inverse Qc, alias coda attenuation - the parameter used to map absorption. The depth is set to -1000 m.
     
-***Analysis = 1***: Only four columns as the parameters are just regionalised, not inverted.
+**Analysis = 1**: Only four columns as the parameters are just regionalised, not inverted.
 
-***Analyses = 2 or 3***: The fifth and sixth columns correspond to input and output of the checkerboard test, respectively. The seventh and eigth columns are the first two 2D kernels.
+**Analyses = 2 or 3**: The fifth and sixth columns correspond to input and output of the checkerboard test, respectively. The seventh and eigth columns are the first two 2D kernels.
 
 ------------
-**3D coda-normalised P/S attenuation** - *Q3D.txt* - Only for **Analysis = 3**
+*Q3D.txt* - Only for **Analysis = 3**
 
 Variations of inverse Q, alias total direct-wave attenuation. The fifth and sixth columns correspond to input and output of the 3D checkerboard test, respectively. The seventh column provides the values of the resolution matrix. The eigth column is the result of a synthetic test using the actual result as input - this is improper, but used in some studies. The ninth and tenth columns are the input and output of the two-layer synthetic test, where the interface is set at **Depth Synthetic Model Layer**. 
 
