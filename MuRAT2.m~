@@ -53,6 +53,15 @@
 
 %% INPUTS AND CHECKS
 
+% Check that user has the Mapping Toolbox installed.
+hasMT = license('test', 'map_toolbox');
+Murat.figures.hasMT=hasMT;
+if ~hasMT
+  % User does not have the toolbox installed.
+  message =...
+      sprintf('No Mapping Toolbox - Maps will not be geo-localised');
+end
+
 unzip('Utilities_Matlab.zip','Utilities_Matlab')
 addpath('./Utilities_Matlab')
 clear
@@ -108,15 +117,6 @@ end
 
 % How big are markers for stations and events
 Murat.figures.sizeMarker=60;
-
-% Check that user has the Mapping Toolbox installed.
-hasMT = license('test', 'map_toolbox');
-Murat.figures.hasMT=hasMT;
-if ~hasMT
-  % User does not have the toolbox installed.
-  message =...
-      sprintf('No Mapping Toolbox - Maps will not be geo-localised');
-end
 
 %% INPUT DATA
 % Choose between P- (2) and S- (3) waves for peak delay
@@ -2264,12 +2264,12 @@ end
 
 pdef(:,4)=pdef(:,4)-mean(pdef(:,4));
 Qcef(:,4)=Qcef(:,4)-mean(Qcef(:,4));
-mipdm=min(pdef(:,4));
-mapdm=max(pdef(:,4));
 miQcm=min(Qcef(:,4));
 maQcm=max(Qcef(:,4));
-trepd=0.05*(mapdm-mipdm)/2;
-treQc=0.05*(maQcm-miQcm)/2;
+mipdm=min(pdef(:,4));
+mapdm=max(pdef(:,4));
+trepd=0.05*(mapdm-;
+treQc=0.05*maQcm;
 
 Qps=Qcef(:,4);
 pdps=pdef(:,4);
