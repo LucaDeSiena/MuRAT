@@ -31,7 +31,7 @@ MuRAT is a Matlab Package for Seismic Attenuation Tomography at multiple Earth s
 
 * 2019: MuRAT2.0 is released including 2D scattering/absorption mapping and kernel-based inversion and re-branded Multi-Resolution Seismic Attenuation Tomography. [GitHub Repository] (https://github.com/LucaDeSiena/MuRAT)
 
-Documentation
+*Documentation*
 -------------
 
 The full documentation for MuRAT2.0 is under construction. This README file and the linked internet sites are to be used as reference. 
@@ -84,7 +84,8 @@ Directory where MuRAT.m is contained - *Default = ./*
 
 ------------
 **Data Folder**
-RULE: Directory containing the SAC files - *Default = ./sac_Label*
+
+Directory containing the SAC files - *Default = ./sac_Label*
 
 ------------
 **Figures Format**
@@ -184,25 +185,9 @@ Seconds before P-wave arrival, where the window to compute noise starts. Only av
 
 It is necessary to define source and station locations for mapping: you can import event origin time and coords of event and station from and external .txt file (1) or from the SAC files directly (2). Index one is the original format of MuRAT 1.0 and requires even.txt and staz.txt files as per sample files. Index two is the ideal format, where event and station info are stored in the SAC header, in lat/long format. The field that must be filled are:
 
-Event:
+*Event*: Name of event - *SAChdr.event.kevnm*; Station latitude - *SAChdr.event.evla*; Station longitude- *SAChdr.event.evlo*; Station depth - *SAChdr.event.evdp*
 
-Name of event - *SAChdr.event.kevnm*
-
-Station latitude - *SAChdr.event.evla*
-
-Station longitude- *SAChdr.event.evlo*
-
-Station depth - *SAChdr.event.evdp*
-
-Station:
-
-Name of station - *SAChdr.station.kstnm*
-
-Station latitude - *SAChdr.station.stla*
-
-Station longitude- *SAChdr.station.stlo*
-
-Station elevation - *SAChdr.station.stel*
+*Station*: Name of station - *SAChdr.station.kstnm*; Station latitude - *SAChdr.station.stla*; Station longitude- *SAChdr.station.stlo*; Station elevation - *SAChdr.station.stel*
 
 -------------
 **Origin of the Grid**
@@ -214,30 +199,14 @@ The origin of the 2D or 3D grid for imaging is either in UTM or lat/long with de
 
 Name of the file containing events' coordinates, for Import Option = 1. The format is:
 
-even.txt:
-
-Column (1) = twelve numbers for the origin time of the event (date+time in seconds)
-
-Column (2) = UTM (WE) or latitude
-
-Column (3) = UTM (SN) or longitude
-
-Column (4) = Depth in meters
+*even.txt*: Column (1) = twelve numbers for the origin time of the event (date+time in seconds); Column (2) = UTM (WE) or latitude; Column (3) = UTM (SN) or longitude; Column (4) = Depth in meters or km
 
 -------------
 **Name Stations File**
 
 Name of the file containing stations' coordinates, for Import Option = 1. The format is:
 
-staz.txt:
-
-Column (1) = Max four characters
-
-Column (2) = UTM (WE) or latitude
-
-Column (3) = UTM (SN) or longitude
-
-Column (4) = Depth in meters or km
+*staz.txt*: Column (1) = Max four characters; Column (2) = UTM (WE) or latitude; Column (3) = UTM (SN) or longitude; Column (4) = Depth in meters or km
 
 -------------
 **Number of X Nodes**, **Number of Y Nodes** and **Grid Step**
@@ -305,94 +274,87 @@ The length and number of windows used to compute coda energies for the inversion
 
 The search for the Qc minimising the inversion is done starting from a minimum inverse Q (e.g. 0) to a maximum inverse Qc (e.g. 0.01). The total number of Qc we search are equally-spaced and defined between minimum and maximum. To be set to appropriate parameters for the non-linear inversion
 
-*Instructions - output files*
+*Instructions - the output files*
 ------------
 
-All the output files (.txt) and figures (in the format defined by the user) are stored in the **Label** folder, created in the **Working Directory**.
-
-The first three columns of the output files correspond to WE, SN, and depth. The fourth column is the mapped parameter. 
+All the output files (.txt) and figures (in the format defined by the user) are stored in the **Label** folder, created in the **Working Directory**. The first three columns of the output files correspond to WE, SN, and depth. The fourth column is the mapped parameter. 
 
 ------------
-**2D Peak delays, Analyses = 1, 2, or 3**
+**2D peak delays** - *peakdelay.txt*
 
-*peakdelay.txt* - Variations of Log10 Peak delay with respect to the average - the parameter used to map scattering attenuation. The depth is set to -1000 m. Only four columns as the parameters are just regionalised, not inverted.
+Variations of Log10 Peak delay with respect to the average - the parameter used to map scattering attenuation. The depth is set to -1000 m. Only four columns as the parameters are just regionalised, not inverted.
 
 ------------
-**2D coda attenuation, Analyses = 1, 2, or 3**
+**2D coda attenuation** - *Qc.txt*
 
-*Qc.txt* - Variations of inverse Qc, alias coda attenuation - the parameter used to map absorption. The depth is set to -1000 m.
+Variations of inverse Qc, alias coda attenuation - the parameter used to map absorption. The depth is set to -1000 m.
     
-====Analysis = 1: Only four columns as the parameters are just regionalised, not inverted.
+***Analysis = 1***: Only four columns as the parameters are just regionalised, not inverted.
 
-====Analyses = 2 or 3: The fifth and sixth columns correspond to input and output of the checkerboard test, respectively. The seventh and eigth columns are the first two 2D kernels.
-
-
-------------
-**Coda-normalised P/S attenuation, Analysis = 3**
-
-*Q3D.txt* - Variations of inverse Q, alias total direct-wave attenuation. The fifth and sixth columns correspond to input and output of the 3D checkerboard test, respectively. The seventh column provides the values of the resolution matrix. The eigth column is the result of a synthetic test using the actual result as input - this is improper, but used in some studies. The ninth and tenth columns are the input and output of the two-layer synthetic test, where the interface is set at **Depth Synthetic Model Layer**. 
-
-
-*Instructions - output figures*
-------------
-
-All the figures (in the **Figures Format** defined by the user) are stored in the **Label** folder, created in the **Working Directory**.
-
-If the Mapping Toolbox is available and the coordinates are in latitude and longitude, the figure will show coast lines.
+***Analyses = 2 or 3***: The fifth and sixth columns correspond to input and output of the checkerboard test, respectively. The seventh and eigth columns are the first two 2D kernels.
 
 ------------
-*Rays.**Figures format***
+**3D coda-normalised P/S attenuation** - *Q3D.txt* - Only for **Analysis = 3**
+
+Variations of inverse Q, alias total direct-wave attenuation. The fifth and sixth columns correspond to input and output of the 3D checkerboard test, respectively. The seventh column provides the values of the resolution matrix. The eigth column is the result of a synthetic test using the actual result as input - this is improper, but used in some studies. The ninth and tenth columns are the input and output of the two-layer synthetic test, where the interface is set at **Depth Synthetic Model Layer**. 
+
+*Instructions - the output figures*
+------------
+
+All the figures (in the **Figures Format** defined by the user) are stored in the **Label** folder, created in the **Working Directory**. If the Mapping Toolbox is available and the coordinates are in latitude and longitude, the figures will show coast lines.
+
+------------
+*Rays.Figures format*
 
 A figure to plot rays either in 2D (Analyses + 1 or 2) or 3D (Analysis = 3) - it will show rays in the reference system of the pre-defined grid with effective sources and stations used.
 
 ------------
-*Qc_sensitivity.**Figures format** - Only available for Analyses = 2 or 3*
+*Qc_sensitivity.Figures format* - Only available for **Analyses = 2 or 3**
 
 A figure to plot the source-station normalised kernel for the first source-station pair. It will show the sensitivity in the reference system of the pre-defined grid.
 
 ------------
-*Spectrogram.**Figures format** - Optional*
+*Spectrogram.Figures format - Optional*
 
 An optional figure to plot the first spectrogram in the dataset. The plot can be used to set appropriate frequency, peak delay, and coda inputs.
 
 ------------
-*Qc_Peak_Delay.**Figures format***
+*Qc_Peak_Delay.Figures format*
 
 A figure to evaluate how well the peak-delay and coda inputs have been set. The upper panel should show a constant inverse Qc with travel time. The lower panel should show an increasing peak delay with travel time. Red dots correspond to outliers. For Q, the maximum uncertainty is defined in **Treshold Linear Fit**, for the non-linear it is pre-defined. For the peak-delay, we define as outliers all the values over twice the standard deviation with respect to the average.
 
 ------------
-*CN_plot.**Figures format** - Optional*
+*CN_plot.Figures format - Optional*
 
 A figure to evaluate if the direct-energy decrease with travel time follows the assumption of the coda-normalisation method (upper panel). Differently from the standard coda-normalisation method, we input the Qc measurements obtained in previous steps in the equation. This removes the effect of coda attenuation variations, improving the fit for the direct wave attenuation. The lower panel shows the effect of resigual geometrical spreading on coda attenuation, with the evental presence of outliers.
 
 ------------
-*Lc_Qc.**Figures format** (for Analyses = 2 or 3) and Lc_CN.**Figures format** (for Analysis = 3)*
+*Lc_Qc.Figures format (for **Analyses = 2 or 3**) and Lc_CN.Figures format (for **Analyses = 2 or 3**)*
 
-These are the only plots appearing if **Figures Visibility = 0**. They show the L-curves corresponding to the coda-attenuation and total-attenuation inversion. After they appear, a prompt asks which damping parameter the user wants to pick.
+These are the only plots appearing if **Figures Visibility = 0** during computation. They show the L-curves corresponding to the coda-attenuation and total-attenuation inversion. After they appear, a prompt asks which damping parameter the user wants to pick.
 
 ------------
-*Picard_Qc.**Figures format** (for Analyses = 2 or 3)and Picard_CN.**Figures format** (for Analysis = 3)*
+*Picard_Qc..Figures format (for **Analyses = 2 or 3**) and Picard_CN.Figures format (for **Analysis = 3**)*
 
 These plots show the result of the Picard analysis, necessary to evaluate how many of the inversion parameters are correctively solved in the coda-attenuation and total-attenuation inversions, respectively. The two figures are not shown during computation.
 
 ------------
-*Peak_delay_map.**Figures format** and Qc_map.**Figures format***
+*Peak_delay_map..Figures format* and *Qc_map.Figures format*
 
 These plots show the result of the peak-delay and Qc mapping in the grid reference system.
 
 ------------
-*Qc_checkerboard_input.**Figures format** and Qc_checkerboard_output.**Figures format** - Only for Analyses = 2 or 3*
+*Qc_checkerboard_input.Figures format* and *Qc_checkerboard_output.Figures format - Only for **Analyses = 2 or 3***
 
 These plots show the result of the checkerboard test for the Qc mapping in the grid reference system.
 
-
 ------------
-*Parameter_space_variations.**Figures format***
+*Parameter_space_variations.Figures format*
 
 Separation of scattering and absorption parameters in their parameter space. Gray dots correspond to parameters too near to the average to be interpreted as scattering or absorption variations - the treshold is pre-defined at 5% of the maximum variation of each parameter. Red = High scattering and absorption; Cyan = High scattering and low absorption; Orange = Low scattering and high absorption; Green = Low scattering and absorption.
 
 ------------
-*Q_model.fig; V_model.fig; 3DQ_check_input.fig; 3DQ_check_output.fig - Only for Analysis = 3*
+*Q_model.fig; V_model.fig; 3DQ_check_input.fig; 3DQ_check_output.fig - Only for **Analysis = 3***
 
 The 3D velocityy model, the total attenuation model, and the checkerboard test input and output are available as 3D figures in Matlab format. They can be loaded in matlab, and will show the vertical and horizontal slices defined in **Figures Sections**.
 
