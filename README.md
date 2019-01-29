@@ -14,7 +14,7 @@ MuRAT is a Matlab Package for Seismic Attenuation Tomography at multiple Earth s
 
 * MuRAT also comes in Python and C++ versions (under development) to provide a fully-integrated solution for seismic attenuation imaging. 
 
-* MuRAT1.0 was first developed by Luca De Siena (Johannes Gutenberg University, Mainz, Germany) during its PhD at the INGV-Osservatorio Vesuviano, Italy, and published in 2014 while he was research assistant at the Westfälisches Wilhelms Universität, Münster.
+* MuRAT1.0 was first developed by Luca De Siena (Johannes Gutenberg University, Mainz, Germany) during his PhD at the INGV-Osservatorio Vesuviano, Italy, and published in 2014 while he was research assistant at the Westfälisches Wilhelms Universität, Münster.
 
 * MuRAT2.0 is the result of the activity of the Volcano Imaging group, led by De Siena during his stint as permanent Lecturer at the University of Aberdeen, UK.
 
