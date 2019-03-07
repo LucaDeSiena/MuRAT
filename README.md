@@ -39,7 +39,7 @@ The full documentation for MuRAT2.0 is under construction. This README file and 
 *Installation and running*
 ------------
 
-SYSTEM: The program works on a Macbook pro with High Sierra, Matlab R2017a.
+SYSTEM: The program works on: 1) Macbook pro with High Sierra, Matlab R2017a; 2) Ubuntu 16.04.6 LTS, Matlab R2017a.
 
 Necessary Toolboxes: Signal Processing (compulsory) and Mapping (optional, for geolocalisation - Romania example).
 
