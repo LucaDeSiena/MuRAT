@@ -786,6 +786,7 @@ FLabel=Murat.paths.label;
 visib=Murat.figures.visibility;
 sz=Murat.figures.sizeMarker;
 fformat=Murat.figures.format;
+hasMT=Murat.figures.hasMT;
 
 %DATA
 evst=Murat.geometry.import;
