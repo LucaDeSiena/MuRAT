@@ -427,7 +427,7 @@ elseif Murat.inversion.nonlinear==1
     Murat.inversion.fit = (m1min + (m1max-m1min)/(total-1)*(0:total-1))';
 end
 
-if exist(Murat.paths.label,'dir')~=7
+if exist(cat(2,'./',Murat.paths.label),'dir')~=7
     mkdir(Murat.paths.label)
 end
 
