@@ -41,9 +41,6 @@ The full documentation for MuRAT2.0 is under construction. This README file and 
 
 SYSTEM: The program works on: 1) Macbook pro with High Sierra, Matlab R2017a; 2) Ubuntu 16.04.6 LTS, Matlab R2017a.
 
-<<<<<<< HEAD
-Necessary Toolboxes: Signal Processing, Image Processing, Curve Fitting (compulsory) and Mapping (optional, for geolocalisation - Romania example).
-=======
 Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing (compulsory) and Mapping (optional, for geolocalisation - Romania example).
 >>>>>>> 9692690e5a2bb312d96731453586d6f24374a22b
 
