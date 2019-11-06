@@ -42,7 +42,6 @@ The full documentation for MuRAT2.0 is under construction. This README file and 
 SYSTEM: The program works on: 1) Macbook pro with High Sierra, Matlab R2017a; 2) Ubuntu 16.04.6 LTS, Matlab R2017a.
 
 Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing (compulsory) and Mapping (optional, for geolocalisation - Romania example).
->>>>>>> 9692690e5a2bb312d96731453586d6f24374a22b
 
 Two sample datasets (Mount St. Helens and Romania) can be downloaded at https://doi.pangaea.de/10.1594/PANGAEA.893893 to test the code. The third sample input (Pollino) in the working directory works with a dataset that may be requested to Luca De Siena.
 
