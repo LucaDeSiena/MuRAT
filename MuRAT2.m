@@ -53,7 +53,7 @@
 
 %% INPUTS AND CHECKS
 
-unzip('Utilities_Matlab.zip','Utilities_Matlab')
+unzip('Utilities_Matlab.zip')
 addpath('./Utilities_Matlab')
 clear
 close all
