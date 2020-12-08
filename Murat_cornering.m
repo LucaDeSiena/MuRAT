@@ -1,87 +1,75 @@
-%FINDS the indices of the vertex of the
-% cube of grid points surrounding the point (xx,yy,zz).
-% ip = index of minimum x grid coord (min. x coord. = grid(1,ip)).
-% jp = index of minimum y grid coord (min. y coord. = grid(2,jp)).
-% kp = index of minimum z grid coord (min. z coord. = grid(3,kp)).
+%FINDS the indices of the vertex of the cube of grid points surrounding the
+% point [xx,yy,zz].
+% ip = index of minimum x grid coord - West;
+% jp = index of minimum y grid coord - South;
+% kp = index of maximum z grid coord - shallowest.
 
 function [ip,jp,kp,flag]    =   Murat_cornering(xx,yy,zz,gridD)
 
-x(1)=xx;
-x(2)=yy;
-x(3)=zz;
-ngrid=[nnz(gridD(1,:)) nnz(gridD(2,:)) nnz(gridD(3,:))];
-flag=0;
+% Coordinates of the propagation grid are unwrapped
+xGrid                       =   gridD.x;
+yGrid                       =   gridD.y;
+zGrid                       =   gridD.z;
+
+% If point exceeds grid extrema
+flag                        =   0;
 
 %If statement to check if the point is outside the gridg
-if zz < min(gridD(3,:))
-    [~,ip]=min(abs(xx-gridD(1,1:ngrid(1))));
-    [~,jp]=min(abs(yy-gridD(2,1:ngrid(2))));
-    kp=ngrid(3);
-    flag=1;
-%     no = zz;
-%     warning('Point is at depth=%f, too deep',no);
+if zz < min(zGrid)
+    [~,ip]                  =   min(abs(xx-xGrid));
+    [~,jp]                  =   min(abs(yy-yGrid));
+    [~,kp]                  =   min(zGrid);
+    flag                    =   1;
+    %     no = zz;
+    %     warning('Point is at depth=%f, too deep',no);
     return
-elseif zz > max(gridD(3,:))
-    [~,ip]=min(abs(xx-gridD(1,1:ngrid(1))));
-    [~,jp]=min(abs(yy-gridD(2,1:ngrid(2))));
-    kp=1;
-%     no = zz;
-%     warning('Point is at depth=%f, too shallow',no);
-    flag=1;
-    return
-end
-if yy < min(gridD(2,:))
-    [~,ip]=min(abs(xx-gridD(1,1:ngrid(1))));
-    [~,kp]=min(abs(zz-gridD(3,1:ngrid(3))));
-    jp=1;
-%     no = yy;
-%     warning('Point is at y=%f',no);
-    flag=1;
-    return
-elseif yy > max(gridD(2,:))
-    [~,ip]=min(abs(xx-gridD(1,1:ngrid(1))));
-    [~,kp]=min(abs(zz-gridD(3,1:ngrid(3))));
-%     no = yy;
-%     warning('Point is at y=%f',no);
-    jp=ngrid(2);
-    flag=1;
+elseif zz > max(zGrid)
+    [~,ip]                  =   min(abs(xx-xGrid));
+    [~,jp]                  =   min(abs(yy-yGrid));
+    [~,kp]                  =   max(zGrid);
+    flag                    =   1;
+    %     no = zz;
+    %     warning('Point is at depth=%f, too shallow',no);
     return
 end
-if xx < min(gridD(1,:))
-    [~,jp]=min(abs(yy-gridD(2,1:ngrid(2))));
-    [~,kp]=min(abs(zz-gridD(3,1:ngrid(3))));
-    ip=1;
-%     no = xx;
-%     warning('Point is at x=%f',no);
-    flag=1;
+if yy < min(yGrid)
+    [~,ip]                  =   min(abs(xx-xGrid));
+    [~,jp]                  =   min(yGrid);
+    [~,kp]                  =   min(abs(zz-zGrid));
+    flag                    =   1;
+    %     no = yy;
+    %     warning('Point is at y=%f',no);
     return
-elseif xx > max(gridD(1,ngrid(1)))
-    [~,jp]=min(abs(yy-gridD(2,1:ngrid(2))));
-    [~,kp]=min(abs(zz-gridD(3,1:ngrid(3))));
-    ip=ngrid(1);
-%     no = xx;
-%     warning('Point is at x=%f',no);
+elseif yy > max(yGrid)
+    [~,ip]                  =   min(abs(xx-xGrid));
+    [~,jp]                  =   max(yGrid);
+    [~,kp]                  =   min(abs(zz-zGrid));
+    flag                    =   1;
+    %     no = yy;
+    %     warning('Point is at y=%f',no);
+    return
+end
+if xx < min(xGrid)
+    [~,ip]                  =   min(xGrid);
+    [~,jp]                  =   min(abs(yy-yGrid));
+    [~,kp]                  =   min(abs(zz-zGrid));
     flag=1;
+    %     no = xx;
+    %     warning('Point is at x=%f',no);
+    return
+elseif xx > max(xGrid)
+    [~,ip]                  =   max(xGrid);
+    [~,jp]                  =   min(abs(yy-yGrid));
+    [~,kp]                  =   min(abs(zz-zGrid));
+    flag                    =   1;
+    %     no = xx;
+    %     warning('Point is at x=%f',no);
     return
 end
 
-% Loop over dimensions
-indx=zeros(3,1);
+% Finds index - remember convention on shallowest SW point!
+ip                          =   find(xGrid<xx,1,'last');
+jp                          =   find(yGrid<yy,1,'last');
+kp                          =   find(zGrid>zz,1,'last');
 
-for j=1:3
-    indx(j)=ngrid(j);
-    if j<3
-        while x(j)<gridD(j,indx(j))
-            indx(j)=indx(j)-1;
-        end
-    else
-        while x(3)>gridD(3,indx(3))
-            indx(3)=indx(3)-1;
-        end
-    end
-end
-    
-    ip=indx(1);
-    jp=indx(2);
-    kp=indx(3)+1;
 end

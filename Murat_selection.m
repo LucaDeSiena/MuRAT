@@ -1,7 +1,6 @@
 function Murat                      = Murat_selection(Murat)
 
 % Selects input and data to select
-RZZ2                                =   Murat.input.fitTreshold;
 compon                              =   Murat.input.components;
 tresholdnoise                       =   Murat.input.tresholdNoise;
 modv                                =   Murat.input.modv;
@@ -14,22 +13,23 @@ A                                   =   Murat.data.inversionMatrixQ;
 Ac                                  =   Murat.data.inversionMatrixQc;
 peakd                               =   Murat.data.peakDelay;
 luntot                              =   Murat.data.totalLengthRay;
-tPS                                 =   Murat.data.travelTimePOrS;
-evestaz                             =   Murat.data.locations;
+tPS                                 =   Murat.data.theoreticalTime;
+evestaz                             =   Murat.data.locationsDeg;
 Qm                                  =   Murat.data.inverseQc;
 RZZ                                 =   Murat.data.uncertaintyQc;
 rapsp                               =   Murat.data.energyRatioBodyCoda;
 rapspcn                             =   Murat.data.energyRatioCodaNoise;
 raysplot                            =   Murat.data.raysPlot;
-rayscrossing                        =   Murat.data.rayCrossing;
 
 %Find the amount of Qc unavailable in the data
 noQm                                =   sum(Qm==0)/length(Qm)*100;
 
 %Conditions for the linear and non-linear inversions are opposite
 if nonlinear == 0
+    RZZ2                            =   Murat.input.fitTresholdLinear;
     noRZZ                           =   sum(RZZ<=RZZ2)/length(RZZ)*100;
 elseif nonlinear == 1
+    RZZ2                            =   Murat.input.fitTresholdNonLinear;
     noRZZ                           =   sum(RZZ>=RZZ2)/length(RZZ)*100;
 end
 
@@ -53,7 +53,6 @@ luntot                              =   luntot(1:compon:dataL);
 time0                               =   tPS(1:compon:dataL);
 evestaz                             =   evestaz(1:compon:dataL,:);
 raysplot                            =   raysplot(:,:,1:compon:dataL);
-rayscrossing                        =   rayscrossing(1:compon:dataL);
 Ac                                  =   Ac(1:compon:dataL,:);
 Apd                                 =   Apd(1:compon:dataL,:);
 A                                   =   A(1:compon:dataL,:);
@@ -180,21 +179,18 @@ Ac                                  =   Ac(:,K_crosses);
 modv_Qc                             =   modv(:,1:3);
 modv_Qc(K_crosses,5)                =   1;
 
-
 Murat.data.inversionMatrixPeakDelay =   Apd;
 Murat.data.inversionMatrixQ         =   A;
 Murat.data.inversionMatrixQc        =   Ac;
 Murat.data.peakDelay                =   peakd;
 Murat.data.totalLengthRay           =   luntot;
-Murat.data.travelTimePOrS           =   tPS;
-Murat.data.locations                =   evestaz;
+Murat.data.locationsDeg             =   evestaz;
 Murat.data.inverseQc                =   Qm;
 Murat.data.uncertaintyQc            =   RZZ;
 Murat.data.energyRatioBodyCoda      =   rapsp;
 Murat.data.energyRatioCodaNoise     =   rapspcn;
 Murat.data.raysPlot                 =   raysplot;
 Murat.data.plotRays                 =   raysplot;
-Murat.data.rayCrossing              =   rayscrossing;
 
 Murat.data.variationPeakDelay       =   lpdelta;
 Murat.data.travelTime               =   time0;

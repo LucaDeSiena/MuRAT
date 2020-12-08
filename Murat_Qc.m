@@ -43,7 +43,7 @@ elseif Murat.input.nonLinear == 1
     %Solving with the grid-search
     nW                  =   Murat.input.fitLengthWindows;
     ntW                 =   Murat.input.fitNumberWindows;
-    L1                  =   Murat.input.fitNumber;
+    L1                  =   Murat.input.totalQcNumber;
     m1a                 =   Murat.input.fitTrialQc;
 
     %THIS IS THE SYSTEM OF EQUATIONS FOR THE NON-LINEAR SOLUTION

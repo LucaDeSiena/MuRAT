@@ -18,7 +18,9 @@ zp                      =   zp/1000;
 [Xp,Yp,Zp]              =   meshgrid(yp,xp,zp);
 mVp                     =   interp3(X,Y,Z,V,Xp,Yp,Zp);
 
-mVp                      =   inpaintn(mVp);
+% if find(isnan(mVp))
+%     mVp                      =   inpaintn(mVp);
+% end
 
 z                       =   sort(z)/1000;
 % Creates and outputs figure in 3D

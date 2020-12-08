@@ -18,10 +18,12 @@ lengthParameterModel                    =   length(Murat.input.modv(:,1));
 if Murat.input.importLocation ~= 1
     
     eventStation                        =   zeros(lengthData,6);
-    
+    locationDeg                         =   zeros(lengthData,6); 
+
 else
     
     eventStation                        =   Murat.input.Locations;
+    locationDeg                         =   eventStation;
     dist_xdeg_even                      =   eventStation(:,2)-origin(2);
     dist_ydeg_even                      =   eventStation(:,1)-origin(1);
     eventStation(:,3)                   =   -eventStation(:,3);
@@ -38,13 +40,12 @@ else
 end
 
 %Set up variables to save
-location                                =   zeros(lengthData,6); 
+locationM                               =   zeros(lengthData,6); 
 theoreticalTime                         =   zeros(lengthData,1); 
 peakDelay                               =   zeros(lengthData,1); 
 totalLengthRay                          =   zeros(lengthData,1);
 inverseQc                               =   zeros(lengthData,1); 
 uncertaintyQc                           =   zeros(lengthData,1); 
-travelTimePOrS                          =   zeros(lengthData,1);
 energyRatioBodyCoda                     =   zeros(lengthData,1); 
 energyRatioCodaNoise                    =   zeros(lengthData,1);
 raysPlot                                =   zeros(100,5,lengthData);
@@ -60,7 +61,7 @@ rayCrossing                             =...
 
 
 %=========================================================================
-parfor i = 1:lengthData %loop through source-station pairs
+for i = 1:lengthData %loop through source-station pairs
     
     %Display every 200 waveforms
     if isequal(mod(i,1000),0)
@@ -71,8 +72,8 @@ parfor i = 1:lengthData %loop through source-station pairs
     
     %% OPERATIONS ON WAVEFORM
     listSac_i                           =   listSac{i};
-    [pktime_i,sp_i,hsp_i,SAChdr_i,...
-        srate_i,tempis]                 =...
+    [sp_i,hsp_i,SAChdr_i,...
+        srate_i]                 =...
         Murat_envelope(Murat,listSac_i);
     
     % In case it has been precalculated from external files.
@@ -80,19 +81,19 @@ parfor i = 1:lengthData %loop through source-station pairs
     
     if isequal(eventStation_i,zeros(1,6))
     
-        location_i                      =   Murat_location(Murat,SAChdr_i);
-        
+        [locationDeg_i, locationM_i]    =   Murat_location(Murat,SAChdr_i);
+        locationDeg(i,:)                =   locationDeg_i;
+    
     else
         
-        location_i                      =   eventStation_i;
-    
+        locationM_i                     =   eventStation_i;
+        
     end
     
-    [theoreticalTime_i, originTime_i,...
-        tCoda_i, cursorPick_i, cursorPeakDelay_i, cursorCodaStart_i,...
-        cursorCodaEnd_i]                =...
-        Murat_times(Murat,tempis,pktime_i,location_i,srate_i);
-    travelTimePOrS_i                    =   pktime_i - originTime_i;
+    [theoreticalTime_i, tCoda_i, cursorPick_i, cursorPeakDelay_i,...
+        cursorCodaStart_i, cursorCodaEnd_i]...
+                                        =...
+        Murat_times(Murat,locationM_i,listSac_i);
     
     %% OPERATIONS TO MEASURE AND MODEL PEAK DELAYS + INVERSION MATRIX Q
     peakDelay_i                         =...
@@ -104,7 +105,7 @@ parfor i = 1:lengthData %loop through source-station pairs
         
         [Apd_i, AQ_i, totalLengthRay_i, raysPlot_i,...
             rayCrossing_i]              =...
-            Murat_rays(Murat,location_i);
+            Murat_rays(Murat,locationM_i);
         
         inversionMatrixPeakDelay(i,:)   =   Apd_i;
         inversionMatrixQ(i,:)           =   AQ_i;
@@ -125,7 +126,7 @@ parfor i = 1:lengthData %loop through source-station pairs
     if calculateKernels
         
             AQc_i                       =...
-                Murat_codaMatrix(Murat,0,tCoda_i,location_i);
+                Murat_codaMatrix(Murat,0,tCoda_i,locationM_i);
             
             inversionMatrixQc(i,:)      =   AQc_i;
     
@@ -133,13 +134,12 @@ parfor i = 1:lengthData %loop through source-station pairs
                 
     %% OPERATIONS TO MEASURE  Q
     [energyRatioBodyCoda_i,...
-        energyRatioCodaNoise_i]         = Murat_body(Murat,...
+        energyRatioCodaNoise_i]         =   Murat_body(Murat,...
         srate_i,hsp_i,cursorPick_i,cursorCodaStart_i,cursorCodaEnd_i);
  
     %% SAVING
-    location(i,:)                       =   location_i;
+    locationM(i,:)                      =   locationM_i;
     theoreticalTime(i,1)                =   theoreticalTime_i;
-    travelTimePOrS(i,1)                 =   travelTimePOrS_i;
     peakDelay(i,1)                      =   peakDelay_i;
     inverseQc(i,1)                      =   inverseQc_i; 
     uncertaintyQc(i,1)                  =   uncertaintyQc_i; 
@@ -149,9 +149,9 @@ parfor i = 1:lengthData %loop through source-station pairs
 end
 
 %% Setting up the final data vectors and matrices with checks on values
-Murat.data.locations                    =   location;
+Murat.data.locationsDeg                 =   locationDeg;
+Murat.data.locationsM                   =   locationM;
 Murat.data.theoreticalTime              =   theoreticalTime;
-Murat.data.travelTimePOrS               =   travelTimePOrS;
 Murat.data.peakDelay                    =   peakDelay;
 Murat.data.inversionMatrixPeakDelay     =   inversionMatrixPeakDelay;
 Murat.data.inversionMatrixQ             =   inversionMatrixQ;
@@ -168,12 +168,12 @@ Murat.data.energyRatioCodaNoise         =   energyRatioCodaNoise;
 Murat                                   =   Murat_selection(Murat);
 
 
-function calculateValue         =...
+function calculateValue                 =...
     recognizeComponents(index,components)
 %LOGICAL to decide if forward model is necessary depending in waveform
 %number (index) and number of components.
 
-calculateValue                  =   isequal(components,1) ||...
+calculateValue                          =   isequal(components,1) ||...
     (isequal(components,2) && ~isequal(mod(index,2),0)) ...
         || (isequal(components,1) && ~isequal(mod(index,2),0) &&...
         ~isequal(mod(index,3),0));

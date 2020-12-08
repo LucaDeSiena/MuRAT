@@ -6,13 +6,13 @@ function Murat                  =   Murat_inversion(Murat)
 FPath                           =   Murat.input.workingDirectory;
 FLabel                          =   Murat.input.label;
 fformat                         =   Murat.input.format;
-figuresInversion                =   Murat.input.inversion;
+outputLCurve                    =   Murat.input.lCurve;
 tCm                             =   Murat.input.startLapseTime;
 tWm                             =   Murat.input.codaWindow;
 cf                              =   Murat.input.centralFrequency;
 sped                            =   Murat.input.spectralDecay;
-nxc                             =   Murat.input.gridX;
-nyc                             =   Murat.input.gridY;
+nxc                             =   Murat.input.gridLong;
+nyc                             =   Murat.input.gridLat;
 nzc                             =   Murat.input.gridZ;
 sizea                           =   Murat.input.sizeCheck;
 latt                            =   Murat.input.lowCheck;
@@ -76,12 +76,15 @@ dcW                             =   Wc*Qm(retain_Qc);
 Gc                              =   Wc*Ac;
 [Uc,Sc,Vc]                      =   svd(Gc);
 
-if figuresInversion == 1
+if outputLCurve == 1
     
     % Damped parameter is user defined
     LcQc                        =...
         figure('Name','L-curve Qc','NumberTitle','off');
-    l_curve(Uc,diag(Sc),dcW,'Tikh')
+    [rho,eta,reg_param]         =...
+        l_curve_tikh_svd(Uc,diag(Sc),dcW,100);
+    plot_lc(rho,eta,'-',1,reg_param)
+%     l_curve(Uc,diag(Sc),dcW,'Tikh')
     % define from L-curve
     tik0_regC                   =...
         input('Your personal smoothing parameter for coda ');
@@ -97,7 +100,7 @@ if figuresInversion == 1
     FName                       =   'Picard_Qc';
     saveas(PpQc,fullfile(FPath, FLabel, FName), fformat);
 else
-    tik0_regC                   =   Murat.data.lCurveQc;
+    tik0_regC                   =   Murat.input.lCurveQc;
     
 end
 % invert
@@ -134,7 +137,7 @@ d1                              =...
 % tikhonov inversion - by using the programs in HANSEN et al. 1994
 [U,S,V]=svd(A);
 
-if figuresInversion == 1
+if outputLCurve == 1
     
     %sets the smoothing parameter - always user defined
     LcCN                        =   figure('Name','L-curve coda-normalization','NumberTitle','off');
@@ -152,7 +155,7 @@ if figuresInversion == 1
     saveas(PpCN,fullfile(FPath, FLabel, FName), fformat);
     
 else
-    tik0_reg                    =   Murat.data.lCurveQ;
+    tik0_reg                    =   Murat.input.lCurveQ;
     
 end
 %results

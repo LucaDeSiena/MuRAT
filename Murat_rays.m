@@ -1,8 +1,8 @@
-function [Apd_i, A_i, luntot_i, rma_i,rayCrossing_i]  =...
+function [Apd_i, A_i, luntot_i, rma_i, rayCrossing_i]  =...
     Murat_rays(Murat,sst_i)
 
 modv                                    =   Murat.input.modv;
-gridD                                   =   Murat.input.gridD;
+gridD                                   =   Murat.input.gridPropagation;
 pvel                                    =   Murat.input.pvel;
 
 Apd_i                                   =   zeros(1,length(modv(:,1)));

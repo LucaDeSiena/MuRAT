@@ -9,28 +9,28 @@ load coastlines coastlat coastlon
 z                       =   sort(z)/1000;
 lrma                    =   length(rma(1,1,:));
 
+subplot(2,2,1)
+geoshow(coastlat,coastlon);
+rma(:,1,:)              =   origin(1) + km2deg(rma(:,1,:));
+rma(:,2,:)              =   origin(2) + km2deg(rma(:,2,:));
 for i = 1:lrma
     ray                 =   rma(:,:,i);
-    ray(:,1)            =   origin(1) + km2deg(ray(:,1));
-    ray(:,2)            =   origin(2) + km2deg(ray(:,2));
     
     subplot(2,2,1)
     hold on
     plot(ray(:,1),ray(:,2),'k');
-    geoshow(coastlat,coastlon);
-    hold off
     
     subplot(2,2,2)
     hold on
     plot(ray(:,2),ray(:,3),'k');
-    hold off
     
     subplot(2,2,3)
     hold on
     plot(ray(:,1),ray(:,3),'k');
-    hold off
 end
 
+centreGrid              =   [origin(1) + (ending(1) - origin(1))/2 ...
+    origin(2) + (ending(2) - origin(2))/2];
 
 subplot(2,2,1)
 hold on
@@ -100,13 +100,13 @@ subplot(2,2,4)
 hold on
 
 geoshow(coastlat,coastlon,'Color','k');
-scatter(evestaz(1,4),evestaz(1,5),100,...
+scatter(centreGrid(1),centreGrid(2),100,...
     'c','MarkerEdgeColor',...
     [1 1 1], 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 
-xticks(x(1))
+xticks(centreGrid(1))
 set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
-yticks(y(1))
+yticks(centreGrid(2))
 set(gca,'yticklabel',num2str(get(gca,'ytick')','%.2f'))
 axis auto
 SetFDefaults();
