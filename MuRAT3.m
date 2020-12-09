@@ -26,7 +26,7 @@
 % Input files  fom those.
 % # Run MuRAT3.m and select the name of the input file you created.
 %
-% Author:  L. De Siena, November 2020
+% Author:  L. De Siena, December 2020
 %
 %% INPUTS AND CHECKS
 % The code asks for an input file, build one from the sample files provided
@@ -47,6 +47,7 @@ end
 run(fullfile(path, file));
 
 Murat                               =   Murat_checks(Murat);
+Murat.input                         =   orderfields(Murat.input);
 save Murat_checks.mat   Murat
 
 %% SEISMIC DATA PROCESSING AND FORWARD MODELLING

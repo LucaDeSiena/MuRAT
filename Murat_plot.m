@@ -19,6 +19,7 @@ figuresGeometry                 =   Murat.input.geometry;
 figuresInversion                =   Murat.input.inversion;
 figuresCheckerboard             =   Murat.input.checkerboard;
 figuresSpike                    =   Murat.input.spike;
+plotV                           =   Murat.input.modvPlot;
 
 Qm                              =   Murat.data.inverseQc;
 time0                           =   Murat.data.travelTime;
@@ -49,13 +50,13 @@ sizeTitle                       =   18;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% PLOTS - coverage and sensitivity
+storeFolder                     =   'Rays_Checks';
 
 if figuresGeometry == 1
     % Rays for different techniques
     
     % Plotting rays for peak delay
     FName_peakDelay             =   'Rays-PeakDelay';
-    
     %Creates figure with rays
     rma_pd                      =   rma(:,2:4,retainPeakDelay)/1000;
     evestaz_pd                  =   evestaz(retainPeakDelay,:);
@@ -65,7 +66,7 @@ if figuresGeometry == 1
         x,y,z,FName_peakDelay,visib);
     
     saveas(rays_peakDelay,...
-        fullfile(FPath, FLabel, FName_peakDelay), fformat);
+        fullfile(FPath, FLabel, storeFolder, FName_peakDelay), fformat);
     
     % Plotting rays for Q
     FName_Q                     =   'Rays-Q';
@@ -78,7 +79,7 @@ if figuresGeometry == 1
         Murat_imageRays(rma_Q,origin,ending,evestaz_Q,sz,...
         x,y,z,FName_Q,visib);
     
-    saveas(rays_Q,fullfile(FPath, FLabel, FName_Q), fformat);
+    saveas(rays_Q,fullfile(FPath, FLabel, storeFolder, FName_Q), fformat);
     
     % Plotting kernels for Qc
     FName_Qc                    =   'Kernel-Qc';
@@ -91,7 +92,7 @@ if figuresGeometry == 1
     Murat_codaMatrix(Murat,1,...
         Murat.input.startLapseTime,evestazMeters(1,:));
     
-    saveas(kernels,fullfile(FPath, FLabel, FName_Qc));
+    saveas(kernels,fullfile(FPath, FLabel, storeFolder, FName_Qc));
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -146,14 +147,16 @@ if figuresData == 1
     SetFDefaults()
     
     FName                       =   'Qc_Peak_Delay';
-    saveas(Qcpd, fullfile(FPath, FLabel, FName), fformat);
+    saveas(Qcpd, fullfile(FPath, FLabel, storeFolder, FName), fformat);
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %% PLOT - RESULTS
 %Set up matrices
 %The points are the upper SW vertces so that they work with the function
 %slice
+storeFolder                     =   'Results';
+
+
 [X,Y,Z1,mPD]                    =   Murat_fold(x,y,z,modv_pd(:,4));
 [~,~,~,mQc]                     =   Murat_fold(x,y,z,modv_Qc(:,4));
 [~,~,~,mQ]                      =   Murat_fold(x,y,z,modv_Q(:,4));
@@ -177,7 +180,7 @@ if figuresInversion == 1
     title('Peak-delay variations',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     
-    saveas(peakDelaymap,fullfile(FPath, FLabel, FName_PDMap));
+    saveas(peakDelaymap,fullfile(FPath, FLabel, storeFolder, FName_PDMap));
     
     %Qc
     
@@ -189,7 +192,7 @@ if figuresInversion == 1
     title('Coda attenuation',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     
-    saveas(Qcmap,fullfile(FPath, FLabel, FName_QcMap));
+    saveas(Qcmap,fullfile(FPath, FLabel, storeFolder, FName_QcMap));
     
     %Q
     purpleorange = colMapGen([.5 0 .5],[0.91 0.41 0.17],256);
@@ -202,7 +205,18 @@ if figuresInversion == 1
     title('Coda attenuation',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     
-    saveas(Qmap,fullfile(FPath, FLabel, FName_QMap));
+    saveas(Qmap,fullfile(FPath, FLabel, storeFolder, FName_QMap));
+    
+    %VELOCITY MODEL
+    
+    FName_Vimage                    =   'Velocity_model';
+    Vimage                          =   Murat_image3D(X,Y,Z,plotV,...
+        inferno,sections,evestaz_Q,x,y,z,FName_Vimage,sz,visib);
+    title('Velocity Model',...
+        'FontSize',sizeTitle,'FontWeight','bold','Color','k');
+    
+    saveas(Vimage,fullfile(FPath, FLabel, storeFolder, FName_Vimage));
+    
 end
 %% PLOT - CHECKERBOARDS
 
@@ -223,7 +237,7 @@ if figuresCheckerboard == 1
     title('Input checkerboard Qc',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     
-    saveas(Qcinput,fullfile(FPath, FLabel, FName_QcInput));
+    saveas(Qcinput,fullfile(FPath, FLabel, storeFolder, FName_QcInput));
     
     %Output
     FName_QcOutput              =   'Qc-Checkerboard-Output';
@@ -234,7 +248,7 @@ if figuresCheckerboard == 1
     title('Output checkerboard Qc',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     
-    saveas(Qcoutput,fullfile(FPath, FLabel, FName_QcOutput));
+    saveas(Qcoutput,fullfile(FPath, FLabel, storeFolder, FName_QcOutput));
     
     %Checkerboard Q
     %Input
@@ -246,7 +260,7 @@ if figuresCheckerboard == 1
     title('Input checkerboard Q',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     
-    saveas(Qinput,fullfile(FPath, FLabel, FName_QInput));
+    saveas(Qinput,fullfile(FPath, FLabel, storeFolder, FName_QInput));
     
     %Output
     FName_QOutput               =   'Q-Checkerboard-Output';
@@ -257,7 +271,7 @@ if figuresCheckerboard == 1
     title('Output checkerboard Q',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     
-    saveas(Qoutput,fullfile(FPath, FLabel, FName_QOutput));
+    saveas(Qoutput,fullfile(FPath, FLabel, storeFolder, FName_QOutput));
 end
 
 %% PLOT - SPIKES
@@ -279,7 +293,7 @@ if figuresSpike == 1
     title('Input spike Qc',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     
-    saveas(Qcinput,fullfile(FPath, FLabel, FName_QcInput));
+    saveas(Qcinput,fullfile(FPath, FLabel, storeFolder, FName_QcInput));
     
     %Output
     FName_QcOutput              =   'Qc-Spike-Output';
@@ -290,7 +304,7 @@ if figuresSpike == 1
     title('Output spike Qc',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     
-    saveas(Qcoutput,fullfile(FPath, FLabel, FName_QcOutput));
+    saveas(Qcoutput,fullfile(FPath, FLabel, storeFolder, FName_QcOutput));
     
     %Spike Q
     %Input
@@ -302,7 +316,7 @@ if figuresSpike == 1
     title('Input spike Q',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     
-    saveas(Qinput,fullfile(FPath, FLabel, FName_QInput));
+    saveas(Qinput,fullfile(FPath, FLabel, storeFolder, FName_QInput));
     
     %Output
     FName_QOutput               =   'Q-Spike-Output';
@@ -313,10 +327,12 @@ if figuresSpike == 1
     title('Output spike Q',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     
-    saveas(Qoutput,fullfile(FPath, FLabel, FName_QOutput));
+    saveas(Qoutput,fullfile(FPath, FLabel, storeFolder, FName_QOutput));
 end
 
 %% PARAMETER PLOT
+storeFolder                     =   'Results';
+
 if figuresInversion == 1
     
     [param_plot,par,para_map]   =...
@@ -329,7 +345,8 @@ if figuresInversion == 1
     axis square
     
     FName_Parameters            =   'Parameter_space_variations';
-    saveas(param_plot,fullfile(FPath, FLabel, FName_Parameters), fformat);
+    saveas(param_plot,...
+        fullfile(FPath, FLabel, storeFolder, FName_Parameters), fformat);
     
     for k=1:length(par(:,1))
         locate_para             =   para_map(:,1) == par(k,1) &...
@@ -366,10 +383,12 @@ if figuresInversion == 1
     title('Parameter separation map',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     
-    saveas(ParaMap,fullfile(FPath, FLabel, FName_PMap));
+    saveas(ParaMap,fullfile(FPath, FLabel, storeFolder, FName_PMap));
 end
 
 %% SAVE as VTK for visualization in PARAVIEW
+storeFolder                     =   'VTK';
+
 [WE_origin, SN_origin]          =   deg2utm(origin(2),origin(1));
 % convert Lon/Lat to UTM
 x_origin                        =   x - origin(1);
@@ -378,27 +397,50 @@ UTM_WE                          =   WE_origin + deg2km(x_origin)*1000;
 UTM_SN                          =   SN_origin + deg2km(y_origin)*1000;
 [X_UTM,Y_UTM,~]                 =   Murat_fold(UTM_WE,UTM_SN,z);
 
-%write the models to vtk
-vtkwrite(fullfile(FPath, FLabel,'Peak_delay.vtk'),'structured_grid',...
-    X_UTM,Y_UTM,Z1,'scalars','Peak_delay',mPD)
+%write the four models to vtk
+vtkwrite(fullfile(FPath, FLabel,storeFolder,'Peak_delay.vtk'),...
+    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Peak_delay',mPD)
 
-vtkwrite(fullfile(FPath, FLabel,'Qc.vtk'),'structured_grid',...
+vtkwrite(fullfile(FPath, FLabel,storeFolder,'Qc.vtk'),'structured_grid',...
     X_UTM,Y_UTM,Z1,'scalars','Qc',mQc)
 
-vtkwrite(fullfile(FPath, FLabel,'Q.vtk'),'structured_grid',...
+vtkwrite(fullfile(FPath, FLabel,storeFolder,'Q.vtk'),'structured_grid',...
     X_UTM,Y_UTM,Z1,'scalars','Q',mQ)
 
-%write the input-output checks
-vtkwrite(fullfile(FPath, FLabel,'Input_check_Qc.vtk'),'structured_grid',...
-    X_UTM,Y_UTM,Z1,'scalars','Input_check_Qc',check_inputQc)
+vtkwrite(fullfile(FPath, FLabel,storeFolder,'Velocity_model.vtk'),...
+    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','V',plotV)
 
-vtkwrite(fullfile(FPath, FLabel,'Input_check_Q.vtk'),'structured_grid',...
-    X_UTM,Y_UTM,Z1,'scalars','Input_check_Q',check_inputQ)
+%write the input-output checkerboard
+vtkwrite(fullfile(FPath, FLabel,storeFolder,'Input_check_Qc.vtk'),...
+    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Input_check_Qc',...
+    check_inputQc)
 
-vtkwrite(fullfile(FPath, FLabel,'Output_check_Qc.vtk'),...
+vtkwrite(fullfile(FPath, FLabel,storeFolder,'Input_check_Q.vtk'),...
+    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Input_check_Q',...
+    check_inputQ)
+
+vtkwrite(fullfile(FPath, FLabel,storeFolder,'Output_check_Qc.vtk'),...
     'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Output_check_Qc',...
     check_outputQc)
 
-vtkwrite(fullfile(FPath, FLabel,'Output_check_Q.vtk'),'structured_grid',...
-    X_UTM,Y_UTM,Z1,'scalars','Output_check_Q',check_outputQ)
+vtkwrite(fullfile(FPath, FLabel,storeFolder,'Output_check_Q.vtk'),...
+    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Output_check_Q',...
+    check_outputQ)
+
+%write the input-output spikes
+vtkwrite(fullfile(FPath, FLabel,storeFolder,'Input_spike_Qc.vtk'),...
+    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Input_spike_Qc',...
+    spike_inputQc)
+
+vtkwrite(fullfile(FPath, FLabel,storeFolder,'Input_spike_Q.vtk'),...
+    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Input_spike_Q',...
+    spike_inputQ)
+
+vtkwrite(fullfile(FPath, FLabel,storeFolder,'Output_spike_Qc.vtk'),...
+    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Output_spike_Qc',...
+    spike_outputQc)
+
+vtkwrite(fullfile(FPath, FLabel,storeFolder,'Output_spike_Q.vtk'),...
+    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Output_spike_Q',...
+    spike_outputQ)
 

@@ -3,9 +3,21 @@ function Murat                  =   Murat_checks(Murat)
 
 disp('Checks and Loops')
 
-% Creating folder for storing results
+% Creating folder to store results
 if exist(cat(2,Murat.input.workingDirectory,Murat.input.label),'dir')~=7
+    
     mkdir(cat(2,Murat.input.workingDirectory,Murat.input.label))
+    mkdir(cat(2,Murat.input.workingDirectory,...
+        Murat.input.label,'/Rays_Checks'))
+    mkdir(cat(2,Murat.input.workingDirectory,...
+        Murat.input.label,'/Results'))
+    mkdir(cat(2,Murat.input.workingDirectory,...
+        Murat.input.label,'/Resolution'))
+    mkdir(cat(2,Murat.input.workingDirectory,...
+        Murat.input.label,'/VTK'))
+    mkdir(cat(2,Murat.input.workingDirectory,...
+        Murat.input.label,'/TXT'))
+    
 end
 
 % Get general paths/data options
@@ -161,7 +173,6 @@ elseif Murat.input.availableVelocity ==  1
 end
 
 Murat.input.pvel                =   pvel;
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function evestaz                =   importLocation(evenFile,stazFile,list)
 %LOADS event and station coordinates from two files. DEPRECATED as it

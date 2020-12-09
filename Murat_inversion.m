@@ -90,7 +90,7 @@ if outputLCurve == 1
         input('Your personal smoothing parameter for coda ');
     
     FName                       =   'Lc_Qc';
-    saveas(LcQc,fullfile(FPath, FLabel, FName), fformat);
+    saveas(LcQc,fullfile(FPath, FLabel, 'Rays_Checks', FName), fformat);
     close(LcQc)
     
     % picard plot
@@ -98,7 +98,7 @@ if outputLCurve == 1
         'NumberTitle','off','visible','off');
     picard(Uc,diag(Sc),dcW);
     FName                       =   'Picard_Qc';
-    saveas(PpQc,fullfile(FPath, FLabel, FName), fformat);
+    saveas(PpQc,fullfile(FPath, FLabel, 'Rays_Checks', FName), fformat);
 else
     tik0_regC                   =   Murat.input.lCurveQc;
     
@@ -144,7 +144,7 @@ if outputLCurve == 1
     l_curve(U,diag(S),d1,'Tikh')
     tik0_reg                    =   input('Your personal smoothing parameter ');
     FName                       =   'Lc_CN';
-    saveas(LcCN,fullfile(FPath, FLabel, FName), fformat);
+    saveas(LcCN,fullfile(FPath, FLabel, 'Rays_Checks', FName), fformat);
     close(LcCN)
     
     % picard plot
@@ -152,14 +152,14 @@ if outputLCurve == 1
         'visible','off');
     picard(U,diag(S),d1);
     FName                       =   'Picard_CN';
-    saveas(PpCN,fullfile(FPath, FLabel, FName), fformat);
+    saveas(PpCN,fullfile(FPath, FLabel, 'Rays_Checks', FName), fformat);
     
 else
     tik0_reg                    =   Murat.input.lCurveQ;
     
 end
 %results
-mtik0=tikhonov(U,diag(S),V,d1,tik0_reg);
+mtik0                           =   tikhonov(U,diag(S),V,d1,tik0_reg);
 modv_Q(modv_Q(:,5)==1,4)        =   mtik0;
 
 %% Testing - 3D checkerboard and spike inputs
@@ -258,12 +258,12 @@ Murat.data.modvQ                =   modv_Q;
 
 % save peak-delay
 FName                           =   'peakdelay.txt';
-save(fullfile(FPath, FLabel, FName), 'modv_pd','-ascii');
+save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_pd','-ascii');
 
 % save Qc
 FName                           =   'Qc.txt';
-save(fullfile(FPath, FLabel, FName), 'modv_Qc','-ascii');
+save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_Qc','-ascii');
 
 % save Q
 FName                           =   'Q.txt';
-save(fullfile(FPath, FLabel, FName), 'modv_Q','-ascii');
+save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_Q','-ascii');
