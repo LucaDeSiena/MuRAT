@@ -137,25 +137,25 @@ If you use MuRAT for your research and publications, please consider mentioning 
 
 *Q (Total attenuation)*:
 
-1) De Siena, L., C. Thomas, and R. Aster. "Multi-scale reasonable attenuation tomography analysis (MuRAT): An imaging algorithm designed for volcanic regions." Journal of Volcanology and Geothermal Research 277 (2014): 22-35. - older release that discusses the code for coda-normalisation.
+1) De Siena, L., C. Thomas, and R. Aster. "Multi-scale reasonable attenuation tomography analysis (MuRAT): An imaging algorithm designed for volcanic regions." Journal of Volcanology and Geothermal Research 277 (2014): 22-35. - **Older release that discusses the code for coda-normalisation, also used in the early works of Prudencio et al. 2015a,b**
 
 2) De Siena, L., Giovanni Chiodini, Giuseppe Vilardo, Edoardo Del Pezzo, Mario Castellano,
-Simona Colombelli, Nicola Tisato, and Guido Ventura, 2017. Source and dynamics of a volcanic caldera unrest: Campi Flegrei, 1983–84. Scientific reports: Nature Journals 7, 8099. - More recent implementation of the Coda Normalization method with correction for coda attenuation variations.
+Simona Colombelli, Nicola Tisato, and Guido Ventura, 2017. Source and dynamics of a volcanic caldera unrest: Campi Flegrei, 1983–84. Scientific reports: Nature Journals 7, 8099. - **More recent implementation of the Coda Normalization method with correction for coda attenuation variations**
 
 
 *Qc and Peak Delay (Absorption and scattering)*:
 
 3) De Siena L., Calvet, M., Watson, K.J., Jonkers, A.R.T. and Thomas, C., 2016. Seismic
-scattering and absorption mapping of debris flows, feeding paths, and tectonic units at Mount St. Helens volcano. Earth and Planetary Science Letters, 442, pp.21-31. - Implementation of the older peak delay and Qc technique, both with regionalisation
+scattering and absorption mapping of debris flows, feeding paths, and tectonic units at Mount St. Helens volcano. Earth and Planetary Science Letters, 442, pp.21-31. - **Implementation of the older peak delay and Qc technique, both with regionalisation**
 
 4) De Siena L., A. Amoruso, E. Del Pezzo, Z. Wakeford, M. Castellano, L. Crescentini, 2017.
 Space-weighted seismic attenuation mapping of the aseismic source of Campi Flegrei 1983–84
-unrest. Geophysical Research Letters, 44.4 pp. 1740-1748. - First implementation with kernels for Qc.
+unrest. Geophysical Research Letters, 44.4 pp. 1740-1748. - **First implementation with kernels for Qc**
 
-5) Del Pezzo, E., De La Torre, A., Bianco, F., Ibanez, J., Gabrielli, S., and De Siena, L. (2018). Numerically Calculated 3D Space-Weighting Functions to Image Crustal Volcanic Structures Using Diffuse Coda Waves. - Numerical implementation of kernel functions
+5) Del Pezzo, E., De La Torre, A., Bianco, F., Ibanez, J., Gabrielli, S., and De Siena, L. (2018). Numerically Calculated 3D Space-Weighting Functions to Image Crustal Volcanic Structures Using Diffuse Coda Waves. - **Numerical implementation of kernel functions**
 
 6) Sketsiou P., F. Napolitano, A. Zenonos, L. De Siena, (2020). New insights into seismic
-absorption imaging. Physics of the Earth and Planetary Interiors, 298, 106337. - Comprehensive review of the method and future outlooks.
+absorption imaging. Physics of the Earth and Planetary Interiors, 298, 106337. - **Comprehensive review of the method and future outlooks**
 
 *Disclaimer*
 ------------
