@@ -31,12 +31,12 @@ MuRAT is a Matlab Package for Seismic Attenuation Tomography using Body and Coda
 
 * 2019: MuRAT2.1 is released, fixing most of the bugs and adding the Pollino dataset.
 
-* December 2020 - Planned: MuRAt3.0 is released as a parallelized code for full 3D attenuation imaging using the three parameters.
+* December 2020: MuRAt3.0 is released as a parallelized code for full 3D attenuation imaging using the three parameters.
 
 *Documentation*
 -------------
 
-The full documentation for MuRAT3.0 can be found under in the MuRAt wiki. This README file and the linked internet sites are to be used as a reference. 
+The full documentation for MuRAT3.0 can be found in the MuRAt pages associated to this repository. This README file and the linked internet sites are to be used as a reference. 
 
 *Installation and running*
 ------------
@@ -45,17 +45,15 @@ SYSTEM: The program works on  mac, linux and windows-based system equipped with 
 
 Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing and Mapping. The Parallel Computing Toolbox is recommended.
 
-Two sample datasets (Mount St. Helens and Romania) can be downloaded at https://doi.pangaea.de/10.1594/PANGAEA.893893 to test the code. The third sample input (Pollino) in the working directory works with a dataset that may be requested to Luca De Siena.
+Two sample datasets (Mount St. Helens and Romania) are included. 
 
 The current version works following these steps:
 
 1. Download the package at https://github.com/LucaDeSiena/MuRAT.
 
-2. Download the two sample datasets at https://www.lucadesiena.com/murat. Unzip the MSH (Mount St. Helens) and Romania datasets and put the folders in the Murat-master folder. Delete the zipped files.
+2. MuRAT works with .mlx files that provide a step by step explanation of all inputs. Open one of the two Murat_input*.mlx in this folder (Murat_input_MSH.mlx or Murat_input_Romania.mlx) to create your own. The API documentation is created as html files from the .mlx of the primary functions used by the code.
 
-3. MuRAT works with a single input file in .m format Murat_input*. Build the input file starting from the samples (either Murat_input_MSH.m or Input_Romania.m). Read the instructions presented in the next sections.
-
-4. Run MuRAT3 and select the name of the input file desired.
+3. Run MuRAT3 and select the name of the input file desired.
 
 *Instructions - the input file*
 ------------

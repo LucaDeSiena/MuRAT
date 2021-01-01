@@ -53,7 +53,7 @@ nLat                            =   Murat.input.gridLat;
 nLong                           =   Murat.input.gridLong;
 nzc                             =   Murat.input.gridZ;
 
-% Save x,y,z in degrees switching as long comes second
+% Save x,y,z in degrees switching as longitude comes second
 Murat.input.x                   =   linspace(origin(2),ending(2),nLong);
 Murat.input.y                   =   linspace(origin(1),ending(1),nLat);
 Murat.input.z                   =   linspace(origin(3),ending(3),nzc);
@@ -107,7 +107,6 @@ if Murat.input.availableVelocity ==  0
     [~,~,~,pvel]                =   Murat_fold(xD,yD,zD,modv(:,4));
     Murat.input.modv            =   modv;
     Murat.input.modvp           =   modv;
-    
     
 elseif Murat.input.availableVelocity ==  1
     

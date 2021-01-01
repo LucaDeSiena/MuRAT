@@ -21,7 +21,7 @@ function plot_lc(rho,eta,marker,ps,reg_param)
 % Set defaults.
 if (nargin==2), marker = '-'; end  % Default marker.
 if (nargin < 4), ps = 1; end       % Std. form is default.
-np = 10;                           % Number of identified points.
+np = 20;                           % Number of identified points.
 
 % Initialization.
 if (ps < 1 | ps > 2), error('Illegal value of ps'), end
