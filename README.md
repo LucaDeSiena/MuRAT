@@ -77,8 +77,8 @@ C) a 10th column for the model resolution matrix.
 
 *Instructions - the output figures*
 ------------
-
 All the figures (in the **Figures Format** defined by the user) are stored in subdirectories in the **Label** folder, created in the **Working Directory**. 
+
 ------------
 *Rays.Figures format*
 
