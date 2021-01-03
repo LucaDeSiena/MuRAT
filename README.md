@@ -45,7 +45,7 @@ SYSTEM: The program works on Mac, Linux and Windows systems equipped with Matlab
 
 Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing and Mapping. The Parallel Computing Toolbox is recommended for speed.
 
-Two sample datasets (Mount St. Helens and Romania) are included and allow the user to obtain sample models. The user must build his own input files from them. 
+Two sample datasets (Mount St. Helens and Romania) are included and allow the user to obtain sample models. The  datasets work with the two input .mlx files that are provided and show examples of what the user can obtain with the code. 
 
 The current version works following these steps:
 
