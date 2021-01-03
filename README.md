@@ -41,7 +41,7 @@ The full documentation for MuRAT3.0 can be found in html files associated with t
 *Installation and running*
 ------------
 
-SYSTEM: The program works on  Mac, Linux and Windows systems equipped with Matlab R2019a.
+SYSTEM: The program works on Mac, Linux and Windows systems equipped with Matlab R2019a.
 
 Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing and Mapping. The Parallel Computing Toolbox is recommended for speed.
 
@@ -53,34 +53,51 @@ The current version works following these steps:
 
 2. Open one of the two input .mlx files that provide a step by step explanation of all inputs (Murat_input_MSH.mlx or Murat_input_Romania.mlx) and create your own. The API documentation is created as html files from the .mlx of the primary functions used by the code.
 
-3. MuRAT works with SAC files 
-3. Run MuRAT3 and select the name of the input file desired.
+3. MuRAT works with SAC files (https://ds.iris.edu/files/sac-manual/) that must be stored all into a single folder and be possibly corrected for the instrument function. The files must have populated headers, although the code can work using only the following header fields:
 
-*Instructions - the input file*
-------------
-The input files are self-explicative - edit the .mlx files provided as examples. If you have a 3D velocity model use the MSH file with the option Murat.input.importLocation = 0.
+              a. The P-wave picking in the reference system of the waveform.
+              b. The coordinates of the event.
+              c. The coordinates of the station.
+              d. The origin time of the event (optional).
 
-*Instructions - the output files*
+4. Run MuRAT3 and select the name of the input file desired.
+
+*Instructions*
 ------------
-All the output files (.txt), figures and .vtk files (for visualisation in Paraview) are stored in sub-directories in the **Label** folder, created in the **Working Directory**.
+
+To work with MuRAT, follow these steps:
+
+1. **Start from the Murat_input.. files**
+
+The input files are self-explicative .mlx files providing detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model use the MSH file otherwise pick MuRAT_Romania.
 
 ------------
-*Text files*
+
+2. **Read the html**
+
+The package has a html folder that explains what each main function does: read them to understand the approximations used to process data, forward model kernels, and invert observations
+
+------------
+
+
+3. **The output text files**
+
+All the output files (.txt), figures and .vtk files (for visualisation in Paraview) are stored in sub-directories in the **Label** folder, created in the **Working Directory**. Use the html Murat_plot html file to have information about what each plot means and how it is created. In the following, a list of the output files and what they contain is provided.
 
 Inside the *TXT* subfolder, the first three columns of each output file correspond to WE, SN, and depth. The fourth column is the mapped parameter. In ascii format, they contain a minimum of five columns (for *Peak Delay*) that can be imported to show the locations of the anomalies in a simple (x,y,z) reference system. The fifth columns shows blocks hit by at least one ray.
 
 *Qc.txt* and *Q3D.txt* are solved with an inversion and thus have:
 
-A) a sixth and seventh columns that corresponds to the input and output of the checkerboard test;
-B) eight and nineth columns that corresponds to the input and output of the spike test;
-C) a 10th column for the model resolution matrix.
+      A. a sixth and seventh columns that corresponds to the input and output of the checkerboard test;
+      B. eight and nineth columns that corresponds to the input and output of the spike test;
+      C. a 10th column for the model resolution matrix.
 
+All the .vtk files are stored into the VTK subfolder.
 
-*Instructions - the output figures*
-------------
+4. **The output figure files**
+
 All the figures (in the **Figures Format** defined by the user) are stored in subdirectories in the **Label** folder, created in the **Working Directory**. 
 
-------------
 *Rays.Figures format*
 
 A figure to show how rays develop in 3D for the Peak Delay and Q measurements. It plots them on three slices (WE, SN, Z). The fourth panel shows the location of the area on the Earth.
