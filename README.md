@@ -4,13 +4,13 @@ MuRAT - Multi-Resolution Seismic Attenuation Tomography
 Getting Started
 -------
 
-MuRAT is a Matlab Package for Seismic Attenuation Tomography using Body and Coda Waves. 
+MuRAT is a Matlab Package for Seismic Attenuation, SCattering and Absorption Tomography using Body and Coda Waves. 
 
 
 *Features*
 --------
 
-* MuRAT is a complete software package for measuring seismic attenuation, scattering, and absorption from passive and active data, and map 2D and 3D variations of these parameters in space.
+* MuRAT is a complete software package for measuring seismic attenuation, scattering, and absorption from passive and active data, and model 3D variations of these parameters in space.
 
 * MuRAT1.0 was first developed by Luca De Siena (Johannes Gutenberg University, Mainz, Germany) during his PhD at the INGV-Osservatorio Vesuviano, Italy, and published in 2014 while he was research assistant at the Westfälisches Wilhelms Universität, Münster. Murat1.0 allowed 3D total attenuation imaging with the coda-normalization method (*Del Pezzo et al. 2006, PEPI; De Siena et al. 2008 PEPI; De Siena et al. 2009, JGR; De Siena et al. 2014a, JVGR; De Siena et al. 2014a, JVGR; De Siena et al. 2014b, JGR; Prudencio et al. 2015a, Surv. in Geoph.; Prudencio et al. 2015b, Surv. in Geoph.*).
 
@@ -31,28 +31,29 @@ MuRAT is a Matlab Package for Seismic Attenuation Tomography using Body and Coda
 
 * 2019: MuRAT2.1 is released, fixing most of the bugs and adding the Pollino dataset.
 
-* December 2020: MuRAt3.0 is released as a parallelized code for full 3D attenuation imaging using the three parameters.
+* January 2021: MuRAt3.0 is released as a parallelized code for full 3D attenuation, scattering and absorption imaging using peak delays, coda attenuation and coda-normalized energies.
 
 *Documentation*
 -------------
 
-The full documentation for MuRAT3.0 can be found in the MuRAt pages associated to this repository. This README file and the linked internet sites are to be used as a reference. 
+The full documentation for MuRAT3.0 can be found in html files associated with the software. This README file and the linked internet sites are to be used as a reference. 
 
 *Installation and running*
 ------------
 
-SYSTEM: The program works on  mac, linux and windows-based system equipped with Matlab R2019a.
+SYSTEM: The program works on  Mac, Linux and Windows systems equipped with Matlab R2019a.
 
-Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing and Mapping. The Parallel Computing Toolbox is recommended.
+Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing and Mapping. The Parallel Computing Toolbox is recommended for speed.
 
-Two sample datasets (Mount St. Helens and Romania) are included. 
+Two sample datasets (Mount St. Helens and Romania) are included and allow the user to obtain sample models. The user must build his own input files from them. 
 
 The current version works following these steps:
 
 1. Download the package at https://github.com/LucaDeSiena/MuRAT.
 
-2. MuRAT works with .mlx files that provide a step by step explanation of all inputs. Open one of the two Murat_input*.mlx in this folder (Murat_input_MSH.mlx or Murat_input_Romania.mlx) to create your own. The API documentation is created as html files from the .mlx of the primary functions used by the code.
+2. Open one of the two input .mlx files that provide a step by step explanation of all inputs (Murat_input_MSH.mlx or Murat_input_Romania.mlx) and create your own. The API documentation is created as html files from the .mlx of the primary functions used by the code.
 
+3. MuRAT works with SAC files 
 3. Run MuRAT3 and select the name of the input file desired.
 
 *Instructions - the input file*
