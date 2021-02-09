@@ -6,7 +6,7 @@ MuRAT - Multi-Resolution Seismic Attenuation Tomography
 Getting Started
 -------
 
-MuRAT is a Matlab Package for Seismic Attenuation, SCattering and Absorption Tomography using Body and Coda Waves. 
+MuRAT is a Matlab Package for Seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves. 
 
 
 *Features*
@@ -77,7 +77,14 @@ The input files are self-explicative .mlx files providing detailed descriptions 
 
 2. **Read the html**
 
-The package has a html folder that explains what each main function does: read them to understand the approximations used to process data, forward model kernels, and invert observations
+The package has a html folder that explains what the code does: read each file to understand the approximations used to process data, forward model kernels, and invert observations. Follow this workflow:
+
+* Murat3.html: explains how to run the code in general. Here you find the names of the primary functions.
+* MuRAT_MSH.html: You want to start with this input  file to work at the local scale. It contains information on how to use the code with the standard settings and includes examples on how to add features (e.g., use three instead of one-component seismograms). Please beware of the import option: in this file, we include a deprecated import solution from SAC header and external files. For a better import solution use MSH_Romania.htlm.
+* MSH_Romania.html: the best input if you want a model at the regional scale and containing the correct import option only from SAC files.
+* Murat_plot.htlm: the plot function shows at which lines of the code figures are produced, providing additional information on the output.
+
+If you want to obtain model at a larger regional scale you can then run MSH_Romania.mlx.
 
 ------------
 
