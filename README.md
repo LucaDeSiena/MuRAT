@@ -1,3 +1,5 @@
+![Campi Flegrei direct-wave attenuation model.](https://github.com/LucaDeSiena/MuRAT/blob/Murat_ID/MuRAT_CF.png "A 3D attenuation model obtained with the coda-normalization method. The model is plotted using the Voxler software.")
+
 MuRAT - Multi-Resolution Seismic Attenuation Tomography
 =======
 
