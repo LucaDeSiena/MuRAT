@@ -93,3 +93,9 @@ cursorCodaStart_i               =...
 cursorCodaEnd_i                 =...
     floor(cursorCodaStart_i + tWm*srate_i-1);
 
+%Setting the end of the coda window as the end of the
+%waveform (in case the seismogram is too short)
+
+if cursorCodaEnd_i > length(tempis)
+    cursorCodaEnd_i             = length(tempis);
+end
