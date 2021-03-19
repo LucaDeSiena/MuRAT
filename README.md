@@ -27,7 +27,7 @@ MuRAT is a Matlab Package for Seismic Attenuation, SCattering and Absorption Tom
 
 * 2014: MuRAT1.0 is published in De Siena et al. 2014, JVGR, with two sample datasets (Mount St. Helens and Vesuvius) [JVGR article](https://www.sciencedirect.com/science/article/abs/pii/S0377027314000961)
 
-* 2018: MuRAT2.0 is released including 2D scattering/absorption mapping and kernel-based inversion and re-branded Multi-Resolution Seismic Attenuation Tomography. [GitHub Repository] (https://github.com/LucaDeSiena/MuRA)
+* 2018: MuRAT2.0 is released including 2D scattering/absorption mapping and kernel-based inversion and re-branded Multi-Resolution Seismic Attenuation Tomography. [GitHub Repository] (https://github.com/LucaDeSiena/MuRAT)
 
 * 2019: MuRAT2.1 is released, fixing most of the bugs and adding the Pollino dataset.
 
