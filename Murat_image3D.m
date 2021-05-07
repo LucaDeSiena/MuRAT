@@ -29,6 +29,7 @@ image                   =   figure('Name',name,...
     'NumberTitle','off','visible',visib,'Position',[20,400,1200,1000]);
 
 slice(Xp, Yp, Zp, mVp, sections(1), sections(2), sections(3))
+set(gca,'Ydir','reverse')
 colormap(color);
 colorbar
 shading flat
