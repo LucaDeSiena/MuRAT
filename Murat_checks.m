@@ -107,6 +107,7 @@ if Murat.input.availableVelocity ==  0
     [~,~,~,pvel]                =   Murat_fold(xD,yD,zD,modv(:,4));
     Murat.input.modv            =   modv;
     Murat.input.modvp           =   modv;
+    Murat.input.modvPlot        =   [];
     
 elseif Murat.input.availableVelocity ==  1
     
