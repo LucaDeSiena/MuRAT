@@ -4,38 +4,30 @@ MuRAT - Multi-Resolution Seismic Attenuation Tomography
 =======
 
 MuRAT is a Matlab Package for Seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves. 
--------
 
-*Features*
---------
+MuRAT measures seismic attenuation, scattering, and absorption from passive and active data, and models 3D variations of these parameters in space.
 
-* MuRAT is a complete software package for measuring seismic attenuation, scattering, and absorption from passive and active data, and model 3D variations of these parameters in space.
-
-* MuRAT1.0 was first developed by Luca De Siena (Johannes Gutenberg University, Mainz, Germany) during his PhD at the INGV-Osservatorio Vesuviano (Italy), and published in 2014 while he was research assistant at the Westfälisches Wilhelms Universität, Münster (Germany). Murat1.0 allowed 3D total attenuation imaging with the coda-normalization method.
-
-* [MuRAT2D](https://github.com/LucaDeSiena/MuRAT2D) is the result of the activity of the [Volcano Earth Imaging group](https://www.lucadesiena.com), led by De Siena during his stint as Lecturer at the University of Aberdeen (UK) and now as Associate Professor in Geophysics at JGU Mainz (Germany). It images 2D seismic scattering (peak delay) and absorption (Qc at late lapse time - kernel-based). It is ideal for small datasets and in case no previous velocity information is available.
-
-* The group of active users (providing questions, feedback, snippets of code) is the [Volcano Earth Imaging group.](https://www.lucadesiena.com).
+The group of active users (providing questions, feedback, snippets of code) is the [Volcano Earth Imaging group](https://www.lucadesiena.com).
 
 *History*
 -------
 
-* 2006-2010: MuRAT (at the time named "Multi-scale reasonable attenuation tomography analysis") is built using Matlab, c++, csh and Fortran codes mostly developed at INGV-Osservatorio.
+* *2006-2010*: MuRAT is built first by Luca De Siena during his PhD at the INGV-Osservatorio Vesuviano (Italy) using Matlab, c++, csh and Fortran codes.
 
-* 2010-2013: MuRAT1.0 is developed as a 3D direct-wave attenuation imaging code with the contribution of Christine Thomas (WWU Münster) and Richard Aster (Colorado State University).
+* *2010-2013*: MuRAT1.0 was developed and published in 2014 while De Siena was research assistant at the Westfälisches Wilhelms Universität, Münster (Germany). Murat1.0 allowed 3D total attenuation imaging with the coda-normalization method. Important contributions were given by Christine Thomas (WWU Münster) and Richard Aster (Colorado State University).
 
-* 2014: MuRAT1.0 is published in [De Siena et al. 2014, JVGR](https://www.sciencedirect.com/science/article/abs/pii/S0377027314000961) with two sample datasets (Mount St. Helens and Vesuvius).
+* *2014*: MuRAT1.0 is published in [De Siena et al. 2014, JVGR](https://www.sciencedirect.com/science/article/abs/pii/S0377027314000961) with two sample datasets (Mount St. Helens and Vesuvius).
 
-* 2018: [MuRAT2D](https://github.com/LucaDeSiena/MuRAT2D) is released iand re-branded Multi-Resolution seismic Attenuation Tomography.
+* *2018*: [MuRAT2D](https://github.com/LucaDeSiena/MuRAT2D) is the result of the activity of the [Volcano Earth Imaging group](https://www.lucadesiena.com), led by De Siena during his stint as Lecturer at the University of Aberdeen (UK). It images 2D seismic scattering (peak delay) and absorption (Qc at late lapse time - kernel-based). It is ideal for small datasets and in case no previous velocity information is available.
 
-* January 2021: [MuRAT3D](https://github.com/LucaDeSiena/MuRAT) is released as a parallelized code for full 3D attenuation, scattering and absorption imaging using peak delays, coda attenuation and coda-normalized energies.
+* *2021*: [MuRAT3D](https://github.com/LucaDeSiena/MuRAT) is released as a parallelized code for full 3D attenuation, scattering and absorption imaging using peak delays, coda attenuation and coda-normalized energies.
 
 *Documentation*
 -------------
 
 The full documentation for MuRAT3.0 can be found in html files associated with the software. This README file and the linked internet sites are to be used as a reference. 
 
-*SYSTEM*
+*System*
 ------------
 The program works on Mac, Linux and Windows systems equipped with Matlab R2019a.
 
@@ -66,11 +58,11 @@ The current version works following these steps:
 *What the code does*
 --------
 
-To understand what MuRAT3D does, follow these steps:
+To understand what MuRAT3D does:
 
 1. **Start from the Murat_input..mlx files**
 
-The input files are self-explanatory and provide detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model use MuRAT_InputMSH.mlx otherwise start from MuRAT_InputRomania.mlx.
+The input files are self-explanatory and provide detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model use *MuRAT_InputMSH.mlx* otherwise start from *MuRAT_InputRomania.mlx*.
 
 2. **Read the html**
 
@@ -79,7 +71,7 @@ The package has a html folder where each file explains what the code does: read 
 * MuRAT3.html: is the *make* code and can be run in sections. Here you find the names of the primary functions.
 * Murat_plot.htlm: the plot function shows at which lines of the code figures are produced, providing additional information on the output.
 
-3. **The output text files**
+3. **Understand the output text files**
 
 All the output files (.txt), figures and .vtk files (for visualisation in Paraview) are stored in sub-directories in the **Label** folder, created in the working directory. Use the html Murat_plot html file to have information about what each plot means and how it is created. In the following, a list of the output files and what they contain is provided.
 
@@ -91,11 +83,11 @@ Inside the *TXT* subfolder, the first three columns of each output file correspo
       B. eight and nineth columns that corresponds to the input and output of the spike test;
       C. a 10th column for the model resolution matrix.
 
-All the .vtk files are stored into the VTK subfolder.
+All the .vtk files are stored into the *VTK* subfolder.
 
-4. **The output figure files**
+4. **Understand the output figure files**
 
-All the figures (in the **Figures Format** defined by the user) are stored in subdirectories in the **Label** folder, created in the **Working Directory**. 
+All the figures (in the **Figures Format** defined by the user) are stored in subdirectories in the **Label** folder, created in the working directory. 
 
 *Rays.Figures format*
 
@@ -122,24 +114,24 @@ L-curves corresponding to the coda-attenuation and total-attenuation inversion. 
 These plots show the result of the Picard criterium, necessary to evaluate how many of the inversion parameters are correctively solved in the coda-attenuation and total-attenuation inversions, respectively. The two figures do not appear during computation.
 
 ------------
-*Peak_delay-3D.fig*, *Qc-3D.fig* and *Q-3D.fig*
+*Peak-delay-3D.fig*, *Qc-3D.fig* and *Q-3D.fig*
 
 These plots show the result of the peak-delay, Qc and Q 3D tomography in the grid's reference system. All in Matlab .fig format, use the .vtk and Paraview for publication-quality figures.
 
 ------------
-*Qc_checkerboard_input.fig*, *Qc_checkerboard_output.fig*, *Q_checkerboard_input.fig*, and *Q_checkerboard_output.fig*
+*Qc-checkerboard.fig*, *Qc-spike.fig*
 
-These plots show the result of the checkerboard test for the Qc and Q mapping in the grid's reference system.
-
-------------
-*Qc_spike_input.fig*, *Qc_spike_output.fig*, *Q_spike_input.fig*, and *Q_spike_output.fig*
-
-These plots show the result of the spike test for the Qc and Q mapping in the grid's reference system.
+These plots show input and output of the checkerboard and spike tests for the Qc and Q mapping in the grid's reference system.
 
 ------------
 *Parameter_space_variations.Figures format*
 
 The plot shows the separation of the scattering and absorption parameters in their parameter space. Grey dots correspond to parameters too near to the average to be interpreted as scattering or absorption variations - the threshold is pre-defined at 5% of the maximum variation of each parameter. Red = High scattering and absorption; Cyan = High scattering and low absorption; Orange = Low scattering and high absorption; Green = Low scattering and absorption.
+
+------------
+*Parameter-Map.fig*
+
+The parameter space separation as it is apparent in the 3D space. Each block is characterized by the color corresponding to its scattering and absorption characteristics
 
 ------------
 *V_model.fig*

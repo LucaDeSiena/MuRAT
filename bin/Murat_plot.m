@@ -174,8 +174,8 @@ saveas(Qmap,fullfile(FPath, FLabel, storeFolder, FName_QMap));
 %% 
 % Also showing the velocity model in case it is available
 if Murat.input.availableVelocity == 1
-    FName_Vimage                    =   'Velocity_model';
-    Vimage                          =   Murat_image3D(X,Y,Z,plotV,...
+    FName_Vimage            =   'Velocity_model';
+    Vimage                  =   Murat_image3D(X,Y,Z,plotV,...
         inferno,sections,evestaz_Q,x,y,z,FName_Vimage,sz,visib);
     title('Velocity Model',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
@@ -185,6 +185,7 @@ end
 %% PLOT - CHECKERBOARDS
 % In this section Murat_plot shows input and output of the checkerboard tests 
 % for Q and Qc.
+storeFolder                 =   'Resolution';
 [~,~,~,check_inputQc]       =   Murat_fold(x,y,z,modv_Qc(:,6));
 [~,~,~,check_outputQc]      =   Murat_fold(x,y,z,modv_Qc(:,7));
 [~,~,~,check_inputQ]        =   Murat_fold(x,y,z,modv_Qc(:,6));
@@ -245,7 +246,7 @@ title('Output spike Qc',...
 saveas(Qc_spike,fullfile(FPath, FLabel, storeFolder, FNameQcSpike));
 %% 
 % Spike Q: Input and Output
-FNameQSpike                 =   'Q-Spike-Input';
+FNameQSpike                 =   'Q-Spike';
 Q_spike                     =   figure('Name',FNameQSpike,...
     'NumberTitle','off','visible',visib,'Position',[20,400,2000,1000]);
 subplot(1,2,1)
