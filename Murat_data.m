@@ -12,32 +12,9 @@ function Murat                          =   Murat_data(Murat)
 listSac                                 =   Murat.input.listSac;
 lengthData                              =   length(listSac);
 compon                                  =   Murat.input.components;
-origin                                  =   Murat.input.origin;
 lengthParameterModel                    =   length(Murat.input.modv(:,1));
-
-if Murat.input.importLocation ~= 1
-    
-    eventStation                        =   zeros(lengthData,6);
-    locationDeg                         =   zeros(lengthData,6); 
-
-else
-    
-    eventStation                        =   Murat.input.Locations;
-    locationDeg                         =   eventStation;
-    dist_xdeg_even                      =   eventStation(:,2)-origin(2);
-    dist_ydeg_even                      =   eventStation(:,1)-origin(1);
-    eventStation(:,3)                   =   -eventStation(:,3);
-    
-    dist_xdeg_station                   =   eventStation(:,5)-origin(2);
-    dist_ydeg_station                   =   eventStation(:,4)-origin(1);
-    
-    %Transforms in meters
-    eventStation(:,1)                   =   deg2km(dist_xdeg_even)*1000;
-    eventStation(:,2)                   =   deg2km(dist_ydeg_even)*1000;
-    eventStation(:,4)                   =   deg2km(dist_xdeg_station)*1000;
-    eventStation(:,5)                   =   deg2km(dist_ydeg_station)*1000;
-
-end
+eventStation                            =   zeros(lengthData,6);
+locationDeg                             =   zeros(lengthData,6); 
 
 %Set up variables to save
 locationM                               =   zeros(lengthData,6); 
@@ -59,11 +36,10 @@ inversionMatrixQc                       =...
 rayCrossing                             =...
     zeros(lengthData,lengthParameterModel);
 
-
 %=========================================================================
 for i = 1:lengthData %loop through source-station pairs
     
-    %Display every 200 waveforms
+    %Display every 1000 waveforms
     if isequal(mod(i,1000),0)
         
         disp(['Waveform number is ', num2str(i)])

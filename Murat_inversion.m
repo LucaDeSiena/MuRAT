@@ -3,7 +3,6 @@ function Murat                  =   Murat_inversion(Murat)
 %% PATHS and FIGURES
 %%
 % Importing all the necessary inputs and data for plotting
-FPath                           =   Murat.input.workingDirectory;
 FLabel                          =   Murat.input.label;
 fformat                         =   Murat.input.format;
 outputLCurve                    =   Murat.input.lCurve;
@@ -40,7 +39,7 @@ retain_Q                        =   Murat.data.retainQ;
 modv_pd                         =   Murat.data.modvPeakDelay;
 modv_Qc                         =   Murat.data.modvQc;
 modv_Q                          =   Murat.data.modvQ;
-
+FPath                           =   './';
 %% Peak delay mapping - weighted average
 % This section deals with the peak delay data - the 4th column of the file.
 lApd                            =   size(Apd);

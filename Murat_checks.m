@@ -4,24 +4,24 @@ function Murat                  =   Murat_checks(Murat)
 disp('Checks and Loops')
 
 % Creating folder to store results
-if exist(cat(2,Murat.input.workingDirectory,Murat.input.label),'dir')~=7
+if exist(cat(2,'./',Murat.input.label),'dir')~=7
     
-    mkdir(cat(2,Murat.input.workingDirectory,Murat.input.label))
-    mkdir(cat(2,Murat.input.workingDirectory,...
+    mkdir(cat(2,'./',Murat.input.label))
+    mkdir(cat(2,'./',...
         Murat.input.label,'/Rays_Checks'))
-    mkdir(cat(2,Murat.input.workingDirectory,...
+    mkdir(cat(2,'./',...
         Murat.input.label,'/Results'))
-    mkdir(cat(2,Murat.input.workingDirectory,...
+    mkdir(cat(2,'./',...
         Murat.input.label,'/Resolution'))
-    mkdir(cat(2,Murat.input.workingDirectory,...
+    mkdir(cat(2,'./',...
         Murat.input.label,'/VTK'))
-    mkdir(cat(2,Murat.input.workingDirectory,...
+    mkdir(cat(2,'./',...
         Murat.input.label,'/TXT'))
     
 end
 
 % Get general paths/data options
-[Murat.input.listSac,lista]     =...
+[Murat.input.listSac,~]         =...
     Murat_createsList(Murat.input.dataDirectory);
 
 if Murat.input.nonLinear == 1
@@ -34,14 +34,6 @@ if Murat.input.nonLinear == 1
         (Murat.input.minimumQcGrid +...
         (Murat.input.maximumQcGrid - Murat.input.minimumQcGrid)/...
         (Murat.input.totalQcNumber-1)*(0:Murat.input.totalQcNumber-1))';
-    
-end
-
-% DEPRECATED BUT NECESSARY FOR NOW - importing locations from files
-if Murat.input.importLocation == 1
-    
-    Murat.input.Locations       =...
-        importLocation('eventLocations.txt','stationLocations.txt',lista);
     
 end
 
@@ -173,70 +165,6 @@ elseif Murat.input.availableVelocity ==  1
 end
 
 Murat.input.pvel                =   pvel;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function evestaz                =   importLocation(evenFile,stazFile,list)
-%LOADS event and station coordinates from two files. DEPRECATED as it
-%requires mathing the names of the external files.
-
-evestaz                         =   zeros(length(list),6);
-
-%Name of the event file if importing event locations from file
-namee                           =   evenFile;
-
-% Opening the event file. Format is:
-% column (1) = twelve numbers for the origin time of the event
-% (date+time in seconds)
-% column (2) = latitude
-% column (3) = longitude
-% column (4) = Altitude above sea level in meters
-event                           =   fopen(namee);
-namee                           =   textscan(event,'%s %f %f %f');
-nameeven                        =   namee{1};
-even                            =   [namee{2} namee{3} -namee{4}];
-fclose(event);
-
-%Name of the station file if importing event locations from file
-names                           =   stazFile;
-
-% Opening the station file. Format is:
-% column (1) = Name of station (3 characters)
-% column (2) = latitude
-% column (3) = longitude
-% column (4) = Altitude above sea level in meters
-station                         =   fopen(names);
-names                           =   textscan(station,'%s %f %f %f');
-namestation                     =   names{1};
-stat                            =   [names{2} names{3} names{4}];
-fclose(station);
-
-indexray=0;
-for i = 1:length(list)
-    %Here it takes the event/station name. It is necessary to adapt the
-    %numbers to where event name and station name are.
-    li                          =   list{i};
-    li1                         =   cat(2,li(1:12),li(18:20));
-    
-    for ii = 1:length(nameeven)
-        namee1                  =   nameeven{ii};
-        namee                   =   namee1(1:12);
-        
-        % Loop over stations in stationLocations.txt file
-        for ir = 1:length(namestation)
-            namest1             =   namestation{ir};
-            namest              =   namest1(1:3);
-            levst               =   cat(2,namee,namest);
-            
-            if find(strncmp(li1,levst,length(levst)))>0
-                indexray        =   indexray+1;
-                sst             =   [even(ii,:) stat(ir,:)];
-                evestaz(indexray,1:6) = sst;
-                break
-            end
-        end
-    end
-    
-end
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %% DEVELOPMENT: PEAK DELAY INVERSION
