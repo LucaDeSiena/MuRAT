@@ -191,14 +191,16 @@ title('Total attenuation',...
 
 saveas(Qmap,fullfile(FPath, FLabel, storeFolder, FName_QMap));
 %%
-% Also showing the velocity model
-FName_Vimage                    =   'Velocity_model';
-Vimage                          =   Murat_image3D(X,Y,Z,plotV,...
-    inferno,sections,evestaz_Q,x,y,z,FName_Vimage,sz,visib);
-title('Velocity Model',...
-    'FontSize',sizeTitle,'FontWeight','bold','Color','k');
-
-saveas(Vimage,fullfile(FPath, FLabel, storeFolder, FName_Vimage));
+% Also showing the velocity model in case you have it
+if Murat.input.availableVelocity == 1
+    FName_Vimage                    =   'Velocity_model';
+    Vimage                          =   Murat_image3D(X,Y,Z,plotV,...
+        inferno,sections,evestaz_Q,x,y,z,FName_Vimage,sz,visib);
+    title('Velocity Model',...
+        'FontSize',sizeTitle,'FontWeight','bold','Color','k');
+    
+    saveas(Vimage,fullfile(FPath, FLabel, storeFolder, FName_Vimage));
+end
 %% PLOT - CHECKERBOARDS
 % In this section Murat_plot shows input and output of the checkerboard tests 
 % for Q and Qc.
