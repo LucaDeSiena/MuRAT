@@ -1,12 +1,13 @@
-function [K_grid,r_grid1]	=   Murat_kernels(T,event,station,modv,v,kT)
+function [K_grid,r_grid1]	=...
+    Murat_kernels(T,event,station,modv,v,kT,B0,Le_1)
 %COMPUTATION of kernel integral for an event-station couple in a
 % 3D grid (modv format), to be used for coda tomography. There is the
 % option to define the average velocity (v) and divide the original spacing
 % by kT - higher kT brings longer computational time.
 %
-% The outputs are two result files (plain text):
-% An ascii file describing the coordinates of the grid
-% An ascii file with the K function estimated at each point of the grid
+% OUTPUTS:
+% The coordinates of the grid
+% The kernel (K) function estimated at each point of the grid
 %
 % Structure of the file describing the coordinates:
 %     Nx    -> number of x values in the grid
@@ -40,10 +41,8 @@ function [K_grid,r_grid1]	=   Murat_kernels(T,event,station,modv,v,kT)
 % Limits of the spatial grid
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% CONFIGURATION OF THE SCRIPT
-% Geophysical constants
-B0                          =   0.5;% constant Paasschen function
-Le_1                        =   0.02;% constant Paasschen function
-DT                          =   0.5;% temporal sampling
+% Geophysical constants: albedo and extinction length
+DT                          =   0.5;
 
 %% INITIAL COMPUTATIONS
 x1                          =   unique(modv(:,1));

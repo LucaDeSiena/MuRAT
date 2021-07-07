@@ -1,7 +1,7 @@
 function Murat                  =   Murat_checks(Murat)
 %ADDITIONAL input variables that are not set by the user.
 
-disp('Checks and Loops')
+disp('Checks')
 
 % Creating folder to store results
 if exist(cat(2,'./',Murat.input.label),'dir')~=7
@@ -109,7 +109,6 @@ elseif Murat.input.availableVelocity ==  1
     
     % Original 3D velocity model from text file.
     modv_o                      =   load(velocityModel);
-    modv_o(:,5)                 =   0;
     
     % Nodes of the original velocity model
     xD                          =   unique(modv_o(:,1));
@@ -159,9 +158,7 @@ elseif Murat.input.availableVelocity ==  1
     
     % Standard unpacking of the velocity model for propagation
     modvp                       =   Murat_unfold(xp',yp',zp',pvel);
-    modvp(:,5)                  =   0;
-    Murat.input.modvp           =   modvp;
-    
+    Murat.input.modvp           =   modvp(:,1:4);
     
 end
 

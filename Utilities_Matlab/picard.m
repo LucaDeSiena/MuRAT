@@ -26,7 +26,7 @@ function eta = picard(U,s,b,d)
 
 % Initialization.
 [n,ps] = size(s); beta = abs(U(:,1:n)'*b); eta = zeros(n,1);
-if (nargin==3), d = 0; end;
+if (nargin==3), d = 0; end
 if (ps==2), s = s(:,1)./s(:,2); end
 d21 = 2*d+1; keta = 1+d:n-d;
 if ~all(s), warning('Division by zero singular values'), end

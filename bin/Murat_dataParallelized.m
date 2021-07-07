@@ -13,10 +13,11 @@ listSac                                 =   Murat.input.listSac;
 lengthData                              =   length(listSac);
 compon                                  =   Murat.input.components;
 lengthParameterModel                    =   length(Murat.input.modv(:,1));
-eventStation                            =   zeros(lengthData,6);
-locationDeg                             =   zeros(lengthData,6); 
+cf                                      =   Murat.input.centralFrequency;
+lcf                                     =   length(cf);
 
 %Set up variables to save
+locationDeg                             =   zeros(lengthData,6); 
 locationM                               =   zeros(lengthData,6); 
 theoreticalTime                         =   zeros(lengthData,1); 
 peakDelay                               =   zeros(lengthData,1); 
@@ -37,9 +38,8 @@ rayCrossing                             =...
     zeros(lengthData,lengthParameterModel);
 
 %=========================================================================
-parfor (i = 1:lengthData, Murat.input.workers) %loop - source-station pairs
+for i = 1:lengthData %loop through source-station pairs
     
-    %Display every 1000 waveforms
     if isequal(mod(i,1000),0)
         
         disp(['Waveform number is ', num2str(i)])
@@ -48,23 +48,12 @@ parfor (i = 1:lengthData, Murat.input.workers) %loop - source-station pairs
     
     %% OPERATIONS ON WAVEFORM
     listSac_i                           =   listSac{i};
-    [sp_i,hsp_i,SAChdr_i,...
-        srate_i]                 =...
+    [sp_i,SAChdr_i,srate_i]             =...
         Murat_envelope(Murat,listSac_i);
     
     % In case it has been precalculated from external files.
-    eventStation_i                      =   eventStation(i,:);
-    
-    if isequal(eventStation_i,zeros(1,6))
-    
-        [locationDeg_i, locationM_i]    =   Murat_location(Murat,SAChdr_i);
-        locationDeg(i,:)                =   locationDeg_i;
-    
-    else
-        
-        locationM_i                     =   eventStation_i;
-        
-    end
+    [locationDeg_i, locationM_i]        =   Murat_location(Murat,SAChdr_i);
+    locationDeg(i,:)                    =   locationDeg_i;
     
     [theoreticalTime_i, tCoda_i, cursorPick_i, cursorPeakDelay_i,...
         cursorCodaStart_i, cursorCodaEnd_i]...
@@ -110,18 +99,18 @@ parfor (i = 1:lengthData, Murat.input.workers) %loop - source-station pairs
                 
     %% OPERATIONS TO MEASURE  Q
     [energyRatioBodyCoda_i,...
-        energyRatioCodaNoise_i]         = Murat_body(Murat,...
-        srate_i,hsp_i,cursorPick_i,cursorCodaStart_i,cursorCodaEnd_i);
- 
+        energyRatioCodaNoise_i]         =   Murat_body(Murat,...
+        srate_i,sp_i,cursorPick_i,cursorCodaStart_i,cursorCodaEnd_i);
+    
     %% SAVING
     locationM(i,:)                      =   locationM_i;
     theoreticalTime(i,1)                =   theoreticalTime_i;
-    peakDelay(i,1)                      =   peakDelay_i;
-    inverseQc(i,1)                      =   inverseQc_i; 
-    uncertaintyQc(i,1)                  =   uncertaintyQc_i; 
-    energyRatioBodyCoda(i,1)            =   energyRatioBodyCoda_i; 
-    energyRatioCodaNoise(i,1)           =   energyRatioCodaNoise_i;
-
+    peakDelay(i,1:lcf)                    =   peakDelay_i;
+    inverseQc(i,1:lcf)                    =   inverseQc_i; 
+    uncertaintyQc(i,1:lcf)                =   uncertaintyQc_i; 
+    energyRatioBodyCoda(i,1:lcf)          =   energyRatioBodyCoda_i; 
+    energyRatioCodaNoise(i,1:lcf)         =   energyRatioCodaNoise_i;
+    
 end
 
 %% Setting up the final data vectors and matrices with checks on values
@@ -146,7 +135,7 @@ Murat                                   =   Murat_selection(Murat);
 
 function calculateValue                 =...
     recognizeComponents(index,components)
-%LOGICAL to decide if forward model is necessary depending on waveform
+%LOGICAL to decide if forward model is necessary depending in waveform
 %number (index) and number of components.
 
 calculateValue                          =   isequal(components,1) ||...

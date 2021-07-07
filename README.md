@@ -83,7 +83,7 @@ Inside the *TXT* subfolder, the first three columns of each output file correspo
       B. eight and nineth columns that corresponds to the input and output of the spike test;
       C. a 10th column for the model resolution matrix.
 
-All the .vtk files are stored into the *VTK* subfolder.
+All the .vtk files are stored into the *VTK* subfolder. A Matlab structure ('Murat.mat') containing all inputs and data is stored in the working directory.
 
 4. **Understand the output figure files**
 

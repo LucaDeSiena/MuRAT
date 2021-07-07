@@ -1,5 +1,5 @@
 function image          = ...
-    Murat_image3D(X,Y,Z,V,color,sections,evestaz,x,y,z,name,sz,visib)
+    Murat_image3D(X,Y,Z,V,color,sections,evestaz,x,y,z,name)
 %PLOTS a 3D image of a field on slices
 
 stepgx                  =   x(2) - x(1);
@@ -26,7 +26,7 @@ z                       =   sort(z)/1000;
 % Creates and outputs figure in 3D
 
 image                   =   figure('Name',name,...
-    'NumberTitle','off','visible',visib,'Position',[20,400,1200,1000]);
+    'NumberTitle','off','Position',[20,400,1200,1000]);
 
 slice(Xp, Yp, Zp, mVp, sections(1), sections(2), sections(3))
 set(gca,'Ydir','reverse')
@@ -37,11 +37,11 @@ hcb                     =   colorbar;
 hcb.FontSize            =   14;
 
 hold on
-scatter3(evestaz(:,2),evestaz(:,1),evestaz(:,3),sz,...
+scatter3(evestaz(:,2),evestaz(:,1),evestaz(:,3),60,...
     'c','MarkerEdgeColor',...
     [1 1 1], 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 
-scatter3(evestaz(:,5),evestaz(:,4),evestaz(:,6),sz,...
+scatter3(evestaz(:,5),evestaz(:,4),evestaz(:,6),60,...
     '^','MarkerEdgeColor',...
     [1 1 1], 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 

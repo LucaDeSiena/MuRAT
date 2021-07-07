@@ -1,16 +1,21 @@
 function peakDelay_i            =...
     Murat_peakDelay(sp_i,cursorPick_i,cursorPeakDelay_i,srate_i)
+
 %CALCULATES peak delay time
-pdsp                            =...
-    sp_i(cursorPick_i:cursorPeakDelay_i);
+lsp                             =   size(sp_i,2);
+peakDelay_i                     =   zeros(lsp,1);
+for i = 1:lsp
+    pdsp                            =...
+        sp_i(cursorPick_i:cursorPeakDelay_i,i);
 
-[~,timeMaxAmplitude]            =	max(pdsp);
+    [~,timeMaxAmplitude]            =	max(pdsp);
 
-peakDelay_i                     =   timeMaxAmplitude/srate_i;
+    peakDelay_i(i)                     =   timeMaxAmplitude/srate_i;
+end
 
 
 % % NEW FEATURE Takahashi 2009
-% f                   = [3 6 12 18];
+% cf                   = Murat.data.centralFrequency;
 % 
 % pdsp_ref            =...
 %     Murat.temp.sp_ref(Murat.temp.cursor1:Murat.temp.pdcursor);

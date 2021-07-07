@@ -39,6 +39,5 @@ if (nargin==4)
             end
         end
     end
-    r(:,5)                  =   0;
 end
     

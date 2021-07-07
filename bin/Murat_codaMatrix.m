@@ -8,6 +8,8 @@ modv                            =   Murat.input.modv;
 vS                              =   Murat.input.averageVelocityS;
 origin                          =   Murat.input.origin;
 sections                        =   Murat.input.sections;
+B0                              =   Murat.input.albedo;
+Le_1                            =   Murat.input.extinctionLength;
 
 % Coda kernels compute value at the centre of the cell, differently from
 % rays, which refer to the shallowest SW corner.
@@ -22,7 +24,7 @@ modv(:,3)                       =   modv(:,3) + stepgZ;
 
 [K_grid,r_grid]                 =...
     Murat_kernels(tCoda_i+tWm/2,eventStation_i(1:3),eventStation_i(4:6),...
-    modv,vS,kT);
+    modv,vS,kT,B0,Le_1);
 
 % Nodes of the kernel model space
 xK                              =   unique(r_grid(:,1));
@@ -77,9 +79,9 @@ if flag == 1
 end
 
 %pre-define 3D matrix in space
-lx                              =   length(x); % number of positions x
-ly                              =   length(y); % number of positions y
-lz                              =   length(z); % number of positions z
+lx                              =   length(x);
+ly                              =   length(y);
+lz                              =   length(z);
 index                           =   0;
 Ac_i                            =   zeros(1,(length(modv(:,1))));
 for i=1:lx
@@ -92,25 +94,4 @@ for i=1:lx
 end
 
 % Residual from cutting the grid (it is always <1%
-% resAc = sum(Ac_i)/sum(K_grid);
-
 Ac_i = Ac_i/sum(Ac_i);
-
-%PLOTS a 3D image for the kernels
-function Murat_imageKernels(X,Y,Z,V,color,sections)
-V(isinf(V))             =   10^-100;
-
-slice(X, Y, Z, V, sections(1), sections(2), sections(3))
-colorbar
-shading flat
-colormap(color);
-colorbar
-
-grid on
-    
-ax                      =   gca;
-ax.GridLineStyle        =   '-';
-ax.GridColor            =   'k';
-ax.GridAlpha            =   1;
-ax.LineWidth            =   1;
-

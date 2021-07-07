@@ -1,295 +1,229 @@
-function Murat                  =   Murat_inversion(Murat)
+function Murat                      =   Murat_inversion(Murat)
 %% 2D peak-delay, Qc and Q TOMOGRAPHIC INVERSIONS
-%% PATHS and FIGURES
 %%
 % Importing all the necessary inputs and data for plotting
-FLabel                          =   Murat.input.label;
-fformat                         =   Murat.input.format;
-outputLCurve                    =   Murat.input.lCurve;
-tCm                             =   Murat.input.startLapseTime;
-tWm                             =   Murat.input.codaWindow;
-cf                              =   Murat.input.centralFrequency;
-sped                            =   Murat.input.spectralDecay;
-nxc                             =   Murat.input.gridLong;
-nyc                             =   Murat.input.gridLat;
-nzc                             =   Murat.input.gridZ;
-sizea                           =   Murat.input.sizeCheck;
-latt                            =   Murat.input.lowCheck;
-hatt                            =   Murat.input.highCheck;
-nonlinear                       =   Murat.input.nonLinear;
-spike_o                         =   Murat.input.spikeLocationOrigin;
-spike_e                         =   Murat.input.spikeLocationEnd;
-spike_v                         =   Murat.input.spikeValue;
-x                               =   Murat.input.x;
-y                               =   Murat.input.y;
-z                               =   Murat.input.z;
-
-Apd                             =   Murat.data.inversionMatrixPeakDelay;
-Ac                              =   Murat.data.inversionMatrixQc;
-A                               =   Murat.data.inversionMatrixQ;
-luntot                          =   Murat.data.totalLengthRay;
-time0                           =   Murat.data.travelTime;
-Qm                              =   Murat.data.inverseQc;
-RZZ                             =   Murat.data.uncertaintyQc;
-lpdelta                         =   Murat.data.variationPeakDelay;
-rapsp                           =   Murat.data.energyRatioBodyCoda;
-retain_pd                       =   Murat.data.retainPeakDelay;
-retain_Qc                       =   Murat.data.retainQc;
-retain_Q                        =   Murat.data.retainQ;
-modv_pd                         =   Murat.data.modvPeakDelay;
-modv_Qc                         =   Murat.data.modvQc;
-modv_Q                          =   Murat.data.modvQ;
-FPath                           =   './';
-%% Peak delay mapping - weighted average
-% This section deals with the peak delay data - the 4th column of the file.
-lApd                            =   size(Apd);
-mpd                             =   zeros(lApd(2),1);
-
-%%
-% For loop to sum and normalize
-for j = 1:lApd(2)
-    mpd(j,1)                    =...
-        sum(Apd(:,j).*lpdelta(retain_pd))/sum(Apd(:,j));
-end
-%%
-% Assign to 4th column of what you save
-modv_pd(modv_pd(:,5)==1,4)      =   mpd;
-
-%% Qc inversion
-% Weighting depends on the values of RZZ, which can be defined for both the
-% linear and non-linear cases. You start with the linear.
-if nonlinear == 0
-    
-    W1                          =   RZZ(retain_Qc)<0.3;
-    W2                          =   RZZ(retain_Qc)<0.5;
-    W3                          =   RZZ(retain_Qc)<0.7;
-    W4                          =   W3+W2+W1;
-    Wc                          =   diag(1./(W4+1));% weights
-    
-elseif nonlinear == 1
-    %% For now  in the nonlinear case there is no weighting.
-    Wc                          =   1;
-    
+FLabel                              =   Murat.input.label;
+fformat                             =   Murat.input.format;
+outputLCurve                        =   Murat.input.lCurve;
+tCm                                 =   Murat.input.startLapseTime;
+tWm                                 =   Murat.input.codaWindow;
+cf                                  =   Murat.input.centralFrequency;
+sped                                =   Murat.input.spectralDecay;
+nxc                                 =   Murat.input.gridLong;
+nyc                                 =   Murat.input.gridLat;
+nzc                                 =   Murat.input.gridZ;
+sizea                               =   Murat.input.sizeCheck;
+latt                                =   Murat.input.lowCheck;
+hatt                                =   Murat.input.highCheck;
+modv                                =   Murat.input.modv;
+nonlinear                           =   Murat.input.nonLinear;
+spike_o                             =   Murat.input.spikeLocationOrigin;
+spike_e                             =   Murat.input.spikeLocationEnd;
+spike_v                             =   Murat.input.spikeValue;
+x                                   =   Murat.input.x;
+y                                   =   Murat.input.y;
+z                                   =   Murat.input.z;
+if outputLCurve == 0
+    lCurveQc                        =   Murat.input.lCurveQc;
+    lCurveQ                         =   Murat.input.lCurveQ;
 end
 
-%%
-% Weighted tikhonov inversion - first the SVD
-dcW                             =   Wc*Qm(retain_Qc);
-Gc                              =   Wc*Ac;
-[Uc,Sc,Vc]                      =   svd(Gc);
+Apd_i                               =...
+    Murat.data.inversionMatrixPeakDelay;
+Ac_i                                =   Murat.data.inversionMatrixQc;
+A_i                                 =   Murat.data.inversionMatrixQ;
+luntot                              =   Murat.data.totalLengthRay;
+time0                               =   Murat.data.travelTime;
+Qm                                  =   Murat.data.inverseQc;
+RZZ                                 =   Murat.data.uncertaintyQc;
+lpdelta                             =   Murat.data.variationPeakDelay;
+rapsp                               =   Murat.data.energyRatioBodyCoda;
+retain_pd                           =   Murat.data.retainPeakDelay;
+retain_Qc                           =   Murat.data.retainQc;
+retain_Q                            =   Murat.data.retainQ;
+ray_crosses_pd                      =   Murat.data.raysPeakDelay;
+ray_crosses_Qc                      =   Murat.data.raysQc;
+ray_crosses_Q                       =   Murat.data.raysQ;
+FPath                               =   './';
 
-%%
-% Only shows LCurve if user wants, otherwise you can pre-arrange the damping
-% to a certain value.
-if outputLCurve == 1
-    
-    %%
-    % Damping parameter is user defined from the plot
-    LcQc                        =...
-        figure('Name','L-curve Qc','NumberTitle','off');
-    [rho,eta,reg_param]         =...
-        l_curve_tikh_svd(Uc,diag(Sc),dcW,100);
-    plot_lc(rho,eta,'-',1,reg_param)
-
-    tik0_regC                   =...
-        input('Your personal smoothing parameter for coda ');
-    
-    FName                       =   'Lc_Qc';
-    saveas(LcQc,fullfile(FPath, FLabel, 'Rays_Checks', FName), fformat);
-    close(LcQc)
-    
-    %%
-    % A Picard plot is not shown but saved to evaluate the quality of the
-    % inversion.
-    PpQc                        =   figure('Name','Picard-plot Qc',...
-        'NumberTitle','off','visible','off');
-    picard(Uc,diag(Sc),dcW);
-    FName                       =   'Picard_Qc';
-    saveas(PpQc,fullfile(FPath, FLabel, 'Rays_Checks', FName), fformat);
-
-else
-    %%
-    % This is in the case the damping is pre-assigned.
-    tik0_regC                   =   Murat.input.lCurveQc;
-    
+if outputLCurve == 0
+    lCurveQc                        =   Murat.input.lCurveQc;
+    lCurveQ                         =   Murat.input.lCurveQ;
 end
 
+
+%% Defining inversion problem for each frequency band
+lMF                                 =   size(ray_crosses_pd);
+modv_pd                             =   zeros(lMF(1),5,lMF(2));
+modv_Qc                             =   zeros(lMF(1),10,lMF(2));
+modv_Q                              =   zeros(lMF(1),10,lMF(2));
+const_Qc                            =   zeros(size(rapsp));
+residualQ                           =   zeros(1,lMF(2));
+residualQc                          =   zeros(1,lMF(2));
 %%
-% Inversion with a standard Tikhonov - using the programs in HANSEN et al.
-% 1994
-mtik0C                          =   tikhonov(Uc,diag(Sc),Vc,dcW,tik0_regC);
-modv_Qc(modv_Qc(:,5)==1,4)      =   mtik0C;
+% Loops over all frequencies and parameter models
+for k = 1:lMF(2)
+    modv_pd(:,1:4,k)                =   modv;
+    modv_Qc(:,1:4,k)                =   modv;
+    modv_Q(:,1:4,k)                 =   modv;
 
-%% Q inversion - Direct wave attenuation
-% Set up the constant for the method from start - the Qc is measured for
-% each source-station pair.
-
-const_Qc                        =...
-    (tCm+tWm/2)^sped.*exp(Qm(retain_Q)*2*pi*cf*(tCm+tWm/2));
-
-%%
-% Data of the starting inverse problem - to set geometrical spreading and
-% average Q.
-d0                              =   log(rapsp(retain_Q)./const_Qc)/2/pi/cf;
-G                               =   -log(luntot(retain_Q))/pi/cf;
-G(:,2)                          =   -time0(retain_Q);
-
-%%
-% The three parameters are the constant, the geometrical spreading, and the
-% average Q and they are contained in constQmean. Computed with a least
-% square inversion. Using the covariance matrix for uncertainties.
-constQmean                      =   lsqlin(G,d0(:,1));
-cova                            =...
-    (G'*G)^(-1)*G'*cov(d0)*G*(G'*G)^(-1); 
-er                              =   sqrt(diag(cova));
-constQmean(:,2)                 =   er;
-
-%%
-% Data creation for the true inversion, removing the pre-calculated
-% parameters.
-d1                              =...
-    d0  + constQmean(1,1)*log(luntot(retain_Q))/pi/cf...
-    + time0(retain_Q)*constQmean(2,1);
-
-
-%%
-% Same procedure for inversion for Q. 
-[U,S,V]=svd(A);
-
-if outputLCurve == 1
+    %% Peak delay regionalization
+    rcpd                            =   ray_crosses_pd(:,k);
+    rtpd                            =   retain_pd(:,k);
+    Apd                             =	Apd_i(rtpd,rcpd);
+    lApd                            =   size(Apd,2);
+    mpd                             =   zeros(lApd,1);
+    cfk                             =   cf(k);
+    fcName                          =   num2str(cfk);
     
-    %%
-% sets the smoothing parameter - as before
-    LcCN                        =   figure('Name','L-curve coda-normalization','NumberTitle','off');
-    l_curve(U,diag(S),d1,'Tikh')
-    tik0_reg                    =   input('Your personal smoothing parameter ');
-    FName                       =   'Lc_CN';
-    saveas(LcCN,fullfile(FPath, FLabel, 'Rays_Checks', FName), fformat);
-    close(LcCN)
-    
-    %%
-    % Picard plot
-    PpCN                        =   figure('Name','Picard coda-norm.','NumberTitle','off',...
-        'visible','off');
-    picard(U,diag(S),d1);
-    FName                       =   'Picard_CN';
-    saveas(PpCN,fullfile(FPath, FLabel, 'Rays_Checks', FName), fformat);
-    
-else
-    tik0_reg                    =   Murat.input.lCurveQ;
-    
-end
-mtik0                           =   tikhonov(U,diag(S),V,d1,tik0_reg);
-modv_Q(modv_Q(:,5)==1,4)        =   mtik0;
-
-%% Testing - 3D checkerboard and spike inputs
-% This part creates files and variables for the inversion of the
-% checkerboard and spike tests. We start with the creation of the
-% checkerboard pattern with a function from Gibboncode
-% (https://www.gibboncode.org).
-siz                             =   [nxc nyc nzc];
-I                               =   checkerBoard3D(siz,sizea);
-
-%%
-% Then we fold in checkerboard velocity model...
-index                           = 0;
-for i=1:nxc
-    for j=1:nyc
-        for k=1:nzc
-            index               = index+1;
-            modv_Qc(index,6)    = I(i,j,k);
-        end
+    for j = 1:lApd
+        
+        mpd(j,1)                    =...
+            sum(Apd(:,j).*lpdelta(rtpd))/sum(Apd(:,j));
+        
     end
-end
-
-%%
-% and assign alternating values to the checkerboard.
-modv_Qc(modv_Qc(:,6)==1,6)      =   latt;
-modv_Qc(modv_Qc(:,6)==0,6)      =   hatt;
-
-
-%%
-% Spike test - we assume everything is average and follow a similar
-% procedure.
-modv_Qc(:,8)                    =   mean(Qm);
-
-if ~isempty(spike_o)
-    r                           =   Murat_unfold(x',y',z');
-    cond_in                     =...
-        r(:,1)>spike_o(2) & r(:,1)<spike_e(2) &...
-        r(:,2)>spike_o(1) & r(:,2)<spike_e(1) &...
-        r(:,3)<spike_o(3) & r(:,3)>spike_e(3);
     
-    modv_Qc(cond_in,8)          =   spike_v;
-end
-
-%%
-% Same checkerboard/spike inputs are created for Q
-modv_Q(:,6:8)                   =   modv_Qc(:,6:8);
-
-%% Testing - 3D checkerboard and spike inversions
-% Inverting checkerboard for Qc and Q
-Qc_ch                           =   modv_Qc(modv_Qc(:,5)==1,6);
-re_Qc                           =   Gc*Qc_ch;
-mcheck_c                        =   tikhonov(Uc,diag(Sc),Vc,re_Qc,tik0_regC);
-modv_Qc(modv_Qc(:,5)==1,7)      =   mcheck_c; %output checkerboard
-
-Q_ch                            =   modv_Q(modv_Q(:,5)==1,6);
-re_Q                            =   A*Q_ch;
-mcheck                          =   tikhonov(U,diag(S),V,re_Q,tik0_reg);
-modv_Q(modv_Q(:,5)==1,7)        =   mcheck; %output checkerboard
-
-%%
-% Inverting spike for Qc and Q at user discretion
-if ~isempty(spike_o)
-    Qc_sp                       =   modv_Qc(modv_Qc(:,5)==1,8);
-    re_Qc                       =   Gc*Qc_sp;
-    mspike_c                    =   tikhonov(Uc,diag(Sc),Vc,re_Qc,tik0_regC);
-    modv_Qc(modv_Qc(:,5)==1,9)  =   mspike_c; %output spike
+    modv_pd(rcpd,5,k)               =   mpd;
     
-    Q_sp                        =   modv_Q(modv_Q(:,5)==1,8);
-    re_Q                        =   A*Q_sp;
-    mspike                      =   tikhonov(U,diag(S),V,re_Q,tik0_reg);
-    modv_Q(modv_Q(:,5)==1,9)    =   mspike; %output spike
+    %% Qc inversion
+    rcQc                            =   ray_crosses_Qc(:,k);
+    rtQc                            =   retain_Qc(:,k);
+    Ac                              =   Ac_i(rtQc,rcQc);
+    Qm_k                            =   Qm(rtQc,k);
+    RZZ_k                           =   RZZ(rtQc,k);
+    
+    Wc                              =...
+        Murat_weighting(nonlinear,RZZ_k);
+    Gc                              =   Wc*Ac;
+    [Uc,Sc,Vc]                      =   svd(Gc);
+    
+    [mtik0C,residualQc_k,LcQc,tik0_regC]...
+                                    =...
+        Murat_tikhonovQc(outputLCurve,Qm_k,Wc,Gc,lCurveQc);
+    
+    FName                           =   ['L-curve_Qc_' fcName '_Hz'];
+    saveas(LcQc,fullfile(FPath, FLabel,'Rays_Checks',FName),fformat);
+    close(LcQc)
+
+    residualQc(1,k)                 =   residualQc_k;
+    modv_Qc(rcQc,5,k)               =   mtik0C;
+    
+    %% Q inversion - Direct wave attenuation - modified CN method
+    % Set up the constant for the method from start - the Qc is measured
+    % for each source-station pair.
+    rcQ                             =   ray_crosses_Q(:,k);
+    rtQ                             =   retain_Q(:,k);
+    A                               =   A_i(rtQ,rcQ);
+    Q_k                             =   Qm(rtQ,k);
+    
+    const_Qc_k                      =...
+        (tCm+tWm/2)^-sped.*exp(-Q_k*2*pi*cfk*(tCm+tWm/2));
+    rapsp_k                         =   rapsp(rtQ,k);    
+    [U,S,V]                         =   svd(A);
+    
+    [mtik0,residualQ_k,LcCN,tik0_reg,~,~]...
+                                    =   Murat_tikhonovQ(cfk,rtQ,...
+        outputLCurve,rapsp_k,const_Qc_k,luntot,time0,A,lCurveQ);
+
+    FName                           =   ['L-curve_Q_' fcName '_Hz'];
+    saveas(LcCN,fullfile(FPath, FLabel,'Rays_Checks',FName),fformat);
+    close(LcCN)
+    modv_Q(rcQ,5,k)                 =   mtik0;
+    const_Qc(rtQ,k)                   =   const_Qc_k;
+    residualQ(:,k)                  =   residualQ_k;
+    
+    %% Testing - 3D checkerboard and spike inputs
+    % This part creates inputs and outputs for the checkerboard and spike
+    % tests. The checkerboard pattern is created with a function from
+    % Gibboncode (https://www.gibboncode.org).
+    siz                             =   [nxc nyc nzc];
+    I                               =   checkerBoard3D(siz,sizea);
+    [checkInput,spikeInput]         =...
+    Murat_inputTesting(I,spike_o,spike_e,x,y,z);
+    
+    modv_Qc(checkInput==1,6,k)      =   latt;
+    modv_Qc(checkInput==0,6,k)      =   hatt;
+    
+    modv_Qc(:,8,k)                  =   mean(Qm_k);
+    modv_Qc(spikeInput,8,k)         =   spike_v;
+    
+    % Same checkerboard/spike inputs are created for Q
+    modv_Q(:,6:8,k)                 =   modv_Qc(:,6:8,k);
+    
+    %% Testing - 3D checkerboard and spike inversions
+    % Inverting checkerboard for Qc and Q
+    Qc_ch                           =   modv_Qc(rcQc,6,k);
+    re_Qc                           =   Gc*Qc_ch;
+    mcheck_c                        =...
+        tikhonov(Uc,diag(Sc),Vc,re_Qc,tik0_regC);
+    modv_Qc(rcQc,7,k)               =   mcheck_c;
+    
+    Q_ch                            =   modv_Q(rcQ,6,k);
+    re_Q                            =   A*Q_ch;
+    mcheck                          =...
+        tikhonov(U,diag(S),V,re_Q,tik0_reg);
+    modv_Q(rcQ,7,k)                 =   mcheck;
+    %%
+    % Inverting spike for Qc and Q at user discretion
+    if ~isempty(spike_o)
+        Qc_sp                       =   modv_Qc(rcQc,8,k);
+        re_Qc                       =   Gc*Qc_sp;
+        mspike_c                    =   tikhonov(Uc,diag(Sc),Vc,re_Qc,tik0_regC);
+        modv_Qc(rcQc,9,k)           =   mspike_c;
+        
+        Q_sp                        =   modv_Q(rcQ,8,k);
+        re_Q                        =   A*Q_sp;
+        mspike                      =   tikhonov(U,diag(S),V,re_Q,tik0_reg);
+        modv_Q(rcQ,9,k)             =   mspike;
+    end
+    
+    %% Diagonal of the resolution matrix
+    % Using the filter functions for Qc and Q.
+    sSc                             =   size(Sc);
+    fil_reg                         =   fil_fac(diag(Sc),tik0_regC);
+    if sSc(2) > sSc(1)
+        fil_reg(end+1:sSc(2),1)     =   0;
+    end
+    Rc                              =   Vc*diag(fil_reg)*Vc';
+    dRc                             =   diag(Rc);
+    modv_Qc(rcQc,10,k)              =   dRc;
+    
+    sS                              =   size(S);
+    fil_reg                         =   fil_fac(diag(S),tik0_reg);
+    if sS(2) > sS(1)
+        fil_reg(end+1:sS(2),1)      =   0;
+    end
+    R                               =   V*diag(fil_reg)*V';
+    dR                              =   diag(R);
+    modv_Q(rcQ,10,k)                =   dR;
+    
+    %% SAVE
+    % save peak-delay
+    modv_pd_k                       =   modv_pd(:,:,k);
+    FName                           =   ['peakdelay_' fcName '_Hz.txt'];
+    save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_pd_k','-ascii');
+    
+    %%
+    % save Qc
+    modv_Qc_k                       =   modv_pd(:,:,k);
+    FName                           =   ['Qc_' fcName '_Hz.txt'];
+    save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_Qc_k','-ascii');
+    
+    %%
+    % save Q
+    modv_Q_k                        =   modv_Q(:,:,k);
+    FName                           =   ['Q_' fcName '_Hz.txt'];
+    save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_Q_k','-ascii');
+    
 end
 
-%%
-% We also output the diagonal of the resolution matrix using the filter
-% functions for Qc and Q. No plot will be done.
-sSc                             =   size(Sc);
-fil_reg                         =   fil_fac(diag(Sc),tik0_regC);
-if sSc(2) > sSc(1)
-    fil_reg(end+1:sSc(2),1)     =   0;
-end
-Rc                              =   Vc*diag(fil_reg)*Vc';
-dRc                             =   diag(Rc);
-modv_Qc(modv_Qc(:,5)==1,10)     =   dRc; %diag of resolution matrix
+%% Save in Murat
+Murat.data.residualQc           =   residualQc;
 
-sS                              =   size(S);
-fil_reg                         =   fil_fac(diag(S),tik0_reg);
-if sS(2) > sS(1)
-    fil_reg(end+1:sS(2),1)      =   0;
-end
-R                               =   V*diag(fil_reg)*V';
-dR                              =   diag(R);
-modv_Q(modv_Q(:,5)==1,10)       =   dR; %diag of resolution matrix
+Murat.data.const_Qc             =   const_Qc;
+Murat.data.residualQ            =   residualQ;
 
-%% Save in and outside Murat
 Murat.data.modvPeakDelay        =   modv_pd;
 Murat.data.modvQc               =   modv_Qc;
 Murat.data.modvQ                =   modv_Q;
 
-%%
-% save peak-delay
-FName                           =   'peakdelay.txt';
-save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_pd','-ascii');
-
-%%
-% save Qc
-FName                           =   'Qc.txt';
-save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_Qc','-ascii');
-
-%%
-% save Q
-FName                           =   'Q.txt';
-save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_Q','-ascii');
