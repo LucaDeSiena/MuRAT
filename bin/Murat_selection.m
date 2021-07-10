@@ -1,7 +1,7 @@
 function Murat                      =   Murat_selection(Murat)
 
 % Selects input and data to select
-comp                                =   Murat.input.components;
+components                          =   Murat.input.components;
 tresholdnoise                       =   Murat.input.tresholdNoise;
 modv                                =   Murat.input.modv;
 nonlinear                           =   Murat.input.nonLinear;
@@ -29,10 +29,6 @@ dataFreq                            =   size(peakd,2);
 modvL                               =   size(modv,1);
 
 fitrobust                           =   zeros(2,dataFreq);
-lpdelta                             =   zeros(dataL,dataFreq);
-retain_pd                           =   false(dataL,dataFreq);
-retain_Qm                           =   false(dataL,dataFreq);
-retain_Q                            =   false(dataL,dataFreq);
 ray_crosses_pd                      =   false(modvL,dataFreq);
 ray_crosses_Qc                      =   false(modvL,dataFreq);
 ray_crosses_Q                       =   false(modvL,dataFreq);
@@ -44,28 +40,30 @@ switch nonlinear
         fT                          =   Murat.input.fitTresholdNonLinear;
 end
     
-
-%% Setting up the data vector in case of 2- and 3-components data
-
-luntot                              =   luntot(1:comp:dataL);
-time0                               =   tPS(1:comp:dataL);
-evestaz                             =   evestaz(1:comp:dataL,:);
-raysplot                            =   raysplot(:,:,1:comp:dataL);
-Ac_i                                =   Ac_i(1:comp:dataL,:);
-Apd_i                               =   Apd_i(1:comp:dataL,:);
-A_i                                 =   A_i(1:comp:dataL,:);
-
-if comp >  1
-    [peakd,Qm,RZZ,rapsp,rapspcn]	=...
-    Murat_components(components,peakd,Qm,RZZ,rapsp,rapspcn);
-end
-
-
-%% Warns about problematic data and saves their names
-[problemPD,problemQc,problemRZZ,problemQ,yesPD]...
+%% Warns about problematic data and saves their names and locations
+[problemPD,problemQc,problemRZZ,problemQ,~,compMissing,flagWarning]...
                                     =...
             Murat_dataWarning(listaSac,nonlinear,tresholdnoise,...
-            maPD,miPD,fT,peakd,Qm,RZZ,rapspcn);
+            maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,components,0);
+
+%% Selects data in case of multiple components
+luntot                          =   luntot(1:components:dataL);
+time0                           =   tPS(1:components:dataL);
+evestaz                         =   evestaz(1:components:dataL,:);
+raysplot                        =   raysplot(:,:,1:components:dataL);
+Ac_i                            =   Ac_i(1:components:dataL,:);
+Apd_i                           =   Apd_i(1:components:dataL,:);
+A_i                             =   A_i(1:components:dataL,:);
+
+if components >  1
+    [peakd,Qm,RZZ,rapsp,rapspcn]    =...
+    Murat_components(components,peakd,Qm,RZZ,...
+    rapsp,rapspcn,compMissing);
+end
+[~,~,~,~,yesPD,~,~]...
+                                    =...
+            Murat_dataWarning(listaSac,nonlinear,tresholdnoise,...
+            maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,components,flagWarning);
 
 
 %% Operations to decide weight of each data for the solution
@@ -85,14 +83,19 @@ end
 %%
 % Remove outliers and inversion parameters with little/no sensitivity and
 % store the remaining indexes for later
+dataLMoreComp                       =   size(peakd,1);
+lpdelta                             =   zeros(dataLMoreComp,dataFreq);
+retain_pd                           =   false(dataLMoreComp,dataFreq);
+retain_Qm                           =   false(dataLMoreComp,dataFreq);
+retain_Q                            =   false(dataLMoreComp,dataFreq);
 for i = 1:dataFreq
     
     % Peak Delays
-    l10pd_i                         =   l10pd(:,i);
     yesPD_i                         =   yesPD(:,i);
+    l10pd_i                         =   l10pd(:,i);
     [pab,lpdelta_i,retain_pd_i,ray_crosses_pd_i]...
                                     =...
-            Murat_retainPeakDealay(t_phase,l10pd_i,yesPD_i,Apd_i);
+            Murat_retainPeakDelay(t_phase,l10pd_i,yesPD_i,Apd_i);
     
     % Qc
     Qm_i                            =   Qm(:,i);
@@ -137,4 +140,7 @@ Murat.data.retainQ                  =   retain_Q;
 Murat.data.raysPeakDelay            =   ray_crosses_pd;
 Murat.data.raysQc                   =   ray_crosses_Qc;
 Murat.data.raysQ                    =   ray_crosses_Q;
+Murat.data.inversionMatrixPeakDelay =   Apd_i;
+Murat.data.inversionMatrixQc        =   Ac_i;
+Murat.data.inversionMatrixQ         =   A_i;
 

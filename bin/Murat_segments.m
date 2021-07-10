@@ -1,5 +1,5 @@
 function [lunpar, blocch, lunto, s, rayCrossing] =...
-    segments_single(modv,rma)
+    Murat_segments(modv,rma)
 %   segments  Creates files with
 %             1. the total length of the segments (lunto)
 %             2. the slowness (s) in each block of the vel. model
@@ -74,7 +74,7 @@ bv = 1:length(xv);% number corresponding to each block of the grid
 bS = xv<=sorg(1) & sorg(1)<xv+deltastepx & yv<=sorg(2) &...
     sorg(2)<yv+deltastepy  & zv+deltastepz<=sorg(3) & sorg(3)<zv;
 
-% This is the block, added +1 as the reference is the deepest pointto the
+% This is the block, added +1 as the reference is the deepest point to the
 % South-West
 bSS = bv(bS>0)+1;
 

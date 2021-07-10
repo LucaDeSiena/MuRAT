@@ -23,11 +23,6 @@ spike_v                             =   Murat.input.spikeValue;
 x                                   =   Murat.input.x;
 y                                   =   Murat.input.y;
 z                                   =   Murat.input.z;
-if outputLCurve == 0
-    lCurveQc                        =   Murat.input.lCurveQc;
-    lCurveQ                         =   Murat.input.lCurveQ;
-end
-
 Apd_i                               =...
     Murat.data.inversionMatrixPeakDelay;
 Ac_i                                =   Murat.data.inversionMatrixQc;
@@ -49,8 +44,10 @@ FPath                               =   './';
 if outputLCurve == 0
     lCurveQc                        =   Murat.input.lCurveQc;
     lCurveQ                         =   Murat.input.lCurveQ;
+else
+    lCurveQc                        =   [];
+    lCurveQ                         =   [];
 end
-
 
 %% Defining inversion problem for each frequency band
 lMF                                 =   size(ray_crosses_pd);
