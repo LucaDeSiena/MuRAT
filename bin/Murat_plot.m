@@ -65,11 +65,14 @@ evestaz                         =...
 %% PLOTS - coverage and sensitivity
 % Murat_plot starts plotting the ray distribution if asked by the user.
 % It stores  the files in the corresponding folder.
-storeFolder                     =   'Rays_Checks';
 
 for k = 1:lMF(2)
+    storeFolder                     =   'Rays_Checks';
     cfk                         =   cf(k);
     fcName                      =   num2str(cfk);
+    if find(fcName == '.')
+        fcName(fcName == '.')   =   '_';
+    end
     rtpdk                       =   retainPeakDelay(:,k);
     rtQk                        =   retainQ(:,k);
     rtQck                       =   retainQc(:,k);
@@ -283,7 +286,7 @@ for k = 1:lMF(2)
 
     %%
     % Peak delays results
-    FName_PDMap                     =   ['Peak-Delay-3D' fcName '_Hz'];
+    FName_PDMap                     =   ['Peak-Delay-3D_' fcName '_Hz'];
     peakDelaymap                    =...
         Murat_image3D(X,Y,Z,mPD,...
         redblue,sections,evestaz_pd,x,y,z,FName_PDMap);
@@ -294,7 +297,7 @@ for k = 1:lMF(2)
 
     %%
     % Qc results
-    FName_QcMap                     =   ['Qc-3D' fcName '_Hz'];
+    FName_QcMap                     =   ['Qc-3D_' fcName '_Hz'];
     Qcmap                           =...
         Murat_image3D(X,Y,Z,mQc,...
         cyanpink,sections,evestaz_Qc,x,y,z,FName_QcMap);
@@ -305,7 +308,7 @@ for k = 1:lMF(2)
 
     %%
     % Q results
-    FName_QMap                      =   ['Q-3D' fcName '_Hz'];
+    FName_QMap                      =   ['Q-3D_' fcName '_Hz'];
     Qmap                            =...
         Murat_image3D(X,Y,Z,mQ,...
         purpleorange,sections,evestaz_Q,x,y,z,FName_QMap);
@@ -324,7 +327,7 @@ for k = 1:lMF(2)
     [~,~,~,check_outputQ]           =   Murat_fold(x,y,z,modv_Q_k(:,7));
     %%
     % Checkerboard Qc: Input and Output
-    FNameQcCheck                    =   ['Qc-Checkerboard' fcName '_Hz'];
+    FNameQcCheck                    =   ['Qc-Checkerboard_' fcName '_Hz'];
     Qc_check                        =   figure('Name',FNameQcCheck,...
         'NumberTitle','off','Position',[20,400,2000,1000]);
     subplot(1,2,1)
@@ -342,7 +345,7 @@ for k = 1:lMF(2)
     
     %%
     %Checkerboard Q: Input and Output
-    FNameQCheck                     =   ['Q-Checkerboard' fcName '_Hz'];
+    FNameQCheck                     =   ['Q-Checkerboard_' fcName '_Hz'];
     Q_check                         =   figure('Name',FNameQCheck,...
         'NumberTitle','off','Position',[20,400,2000,1000]);
     subplot(1,2,1)
@@ -367,7 +370,7 @@ for k = 1:lMF(2)
     [~,~,~,spike_outputQ]           =   Murat_fold(x,y,z,modv_Q_k(:,9));
     %%
     % Spike Qc: Input and Output
-    FNameQcSpike                    =   ['Qc-Spike' fcName '_Hz'];
+    FNameQcSpike                    =   ['Qc-Spike_' fcName '_Hz'];
     Qc_spike                        =   figure('Name',FNameQcSpike,...
         'NumberTitle','off','Position',[20,400,2000,1000]);
     subplot(1,2,1)
@@ -384,7 +387,7 @@ for k = 1:lMF(2)
     close(Qc_spike)
     %%
     % Spike Q: Input and Output
-    FNameQSpike                     =   ['Q-Spike' fcName '_Hz'];
+    FNameQSpike                     =   ['Q-Spike_' fcName '_Hz'];
     Q_spike                         =   figure('Name',FNameQSpike,...
         'NumberTitle','off','Position',[20,400,2000,1000]);
     subplot(1,2,1)
@@ -413,7 +416,8 @@ for k = 1:lMF(2)
     title('Parameter space plot',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     axis square
-    FName_Parameters                =   'Parameter_space_variations';
+    FName_Parameters                =...
+        ['Parameter_space_variations_' fcName '_Hz'];
     saveas(param_plot,...
         fullfile(FPath, FLabel, storeFolder, FName_Parameters), fformat);
     close(param_plot)
@@ -451,7 +455,8 @@ for k = 1:lMF(2)
             'High Scattering and Absorption'};
         
     end
-    FName_PMap                      =   'Parameter-Map';
+    FName_PMap                      =...
+        ['Parameter-Map_' fcName '_Hz'];
     ParaMap                         =...
         Murat_image3D(X,Y,Z,para_3D,...
         'bone',sections,evestaz_Qc,x,y,z,FName_Parameters);

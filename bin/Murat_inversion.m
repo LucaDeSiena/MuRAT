@@ -76,7 +76,7 @@ for k = 1:lMF(2)
     for j = 1:lApd
         
         mpd(j,1)                    =...
-            sum(Apd(:,j).*lpdelta(rtpd))/sum(Apd(:,j));
+            sum(Apd(:,j).*lpdelta(rtpd,k))/sum(Apd(:,j));
         
     end
     

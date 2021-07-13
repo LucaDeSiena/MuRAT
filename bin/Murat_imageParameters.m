@@ -12,14 +12,14 @@ pdd                                     =...
     fitdist(pd_condition,'ExtremeValue');
 
 pd_condition                            =   pd_condition - pdd.mu;
-trepd                                   =   0.05*pdd.sigma;
+trepd                                   =   0.15*pdd.sigma;
 mipdm                                   =   min(pd_condition);
 mapdm                                   =   max(pd_condition);
 
 Qcd                                     =...
     fitdist(Qc_condition,'GeneralizedExtremeValue');
 Qc_condition                            =   Qc_condition - Qcd.mu;
-treQc                                   =   0.05*Qcd.sigma;
+treQc                                   =   0.15*Qcd.sigma;
 miQcm                                   =   min(Qc_condition);
 maQcm                                   =   max(Qc_condition);
 
