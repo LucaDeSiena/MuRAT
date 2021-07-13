@@ -1,7 +1,7 @@
 function [mtik0,residualQ_k,LcCN,tik0_reg,d1k,constQmean_k]...
                                 =...
     Murat_tikhonovQ(cfk,rtQ,outputLCurve,rapsp_k,const_Qc_k,...
-    luntot,time0,A,lCurveQ)
+    luntot,time0,A,lCurveQ,flagShow)
 
 %Weighted tikhonov inversion with SVD for Q. Also creates L-curve and sets
 % data.
@@ -30,21 +30,26 @@ d1k                             =...
 %%
 % Same procedure for inversion for Q.
 [U,S,V]                         =   svd(A);
+
 %%
 % Creates L-curve figure as before and sets damping
-LcCN                            =...
-    figure('Name','L-curve Q','NumberTitle','off');
-[rho,eta,reg_param]             =...
-    l_curve_tikh_svd(U,diag(S),d1k,100);
-plot_lc(rho,eta,'-',1,reg_param)
-
-if outputLCurve == 1
-    tik0_reg                    =...
-        input('Your damping parameter ');
+if flagShow == 1
+    LcCN                            =...
+        figure('Name','L-curve Q','NumberTitle','off');
+    [rho,eta,reg_param]             =...
+        l_curve_tikh_svd(U,diag(S),d1k,100);
+    plot_lc(rho,eta,'-',1,reg_param)
+    
+    if outputLCurve == 1
+        tik0_reg                =...
+            input('Your damping parameter for Q: ');
+    else
+        tik0_reg                =   lCurveQ;
+    end
 else
-    tik0_reg                    =   lCurveQ;
+   tik0_reg                     =   lCurveQ;
+   LcCN                         =   0;
 end
-
 mtik0                           =   tikhonov(U,diag(S),V,d1k,tik0_reg);
 residualQ_k                     =   sum(abs(d1k-A*mtik0).^2);
 

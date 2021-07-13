@@ -16,8 +16,7 @@ zNodes                      =   gridP.z;
 
 %Max distance one cell
 dconv                       =   sqrt((xNodes(2)-xNodes(1))^2 +...
-    (yNodes(2)-yNodes(1))^2 +...
-    (zNodes(2)-zNodes(1))^2);
+    (yNodes(2)-yNodes(1))^2 + (zNodes(2)-zNodes(1))^2);
 
 %Time limit, in seconds, pvel is in km
 tlim                        =   dconv/mean(mean(mean(pvel*1000))); 

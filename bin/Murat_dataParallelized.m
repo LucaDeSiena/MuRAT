@@ -20,12 +20,12 @@ lcf                                     =   length(cf);
 locationDeg                             =   zeros(lengthData,6); 
 locationM                               =   zeros(lengthData,6); 
 theoreticalTime                         =   zeros(lengthData,1); 
-peakDelay                               =   zeros(lengthData,1); 
 totalLengthRay                          =   zeros(lengthData,1);
-inverseQc                               =   zeros(lengthData,1); 
-uncertaintyQc                           =   zeros(lengthData,1); 
-energyRatioBodyCoda                     =   zeros(lengthData,1); 
-energyRatioCodaNoise                    =   zeros(lengthData,1);
+peakDelay                               =   zeros(lengthData,lcf); 
+inverseQc                               =   zeros(lengthData,lcf); 
+uncertaintyQc                           =   zeros(lengthData,lcf); 
+energyRatioBodyCoda                     =   zeros(lengthData,lcf); 
+energyRatioCodaNoise                    =   zeros(lengthData,lcf);
 raysPlot                                =   zeros(100,5,lengthData);
 
 inversionMatrixPeakDelay                =...
@@ -38,7 +38,7 @@ rayCrossing                             =...
     zeros(lengthData,lengthParameterModel);
 
 %=========================================================================
-for i = 1:lengthData %loop through source-station pairs
+parfor i = 1:lengthData %loop through source-station pairs
     
     if isequal(mod(i,1000),0)
         
@@ -105,11 +105,11 @@ for i = 1:lengthData %loop through source-station pairs
     %% SAVING
     locationM(i,:)                      =   locationM_i;
     theoreticalTime(i,1)                =   theoreticalTime_i;
-    peakDelay(i,1:lcf)                    =   peakDelay_i;
-    inverseQc(i,1:lcf)                    =   inverseQc_i; 
-    uncertaintyQc(i,1:lcf)                =   uncertaintyQc_i; 
-    energyRatioBodyCoda(i,1:lcf)          =   energyRatioBodyCoda_i; 
-    energyRatioCodaNoise(i,1:lcf)         =   energyRatioCodaNoise_i;
+    peakDelay(i,:)                      =   peakDelay_i;
+    inverseQc(i,:)                      =   inverseQc_i; 
+    uncertaintyQc(i,:)                  =   uncertaintyQc_i; 
+    energyRatioBodyCoda(i,:)            =   energyRatioBodyCoda_i; 
+    energyRatioCodaNoise(i,:)           =   energyRatioCodaNoise_i;
     
 end
 
@@ -139,7 +139,5 @@ function calculateValue                 =...
 %number (index) and number of components.
 
 calculateValue                          =   isequal(components,1) ||...
-    (isequal(components,2) && ~isequal(mod(index,2),0)) ...
-        || (isequal(components,1) && ~isequal(mod(index,2),0) &&...
-        ~isequal(mod(index,3),0));
-
+    (isequal(components,2) || isequal(components,3)) &&...
+    isequal(mod(index,components),1);

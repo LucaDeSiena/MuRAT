@@ -15,6 +15,8 @@ nonlinear                       =   Murat.input.nonLinear;
 outputLCurve                    =   Murat.input.lCurve;
 if outputLCurve == 0
     lCurveQ                     =   Murat.input.lCurveQ;
+elseif outputLCurve == 1
+    lCurveQ                     =   [];
 end
 
 Qm                              =   Murat.data.inverseQc;
@@ -208,7 +210,7 @@ for k = 1:lMF(2)
     [~,~,~,~,d1k,spreadAverageQ]=...
                                 Murat_tikhonovQ(cfk,rtQk,outputLCurve,...
                                 energyRatio_k,const_Qc_k,...
-                                luntot,time0,A,lCurveQ);
+                                luntot,time0,A,lCurveQ,0);
     close
     
     equationQ                   =   -log(constQc(rtQk,k))...

@@ -58,7 +58,7 @@ for i = 1:lengthData %loop through source-station pairs
     [theoreticalTime_i, tCoda_i, cursorPick_i, cursorPeakDelay_i,...
         cursorCodaStart_i, cursorCodaEnd_i]...
                                         =...
-        Murat_times(Murat,locationM_i,listSac_i);
+        Murat_times(Murat,locationM_i,listSac_i,i);
     
     %% OPERATIONS TO MEASURE AND MODEL PEAK DELAYS + INVERSION MATRIX Q
     peakDelay_i                         =...
@@ -105,11 +105,11 @@ for i = 1:lengthData %loop through source-station pairs
     %% SAVING
     locationM(i,:)                      =   locationM_i;
     theoreticalTime(i,1)                =   theoreticalTime_i;
-    peakDelay(i,1:lcf)                  =   peakDelay_i;
-    inverseQc(i,1:lcf)                  =   inverseQc_i; 
-    uncertaintyQc(i,1:lcf)              =   uncertaintyQc_i; 
-    energyRatioBodyCoda(i,1:lcf)        =   energyRatioBodyCoda_i; 
-    energyRatioCodaNoise(i,1:lcf)       =   energyRatioCodaNoise_i;
+    peakDelay(i,:)                      =   peakDelay_i;
+    inverseQc(i,:)                      =   inverseQc_i; 
+    uncertaintyQc(i,:)                  =   uncertaintyQc_i; 
+    energyRatioBodyCoda(i,:)            =   energyRatioBodyCoda_i; 
+    energyRatioCodaNoise(i,:)           =   energyRatioCodaNoise_i;
     
 end
 

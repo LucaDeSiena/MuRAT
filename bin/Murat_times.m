@@ -1,6 +1,6 @@
 function [theoreticalTime_i, tC_i, cursorPick_i, cursorPeakDelay_i,...
     cursorCodaStart_i, cursorCodaEnd_i] =...
-    Murat_times(Murat,sst_i,listSac_i)
+    Murat_times(Murat,sst_i,listSac_i,i_label)
 %CREATES al the times for the processing, including those to measure Peak
 %Dealay and Coda Attenuation on the waveform.
 
@@ -31,9 +31,11 @@ end
 
 %If picking is not on the waveform
 if pktime_i < tempis(1)
-    error('The picking is set before the start of the recording!')
+    error(['The picking is set before the start of the recording number '...
+        num2str(i_label)])
 elseif pktime_i > tempis(end)
-    error('The picking is set after the end of the recording!')
+    error(['The picking is set after the end of the recording number '...
+        num2str(i_label)])
 end
 
 
@@ -51,6 +53,10 @@ else
     
     originTime_i                =   eval(f0);
     theoreticalTime_i           =   pktime_i - originTime_i;
+    if theoreticalTime_i < 0
+       error(['The picking is set before the origin time for recording '...
+            num2str(i_label)]);
+    end
     
 end
 

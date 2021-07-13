@@ -120,7 +120,7 @@ for k = 1:lMF(2)
     
     [mtik0,residualQ_k,LcCN,tik0_reg,~,~]...
                                     =   Murat_tikhonovQ(cfk,rtQ,...
-        outputLCurve,rapsp_k,const_Qc_k,luntot,time0,A,lCurveQ);
+        outputLCurve,rapsp_k,const_Qc_k,luntot,time0,A,lCurveQ,1);
 
     FName                           =   ['L-curve_Q_' fcName '_Hz'];
     saveas(LcCN,fullfile(FPath, FLabel,'Rays_Checks',FName),fformat);
