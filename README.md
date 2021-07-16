@@ -1,6 +1,6 @@
 ![Campi Flegrei direct-wave attenuation model.](https://github.com/LucaDeSiena/MuRAT/blob/Murat_ID/MuRAT.jpeg)
 
-MuRAT - Multi-Resolution Seismic Attenuation Tomography
+MuRAT - Multi-Resolution Seismic Attenuation Tomography Analysis
 =======
 
 MuRAT is a Matlab Package for Seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves. 
