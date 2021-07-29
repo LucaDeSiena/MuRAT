@@ -33,6 +33,12 @@ The program works on Mac, Linux and Windows systems equipped with Matlab R2019a.
 
 Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing and Mapping. The Parallel Computing Toolbox is recommended for speed.
 
+Costum toolboxes not included in standard Matlab installations are also provided with the package. These are:
+
+1. Routines to read SAC files created by Zhigang Peng and available from [his SAC tutorial page](http://geophysics.eas.gatech.edu/classes/SAC/).
+2. The [Regularization Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/52-regtools?s_tid=prof_contriblnk) created by Per Christian Hansen and available from Matlab File Exchange.
+3. Functions from the [Geometry and Image-Based Bioengineering add-On for MATLAB](https://github.com/gibbonCode/GIBBON).
+
 Two sample datasets (Mount St. Helens and Romania) are included and allow the user to obtain sample models. The  datasets work with the two input .mlx files that are provided and show examples of what the user can obtain with the code. 
 
 *Instructions in a nutshell*
