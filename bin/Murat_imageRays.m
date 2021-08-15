@@ -1,6 +1,22 @@
 function rays           =...
     Murat_imageRays(rma,origin,ending,evestaz,x,y,z,name)
-%PLOTS 3D rays
+% function rays           =...
+%     Murat_imageRays(rma,origin,ending,evestaz,x,y,z,name)
+%
+% PLOTS 3D rays
+%
+% Input parameters:
+%    rma:               ray in the format output from ray tracing
+%    origin:            origin of the grid
+%    ending:            end of the grid
+%    evestaz:           locations of events and stations in meters
+%    x:                 x vector
+%    y:                 y vector
+%    z:                 z vector
+%    name:              title of the figure
+%
+% Output parameters:
+%    rays:              image produced
 
 rays                    =   figure('Name',name,...
     'NumberTitle','off','Position',[20,400,1200,1000]);

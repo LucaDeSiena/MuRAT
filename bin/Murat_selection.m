@@ -1,14 +1,14 @@
+%% Seismic attributesare selected and components are considered
 function Murat                      =   Murat_selection(Murat)
-
-% Selects input and data to select
+% SELECTS inputs and data
 components                          =   Murat.input.components;
 tresholdnoise                       =   Murat.input.tresholdNoise;
 modv                                =   Murat.input.modv;
-nonlinear                           =   Murat.input.nonLinear;
 PorS                                =   Murat.input.POrS;
 listaSac                            =   Murat.input.listSac;
 maPD                                =   Murat.input.maximumPeakDelay;
 miPD                                =   Murat.input.minimumPeakDelay;
+fT                                  =   Murat.input.fitTresholdLinear;
 
 Apd_i                               =...
     Murat.data.inversionMatrixPeakDelay;
@@ -33,40 +33,34 @@ ray_crosses_pd                      =   false(modvL,dataFreq);
 ray_crosses_Qc                      =   false(modvL,dataFreq);
 ray_crosses_Q                       =   false(modvL,dataFreq);
 
-switch nonlinear
-    case 0
-        fT                          =   Murat.input.fitTresholdLinear;
-    case 1
-        fT                          =   Murat.input.fitTresholdNonLinear;
-end
-    
-%% Warns about problematic data and saves their names and locations
+%%
+% Warns about problematic data and saves their names and locations
 [problemPD,problemQc,problemRZZ,problemQ,~,compMissing,flagWarning]...
                                     =...
-            Murat_dataWarning(listaSac,nonlinear,tresholdnoise,...
+            Murat_dataWarning(listaSac,tresholdnoise,...
             maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,components,0);
 
-%% Selects data in case of multiple components
-luntot                          =   luntot(1:components:dataL);
-time0                           =   tPS(1:components:dataL);
-evestaz                         =   evestaz(1:components:dataL,:);
-raysplot                        =   raysplot(:,:,1:components:dataL);
-Ac_i                            =   Ac_i(1:components:dataL,:);
-Apd_i                           =   Apd_i(1:components:dataL,:);
-A_i                             =   A_i(1:components:dataL,:);
+%%
+% Selects data in case of multiple components
+luntot                              =   luntot(1:components:dataL);
+time0                               =   tPS(1:components:dataL);
+evestaz                             =   evestaz(1:components:dataL,:);
+raysplot                            =   raysplot(:,:,1:components:dataL);
+Ac_i                                =   Ac_i(1:components:dataL,:);
+Apd_i                               =   Apd_i(1:components:dataL,:);
+A_i                                 =   A_i(1:components:dataL,:);
 
 if components >  1
     [peakd,Qm,RZZ,rapsp,rapspcn]    =...
     Murat_components(components,peakd,Qm,RZZ,...
     rapsp,rapspcn,compMissing);
 end
-[~,~,~,~,yesPD,~,~]...
-                                    =...
-            Murat_dataWarning(listaSac,nonlinear,tresholdnoise,...
+[~,~,~,~,yesPD,~,~]                 =...
+            Murat_dataWarning(listaSac,tresholdnoise,...
             maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,components,flagWarning);
 
-
-%% Operations to decide weight of each data for the solution
+%%
+% Operations to decide weight of each data for the solution
 % Using Vp/Vs to map max of S waves in the case of P picking
 vpvs                                =   sqrt(3);
 l10pd                               =   log10(peakd);
@@ -101,7 +95,7 @@ for i = 1:dataFreq
     Qm_i                            =   Qm(:,i);
     RZZ_i                           =   RZZ(:,i);
     [retain_Qm_i,ray_crosses_Qc_i]  =...
-    Murat_retainQc(nonlinear,fT,Qm_i,RZZ_i,Ac_i);
+    Murat_retainQc(fT,Qm_i,RZZ_i,Ac_i);
     
     % Coda-normalization
     retain_Q_i                      =   rapspcn(:,i)>=tresholdnoise;

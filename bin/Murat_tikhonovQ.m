@@ -2,9 +2,33 @@ function [mtik0,residualQ_k,LcCN,tik0_reg,d1k,constQmean_k]...
                                 =...
     Murat_tikhonovQ(cfk,rtQ,outputLCurve,rapsp_k,const_Qc_k,...
     luntot,time0,A,lCurveQ,flagShow)
+% function [mtik0,residualQ_k,LcCN,tik0_reg,d1k,constQmean_k]...
+%                                 =...
+%     Murat_tikhonovQ(cfk,rtQ,outputLCurve,rapsp_k,const_Qc_k,...
+%     luntot,time0,A,lCurveQ,flagShow)
+%
+% INVERTS with weighted tikhonov and creates L-curve and data for Q.
+%
+% Input parameters:
+%    cfk:           central frequency
+%    rtQ:           selected Q waveforms
+%    outputLCurve:  flag to output the L curve
+%    rapsp_k:       energy ratios
+%    const_Qc_k:    constant from the average Qc
+%    luntot:        total length
+%    time0:         travel time
+%    A:             CN inversion matrix
+%    lCurveQ:       damping parameter input from start
+%    flagShow:      flag to decide if show L-curve
+%
+% Output parameters:
+%    mtik0:         inversion parameter
+%    residualQ_k:   residuals for Q inversion
+%    LcCN:          figure of L curve for the CN method
+%    tik0_reg:      regularization parameters
+%    d1k:           data of the inversion
+%    constQmean_k:  constant for the method
 
-%Weighted tikhonov inversion with SVD for Q. Also creates L-curve and sets
-% data.
 d0                              =...
     log(rapsp_k)/2/pi/cfk + log(const_Qc_k)/2/pi/cfk;
 G                               =   -log(luntot(rtQ))/2/pi/cfk;

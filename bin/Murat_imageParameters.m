@@ -1,6 +1,20 @@
 function [image,para_condition,para_map]= ...
-    Murat_imageParameters(x,y,z,modv_pd_k,modv_Qc_k)
-%PLOTS the parameter models in their space and on a 3D map
+    Murat_imageParameters(x,y,z,modv_pd_k,modv_Qc_k,sizeTitle)
+% function [image,para_condition,para_map]= ...
+%     Murat_imageParameters(x,y,z,modv_pd_k,modv_Qc_k,sizeTitle)
+% PLOTS the parameter models in their space and on a 3D map
+%
+% Input parameters:
+%    x:                 x vector
+%    y:                 y vector
+%    z:                 z vector
+%    modv_pd_k:         results of peak delay imaging
+%    modv_Qc_k:         results of Qc imaging
+%
+% Output parameters:
+%    image:             image produced
+%    para_condition:    condition on the parameters to image
+%    para_map:          parameter map
 
 para_map                                =   Murat_unfold(x',y',z');
 condition                               =   abs(modv_pd_k(:,5))>10^(-10);
@@ -67,4 +81,12 @@ xlim([miQcm maQcm]);
 ylim([mipdm mapdm]);
 
 SetFDefaults();
+
+xlabel('Qc','FontSize',sizeTitle,'FontWeight','bold','Color','k')
+ylabel('Log. peak delay','FontSize',sizeTitle,...
+    'FontWeight','bold','Color','k')
+title('Parameter space plot',...
+    'FontSize',sizeTitle,'FontWeight','bold','Color','k');
+axis square
+
 hold off

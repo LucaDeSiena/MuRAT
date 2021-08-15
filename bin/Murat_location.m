@@ -1,16 +1,23 @@
 function [locationsDeg_i, locationsM_i]...
-                            = Murat_location(Murat,SAChdr_i)
-%CREATES the variable with event and station coordinates
+                            =   Murat_location(origin,SAChdr_i)
+% function [locationsDeg_i, locationsM_i]  =   Murat_location(origin,SAChdr_i)
+%
+% CREATES the variable with event and station coordinates
+% CALCULATES the coordinates of event and station in meters.
+% The coordinates and event info come from the SAC file.
+%
+% Input parameters:
+%    origin:            origin of the inversion grid
+%    SAChdr_i:          SAC header
+%    
+% Output parameters:
+%    locationsDeg_i:    locations in degrees
+%    locationsM_i:      locations in meters
 
-origin                      =   Murat.input.origin;
 
-% Calculate coordinates event and station in meters
-% Coordinates from SAC file
-% Event info from file
 even                        =   [SAChdr_i.event.evla...
     SAChdr_i.event.evlo SAChdr_i.event.evdp*1000];
 
-% Station info from file
 stati                       =   [SAChdr_i.station.stla...
     SAChdr_i.station.stlo SAChdr_i.station.stel];
 
@@ -25,7 +32,7 @@ dist_xdeg_station           =   stati(2)-origin(2);
 dist_ydeg_station           =   stati(1)-origin(1);
 dist_z_station              =   stati(3);
 
-%Transforms in meters
+% Transforms in meters
 dist_x_even                 =   deg2km(dist_xdeg_even)*1000;
 dist_y_even                 =   deg2km(dist_ydeg_even)*1000;
 dist_x_station              =   deg2km(dist_xdeg_station)*1000;

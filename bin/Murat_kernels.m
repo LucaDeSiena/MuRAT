@@ -1,13 +1,26 @@
 function [K_grid,r_grid1]	=...
     Murat_kernels(T,event,station,modv,v,kT,B0,Le_1)
-%COMPUTATION of kernel integral for an event-station couple in a
-% 3D grid (modv format), to be used for coda tomography. There is the
-% option to define the average velocity (v) and divide the original spacing
-% by kT - higher kT brings longer computational time.
+% function [K_grid,r_grid1]	=...
+%     Murat_kernels(T,event,station,modv,v,kT,B0,Le_1)
 %
-% OUTPUTS:
-% The coordinates of the grid
-% The kernel (K) function estimated at each point of the grid
+% COMPUTATION of kernel integral for an event-station couple in a
+%   3D grid (modv format), to be used for coda tomography. There is the
+%   option to define the average velocity (v) and divide the original
+%   spacing by kT - higher kT brings longer computational time.
+%
+% Input parameters:
+%    T:             lapse time
+%    event:         event coordinates
+%    station:       station coordinates
+%    modv:          velocity model used for setting up the grid
+%    v:             average velocity
+%    kT:            the computational parameter that speeds up calculations
+%    B0:            albedo
+%    Le_1:          extinction length
+%
+% Output parameters:
+%    r_grid1:           The coordinates of the grid
+%    K_grid:            The kernel estimated at each point of the grid
 %
 % Structure of the file describing the coordinates:
 %     Nx    -> number of x values in the grid
@@ -27,24 +40,18 @@ function [K_grid,r_grid1]	=...
 %     ...
 %     z(Nz) -> last z coordinate
 %
-% Structure of the file with the K function results
+% Structure of the file with the K function results: 
 %     K(1)      1st point for x(1),y(1),z(1)
 %     K(2)      2nd point for x(2),y(1),z(1)
 %     K(3)      3rd point for x(3),y(1),z(1)
 %     ....
 %     K(Nx * Ny * Nz)  last point for x(Nx),y(Ny),z(Nz)
-%
-%
-% Values to be configured:
-% Geophysics constants: v, B0, Le_1
-% Resolution in space, resulution in time, Tmax: DR,DT,T
-% Limits of the spatial grid
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% CONFIGURATION OF THE SCRIPT
-% Geophysical constants: albedo and extinction length
-DT                          =   0.5;
+% Original creators: Angel De La Torre & Edoardo Del Pezzo
+% Adapted for coda attenuation tomography by De Siena.
 
-%% INITIAL COMPUTATIONS
+DT                          =   0.5;
+%%
+% Initial computations to understand were to compute in space
 x1                          =   unique(modv(:,1));
 y1                          =   unique(modv(:,2));
 z1                          =   sort(unique(modv(:,3)),'descend');
@@ -52,39 +59,30 @@ stepgx                      =   x1(2)-x1(1);
 stepgy                      =   y1(2)-y1(1);
 stepgz                      =   z1(2)-z1(1);
 
-DRx                         =   stepgx/kT; % Spacing x
-DRy                         =   stepgy/kT; % Spacing y
-DRz                         =   stepgz/kT; % Spacing z
+DRx                         =   stepgx/kT;
+DRy                         =   stepgy/kT;
+DRz                         =   stepgz/kT;
 DR                          =   min([DRx DRy abs(DRz)])/1000;
 
-%origin of the grid where we compute kernels - middle point between source
-%and receiver
-origin                      =...
-    [(event(1)+station(1))/2 ...
-    (event(2)+station(2))/2 ...
-    (event(3)+station(3))/2];
+% Origin of the grid: middle point between source and receiver
+origin                      =   (event(1:3)+station(1:3))/2;
 
-%add a cushion of 5 seconds
+% Add a cushion of 5 seconds
 S                           =   (v*T+5)*1000;
 
-%New reference system
-xs                          =   event(1)-origin(1);
-ys                          =   event(2)-origin(2);
-zs                          =   event(3)-origin(3);
-xr                          =   station(1)-origin(1);
-yr                          =   station(2)-origin(2);
-zr                          =   station(3)-origin(3);
+% New reference system
+xyzs                        =   event(1:3)-origin(1:3);
+xyzr                        =   station(1:3)-origin(1:3);
 
 % Distance between source and receiver
-dx                          =   xr-xs;
-dy                          =   yr-ys;
-dz                          =   zr-zs;
-D0                          =   sqrt(dx^2 + dy^2 + dz^2)/1000;
+dxyz                        =   xyzr(1:3)-xyzs(1:3);
+D0                          =...
+    sqrt(dxyz(1)^2 + dxyz(2)^2 + dxyz(3)^2)/1000;
 
-% GRID DEFINITION
-x_grid                      =   -S+DRx:DRx:S;  % nodes x 
-y_grid                      =   -S+DRy:DRy:S;  % nodes y 
-z_grid                      =   max(z1)-origin(3):DRz:-S; % nodes z 
+% Grid definition
+x_grid                      =   -S+DRx:DRx:S;
+y_grid                      =   -S+DRy:DRy:S;
+z_grid                      =   max(z1)-origin(3):DRz:-S;
 
 Nx                          =   length(x_grid); 
 Ny                          =   length(y_grid); 
@@ -97,37 +95,45 @@ if Nxyz>50e6
     pause
 end
 
-%Sets the 3D matrix
+% Sets the 3D matrix
 r_grid                      =   Murat_unfold(x_grid',y_grid',z_grid');
 
 
 % Distances r1 and r2, from each point of the grid to source or to receptor
-x                           =   r_grid(:,1);
-y                           =   r_grid(:,2);
-z                           =   r_grid(:,3);
-d1x                         =   x-xs;
-d1y                         =   y-ys;
-d1z                         =   z-zs;
-d2x                         =   x-xr;
-d2y                         =   y-yr;
-d2z                         =   z-zr;
-r1_grid                     =   sqrt(d1x.^2+d1y.^2+d1z.^2)/1000;
-r2_grid                     =   sqrt(d2x.^2+d2y.^2+d2z.^2)/1000;
+xyz                         =   r_grid(:,1:3);
+d1xyz                       =   xyz-xyzs;
+d2xyz                       =   xyz-xyzr;
+r1_grid                     =...
+    sqrt(d1xyz(:,1).^2 + d1xyz(:,2).^2 + d1xyz(:,3).^2)/1000;
+r2_grid                     =...
+    sqrt(d2xyz(:,1).^2 + d2xyz(:,2).^2 + d2xyz(:,3).^2)/1000;
 
-% elements of the grid inside the ellipsoid
-cond_interior               =   r1_grid+r2_grid<T*v;%      
-% cond_ellipsoid=abs(r1_grid+r2_grid-T*v)<=DR;   
+% Elements of the grid inside the ellipsoid
+cond_interior               =   r1_grid + r2_grid < T*v;
 
-%% CATALOG OF PAASSCHENS FUNCTIONS
-R                           =   DR:DR:T*v;    % vector of distances
-NT                          =   ceil((T+DT)/DT); % max number points coda
-NR                          =   length(R);   % number of distances
+%%
+% Catalog of Paasschens Functions
 
-t0_R                        =   zeros(NR,1); % to store t0 for each r
-A_R                         =   zeros(NR,1); % to store A for each r
-% store the number of points in coda for each r
+% Vector of distances
+R                           =   DR:DR:T*v;
+
+% Max number points coda
+NT                          =   ceil((T+DT)/DT); 
+
+% Number of distances
+NR                          =   length(R);
+
+% To store t0 for each r
+t0_R                        =   zeros(NR,1);
+
+% To store A for each r
+A_R                         =   zeros(NR,1);
+
+% Store the number of points in coda for each r
 N_R                         =   zeros(NR,1); 
-coda_R                      =   zeros(NR,NT); % store the coda for each r
+
+% Store the coda for each r
+coda_R                      =   zeros(NR,NT);
 
 for idx_r=1:NR
     r                       =   R(idx_r);
@@ -139,12 +145,13 @@ for idx_r=1:NR
     coda_R(idx_r,1:N)       =   coda(1:N);
 end
 
-%% CATALOG OF r1 - r2 CONVOLUTIONS EVALUATED AT T
+%%
+% Catalog of r1 - r2 convolutions evaluated at T
 R1                          =   R;
 R2                          =   R;
 coda_coda                   =   zeros(NR,NR);
 coda_delta                  =   zeros(NR,NR);
-% tau_vect=(0:(NT-1))*DT;
+
 for idx_r1=1:NR
     for idx_r2              =   1:idx_r1
         r1                  =   R1(idx_r1);
@@ -152,8 +159,10 @@ for idx_r1=1:NR
         
         % delta_T is the overlapping interval between E(r1,t) and E(r2,T-r)
         delta_T             =   T-t0_R(idx_r1) - t0_R(idx_r2);
-        % number of samples involved in the overlapping interval
+        
+        % Number of samples involved in the overlapping interval
         N_mues              =   round(delta_T/DT);
+        
         if r1+r2>=(D0-2*DR) && r1+r2<(T+DT)*v && N_mues>=1
             
             % Computing (coda1 x delta2) and (delta1 x coda 2)
@@ -185,7 +194,7 @@ end
 
 K_integral                  =   coda_coda+coda_delta;
 
-% computing K(x,y,z) by linear interpolation inside the ellipsoid
+% Computing K(x,y,z) by linear interpolation inside the ellipsoid
 c2                          =   cond_interior;
 K_grid                      =   zeros(Nx*Ny*Nz,1);
 K_grid(c2)                  =...

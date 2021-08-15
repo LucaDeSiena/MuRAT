@@ -1,8 +1,5 @@
+% ADDITIONAL input variables that are not set by the user.
 function Murat                  =   Murat_checks(Murat)
-%ADDITIONAL input variables that are not set by the user.
-
-disp('Checks')
-
 % Creating folder to store results
 if exist(cat(2,'./',Murat.input.label),'dir')~=7
     
@@ -21,22 +18,7 @@ if exist(cat(2,'./',Murat.input.label),'dir')~=7
 end
 
 % Get general paths/data options
-[Murat.input.listSac,~]         =...
-    createsList(Murat.input.dataDirectory);
-
-if Murat.input.nonLinear == 1
-    
-    % Number of time windows to compute coda intensity
-    Murat.input.fitNumber       =...
-        Murat.input.codaWindow/Murat.input.fitLengthWindows;
-    
-    Murat.input.fitTrialQc      =...
-        (Murat.input.minimumQcGrid +...
-        (Murat.input.maximumQcGrid - Murat.input.minimumQcGrid)/...
-        (Murat.input.totalQcNumber-1)*(0:Murat.input.totalQcNumber-1))';
-    
-end
-
+[Murat.input.listSac,~]         =	createsList(Murat.input.dataDirectory);
 %% VELOCITY MODELS: ORIGINAL, INVERSION, and PROPAGATION
 % Loading inputs to create the additional parameters
 origin                          =   Murat.input.origin;
@@ -103,9 +85,8 @@ if Murat.input.availableVelocity ==  0
     Murat.input.modvPlot        =   [];
     
 elseif Murat.input.availableVelocity ==  1
-    
     % This works in [x,y,z][m]. If you have a 1D you need
-    % to prepare a 3D from it spanning the horizontal space,
+    % to prepare a 3D from it spanning the horizontal space.
     
     % Original 3D velocity model from text file.
     modv_o                      =   load(velocityModel);
@@ -131,7 +112,7 @@ elseif Murat.input.availableVelocity ==  1
     Murat.input.modvPlot        =   mV;
     
     %Create the classical velocity model for inversion
-    Murat.input.modv             =...
+    Murat.input.modv            =...
         Murat_unfold(xMeters',yMeters',zMeters',mV);
     
     %Interpolated model for ray-tracing - half grid step for original
@@ -163,44 +144,14 @@ elseif Murat.input.availableVelocity ==  1
 end
 
 Murat.input.pvel                =   pvel;
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% DEVELOPMENT: PEAK DELAY INVERSION
-% % Input kappa value
-% vK                            = Murat.input.vonKarman;
-%
-% % Sets the three parameters for the modelling of peak delay (Takahashi et
-% % al. 2008, Table 1).
-% vK_x                          = 0.1:0.1:1;
-%
-% bp_x                          =...
-%     [0.1;0.17;0.23;0.28;0.31;0.34;0.36;0.37;0.37;0.38];
-%
-% C_x                           =...
-%     [0.56;1.06;1.56;2;2.28;2.31;2.14;1.9;1.68;1.5];
-%
-% p_x                             =...
-%     [1.19;1.38;1.56;1.71;1.83;1.91;1.95;1.98;1.99;1.99];
-%
-% F_bp_x                          = griddedInterpolant(vK_x,bp_x);
-%
-% F_C_x                           = griddedInterpolant(vK_x,C_x);
-%
-% F_p_x                           = griddedInterpolant(vK_x,p_x);
-%
-% Murat.input.Bessel               = [F_bp_x(vK) F_C_x(vK) F_p_x(vK)];
-%
-
-function [listWithFolder,listNoFolder]  =   createsList(directory)
-%CREATES a list of visible files in a folder, outputs both with and
+function [listWithFolder,listNoFolder]...
+                                =   createsList(directory)
+% CREATES a list of visible files in a folder, outputs both with and
 % without folder
 
-% Get general paths/figure options
-list                                    =   dir(directory);
-list                                    =...
-    list(~startsWith({list.name}, '.'));
+list                            =   dir(directory);
+list                            =   list(~startsWith({list.name}, '.'));
 
-listWithFolder                          =...
-    fullfile({list.folder},{list.name})';
-
-listNoFolder                            =   {list.name}';
+listWithFolder                  =	fullfile({list.folder},{list.name})';
+listNoFolder                    =   {list.name}';

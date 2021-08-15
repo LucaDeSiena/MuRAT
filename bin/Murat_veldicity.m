@@ -1,9 +1,20 @@
-% FUNCTION VELDICITY: gradient of the velocity in x, y, and z directions at
-% (xx,yy,zz): vx=dv/dx; vy=dv/dy; vz=dv/dz. It uses linear interpolation
-% for speed.
 function [vx,vy,vz]             =   Murat_veldicity(xx,yy,zz,gridD,pvel)
+% function [vx,vy,vz]             =   Murat_veldicity(xx,yy,zz,gridD,pvel)
+%
+% CALCULATES the gradient of the velocity in x, y, and z directions with linear interpolation
+%
+% Input parameters:
+%    xx:        x point
+%    yy:        y point
+%    zz:        z point
+%    gridD:     grid of ray tracing
+%    pvel:      velocity model for ray tracing
+%
+% Output parameters:
+%    vx:        dv/dx
+%    vy:        dv/dx
+%    vz:        dv/dx
 
-% Coordinates of the propagation grid are unwrapped
 xGrid                       =   gridD.x;
 yGrid                       =   gridD.y;
 zGrid                       =   gridD.z;

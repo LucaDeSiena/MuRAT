@@ -1,7 +1,24 @@
 function [xtemp,ytemp,ztemp,v]  =...
     Murat_bending(xtemp,ytemp,ztemp,gridD,v,pvel)
-%BENDS the initial segment along the normal to the
-% ray path tangent at each point by an optimal distance r.
+% function [xtemp,ytemp,ztemp,v]= Murat_bending(xtemp,ytemp,ztemp,gridD,v,pvel)
+% 
+% BENDS the initial segment along the normal to the
+%   ray path tangent at each point by an optimal distance r.
+%   Uses the standard ray-bending approach - Block, 1991.
+%
+% Input parameters:
+%    xtemp:     x before bending
+%    ytemp:     y before bending
+%    ztemp:     z before bending
+%    gridD:     grid of ray tracing
+%    v:         initial velocity of the ray
+%    pvel:      velocity model for ray tracing
+%
+% Output parameters:
+%    xtemp:     x after bending
+%    ytemp:     y after bending
+%    ztemp:     z after bending
+%    v:         final velocity of the ray
 
 xfac                            =   1;
 n                               =   length(xtemp);

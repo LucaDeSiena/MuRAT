@@ -1,18 +1,29 @@
 function [Apd_i, A_i, luntot_i, rma_i, rayCrossing_i]  =...
-    Murat_rays(Murat,sst_i)
-
-modv                                    =   Murat.input.modv;
-gridD                                   =   Murat.input.gridPropagation;
-pvel                                    =   Murat.input.pvel;
+    Murat_rays(modv,gridD,pvel,sst_i)
+% function [Apd_i, A_i, luntot_i, rma_i, rayCrossing_i]  =...
+%     Murat_rays(modv,gridD,pvel,sst_i)
+%
+% RAY TRACING and computation of SEGMENTS inside each cell.
+%
+% Input parameters:
+%    modv:          velocity model for inversion
+%    gridD:         grid for ray tracing
+%    pvel:          velocity model for ray tracing
+%    sst_i:         info on source and stations
+%
+% Output parameters:
+%    Apd_i, Ac_i:   inversion matrices for peak delay and coda
+%    luntot_i:      total length of ray
+%    rma_i:         rays in the three components
+%    rayCrossing_i: hit counts
 
 Apd_i                                   =   zeros(1,length(modv(:,1)));
 A_i                                     =   zeros(1,length(modv(:,1)));
 
-%RAY TRACING
 ray                                     =   reshape(sst_i,3,2);
 rma                                     =   Murat_tracing(ray,gridD,pvel);
 
-%CALCULATON OF SEGMENT LENGTHS
+%Calculation of segment lengths
 [lunpar, blocch,...
     luntot_i, s, rayCrossing_i]         =   Murat_segments(modv,rma);
 

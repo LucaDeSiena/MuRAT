@@ -1,27 +1,44 @@
-% FUNCTION TRACING: Traces the minimum path between source and receiver
-% using pseudo-bending. The initial path is a straight segment. The segment
-% mid-point is used for bending. The procedure repeats for a maximum
-% number of points, or until the changes are below a certain treshold.
-
 function ma                 =   Murat_tracing(ray,gridP,pvel)
+% function ma                 =   Murat_tracing(ray,gridP,pvel)
+% 
+% TRACES the minimum path between source and receiver using pseudo-bending
+%
+% Input parameters:
+%    ray:       input ray
+%    gridP:     grid for ray tracing
+%    gridD:     grid of ray tracing
+%    pvel:      velocity model for ray tracing
+%
+% Output parameters:
+%    ma:        ray in Murat format
+% 
+% Structure:
+% The initial path is a straight segment. The segment mid-point is used for
+%   bending. The procedure repeats for a maximum number of points, or until
+%   the changes are below a certain treshold. 
 
-maxit                       =   100; %Maximum number of iterations allowed
-maxpoints                   =   10000; %Max bend points, 1 direction 
-max3                        =   3*maxpoints; %Three dimensions
+% Maximum number of iterations allowed
+maxit                       =   100; 
 
-%Nodes of the grid
+% Max bend points, 1 direction 
+maxpoints                   =   10000; 
+
+% Three dimensions
+max3                        =   3*maxpoints; 
+
+% Nodes of the grid
 xNodes                      =   gridP.x;
 yNodes                      =   gridP.y;
 zNodes                      =   gridP.z;
 
-%Max distance one cell
+% Max distance one cell
 dconv                       =   sqrt((xNodes(2)-xNodes(1))^2 +...
     (yNodes(2)-yNodes(1))^2 + (zNodes(2)-zNodes(1))^2);
 
-%Time limit, in seconds, pvel is in km
+% Time limit, in seconds, pvel is in km
 tlim                        =   dconv/mean(mean(mean(pvel*1000))); 
 
-%Start bending procedure from the extrema of the ray segment
+% Start bending procedure from the extrema of the ray segment
 xtemp                       =   [ray(1,1) (ray(1,1)+ray(1,2))/2 ray(1,2)];
 ytemp                       =   [ray(2,1) (ray(2,1)+ray(2,2))/2 ray(2,2)];
 ztemp                       =   [ray(3,1) (ray(3,1)+ray(3,2))/2 ray(3,2)];
@@ -37,7 +54,7 @@ for i=1:n
     v(i,1)                  =   vp;
 end
 
-%Computes travel time
+% Computes travel time
 [ta,tra]                    =...
     Murat_traveling(xtemp,ytemp,ztemp,gridP,v,pvel);
 
@@ -53,7 +70,7 @@ for j=1:maxit
     
     deltat                  =   taa-tra;
     
-    % check for convergence
+    % Check for convergence
     if deltat < tlim
         dtemp               =...
             sqrt((xtemp(2)-xtemp(1))^2 + (ytemp(2)-ytemp(1))^2 ...
@@ -64,8 +81,8 @@ for j=1:maxit
         
         else
             % As the travel time decrease is smaller than travel-time
-            % treshold (tlim) and/or the travel time increased, the
-            % code doubles the number of segments:
+            %   treshold (tlim) and/or the travel time increased, the
+            %   code doubles the number of segments:
             ttsave          =   tra;
             ntemp           =   2*n-1;
             if(ntemp > max3)
@@ -101,5 +118,6 @@ for j=1:maxit
     end
 end
 
-%Final ray, including travel time info
+% Final ray, including travel time info
 ma(1:n,1:5)                 =   [(1:n)',xtemp',ytemp',ztemp',ta'/1000]; 
+end

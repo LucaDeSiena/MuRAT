@@ -1,9 +1,23 @@
 function [X,Y,Z,V]          =   Murat_fold(x,y,z,v)
+% function [X,Y,Z,V]          =   Murat_fold(x,y,z,v)
+%
+% MESHGRID 3D for many fields used by MuRAT
+%
+% Input parameters:
+%    x:         x vector
+%    y:         y vector
+%    z:         z vector
+%    v:         field vector
+%
+% Output parameters:
+%    X:         3D x matrix
+%    Y:         3D y matrix
+%    Z:         3D z matrix
+%    V:         3D field matrix
 
-%3D meshgrid of a field
-lx                          =   length(x); % number of positions x
-ly                          =   length(y); % number of positions y
-lz                          =   length(z); % number of positions z
+lx                          =   length(x);
+ly                          =   length(y);
+lz                          =   length(z);
 V                           =   zeros(lx,ly,lz);
 
 [X,Y,Z]                     =   meshgrid(y,x,z);

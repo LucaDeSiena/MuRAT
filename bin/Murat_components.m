@@ -1,13 +1,33 @@
 function [peakd,Qm,RZZ,rapsp,rapspcn]	=...
     Murat_components(comp,peakd1,Qm1,RZZ1,rapsp1,rapspcn1,...
     compMissing)
-%% Creates data vector for two- and three-component recording
+% function [peakd,Qm,RZZ,rapsp,rapspcn]	=...
+%     Murat_components(comp,peakd1,Qm1,RZZ1,rapsp1,rapspcn1,...
+%     compMissing)
+%
+% CREATES data vector for two- and three-component recording
+%
+% Input parameters:
+%    comp:          origin times in seconds
+%    peakd1:        peak delay before averaging
+%    Qm1:           coda attenuation before averaging
+%    RZZ1:       	uncertainty on Qc before averaging
+%    rapsp1:        energy ratio before averaging
+%    rapspcn1:      coda to noise ratio before averaging
+%    compMissing:   takes into account which component values are missing
+%
+% Output parameters:
+%    peakd:         peak delay after averaging
+%    Qm:            coda attenuation after averaging
+%    RZZ:       	uncertainty on Qc after averaging
+%    rapsp:         energy ratio after averaging
+%    rapspcn:       coda to noise ratio after averaging
 
 [dataL,lcf]                                     =   size(peakd1);
 index                                           =   0;
+
 for i = 1:comp:dataL
     index                                       =   index+1;
-    % 2 components (typically [WE, SN]) - average data that fullfill criteria
     
     for j = 1:lcf
         if comp ==  2
@@ -77,7 +97,6 @@ for i = 1:comp:dataL
             
         elseif comp == 3
             
-            %Averaging the 3 components
             noPD                                =   compMissing(i,j,1);
             noPD1                               =   compMissing(i+1,j,1);
             noPD2                               =   compMissing(i+2,j,1);
@@ -112,7 +131,7 @@ for i = 1:comp:dataL
             else
                 peakd(index,j)                  =...
                     (peakd1(i+1,j) + peakd1(i+1,j) + peakd1(i+2,j))/3;
-            
+                
             end
             
             if noQc && noQc1 && noQc2
@@ -197,7 +216,7 @@ for i = 1:comp:dataL
         end
         
     end
-   
+    
 end
-
+end
 

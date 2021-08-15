@@ -1,9 +1,22 @@
 function [checkInput,spikeInput]	=...
     Murat_inputTesting(I,spike_o,spike_e,x,y,z)
+% function [checkInput,spikeInput]	=...
+%     Murat_inputTesting(I,spike_o,spike_e,x,y,z)
+%
+% CREATES checkerboard and spike inputs.
+%   
+% Input parameters:
+%    I:                 Input matrix
+%    spike_o:           Marker to see if you define the spike
+%    spike_e:           Location of the spike
+%    x:                 x vector
+%    y:                 y vector
+%    z:                 z vector
+%
+% Output parameters:
+%    checkInput:        input matrix for the checkerboard
+%    spikeInput:        input matrix for the spike
 
-% We fold in the checkerboard velocity model and assign alternating values
-% to the checkerboard.
-    
 [nxc,nyc,nzc]                       =   size(I);
 index                               =   0;
 checkInput                          =   zeros(nxc*nyc*nzc,1);

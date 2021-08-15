@@ -1,5 +1,5 @@
+%% Peak-delay, Qc and Q TOMOGRAPHIC INVERSIONS
 function Murat                      =   Murat_inversion(Murat)
-%% 2D peak-delay, Qc and Q TOMOGRAPHIC INVERSIONS
 %%
 % Importing all the necessary inputs and data for plotting
 FLabel                              =   Murat.input.label;
@@ -16,13 +16,13 @@ sizea                               =   Murat.input.sizeCheck;
 latt                                =   Murat.input.lowCheck;
 hatt                                =   Murat.input.highCheck;
 modv                                =   Murat.input.modv;
-nonlinear                           =   Murat.input.nonLinear;
 spike_o                             =   Murat.input.spikeLocationOrigin;
 spike_e                             =   Murat.input.spikeLocationEnd;
 spike_v                             =   Murat.input.spikeValue;
 x                                   =   Murat.input.x;
 y                                   =   Murat.input.y;
 z                                   =   Murat.input.z;
+
 Apd_i                               =...
     Murat.data.inversionMatrixPeakDelay;
 Ac_i                                =   Murat.data.inversionMatrixQc;
@@ -49,7 +49,6 @@ else
     lCurveQ                         =   [];
 end
 
-%% Defining inversion problem for each frequency band
 lMF                                 =   size(ray_crosses_pd);
 modv_pd                             =   zeros(lMF(1),5,lMF(2));
 modv_Qc                             =   zeros(lMF(1),10,lMF(2));
@@ -57,14 +56,16 @@ modv_Q                              =   zeros(lMF(1),10,lMF(2));
 const_Qc                            =   zeros(size(rapsp));
 residualQ                           =   zeros(1,lMF(2));
 residualQc                          =   zeros(1,lMF(2));
+
 %%
 % Loops over all frequencies and parameter models
 for k = 1:lMF(2)
     modv_pd(:,1:4,k)                =   modv;
     modv_Qc(:,1:4,k)                =   modv;
     modv_Q(:,1:4,k)                 =   modv;
-
-    %% Peak delay regionalization
+    
+    %%
+    % Peak delay regionalization
     rcpd                            =   ray_crosses_pd(:,k);
     rtpd                            =   retain_pd(:,k);
     Apd                             =	Apd_i(rtpd,rcpd);
@@ -82,15 +83,14 @@ for k = 1:lMF(2)
     
     modv_pd(rcpd,5,k)               =   mpd;
     
-    %% Qc inversion
+    %%
+    % Qc inversion
     rcQc                            =   ray_crosses_Qc(:,k);
     rtQc                            =   retain_Qc(:,k);
     Ac                              =   Ac_i(rtQc,rcQc);
     Qm_k                            =   Qm(rtQc,k);
     RZZ_k                           =   RZZ(rtQc,k);
-    
-    Wc                              =...
-        Murat_weighting(nonlinear,RZZ_k);
+    Wc                              =   Murat_weighting(RZZ_k);
     Gc                              =   Wc*Ac;
     [Uc,Sc,Vc]                      =   svd(Gc);
     
@@ -105,9 +105,8 @@ for k = 1:lMF(2)
     residualQc(1,k)                 =   residualQc_k;
     modv_Qc(rcQc,5,k)               =   mtik0C;
     
-    %% Q inversion - Direct wave attenuation - modified CN method
-    % Set up the constant for the method from start - the Qc is measured
-    % for each source-station pair.
+    %%
+    % Q inversion
     rcQ                             =   ray_crosses_Q(:,k);
     rtQ                             =   retain_Q(:,k);
     A                               =   A_i(rtQ,rcQ);
@@ -126,13 +125,11 @@ for k = 1:lMF(2)
     saveas(LcCN,fullfile(FPath, FLabel,'Rays_Checks',FName),fformat);
     close(LcCN)
     modv_Q(rcQ,5,k)                 =   mtik0;
-    const_Qc(rtQ,k)                   =   const_Qc_k;
+    const_Qc(rtQ,k)                 =   const_Qc_k;
     residualQ(:,k)                  =   residualQ_k;
     
-    %% Testing - 3D checkerboard and spike inputs
-    % This part creates inputs and outputs for the checkerboard and spike
-    % tests. The checkerboard pattern is created with a function from
-    % Gibboncode (https://www.gibboncode.org).
+    %%
+    % Checkerboards and spike inputs and checkerboard inversion
     siz                             =   [nxc nyc nzc];
     I                               =   checkerBoard3D(siz,sizea);
     [checkInput,spikeInput]         =...
@@ -140,26 +137,20 @@ for k = 1:lMF(2)
     
     modv_Qc(checkInput==1,6,k)      =   latt;
     modv_Qc(checkInput==0,6,k)      =   hatt;
-    
     modv_Qc(:,8,k)                  =   mean(Qm_k);
     modv_Qc(spikeInput,8,k)         =   spike_v;
-    
-    % Same checkerboard/spike inputs are created for Q
     modv_Q(:,6:8,k)                 =   modv_Qc(:,6:8,k);
-    
-    %% Testing - 3D checkerboard and spike inversions
-    % Inverting checkerboard for Qc and Q
     Qc_ch                           =   modv_Qc(rcQc,6,k);
     re_Qc                           =   Gc*Qc_ch;
     mcheck_c                        =...
         tikhonov(Uc,diag(Sc),Vc,re_Qc,tik0_regC);
     modv_Qc(rcQc,7,k)               =   mcheck_c;
-    
     Q_ch                            =   modv_Q(rcQ,6,k);
     re_Q                            =   A*Q_ch;
     mcheck                          =...
         tikhonov(U,diag(S),V,re_Q,tik0_reg);
     modv_Q(rcQ,7,k)                 =   mcheck;
+    
     %%
     % Inverting spike for Qc and Q at user discretion
     if ~isempty(spike_o)
@@ -174,8 +165,8 @@ for k = 1:lMF(2)
         modv_Q(rcQ,9,k)             =   mspike;
     end
     
-    %% Diagonal of the resolution matrix
-    % Using the filter functions for Qc and Q.
+    %%
+    % Diagonal of resolution matrix
     sSc                             =   size(Sc);
     fil_reg                         =   fil_fac(diag(Sc),tik0_regC);
     if sSc(2) > sSc(1)
@@ -194,33 +185,26 @@ for k = 1:lMF(2)
     dR                              =   diag(R);
     modv_Q(rcQ,10,k)                =   dR;
     
-    %% SAVE
-    % save peak-delay
+    %%
+    % Save peak-delay, Qc, Q
     modv_pd_k                       =   modv_pd(:,:,k);
     FName                           =   ['peakdelay_' fcName '_Hz.txt'];
     save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_pd_k','-ascii');
     
-    %%
-    % save Qc
     modv_Qc_k                       =   modv_pd(:,:,k);
     FName                           =   ['Qc_' fcName '_Hz.txt'];
     save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_Qc_k','-ascii');
     
-    %%
-    % save Q
     modv_Q_k                        =   modv_Q(:,:,k);
     FName                           =   ['Q_' fcName '_Hz.txt'];
     save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_Q_k','-ascii');
     
 end
-
-%% Save in Murat
-Murat.data.residualQc           =   residualQc;
-
-Murat.data.const_Qc             =   const_Qc;
-Murat.data.residualQ            =   residualQ;
-
-Murat.data.modvPeakDelay        =   modv_pd;
-Murat.data.modvQc               =   modv_Qc;
-Murat.data.modvQ                =   modv_Q;
-
+%%
+% Save in Murat
+Murat.data.residualQc               =   residualQc;
+Murat.data.const_Qc                 =   const_Qc;
+Murat.data.residualQ                =   residualQ;
+Murat.data.modvPeakDelay            =   modv_pd;
+Murat.data.modvQc                   =   modv_Qc;
+Murat.data.modvQ                    =   modv_Q;

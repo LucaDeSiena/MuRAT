@@ -1,30 +1,21 @@
-function Ac_i                   =...
-    Murat_codaMatrix(Murat,flag,tCoda_i,eventStation_i)
-%CREATES the coda attenuation inversion matrix
-
-tWm                             =   Murat.input.codaWindow;
-kT                              =   Murat.input.kernelTreshold;
-modv                            =   Murat.input.modv;
-vS                              =   Murat.input.averageVelocityS;
-origin                          =   Murat.input.origin;
-sections                        =   Murat.input.sections;
-B0                              =   Murat.input.albedo;
-Le_1                            =   Murat.input.extinctionLength;
-
-% Coda kernels compute value at the centre of the cell, differently from
-% rays, which refer to the shallowest SW corner.
-stepgX                          =   (modv(2,1) - modv(1,1))/2;
-stepgY                          =   (modv(2,2) - modv(1,2))/2;
-stepgZ                          =   (modv(2,3) - modv(1,3))/2;
-
-% Update modv to compute at the centre of the block
-modv(:,1)                       =   modv(:,1) + stepgX;
-modv(:,2)                       =   modv(:,2) + stepgY;
-modv(:,3)                       =   modv(:,3) + stepgZ;
-
-[K_grid,r_grid]                 =...
-    Murat_kernels(tCoda_i+tWm/2,eventStation_i(1:3),eventStation_i(4:6),...
-    modv,vS,kT,B0,Le_1);
+function AQc_i                   =...
+    Murat_codaMatrix(modvQc,K_grid,r_grid,flag,origin,sections)
+% function AQc_i                   =...
+%     Murat_codaMatrix(modvQc,origin,sections,flag,K_grid,r_grid)
+%
+% CREATES the coda attenuation inversion matrix and plots the corresponding
+%   kernels
+%
+% Input parameters:         
+%    modvQc:                velocity model for grid
+%    K_grid:                kernel from Murat_kernels
+%    r_grid:                grid from Murat_kernels
+%    flag:                  if turned to 1 creates the figure
+%    origin:                origin of the grid
+%    sections:              sections of the figure
+%
+% Output parameters:
+%    AQc_i:                 coda inversion matrix
 
 % Nodes of the kernel model space
 xK                              =   unique(r_grid(:,1));
@@ -34,9 +25,9 @@ zK                              =   sort(unique(r_grid(:,3)),'descend');
 [Xk,Yk,Zk,K]                    =   Murat_fold(xK,yK,zK,K_grid);
 
 % Interpolated axes for inversion model
-x                               =   unique(modv(:,1));
-y                               =   unique(modv(:,2));
-z                               =   sort(unique(modv(:,3)),'descend');
+x                               =   unique(modvQc(:,1));
+y                               =   unique(modvQc(:,2));
+z                               =   sort(unique(modvQc(:,3)),'descend');
 
 % Interpolation sets everything in the right place
 [X,Y,Z,~]                       =   Murat_fold(x,y,z);
@@ -65,10 +56,10 @@ end
 % Kernel in its grid space
 if flag == 1
     sections1                   =   [sections(2) sections(1) sections(3)];
-    Xk1                         =   origin(2) + km2deg(Xk/1000);
-    Yk1                         =   origin(1) + km2deg(Yk/1000);
-    X1                          =   origin(2) + km2deg(X/1000);
-    Y1                          =   origin(1) + km2deg(Y/1000);
+    Xk1                         =   origin(1) + km2deg(Xk/1000);
+    Yk1                         =   origin(2) + km2deg(Yk/1000);
+    X1                          =   origin(1) + km2deg(X/1000);
+    Y1                          =   origin(2) + km2deg(Y/1000);
 
     subplot(1,2,1)
     Murat_imageKernels(Xk1,Yk1,Zk,log(K),'default',sections1)
@@ -83,15 +74,16 @@ lx                              =   length(x);
 ly                              =   length(y);
 lz                              =   length(z);
 index                           =   0;
-Ac_i                            =   zeros(1,(length(modv(:,1))));
+AQc_i                           =   zeros(1,(length(modvQc(:,1))));
 for i=1:lx
     for j=1:ly
         for k=1:lz
             index               =   index+1;
-            Ac_i(index)         =   mK(i,j,k);
+            AQc_i(index)        =   mK(i,j,k);
         end
     end
 end
 
-% Residual from cutting the grid (it is always <1%
-Ac_i = Ac_i/sum(Ac_i);
+% Residual from cutting the grid (it is always < 1%).
+AQc_i                           =   AQc_i/sum(AQc_i);
+end

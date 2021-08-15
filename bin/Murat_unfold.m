@@ -1,9 +1,20 @@
 function r                  =   Murat_unfold(x,y,z,mV)
+% function r                  =   Murat_unfold(x,y,z,mV)
+%
+% ACCEPTS vertical vectors and unfolds them in standard format
+%
+% Input parameters:
+%    x:         x vector
+%    y:         y vector
+%    z:         z vector
+%    v:         field vector
+%
+% Output parameters:
+%    r:         field in Murat format
 
-% Accepts vertical vectors and unfolds them in standard format
-lx                          =   length(x); % number of positions x
-ly                          =   length(y); % number of positions y
-lz                          =   length(z); % number of positions z
+lx                          =   length(x);
+ly                          =   length(y);
+lz                          =   length(z);
 lxyz                        =   lx*ly*lz;
 
 r                           =   zeros(lxyz,3);
@@ -26,7 +37,6 @@ for i = 1:ly
 end
 
 r(:,2)                      =   repmat(ry,lx,1);
-
 r(:,3)                      =   repmat(z,lx*ly,1);
 
 if (nargin==4)
