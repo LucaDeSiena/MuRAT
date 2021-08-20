@@ -7,7 +7,7 @@ function [X,Y,Z,V]          =   Murat_fold(x,y,z,v)
 %    x:         x vector
 %    y:         y vector
 %    z:         z vector
-%    v:         field vector
+%    v:         field vector - optional
 %
 % Output parameters:
 %    X:         3D x matrix

@@ -1,5 +1,5 @@
 %% Seismic attributes for peak delay and Qc imaging
-function Murat                          =   Murat_dataParallelized(Murat)
+function Murat                          =   Murat_data(Murat)
 % MEASURES Qc, peak-delay and Q for each seismic trace located in a folder.
 %   This code is a collection of functions that do all the necessary.
 
@@ -62,7 +62,7 @@ rayCrossing                             =...
     zeros(lengthData,lengthParameterModel);
 %=========================================================================
 
-parfor i = 1:lengthData
+for i = 1:lengthData
     
     if isequal(mod(i,1000),0)
         
@@ -83,7 +83,8 @@ parfor i = 1:lengthData
     
     % Checks direct-wave picking on the trace and outputs it 
     [cursorPick_i, pktime_i, v_i]  =...
-        Murat_picking(tempis,PTime,STime,PorS,vP,vS,srate_i,SAChdr_i);
+        Murat_picking(tempis,PTime,STime,PorS,vP,vS,srate_i,listSac_i,...
+        SAChdr_i);
 
     % Conditions in case the zero time is missing in the header
     [theoreticalTime_i, originTime_i]   =...
@@ -116,7 +117,8 @@ parfor i = 1:lengthData
                 
     % Sets the lapse time
     [tCoda_i, cursorCodaStart_i, cursorCodaEnd_i]=...
-        Murat_codaCheck(originTime_i,pktime_i,srate_i,tCm,tWm,tempis);
+        Murat_codaCheck(originTime_i,pktime_i,srate_i,tCm,tWm,tempis,...
+        peakDelay_i);
     
     % Measures Qc and its uncertainty
     [inverseQc_i, uncertaintyQc_i]      =   Murat_Qc(cf,sped,...

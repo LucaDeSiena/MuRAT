@@ -5,7 +5,6 @@ function Murat                      =   Murat_inversion(Murat)
 FLabel                              =   Murat.input.label;
 fformat                             =   Murat.input.format;
 outputLCurve                        =   Murat.input.lCurve;
-tCm                                 =   Murat.input.startLapseTime;
 tWm                                 =   Murat.input.codaWindow;
 cf                                  =   Murat.input.centralFrequency;
 sped                                =   Murat.input.spectralDecay;
@@ -39,6 +38,7 @@ retain_Q                            =   Murat.data.retainQ;
 ray_crosses_pd                      =   Murat.data.raysPeakDelay;
 ray_crosses_Qc                      =   Murat.data.raysQc;
 ray_crosses_Q                       =   Murat.data.raysQ;
+tCoda                               =   Murat.data.tCoda;
 FPath                               =   './';
 
 if outputLCurve == 0
@@ -112,6 +112,7 @@ for k = 1:lMF(2)
     A                               =   A_i(rtQ,rcQ);
     Q_k                             =   Qm(rtQ,k);
     
+    tCm                             =   mean(tCoda(:,k));
     const_Qc_k                      =...
         (tCm+tWm/2)^-sped.*exp(-Q_k*2*pi*cfk*(tCm+tWm/2));
     rapsp_k                         =   rapsp(rtQ,k);    

@@ -1,5 +1,5 @@
 function [cursorPick_i, pktime_i, v_i]  =...
-    Murat_picking(tempis,PTime,STime,PorS,vP,vS,srate_i,SAChdr) %#ok<INUSD>
+    Murat_picking(tempis,PTime,STime,PorS,vP,vS,srate_i,listaSAC_i,SAChdr) %#ok<INUSD>
 % CHECKS if you are working with P or S picking and if this picking is
 % inside the waveform.
 %
@@ -28,11 +28,11 @@ end
 
 % If picking is not on the waveform
 if pktime_i < tempis(1)
-    error(['The picking is set before the start of the recording number '...
-        num2str(i_label)])
+    error(['The picking is set before the start of the waveform '...
+        listaSAC_i])
 elseif pktime_i > tempis(end)
-    error(['The picking is set after the end of the recording number '...
-        num2str(i_label)])
+    error(['The picking is set after the end of the waveform '...
+        listaSAC_i])
 end
 
 t00                                     =   tempis(1);

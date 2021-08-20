@@ -83,7 +83,8 @@ for i = 1:lengthData
     
     % Checks direct-wave picking on the trace and outputs it 
     [cursorPick_i, pktime_i, v_i]  =...
-        Murat_picking(tempis,PTime,STime,PorS,vP,vS,srate_i,SAChdr_i);
+        Murat_picking(tempis,PTime,STime,PorS,vP,vS,srate_i,listSac_i,...
+        SAChdr_i);
 
     % Conditions in case the zero time is missing in the header
     [theoreticalTime_i, originTime_i]   =...

@@ -24,6 +24,11 @@ tsisma                              =   tu.*sisma;
 sp_i                                =   zeros(lsis,lcf);
 
 %% Calculations
+
+if isequal(srate_i,-12345)
+    error(['Waveform ' listaSac_i 'has no sampling rate!'])
+end
+
 for i = 1:lcf
     % Filter creation - in loop for different frequencies
     Wn                              =...

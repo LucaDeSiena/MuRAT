@@ -1,5 +1,6 @@
 function [tCoda_i, cursorCodaStart_i, cursorCodaEnd_i]   =...
-    Murat_codaCheck(originTime_i,pktime_i,srate_i,tCm,tWm,tempis)
+    Murat_codaCheck(originTime_i,pktime_i,srate_i,tCm,tWm,tempis,...
+    peakDelay_i)
 
 % function [tCoda_i, cursorCodaStart_i, cursorCodaEnd_i]   =...
 %     Murat_codaCheck(originTime_i,pktime_i,srate_i,tCm,tWm,tempis)
@@ -15,6 +16,7 @@ function [tCoda_i, cursorCodaStart_i, cursorCodaEnd_i]   =...
 %    tCm:                   coda starting time
 %    tWm:                   length of coda window
 %    tempis:                time vector from seismogram    
+%    peakDelay_i:           peak delay for coda lapse time    
 %
 % Output parameters:
 %    tCoda_i:               coda starting time after check in seconds
@@ -27,7 +29,7 @@ lengthTempis                                    =   length(tempis);
 if isequal(tCm,[])
     
     tCoda_i                                     =...
-        (pktime_i-originTime_i)+tspm/srate_i;
+        (pktime_i-originTime_i)+peakDelay_i/srate_i;
     
 else
     

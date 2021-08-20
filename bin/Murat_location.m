@@ -21,6 +21,14 @@ even                        =   [SAChdr_i.event.evla...
 stati                       =   [SAChdr_i.station.stla...
     SAChdr_i.station.stlo SAChdr_i.station.stel];
 
+if find(even == -12345)
+    error(['Waveform ' listaSac_i 'has missing event location field!'])
+end
+
+if find(stati == -12345)
+    error(['Waveform ' listaSac_i 'has missing station location field!'])
+end
+
 % For plotting
 locationsDeg_i              =   [even stati];
 

@@ -23,6 +23,7 @@ RZZ                                 =   Murat.data.uncertaintyQc;
 rapsp                               =   Murat.data.energyRatioBodyCoda;
 rapspcn                             =   Murat.data.energyRatioCodaNoise;
 raysplot                            =   Murat.data.raysPlot;
+tCoda                               =   Murat.data.tCoda;
 
 dataL                               =   size(peakd,1);
 dataFreq                            =   size(peakd,2);
@@ -44,6 +45,7 @@ ray_crosses_Q                       =   false(modvL,dataFreq);
 % Selects data in case of multiple components
 luntot                              =   luntot(1:components:dataL);
 time0                               =   tPS(1:components:dataL);
+tCoda                               =   tCoda(1:components:dataL,:);
 evestaz                             =   evestaz(1:components:dataL,:);
 raysplot                            =   raysplot(:,:,1:components:dataL);
 Ac_i                                =   Ac_i(1:components:dataL,:);
@@ -115,6 +117,7 @@ end
 
 Murat.data.peakDelay                =   peakd;
 Murat.data.totalLengthRay           =   luntot;
+Murat.data.tCoda                    =   tCoda;
 Murat.data.locationsDeg             =   evestaz;
 Murat.data.inverseQc                =   Qm;
 Murat.data.uncertaintyQc            =   RZZ;
@@ -138,3 +141,4 @@ Murat.data.inversionMatrixPeakDelay =   Apd_i;
 Murat.data.inversionMatrixQc        =   Ac_i;
 Murat.data.inversionMatrixQ         =   A_i;
 
+end
