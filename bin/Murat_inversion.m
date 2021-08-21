@@ -21,6 +21,7 @@ spike_v                             =   Murat.input.spikeValue;
 x                                   =   Murat.input.x;
 y                                   =   Murat.input.y;
 z                                   =   Murat.input.z;
+QcM                                 =   Murat.input.QcMeasurement;
 
 Apd_i                               =...
     Murat.data.inversionMatrixPeakDelay;
@@ -90,7 +91,7 @@ for k = 1:lMF(2)
     Ac                              =   Ac_i(rtQc,rcQc);
     Qm_k                            =   Qm(rtQc,k);
     RZZ_k                           =   RZZ(rtQc,k);
-    Wc                              =   Murat_weighting(RZZ_k);
+    Wc                              =   Murat_weighting(RZZ_k,QcM);
     Gc                              =   Wc*Ac;
     [Uc,Sc,Vc]                      =   svd(Gc);
     

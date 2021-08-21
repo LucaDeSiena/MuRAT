@@ -9,6 +9,7 @@ listaSac                            =   Murat.input.listSac;
 maPD                                =   Murat.input.maximumPeakDelay;
 miPD                                =   Murat.input.minimumPeakDelay;
 fT                                  =   Murat.input.fitTresholdLinear;
+QcM                                 =   Murat.input.QcMeasurement;
 
 Apd_i                               =...
     Murat.data.inversionMatrixPeakDelay;
@@ -39,7 +40,7 @@ ray_crosses_Q                       =   false(modvL,dataFreq);
 [problemPD,problemQc,problemRZZ,problemQ,~,compMissing,flagWarning]...
                                     =...
             Murat_dataWarning(listaSac,tresholdnoise,...
-            maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,components,0);
+            maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,components,0,QcM);
 
 %%
 % Selects data in case of multiple components
@@ -59,7 +60,7 @@ if components >  1
 end
 [~,~,~,~,yesPD,~,~]                 =...
             Murat_dataWarning(listaSac,tresholdnoise,...
-            maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,components,flagWarning);
+            maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,components,flagWarning,QcM);
 
 %%
 % Operations to decide weight of each data for the solution
@@ -97,7 +98,7 @@ for i = 1:dataFreq
     Qm_i                            =   Qm(:,i);
     RZZ_i                           =   RZZ(:,i);
     [retain_Qm_i,ray_crosses_Qc_i]  =...
-    Murat_retainQc(fT,Qm_i,RZZ_i,Ac_i);
+    Murat_retainQc(fT,Qm_i,RZZ_i,Ac_i,QcM);
     
     % Coda-normalization
     retain_Q_i                      =   rapspcn(:,i)>=tresholdnoise;

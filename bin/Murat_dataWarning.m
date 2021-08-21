@@ -1,9 +1,9 @@
 function  [problempd,problemQc,problemRZZ,problemQ,yes_pd,compMissing,...
     flag]   =   Murat_dataWarning(listaSac,tresholdnoise,...
-    maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,comp,flag)
+    maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,comp,flag,QcM)
 % function  [problempd,problemQc,problemRZZ,problemQ,yes_pd,compMissing,...
 %     flag]   =   Murat_dataWarning(listaSac,tresholdnoise,...
-%     maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,comp,flag)
+%     maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,comp,flag,QcM)
 %
 % WARNS about problems with the data and locates indices where this happens
 %
@@ -44,13 +44,21 @@ compMissing(:,:,1)                      =   no_pd;
 compMissing(:,:,2)                      =   no_Qc;
 compMissing(:,:,3)                      =   no_Q;
 
-no_RZZ                                  =   RZZ <= fT;
+if isequal(QcM,'Linearized')
+    no_RZZ                              =   RZZ <= fT;
+
+elseif isequal(QcM,'NonLinear')
+    no_RZZ                              =   no_Qc;
+    
+end
 
 for i = 1:lcf(2)
-    problempd{i}                        =   listaSac(no_pd(:,i));
-    problemQc{i}                        =   listaSac(no_Qc(:,i));
-    problemRZZ{i}                       =   listaSac(no_RZZ(:,i));
-    problemQ{i}                         =   listaSac(no_Q(:,i));
+    
+        problempd{i}                    =   listaSac(no_pd(:,i));
+        problemQc{i}                    =   listaSac(no_Qc(:,i));        
+        problemRZZ{i}                   =   listaSac(no_RZZ(:,i));
+        problemQ{i}                     =   listaSac(no_Q(:,i));
+    
 end
 
 % Displays different messages in case of more than 1 component

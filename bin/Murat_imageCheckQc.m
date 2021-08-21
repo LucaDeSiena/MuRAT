@@ -1,7 +1,7 @@
 function Qc_analysis        =   Murat_imageCheckQc(rtQck,rcQck,...
-    Qm_k,RZZ_k,residualQc_k,luntot,Ac_i,sizeTitle,Qc_title)
+    Qm_k,RZZ_k,residualQc_k,luntot,Ac_i,sizeTitle,Qc_title,QcM)
 % function Qc_analysis        =   Murat_imageCheckQc(rtQck,rcQck,...
-%     Qm_k,RZZ_k,residualQc_k,luntot,Ac_i,sizeTitle,Qc_title)
+%     Qm_k,RZZ_k,residualQc_k,luntot,Ac_i,sizeTitle,Qc_title,QcM)
 %
 % PLOTS the Qc checks
 %
@@ -14,6 +14,7 @@ function Qc_analysis        =   Murat_imageCheckQc(rtQck,rcQck,...
 %    Ac_i:          inverse coda attenuation matrix
 %    sizeTitle:     size of title font
 %    Qc_title:      title of Qc figure
+%    QcM:           Linearized or Non Linear measurement
 %
 % Output parameters:
 %   Qc_analysis:    figure for Qc check
@@ -24,7 +25,7 @@ Qc_analysis                 =   figure('Name',...
 luntot_Qc                   =   luntot(rtQck)/1000;
 mQm                         =   mean(Qm_k);
 Ac                          =   Ac_i(rtQck,rcQck);
-Wc                          =   Murat_weighting(RZZ_k);
+Wc                          =   Murat_weighting(RZZ_k,QcM);
 Gc                          =   Wc*Ac;
 dck                         =   Wc*Qm_k;
 [Uc,Sc,~]                   =   svd(Gc);

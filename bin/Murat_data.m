@@ -1,4 +1,3 @@
-%% Seismic attributes for peak delay and Qc imaging
 function Murat                          =   Murat_data(Murat)
 % MEASURES Qc, peak-delay and Q for each seismic trace located in a folder.
 %   This code is a collection of functions that do all the necessary.
@@ -38,6 +37,7 @@ B0                                      =   Murat.input.albedo;
 Le1                                     =   Murat.input.extinctionLength;
 bodyWindow                              =   Murat.input.bodyWindow;
 startNoise                              =   Murat.input.startNoise;
+QcM                                     =   Murat.input.QcMeasurement;
 
 % Set up variables to save
 locationDeg                             =   zeros(lengthData,6); 
@@ -121,7 +121,7 @@ for i = 1:lengthData
     
     % Measures Qc and its uncertainty
     [inverseQc_i, uncertaintyQc_i]      =   Murat_Qc(cf,sped,...
-        sp_i,cursorCodaStart_i,cursorCodaEnd_i,tCoda_i,srate_i);
+        sp_i,cursorCodaStart_i,cursorCodaEnd_i,tCoda_i,srate_i,QcM);
     
     % Decide if you calculate kernels
     calculateKernels                    =   recognizeComponents(i,compon);

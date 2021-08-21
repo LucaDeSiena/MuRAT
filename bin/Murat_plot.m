@@ -17,6 +17,7 @@ tWm                                 =   Murat.input.codaWindow;
 kT                                  =   Murat.input.tresholdNoise;
 B0                                  =   Murat.input.albedo;
 Le1                                 =   Murat.input.extinctionLength;
+QcM                                 =   Murat.input.QcMeasurement;
 
 modvQc                              =   Murat.input.modv;
 stepgX                              =   (modvQc(2,1) - modvQc(1,1))/2;
@@ -153,7 +154,7 @@ for k = 1:lMF(2)
     
     Qc_title                        =   ['Qc check ' fcName ' Hz'];
     Qc_analysis                     =   Murat_imageCheckQc(rtQck,rcQck,...
-        Qm_k,RZZ_k,residualQc_k,luntot,Ac_i,sizeTitle,Qc_title);
+        Qm_k,RZZ_k,residualQc_k,luntot,Ac_i,sizeTitle,Qc_title,QcM);
     
     FName                           =   ['Qc_analysis_' fcName '_Hz'];
     saveas(Qc_analysis, fullfile(FPath,FLabel,storeFolder,FName),fformat);
@@ -333,7 +334,7 @@ for k = 1:lMF(2)
     %   (2) low for both (green); (3) high for peak delays only (cyan);
     %   (4) high for inverse Qc only (orange).    
     storeFolder                     =   'Results';
-
+    
     %%
     % Define all the parameters for imaging    
     FName_Parameters                =...
@@ -387,6 +388,18 @@ for k = 1:lMF(2)
 end
 %%
 % Also showing the velocity model in case it is available, only once
+vtkwrite(fullfile(FPath, FLabel,storeFolder,'Velocity_model.vtk'),...
+    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','V',plotV)
+vtkwrite(fullfile(FPath, FLabel,storeFolder,'Input_checkerboards.vtk'),...
+    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Input_check',...
+    check_inputQc)
+vtkwrite(fullfile(FPath, FLabel,storeFolder,'Input_spikes.vtk'),...
+    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Input_spikes',...
+    spike_inputQc)
+%%
+% Final figure is the velocity model and relation between Qc and frequency
+storeFolder                     =   'Results';
+
 if Murat.input.availableVelocity == 1
     FName_Vimage                    =   'Velocity_model';
     Vimage                          =   Murat_image3D(X,Y,Z,plotV,...
@@ -397,16 +410,6 @@ if Murat.input.availableVelocity == 1
     close(Vimage)
 end
 
-vtkwrite(fullfile(FPath, FLabel,storeFolder,'Velocity_model.vtk'),...
-    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','V',plotV)
-vtkwrite(fullfile(FPath, FLabel,storeFolder,'Input_checkerboards.vtk'),...
-    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Input_check',...
-    check_inputQc)
-vtkwrite(fullfile(FPath, FLabel,storeFolder,'Input_spikes.vtk'),...
-    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Input_spikes',...
-    spike_inputQc)
-%%
-% Final figure is the relation between Qc and frequency
 Murat.data.averageQcFrequency       =   averageQcFrequency;
 Qcf_title                           =   'Qc vs Frequency';
 QcFrequency                         =   Murat_imageQcFrequency(cf,...
