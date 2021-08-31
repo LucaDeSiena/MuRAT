@@ -1,5 +1,4 @@
-%% Seismic attributes for peak delay and Qc imaging
-function Murat                          =   Murat_data(Murat)
+function Murat                          =   Murat_dataParallelized(Murat)
 % MEASURES Qc, peak-delay and Q for each seismic trace located in a folder.
 %   This code is a collection of functions that do all the necessary.
 
@@ -38,6 +37,8 @@ B0                                      =   Murat.input.albedo;
 Le1                                     =   Murat.input.extinctionLength;
 bodyWindow                              =   Murat.input.bodyWindow;
 startNoise                              =   Murat.input.startNoise;
+QcM                                     =   Murat.input.QcMeasurement;
+lapseTimeMethod                         =   Murat.input.lapseTimeMethod;
 
 % Set up variables to save
 locationDeg                             =   zeros(lengthData,6); 
@@ -62,7 +63,7 @@ rayCrossing                             =...
     zeros(lengthData,lengthParameterModel);
 %=========================================================================
 
-for i = 1:lengthData
+parfor i = 1:lengthData
     
     if isequal(mod(i,1000),0)
         
@@ -118,11 +119,11 @@ for i = 1:lengthData
     % Sets the lapse time
     [tCoda_i, cursorCodaStart_i, cursorCodaEnd_i]=...
         Murat_codaCheck(originTime_i,pktime_i,srate_i,tCm,tWm,tempis,...
-        peakDelay_i);
+        peakDelay_i,lapseTimeMethod);
     
     % Measures Qc and its uncertainty
     [inverseQc_i, uncertaintyQc_i]      =   Murat_Qc(cf,sped,...
-        sp_i,cursorCodaStart_i,cursorCodaEnd_i,tCoda_i,srate_i);
+        sp_i,cursorCodaStart_i,cursorCodaEnd_i,tCoda_i,srate_i,QcM);
     
     % Decide if you calculate kernels
     calculateKernels                    =   recognizeComponents(i,compon);
@@ -132,7 +133,7 @@ for i = 1:lengthData
         % Calculates kernels
         [K_grid, r_grid]                =...
             Murat_kernels(tCoda_i+tWm/2,locationM_i(1:3),...
-            locationM_i(4:6),modvQc,vS,kT,B0,Le1);
+            locationM_i(4:6),modvQc,vS,kT,B0,Le1,lapseTimeMethod);
         
         % Calculates matrix
         AQc_i                           =...

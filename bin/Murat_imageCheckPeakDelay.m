@@ -1,13 +1,12 @@
-function pd_analysis        =   Murat_imageCheckPeakDelay(rtpdk,...
-    time0,fitrobust_k,peakData_k,sizeTitle,pd_title)
+function pd_analysis        =   Murat_imageCheckPeakDelay(time0PD,...
+    fitrobust_k,peakData_k,sizeTitle,pd_title)
 % function pd_analysis        =   Murat_imageCheckPeakDelay(rtpdk,...
 %     time0,fitrobust,peakData_k,sizeTitle,pd_title)
 %
 % PLOTS the Peak Delay check
 %
 % Input parameters:
-%    rtpdk:         retained Qc data
-%    time0:         travel time
+%    time0PD:       travel time for peak delay
 %    fitrobust:     robustly fitted coefficients from peak delay fit
 %    peakData_k:    peak delay data
 %    sizeTitle:     size of title font
@@ -19,7 +18,7 @@ function pd_analysis        =   Murat_imageCheckPeakDelay(rtpdk,...
 pd_analysis                 =   figure('Name',...
     pd_title,'NumberTitle','off','Position',[20,400,1200,1000]);
 
-log10Time                   =   log10(time0(rtpdk));
+log10Time                   =   log10(time0PD);
 fitrobust_i                 =...
     fitrobust_k(1)*log10Time + fitrobust_k(2);
 

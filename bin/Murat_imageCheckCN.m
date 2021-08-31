@@ -1,15 +1,12 @@
-function CN_analysis        =   Murat_imageCheckCN(rtQk,rcQk,cfk,...
-        outputLCurve,energyRatio_k,residualQ_k,const_Qc_k,Edirect_k,...
-        luntot,time0,A_i,lCurveQ,CN_title)
-% function CN_analysis        =   Murat_imageCheckCN(rtQk,rcQk,cfk,...
-%         outputLCurve,energyRatio_k,residualQ_k,const_Qc_k,Edirect_k,...
-%         luntot,time0,A_i,lCurveQ,CN_title)
+function CN_analysis    =   Murat_imageCheckCN(equationQ,residualQ_k,d1,...
+    spreadAverageQ,luntot_k,time0_k,energyRatio_k,A_k,Edirect_k,CN_title)
+% function CN_analysis  =   Murat_imageCheckCN(equationQ,d1,...
+%     spreadAverageQ,luntot_k,time0_k,energyRatio_k,A_k,Edirect_k,CN_title)
 % 
 % PLOTS the Qc checks
 %
 % Input parameters:
 %    rtQk:          retained Q data
-%    rcQk:          retained Q parameter models
 %    cfk:           central frequency
 %    outputLCurve:  decide if you want to see the L curve
 %    energyRatio_k: energy ratios at all frequencies
@@ -25,27 +22,19 @@ function CN_analysis        =   Murat_imageCheckCN(rtQk,rcQk,cfk,...
 % Output parameters:
 %    CN_analysis:   figure for coda normalization check
 
-CN_analysis                 =   figure('Name',...
+CN_analysis             =   figure('Name',...
     CN_title,'NumberTitle','off','Position',[20,400,1200,1000]);
 
-A                           =   A_i(rtQk,rcQk);
-[~,~,~,~,d1k,spreadAverageQ]=   Murat_tikhonovQ(cfk,rtQk,outputLCurve,...
-    energyRatio_k,const_Qc_k,luntot,time0,A,lCurveQ,0);
-
-equationQ                   =   -log(const_Qc_k)...
-    -spreadAverageQ(1,1)*log(luntot(rtQk))...
-    -2*pi*cfk*time0(rtQk)*spreadAverageQ(2,1);
-
-dRatio                      =	log(energyRatio_k);
-luntotQ                     =   luntot(rtQk)/1000;
-[U,S,~]                     =   svd(A);
+dRatio                  =	log(energyRatio_k);
+luntotQ                 =   luntot_k/1000;
+[U,S,~]                 =   svd(A_k);
 
 %%
 %Plot of the left and right hand sides of the CN equation.
 subplot(3,1,1)
-plot(time0(rtQk),dRatio,'o','MarkerSize',6,'MarkerEdgeColor',[0 0 0])
+plot(time0_k,dRatio,'o','MarkerSize',6,'MarkerEdgeColor',[0 0 0])
 hold on
-plot(time0(rtQk),equationQ,'r*','MarkerSize',6)
+plot(time0_k,equationQ,'r*','MarkerSize',6)
 hold off
 xlabel('Travel time (s)','FontSize',12,'FontWeight','bold','Color','k')
 ylabel('Logarithmic direct-to-coda energy ratio','FontSize',12,...
@@ -67,16 +56,16 @@ ylabel('Logarithmic direct energy (J/m^2)','FontSize',12,...
     'FontWeight','bold','Color','k')
 title('Dependence of logarithmic direct energy on hypocentral distance.');
 
-xti                         =   xticks;
-xt                          =   cell(length(xti),1);
+xti                     =   xticks;
+xt                      =   cell(length(xti),1);
 for i = 1:length(xti)
-    xt(i,1)                 =   {exp(xti(i))};
+    xt(i,1)             =   {exp(xti(i))};
 end
 xticklabels(xt)
 SetFDefaults()
 %%
 % Then it checks the inversion with a Picard
 subplot(3,1,3)
-picard(U,diag(S),d1k);
+picard(U,diag(S),d1);
 title(['Picard condition. Residual is: ' num2str(residualQ_k)]);
 SetFDefaults()

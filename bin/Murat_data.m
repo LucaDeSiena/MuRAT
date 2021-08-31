@@ -38,6 +38,7 @@ Le1                                     =   Murat.input.extinctionLength;
 bodyWindow                              =   Murat.input.bodyWindow;
 startNoise                              =   Murat.input.startNoise;
 QcM                                     =   Murat.input.QcMeasurement;
+lapseTimeMethod                         =   Murat.input.lapseTimeMethod;
 
 % Set up variables to save
 locationDeg                             =   zeros(lengthData,6); 
@@ -117,7 +118,8 @@ for i = 1:lengthData
                 
     % Sets the lapse time
     [tCoda_i, cursorCodaStart_i, cursorCodaEnd_i]=...
-        Murat_codaCheck(originTime_i,pktime_i,srate_i,tCm,tWm,tempis);
+        Murat_codaCheck(originTime_i,pktime_i,srate_i,tCm,tWm,tempis,...
+        peakDelay_i,lapseTimeMethod);
     
     % Measures Qc and its uncertainty
     [inverseQc_i, uncertaintyQc_i]      =   Murat_Qc(cf,sped,...
@@ -131,7 +133,7 @@ for i = 1:lengthData
         % Calculates kernels
         [K_grid, r_grid]                =...
             Murat_kernels(tCoda_i+tWm/2,locationM_i(1:3),...
-            locationM_i(4:6),modvQc,vS,kT,B0,Le1);
+            locationM_i(4:6),modvQc,vS,kT,B0,Le1,lapseTimeMethod);
         
         % Calculates matrix
         AQc_i                           =...

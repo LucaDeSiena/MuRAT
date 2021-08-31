@@ -18,6 +18,8 @@ kT                                  =   Murat.input.tresholdNoise;
 B0                                  =   Murat.input.albedo;
 Le1                                 =   Murat.input.extinctionLength;
 QcM                                 =   Murat.input.QcMeasurement;
+sped                                =   Murat.input.spectralDecay;
+lapseTimeMethod                     =   Murat.input.lapseTimeMethod;
 
 modvQc                              =   Murat.input.modv;
 stepgX                              =   (modvQc(2,1) - modvQc(1,1))/2;
@@ -26,13 +28,6 @@ stepgZ                              =   (modvQc(2,3) - modvQc(1,3))/2;
 modvQc(:,1)                         =   modvQc(:,1) + stepgX;
 modvQc(:,2)                         =   modvQc(:,2) + stepgY;
 modvQc(:,3)                         =   modvQc(:,3) + stepgZ;
-
-outputLCurve                        =   Murat.input.lCurve;
-if outputLCurve == 0
-    lCurveQ                         =   Murat.input.lCurveQ;
-elseif outputLCurve == 1
-    lCurveQ                         =   [];
-end
 
 Qm                                  =   Murat.data.inverseQc;
 time0                               =   Murat.data.travelTime;
@@ -50,7 +45,6 @@ modv_pd                             =   Murat.data.modvPeakDelay;
 modv_Qc                             =   Murat.data.modvQc;
 modv_Q                              =   Murat.data.modvQ;
 evestazDegrees                      =   Murat.data.locationsDeg;
-constQc                             =   Murat.data.const_Qc;
 energyRatio                         =   Murat.data.energyRatioBodyCoda;
 codaNoiseRatio                      =   Murat.data.energyRatioCodaNoise;
 Ac_i                                =   Murat.data.inversionMatrixQc;
@@ -60,6 +54,7 @@ residualQc                          =   Murat.data.residualQc;
 residualQ                           =   Murat.data.residualQ;
 locationM                           =   Murat.data.locationsM;
 tCoda                               =   Murat.data.tCoda;
+rapsp                               =   Murat.data.energyRatioBodyCoda;
 
 FPath                               =   './';
 sizeTitle                           =   18;
@@ -86,15 +81,15 @@ evestaz                             =...
 averageQcFrequency                  =   zeros(2,lMF(2));
 for k = 1:lMF(2)
     storeFolder                     =   'Rays_Checks';
-    cfk                             =   cf(k);
-    fcName                          =   num2str(cfk);
+    cf_k                            =   cf(k);
+    fcName                          =   num2str(cf_k);
     if find(fcName == '.')
         fcName(fcName == '.')       =   '_';
     end
     rtpdk                           =   retainPeakDelay(:,k);
     rtQk                            =   retainQ(:,k);
-    rtQck                           =   retainQc(:,k);
     rcQk                            =   ray_crosses_Q(:,k);
+    rtQck                           =   retainQc(:,k);
     rcQck                           =   ray_crosses_Qc(:,k);
     %%
     % The rays are visualized for different techniques, starting with the peak delay
@@ -130,7 +125,7 @@ for k = 1:lMF(2)
     % Calculates kernels
     [K_grid, r_grid]                =...
         Murat_kernels(tCoda(1)+tWm/2,locationM(1,1:3),locationM(1,4:6),...
-        modvQc,vS,kT,B0,Le1);
+        modvQc,vS,kT,B0,Le1,lapseTimeMethod);
     
     Murat_codaMatrix(modvQc,K_grid,r_grid,1,origin,sections);
     
@@ -148,13 +143,15 @@ for k = 1:lMF(2)
     Qm_k                            =   Qm(rtQck,k);
     RZZ_k                           =   RZZ(rtQck,k);
     residualQc_k                    =   residualQc(k);
-    
+    luntot_Qc                       =   luntot(rtQck)/1000;
+    Ac                              =   Ac_i(rtQck,rcQck);
+
     averageQcFrequency(1,k)         =   sum(RZZ_k.*Qm_k)/sum(RZZ_k);
     averageQcFrequency(2,k)         =   std(Qm_k);
     
     Qc_title                        =   ['Qc check ' fcName ' Hz'];
-    Qc_analysis                     =   Murat_imageCheckQc(rtQck,rcQck,...
-        Qm_k,RZZ_k,residualQc_k,luntot,Ac_i,sizeTitle,Qc_title,QcM);
+    Qc_analysis                     =   Murat_imageCheckQc(Qm_k,RZZ_k,...
+        residualQc_k,luntot_Qc,Ac,sizeTitle,Qc_title,QcM);
     
     FName                           =   ['Qc_analysis_' fcName '_Hz'];
     saveas(Qc_analysis, fullfile(FPath,FLabel,storeFolder,FName),fformat);
@@ -162,10 +159,11 @@ for k = 1:lMF(2)
     % Then it shows the peak delay relative to the travel time.
     peakData_k                      =   peakData(rtpdk,k);
     fitrobust_k                     =   fitrobust(:,k);
+    time0PD                         =   time0(rtpdk);
     
     pd_title                        =   ['Peak Delay check ' fcName ' Hz'];
-    pd_analysis                     =   Murat_imageCheckPeakDelay(rtpdk,...
-    time0,fitrobust_k,peakData_k,sizeTitle,pd_title);
+    pd_analysis                     =   Murat_imageCheckPeakDelay(...
+    time0PD,fitrobust_k,peakData_k,sizeTitle,pd_title);
 
     FName                           =   ['PD_analysis_' fcName '_Hz'];
     saveas(pd_analysis, fullfile(FPath,FLabel,storeFolder,FName), fformat);
@@ -173,17 +171,27 @@ for k = 1:lMF(2)
     % Then it plots first the logarithm of the energy ratio versus travel
     % time.
     energyRatio_k                   =   energyRatio(rtQk,k);
-    const_Qc_k                      =   constQc(rtQk,k);
     residualQ_k                     =   residualQ(k);
     Edirect_k                       =...
         energyRatio_k./codaNoiseRatio(rtQk,k);
+    A_k                             =   A_i(rtQk,rcQk);
+    luntot_k                        =   luntot(rtQk);
+    time0_k                         =   time0(rtQk);
+    rapsp_k                         =   rapsp(rtQk,k);    
+    tCm                             =   tCoda(rtQk,k);
+    Q_k                             =   Qm(rtQk,k);
     
     CN_title                        =...
-        ['Coda Normalization check ' fcName ' Hz'];    
-    CN_analysis                     =   Murat_imageCheckCN(rtQk,rcQk,cfk,...
-        outputLCurve,energyRatio_k,residualQ_k,const_Qc_k,Edirect_k,...
-        luntot,time0,A_i,lCurveQ,CN_title);
-
+        ['Coda Normalization check ' fcName ' Hz'];   
+    
+    [d1, ~,spreadAverageQ, equationQ]...
+                                    =...
+        Murat_lsqlinQmean(tCm,tWm,Q_k,cf_k,sped,luntot_k,time0_k,rapsp_k);
+    
+    CN_analysis                     =...
+        Murat_imageCheckCN(equationQ,residualQ_k,d1,spreadAverageQ,...
+        luntot_k,time0_k,energyRatio_k,A_k,Edirect_k,CN_title);
+    
     FName                           =   ['CN_analysis_' fcName '_Hz'];
     saveas(CN_analysis, fullfile(FPath,FLabel,storeFolder,FName), fformat);
     

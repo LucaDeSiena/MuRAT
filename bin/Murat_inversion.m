@@ -22,6 +22,7 @@ x                                   =   Murat.input.x;
 y                                   =   Murat.input.y;
 z                                   =   Murat.input.z;
 QcM                                 =   Murat.input.QcMeasurement;
+inversionMethod                     =   Murat.input.inversionMethod;
 
 Apd_i                               =...
     Murat.data.inversionMatrixPeakDelay;
@@ -64,128 +65,134 @@ for k = 1:lMF(2)
     modv_pd(:,1:4,k)                =   modv;
     modv_Qc(:,1:4,k)                =   modv;
     modv_Q(:,1:4,k)                 =   modv;
+    cf_k                            =   cf(k);
+    fcName                          =   num2str(cf_k);
     
     %%
     % Peak delay regionalization
-    rcpd                            =   ray_crosses_pd(:,k);
-    rtpd                            =   retain_pd(:,k);
-    Apd                             =	Apd_i(rtpd,rcpd);
-    lApd                            =   size(Apd,2);
-    mpd                             =   zeros(lApd,1);
-    cfk                             =   cf(k);
-    fcName                          =   num2str(cfk);
+    rcpd_k                          =   ray_crosses_pd(:,k);
+    rtpd_k                          =   retain_pd(:,k);
+    Apd_k                           =	Apd_i(rtpd_k,rcpd_k);
+    lpdelta_k                       =   lpdelta(rtpd_k,k);
     
-    for j = 1:lApd
-        
-        mpd(j,1)                    =...
-            sum(Apd(:,j).*lpdelta(rtpd,k))/sum(Apd(:,j));
-        
-    end
-    
-    modv_pd(rcpd,5,k)               =   mpd;
+    mpd                             =   sum(Apd_k.*lpdelta_k,1)';
+    modv_pd(rcpd_k,5,k)             =   mpd;
     
     %%
     % Qc inversion
-    rcQc                            =   ray_crosses_Qc(:,k);
-    rtQc                            =   retain_Qc(:,k);
-    Ac                              =   Ac_i(rtQc,rcQc);
-    Qm_k                            =   Qm(rtQc,k);
-    RZZ_k                           =   RZZ(rtQc,k);
+    rcQc_k                          =   ray_crosses_Qc(:,k);
+    rtQc_k                          =   retain_Qc(:,k);
+    Ac_k                            =   Ac_i(rtQc_k,rcQc_k);
+    Qm_k                            =   Qm(rtQc_k,k);
+    RZZ_k                           =   RZZ(rtQc_k,k);
     Wc                              =   Murat_weighting(RZZ_k,QcM);
-    Gc                              =   Wc*Ac;
-    [Uc,Sc,Vc]                      =   svd(Gc);
-    
-    [mtik0C,residualQc_k,LcQc,tik0_regC]...
-                                    =...
-        Murat_tikhonovQc(outputLCurve,Qm_k,Wc,Gc,lCurveQc);
-    
+    Gc                              =   Wc*Ac_k;
     FName                           =   ['L-curve_Qc_' fcName '_Hz'];
+    
+    bQm                             =   Wc*Qm_k;
+            
+    if isequal(inversionMethod,'Tikhonov')
+        [mtik0C,residualQc_k,LcQc,tik0_regC]...
+                                    =...
+                            Murat_tikhonovQc(outputLCurve,Gc,bQm,lCurveQc);
+        
+        residualQc(1,k)             =   residualQc_k;
+        modv_Qc(rcQc_k,5,k)         =   mtik0C;
+        
+    elseif isequal(inversionMethod,'Iterative')
+        [LcQc, minimizeVectorQm,infoVectorQm,tik0_regC]...
+                                    =...
+                            Murat_minimise(outputLCurve,Gc,bQm,FName);
+                                    
+        residualQc(1,k)             =   min(infoVectorQm.Rnrm);
+        modv_Qc(rcQc_k,5,k)         =   minimizeVectorQm;
+        
+    else
+        error('Unknown inversion method.')
+        
+    end
+    
     saveas(LcQc,fullfile(FPath, FLabel,'Rays_Checks',FName),fformat);
-    close(LcQc)
-
-    residualQc(1,k)                 =   residualQc_k;
-    modv_Qc(rcQc,5,k)               =   mtik0C;
+    close(LcQc)  
     
     %%
     % Q inversion
-    rcQ                             =   ray_crosses_Q(:,k);
-    rtQ                             =   retain_Q(:,k);
-    A                               =   A_i(rtQ,rcQ);
-    Q_k                             =   Qm(rtQ,k);
+    rcQ_k                           =   ray_crosses_Q(:,k);
+    rtQ_k                           =   retain_Q(:,k);
+    A_k                             =   A_i(rtQ_k,rcQ_k);
+    Q_k                             =   Qm(rtQ_k,k);
+    luntot_k                        =   luntot(rtQ_k);
+    time0_k                         =   time0(rtQ_k);
+    rapsp_k                         =   rapsp(rtQ_k,k);    
+    tCm                             =   tCoda(rtQ_k,k);
     
-    tCm                             =   mean(tCoda(:,k));
-    const_Qc_k                      =...
-        (tCm+tWm/2)^-sped.*exp(-Q_k*2*pi*cfk*(tCm+tWm/2));
-    rapsp_k                         =   rapsp(rtQ,k);    
-    [U,S,V]                         =   svd(A);
+    [d1, const_Qc_k, ~, ~]          =   Murat_lsqlinQmean(tCm,tWm,Q_k,...
+                                    cf_k,sped,luntot_k,time0_k,rapsp_k);
+    const_Qc(rtQ_k,k)               =   const_Qc_k;
     
-    [mtik0,residualQ_k,LcCN,tik0_reg,~,~]...
-                                    =   Murat_tikhonovQ(cfk,rtQ,...
-        outputLCurve,rapsp_k,const_Qc_k,luntot,time0,A,lCurveQ,1);
-
     FName                           =   ['L-curve_Q_' fcName '_Hz'];
+    if isequal(inversionMethod,'Tikhonov')
+        [mtik0,residualQ_k,LcCN,tik0_reg]...
+                                    =...
+                            Murat_tikhonovQ(outputLCurve,A_k,d1,lCurveQ,1);
+
+        residualQ(:,k)              =   residualQ_k;
+        modv_Q(rcQ_k,5,k)           =   mtik0;
+        
+    elseif isequal(inversionMethod,'Iterative')
+        [LcCN, minimizeVectorQ,infoVectorQ,tik0_reg]...
+                                    =...
+                            Murat_minimise(outputLCurve,A_k,d1,FName);
+                                    
+        residualQ(1,k)              =   min(infoVectorQ.Rnrm);
+        modv_Q(rcQ_k,5,k)           =   minimizeVectorQ;
+        
+    end
+    
     saveas(LcCN,fullfile(FPath, FLabel,'Rays_Checks',FName),fformat);
     close(LcCN)
-    modv_Q(rcQ,5,k)                 =   mtik0;
-    const_Qc(rtQ,k)                 =   const_Qc_k;
-    residualQ(:,k)                  =   residualQ_k;
     
-    %%
-    % Checkerboards and spike inputs and checkerboard inversion
+    %% Checkerboards and spike inputs and checkerboard inversion
+    % Qc
     siz                             =   [nxc nyc nzc];
     I                               =   checkerBoard3D(siz,sizea);
     [checkInput,spikeInput]         =...
-    Murat_inputTesting(I,spike_o,spike_e,x,y,z);
+                               Murat_inputTesting(I,spike_o,spike_e,x,y,z);
     
     modv_Qc(checkInput==1,6,k)      =   latt;
     modv_Qc(checkInput==0,6,k)      =   hatt;
     modv_Qc(:,8,k)                  =   mean(Qm_k);
     modv_Qc(spikeInput,8,k)         =   spike_v;
+    Qc_ch                           =   modv_Qc(rcQc_k,6,k);
+    re_checkQc                           =   Gc*Qc_ch;
+    
+    modv_Qc(rcQc_k,7,k)             =...
+        Murat_outputTesting(Gc,re_checkQc,tik0_regC,inversionMethod);
+    %%
+    % Q
     modv_Q(:,6:8,k)                 =   modv_Qc(:,6:8,k);
-    Qc_ch                           =   modv_Qc(rcQc,6,k);
-    re_Qc                           =   Gc*Qc_ch;
-    mcheck_c                        =...
-        tikhonov(Uc,diag(Sc),Vc,re_Qc,tik0_regC);
-    modv_Qc(rcQc,7,k)               =   mcheck_c;
-    Q_ch                            =   modv_Q(rcQ,6,k);
-    re_Q                            =   A*Q_ch;
-    mcheck                          =...
-        tikhonov(U,diag(S),V,re_Q,tik0_reg);
-    modv_Q(rcQ,7,k)                 =   mcheck;
+    Q_ch                            =   modv_Q(rcQ_k,6,k);
+    re_Q                            =   A_k*Q_ch;
+    
+    modv_Q(rcQ_k,7,k)               =...
+        Murat_outputTesting(A_k,re_Q,tik0_reg,inversionMethod);
     
     %%
     % Inverting spike for Qc and Q at user discretion
     if ~isempty(spike_o)
-        Qc_sp                       =   modv_Qc(rcQc,8,k);
-        re_Qc                       =   Gc*Qc_sp;
-        mspike_c                    =   tikhonov(Uc,diag(Sc),Vc,re_Qc,tik0_regC);
-        modv_Qc(rcQc,9,k)           =   mspike_c;
+        Qc_sp                       =   modv_Qc(rcQc_k,8,k);
+        re_spikeQc                       =   Gc*Qc_sp;
         
-        Q_sp                        =   modv_Q(rcQ,8,k);
-        re_Q                        =   A*Q_sp;
-        mspike                      =   tikhonov(U,diag(S),V,re_Q,tik0_reg);
-        modv_Q(rcQ,9,k)             =   mspike;
+        modv_Qc(rcQc_k,9,k)         =...
+            Murat_outputTesting(Gc,re_spikeQc,tik0_regC,inversionMethod);
+        
+        Q_sp                        =   modv_Q(rcQ_k,8,k);
+        re_spikeQ                        =   A_k*Q_sp;
+        
+        modv_Q(rcQ_k,9,k)             =...
+            Murat_outputTesting(A_k,re_spikeQ,tik0_reg,inversionMethod);
+        
     end
-    
-    %%
-    % Diagonal of resolution matrix
-    sSc                             =   size(Sc);
-    fil_reg                         =   fil_fac(diag(Sc),tik0_regC);
-    if sSc(2) > sSc(1)
-        fil_reg(end+1:sSc(2),1)     =   0;
-    end
-    Rc                              =   Vc*diag(fil_reg)*Vc';
-    dRc                             =   diag(Rc);
-    modv_Qc(rcQc,10,k)              =   dRc;
-    
-    sS                              =   size(S);
-    fil_reg                         =   fil_fac(diag(S),tik0_reg);
-    if sS(2) > sS(1)
-        fil_reg(end+1:sS(2),1)      =   0;
-    end
-    R                               =   V*diag(fil_reg)*V';
-    dR                              =   diag(R);
-    modv_Q(rcQ,10,k)                =   dR;
     
     %%
     % Save peak-delay, Qc, Q

@@ -1,5 +1,5 @@
 function [K_grid,r_grid1]	=...
-    Murat_kernels(T,event,station,modv,v,kT,B0,Le_1)
+    Murat_kernels(T,event,station,modv,v,kT,B0,Le_1,lapseTimeMethod)
 % function [K_grid,r_grid1]	=...
 %     Murat_kernels(T,event,station,modv,v,kT,B0,Le_1)
 %
@@ -9,15 +9,15 @@ function [K_grid,r_grid1]	=...
 %   spacing by kT - higher kT brings longer computational time.
 %
 % Input parameters:
-%    T:             lapse time
-%    event:         event coordinates
-%    station:       station coordinates
-%    modv:          velocity model used for setting up the grid
-%    v:             average velocity
-%    kT:            the computational parameter that speeds up calculations
-%    B0:            albedo
-%    Le_1:          extinction length
-%
+%    T:                 lapse time
+%    event:             event coordinates
+%    station:           station coordinates
+%    modv:              velocity model used for setting up the grid
+%    v:                 average velocity
+%    kT:                the computational parameter that speeds up calculations
+%    B0:                albedo
+%    Le_1:              extinction length
+%    lapseTimeMethod:   computing kernels from one of the options
 % Output parameters:
 %    r_grid1:           The coordinates of the grid
 %    K_grid:            The kernel estimated at each point of the grid
@@ -109,6 +109,11 @@ r2_grid                     =...
     sqrt(d2xyz(:,1).^2 + d2xyz(:,2).^2 + d2xyz(:,3).^2)/1000;
 
 % Elements of the grid inside the ellipsoid
+
+if isequal(lapseTimeMethod,'Peak')
+    T                       =   mean(T);
+end
+
 cond_interior               =   r1_grid + r2_grid < T*v;
 
 %%
