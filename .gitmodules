@@ -1,0 +1,3 @@
+[submodule "IRtools"]
+	path = IRtools
+	url = https://github.com/jnagy1/IRtools
