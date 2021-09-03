@@ -124,7 +124,7 @@ SetFDefaults()
 
 if outputLCurve == 1
     minimizeValue                               =...
-        input('Your damping parameter for coda: ');
+        input('Your damping parameter: ');
 else
     minimizeValue                               =...
         mean(indexCostL2,indexCostI);
@@ -133,7 +133,7 @@ end
 
 options                         =...
     IRset('MaxIter', 500,'RegMatrix','Identity','IterBar','off',...
-    'RegParam', minimizeValue);
+    'verbosity','off','RegParam', minimizeValue);
 
 [minimizeVector,infoVector]     =   IRcgls(G,bQ,options);
 

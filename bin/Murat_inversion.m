@@ -90,7 +90,7 @@ for k = 1:lMF(2)
     FName                           =   ['L-curve_Qc_' fcName '_Hz'];
     
     bQm                             =   Wc*Qm_k;
-            
+    
     if isequal(inversionMethod,'Tikhonov')
         [mtik0C,residualQc_k,LcQc,tik0_regC]...
                                     =...
@@ -100,6 +100,8 @@ for k = 1:lMF(2)
         modv_Qc(rcQc_k,5,k)         =   mtik0C;
         
     elseif isequal(inversionMethod,'Iterative')
+        disp(['Qc L-curve and cost functions at ', num2str(cf_k), ' Hz.'])
+        
         [LcQc, minimizeVectorQm,infoVectorQm,tik0_regC]...
                                     =...
                             Murat_minimise(outputLCurve,Gc,bQm,FName);
@@ -111,7 +113,6 @@ for k = 1:lMF(2)
         error('Unknown inversion method.')
         
     end
-    
     saveas(LcQc,fullfile(FPath, FLabel,'Rays_Checks',FName),fformat);
     close(LcQc)  
     
@@ -140,6 +141,7 @@ for k = 1:lMF(2)
         modv_Q(rcQ_k,5,k)           =   mtik0;
         
     elseif isequal(inversionMethod,'Iterative')
+        disp(['Q L-curve and cost functions at ', num2str(cf_k), ' Hz.'])
         [LcCN, minimizeVectorQ,infoVectorQ,tik0_reg]...
                                     =...
                             Murat_minimise(outputLCurve,A_k,d1,FName);
