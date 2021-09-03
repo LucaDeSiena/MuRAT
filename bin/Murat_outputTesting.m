@@ -17,7 +17,7 @@ if isequal(inversionMethod,'Tikhonov')
     
 elseif isequal(inversionMethod,'Iterative')
     optionsI        =   IRset('MaxIter', 500,'RegMatrix','Identity',...
-        'RegParam', reguParam);
+        'RegParam', reguParam,'verbosity','off');
     
     [m,~]           =   IRcgls(G,d,optionsI);
     

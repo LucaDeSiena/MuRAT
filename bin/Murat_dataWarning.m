@@ -62,7 +62,7 @@ for i = 1:lcf(2)
 end
 
 % Displays different messages in case of more than 1 component
-if comp == 1
+if comp == 1 && ~isequal(flag,2)
     displayNoQc                             =   sum(no_Qc)/lcf(1)*100;
     disp(['In your frequency range, [',num2str(displayNoQc),...
         '] % of your Qc are = 0']);
@@ -78,6 +78,8 @@ if comp == 1
     displayNoQ                              =   sum(no_Q)/lcf(1)*100;
     disp(['In your frequency range, [',num2str(displayNoQ),...
         ']% of your coda-to-noise ratios are below noise treshold']);
+    
+    flag                                    =   2;
     
 else
     switch flag

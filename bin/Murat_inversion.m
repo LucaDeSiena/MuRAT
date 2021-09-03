@@ -191,7 +191,7 @@ for k = 1:lMF(2)
         Q_sp                        =   modv_Q(rcQ_k,8,k);
         re_spikeQ                        =   A_k*Q_sp;
         
-        modv_Q(rcQ_k,9,k)             =...
+        modv_Q(rcQ_k,9,k)           =...
             Murat_outputTesting(A_k,re_spikeQ,tik0_reg,inversionMethod);
         
     end
