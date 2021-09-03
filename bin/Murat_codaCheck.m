@@ -50,6 +50,7 @@ cursorCodaStart_i                               =...
 cursorCodaEnd_i                                 =...
     floor(cursorCodaStart_i + tWm * srate_i - 1);
 
+
 if cursorCodaEnd_i > lengthTempis
     cursorCodaEnd_i                             =   lengthTempis;
 end

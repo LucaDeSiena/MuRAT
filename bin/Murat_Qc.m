@@ -30,39 +30,48 @@ for i = 1:lcf
     
     cf_i                                =   cf(i);
     
-    if isequal(QcMeasurement,'Linearized')
+    if isempty(envelopeC)
         
-        lapseT                          =...
-            (tCoda_i+1/srate_i:1/srate_i:tCoda_i+lEnvelopeC/srate_i)';
-        
-        [linearFit, uncertaintyFit]     =...
-            estimatesLinear(lapseT,envelopeC,lEnvelopeC,sped,cf_i);
-        
-        if linearFit(1)<0
-            inverseQc_i(i)              =   -linearFit(1);
-            uncertaintyQc_i(i)          =   abs(uncertaintyFit(1,2));
-        else
-            inverseQc_i(i)              =   0;
-            uncertaintyQc_i(i)          =   0;
-        end
-        
-    elseif isequal(QcMeasurement,'NonLinear')
-        QValues                         =   0:10^-5:10^-1;
-        
-        lWindow                         =...
-            round((cursorCodaEnd_i-cursorCodaStart_i)/srate_i);
-        lapseT                          =...
-            (tCoda_i+0.5:tCoda_i+lWindow-0.5)';
-        
-        [nonLinearFit, uncertaintyFit]  =   estimatesNonLinear(lapseT,...
-            envelopeC,QValues,sped,lWindow,cf_i,srate_i);
-        
-        inverseQc_i(i)                  =   nonLinearFit;
-        uncertaintyQc_i(i)              =   uncertaintyFit;
+        inverseQc_i(i)                    =   0;
+        uncertaintyQc_i(i)                =   0;
         
     else
         
-        error('Unknown strategy to calculate Qc');
+        if isequal(QcMeasurement,'Linearized')
+            
+            lapseT                          =...
+                (tCoda_i+1/srate_i:1/srate_i:tCoda_i+lEnvelopeC/srate_i)';
+            
+            [linearFit, uncertaintyFit]     =...
+                estimatesLinear(lapseT,envelopeC,lEnvelopeC,sped,cf_i);
+            
+            if linearFit(1)<0
+                inverseQc_i(i)              =   -linearFit(1);
+                uncertaintyQc_i(i)          =   abs(uncertaintyFit(1,2));
+            else
+                inverseQc_i(i)              =   0;
+                uncertaintyQc_i(i)          =   0;
+            end
+            
+        elseif isequal(QcMeasurement,'NonLinear')
+            QValues                         =   0:10^-5:10^-1;
+            
+            lWindow                         =...
+                round((cursorCodaEnd_i-cursorCodaStart_i)/srate_i);
+            lapseT                          =...
+                (tCoda_i+0.5:tCoda_i+lWindow-0.5)';
+            
+            [nonLinearFit, uncertaintyFit]  =   estimatesNonLinear(lapseT,...
+                envelopeC,QValues,sped,lWindow,cf_i,srate_i);
+            
+            inverseQc_i(i)                  =   nonLinearFit;
+            uncertaintyQc_i(i)              =   uncertaintyFit;
+            
+        else
+            
+            error('Unknown strategy to calculate Qc');
+            
+        end
         
     end
     
