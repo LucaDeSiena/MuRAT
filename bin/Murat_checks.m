@@ -1,21 +1,19 @@
 % ADDITIONAL input variables that are not set by the user.
 function Murat                  =   Murat_checks(Murat)
 % Creating folder to store results
-if exist(cat(2,'./',Murat.input.label),'dir')~=7
-    
-    mkdir(cat(2,'./',Murat.input.label))
-    mkdir(cat(2,'./',...
-        Murat.input.label,'/Rays_Checks'))
-    mkdir(cat(2,'./',...
-        Murat.input.label,'/Results'))
-    mkdir(cat(2,'./',...
-        Murat.input.label,'/Resolution'))
-    mkdir(cat(2,'./',...
-        Murat.input.label,'/VTK'))
-    mkdir(cat(2,'./',...
-        Murat.input.label,'/TXT'))
-    
+
+Label                           =   ['./',Murat.input.label];
+
+if exist(Label,'dir')==7    
+    rmdir(Label,'s')
 end
+
+mkdir(Label)
+mkdir([Label,'/Rays_Checks'])
+mkdir([Label,'/Results'])
+mkdir([Label,'/Resolution'])
+mkdir([Label,'/VTK'])
+mkdir([Label,'/TXT'])
 
 % Get general paths/data options
 [Murat.input.listSac,~]         =	createsList(Murat.input.dataDirectory);

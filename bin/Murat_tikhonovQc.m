@@ -1,5 +1,5 @@
 function [mtik0C,residualQc_k,LcQc,tik0_regC]   =...
-    Murat_tikhonovQc(outputLCurve,Gc,bQm,lCurveQc)
+    Murat_tikhonovQc(outputLCurve,Gc,bQm,lCurveQc_k)
 % function [mtik0C,residualQc_k,LcQc,tik0_regC]   =...
 %     Murat_tikhonovQc(outputLCurve,Gc,bQm,lCurveQc)   
 %
@@ -10,7 +10,7 @@ function [mtik0C,residualQc_k,LcQc,tik0_regC]   =...
 %    Qm_k:          inverse Qc values
 %    Wc:            weighting matrix
 %    Gc:            inversion matrix
-%    lCurveQc:      damping parameter input from start
+%    lCurveQc_k:    damping parameter input from start
 %
 % Output parameters:
 %    mtik0C:        inversion parameter
@@ -30,7 +30,7 @@ if outputLCurve == 1
     tik0_regC                                   =...
         input('Your damping parameter for coda: ');
 else
-    tik0_regC                                   =   lCurveQc;
+    tik0_regC                                   =   lCurveQc_k;
 end
 
 mtik0C                                          =...

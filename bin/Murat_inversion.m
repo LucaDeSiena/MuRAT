@@ -23,6 +23,8 @@ y                                   =   Murat.input.y;
 z                                   =   Murat.input.z;
 QcM                                 =   Murat.input.QcMeasurement;
 inversionMethod                     =   Murat.input.inversionMethod;
+lCurveQc                            =   Murat.input.lCurveQc;
+lCurveQ                             =   Murat.input.lCurveQ;
 
 Apd_i                               =...
     Murat.data.inversionMatrixPeakDelay;
@@ -43,14 +45,6 @@ ray_crosses_Q                       =   Murat.data.raysQ;
 tCoda                               =   Murat.data.tCoda;
 FPath                               =   './';
 
-if outputLCurve == 0
-    lCurveQc                        =   Murat.input.lCurveQc;
-    lCurveQ                         =   Murat.input.lCurveQ;
-else
-    lCurveQc                        =   [];
-    lCurveQ                         =   [];
-end
-
 lMF                                 =   size(ray_crosses_pd);
 modv_pd                             =   zeros(lMF(1),5,lMF(2));
 modv_Qc                             =   zeros(lMF(1),10,lMF(2));
@@ -67,6 +61,9 @@ for k = 1:lMF(2)
     modv_Q(:,1:4,k)                 =   modv;
     cf_k                            =   cf(k);
     fcName                          =   num2str(cf_k);
+    if find(fcName == '.')
+        fcName(fcName == '.')       =   '_';
+    end
     
     %%
     % Peak delay regionalization
@@ -90,11 +87,12 @@ for k = 1:lMF(2)
     FName                           =   ['L-curve_Qc_' fcName '_Hz'];
     
     bQm                             =   Wc*Qm_k;
+    lCurveQc_k                      =   lCurveQc(k);
     
     if isequal(inversionMethod,'Tikhonov')
         [mtik0C,residualQc_k,LcQc,tik0_regC]...
                                     =...
-                            Murat_tikhonovQc(outputLCurve,Gc,bQm,lCurveQc);
+           Murat_tikhonovQc(outputLCurve,Gc,bQm,lCurveQc_k);
         
         residualQc(1,k)             =   residualQc_k;
         modv_Qc(rcQc_k,5,k)         =   mtik0C;
@@ -104,7 +102,7 @@ for k = 1:lMF(2)
         
         [LcQc, minimizeVectorQm,infoVectorQm,tik0_regC]...
                                     =...
-                            Murat_minimise(outputLCurve,Gc,bQm,FName);
+           Murat_minimise(outputLCurve,Gc,bQm,lCurveQc_k,FName);
                                     
         residualQc(1,k)             =   min(infoVectorQm.Rnrm);
         modv_Qc(rcQc_k,5,k)         =   minimizeVectorQm;
@@ -131,11 +129,12 @@ for k = 1:lMF(2)
                                     cf_k,sped,luntot_k,time0_k,rapsp_k);
     const_Qc(rtQ_k,k)               =   const_Qc_k;
     
+    lCurveQ_k                       =   lCurveQ(k);
     FName                           =   ['L-curve_Q_' fcName '_Hz'];
     if isequal(inversionMethod,'Tikhonov')
         [mtik0,residualQ_k,LcCN,tik0_reg]...
                                     =...
-                            Murat_tikhonovQ(outputLCurve,A_k,d1,lCurveQ,1);
+           Murat_tikhonovQ(outputLCurve,A_k,d1,lCurveQ_k,1);
 
         residualQ(:,k)              =   residualQ_k;
         modv_Q(rcQ_k,5,k)           =   mtik0;
@@ -144,7 +143,7 @@ for k = 1:lMF(2)
         disp(['Q L-curve and cost functions at ', num2str(cf_k), ' Hz.'])
         [LcCN, minimizeVectorQ,infoVectorQ,tik0_reg]...
                                     =...
-                            Murat_minimise(outputLCurve,A_k,d1,FName);
+           Murat_minimise(outputLCurve,A_k,d1,lCurveQ_k,FName);
                                     
         residualQ(1,k)              =   min(infoVectorQ.Rnrm);
         modv_Q(rcQ_k,5,k)           =   minimizeVectorQ;

@@ -1,14 +1,15 @@
-function [image, minimizeVector,infoVector,minimizeValue]...
-                                =   Murat_minimise(outputLCurve,G,bQ,name)
-% function [image, minimizeVector,infoVector,minimizeValue]...
-%                               =   Murat_minimise(G,Q,W,name)
+function [image, minimizeVector,infoVector,minimizeValue]   =...
+    Murat_minimise(outputLCurve,G,bQ,lCurveQc_k,name)
+% function [image, minimizeVector,infoVector,minimizeValue]   =...
+%   Murat_minimise(outputLCurve,G,bQ,lCurveQc_k,name)
 % MINIMIZES both L2 and I cost functions with conjugate gradients
 % CALCULATES the damping value and PLOTS the costs.
 %
 % Input parameters:
+%    outputLCurve:      show L-curve or not
 %    G:                 inversion matrix
-%    Q:                 data vector
-%    W:                 weighting matrix
+%    bQ:                data vector
+%    lCurveQc_k:        preset damping values
 %    name:              name of the figure
 %    
 % Output parameters:
@@ -126,8 +127,7 @@ if outputLCurve == 1
     minimizeValue                               =...
         input('Your damping parameter: ');
 else
-    minimizeValue                               =...
-        mean(indexCostL2,indexCostI);
+    minimizeValue                               =   lCurveQc_k;
 end
 
 

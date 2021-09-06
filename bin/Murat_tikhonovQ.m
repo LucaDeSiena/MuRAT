@@ -1,6 +1,6 @@
 function [mtik0,residualQ_k,LcCN,tik0_reg]...
                                 =...
-    Murat_tikhonovQ(outputLCurve,A,d1,lCurveQ,flagShow)
+    Murat_tikhonovQ(outputLCurve,A,d1,lCurveQ_k,flagShow)
 % function [mtik0,residualQ_k,LcCN,tik0_reg,d1k,constQmean_k]...
 %                                 =...
 %     Murat_tikhonovQ(cfk,rtQ,outputLCurve,rapsp_k,const_Qc_k,...
@@ -17,7 +17,7 @@ function [mtik0,residualQ_k,LcCN,tik0_reg]...
 %    luntot:        total length
 %    time0:         travel time
 %    A:             CN inversion matrix
-%    lCurveQ:       damping parameter input from start
+%    lCurveQ_k:     damping parameter input from start
 %    flagShow:      flag to decide if show L-curve
 %
 % Output parameters:
@@ -44,10 +44,10 @@ if flagShow == 1
         tik0_reg                =...
             input('Your damping parameter for Q: ');
     else
-        tik0_reg                =   lCurveQ;
+        tik0_reg                =   lCurveQ_k;
     end
 else
-    tik0_reg                    =   lCurveQ;
+    tik0_reg                    =   lCurveQ_k;
     LcCN                        =   0;
 end
 mtik0                           =   tikhonov(U,s,V,d1,tik0_reg);
