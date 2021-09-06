@@ -113,7 +113,7 @@ for k = 1:lMF(2)
         error('Unknown inversion method.')
         
     end
-    saveas(LcQc,fullfile(FPath, FLabel,'Rays_Checks',FName),fformat);
+    saveas(LcQc,fullfile(FPath, FLabel,'Rays_Checks',FName));
     close(LcQc)  
     
     %%

@@ -1,9 +1,9 @@
-![Campi Flegrei direct-wave attenuation model.](https://github.com/LucaDeSiena/MuRAT/blob/Murat_ID/MuRAT.jpeg)
+![MuRAT is a code for attenuation, scattering and absorption tomography.](https://github.com/LucaDeSiena/MuRAT/blob/Update_2021/MuRAT.jpg)
 
-MuRAT - Multi-Resolution Seismic Attenuation Tomography
+MuRAT - Multi-Resolution seismic Attenuation Tomography
 =======
 
-MuRAT is a Matlab Package for Seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves. 
+MuRAT is a Matlab Package for seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves at multiple frequencies.
 
 MuRAT measures seismic attenuation, scattering, and absorption from passive and active data, and models 3D variations of these parameters in space.
 
@@ -20,12 +20,11 @@ The group of active users (providing questions, feedback, snippets of code) is t
 
 * *2018*: [MuRAT2D](https://github.com/LucaDeSiena/MuRAT2D) is the result of the activity of the [Volcano Earth Imaging group](https://www.lucadesiena.com), led by De Siena during his stint as Lecturer at the University of Aberdeen (UK). It images 2D seismic scattering (peak delay) and absorption (Qc at late lapse time - kernel-based). It is ideal for small datasets and in case no previous velocity information is available.
 
-* *2021*: [MuRAT3D](https://github.com/LucaDeSiena/MuRAT) is released as a parallelized code for full 3D attenuation, scattering and absorption imaging using peak delays, coda attenuation and coda-normalized energies.
+* *2021*: [MuRAT3D](https://github.com/LucaDeSiena/MuRAT) is released as a multi-frequency parallelized code for full 3D attenuation, scattering and absorption imaging using peak delays, coda attenuation and coda-normalized energies.
 
 *Documentation*
 -------------
-
-The full documentation for MuRAT3.0 can be found in html files associated with the software. This README file and the linked internet sites are to be used as a reference. 
+The full documentation for MuRAT3.0 can be found in the Documentation PDF inside the folder. Additional html files associated with the software are present in the corresponding folder. This README file and the linked internet sites are to be used as a reference.
 
 *System*
 ------------
@@ -33,13 +32,14 @@ The program works on Mac, Linux and Windows systems equipped with Matlab R2019a.
 
 Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing and Mapping. The Parallel Computing Toolbox is recommended for speed.
 
-Costum toolboxes not included in standard Matlab installations are also provided with the package. These are:
+Custom toolboxes not included in standard Matlab installations are also provided with the package. These are:
 
 1. Routines to read SAC files created by Zhigang Peng and available from [his SAC tutorial page](http://geophysics.eas.gatech.edu/classes/SAC/).
 2. The [Regularization Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/52-regtools?s_tid=prof_contriblnk) created by Per Christian Hansen and available from Matlab File Exchange.
-3. Functions from the [Geometry and Image-Based Bioengineering add-On for MATLAB](https://github.com/gibbonCode/GIBBON).
+3. The [IRTools](https://github.com/jnagy1/IRtools/tree/ebd70d4036c3cd8c82fc1e17033351491fddf11f), linked to MuRAT as a submodule.
+4. Functions from the [Geometry and Image-Based Bioengineering add-On for MATLAB](https://github.com/gibbonCode/GIBBON).
 
-Two sample datasets (Mount St. Helens and Romania) are included and allow the user to obtain sample models. The  datasets work with the two input .mlx files that are provided and show examples of what the user can obtain with the code. 
+Three sample datasets (Mount St. Helens, Romania, and Toba) are included and allow the user to obtain sample models. The  datasets work with the three corresponding *input.mlx* files that show examples of what the user can obtain with the code.
 
 *Instructions in a nutshell*
 ------------
@@ -50,9 +50,11 @@ The current version works following these steps:
 
 2. Work in the downloaded folder after moving it to an appropriate location on your system.
 
-3. Open one of the two input .mlx files, providing a step-by-step explanation of all inputs (Murat_input_MSH.mlx or Murat_input_Romania.mlx) and create your own. 
+3. Check that the IRTools have been downloaded in the corresponding folder in the working directory. Otherwise download them from https://github.com/jnagy1/IRtools/tree/ebd70d4036c3cd8c82fc1e17033351491fddf11f.
 
-4. MuRAT works with [SAC files](https://ds.iris.edu/files/sac-manual/) that must be stored into a single folder and corrected for the instrument function. The files must have populated headers, although the code can work using just the following header fields:
+4. Open one of the three input .mlx files, providing a step-by-step explanation of all inputs (*Murat_inputMSH.mlx*, *Murat_inputRomania.mlx*, or *Murat_inputToba.mlx*) and create your own.
+
+5. MuRAT works with [SAC files](https://ds.iris.edu/files/sac-manual/) that must be stored into a single folder and corrected for the instrument function. The files must have populated headers, although the code can work using just the following header fields:
 
               a. The P-wave picking in the reference time of the waveform.
               b. The coordinates of the event.
@@ -68,11 +70,11 @@ To understand what MuRAT3D does:
 
 1. **Start from the Murat_input..mlx files**
 
-The input files are self-explanatory and provide detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model use *MuRAT_InputMSH.mlx* otherwise start from *MuRAT_InputRomania.mlx*.
+The input files are self-explanatory and provide detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model use *MuRAT_InputMSH.mlx* otherwise start from either *MuRAT_InputRomania.mlx* or *MuRAT_InputRomania.mlx*, the examples for 2- and 3-component data.
 
 2. **Read the html**
 
-The package has a html folder where each file explains what the code does: read ethem to understand the approximations used to process data, forward model kernels, and invert observations. Particularly important are:
+The package has a html folder where each file explains one of the primary functions of MuRAT: read them to understand the approximations used to process data, forward model kernels, and invert observations. Particularly important are:
 
 * MuRAT3.html: is the *make* code and can be run in sections. Here you find the names of the primary functions.
 * Murat_plot.htlm: the plot function shows at which lines of the code figures are produced, providing additional information on the output.
@@ -83,51 +85,48 @@ All the output files (.txt), figures and .vtk files (for visualisation in Paravi
 
 Inside the *TXT* subfolder, the first three columns of each output file correspond to WE, SN, and depth. The fourth column is the mapped parameter. In ascii format, they contain a minimum of five columns (for *Peak Delay*) that can be imported to show the locations of the anomalies in a simple (x,y,z) reference system. The fifth columns shows blocks hit by at least one ray.
 
-*Qc.txt* and *Q3D.txt* are solved with an inversion and thus have:
+*peakdelay_Frequency*, *Qc_Frequency.txt* and *Q_Frequency.txt* are the 3D models of the parameters at different frequencies. The last two are solved with an inversion and thus have:
 
       A. a sixth and seventh columns that corresponds to the input and output of the checkerboard test;
-      B. eight and nineth columns that corresponds to the input and output of the spike test;
-      C. a 10th column for the model resolution matrix.
+      B. eight and nineth columns that corresponds to the input and output of the spike test.
 
-All the .vtk files are stored into the *VTK* subfolder. A Matlab structure ('Murat.mat') containing all inputs and data is stored in the working directory.
+All the .vtk files with the same names are stored into the *VTK* subfolder. A Matlab structure ('Murat.mat') containing all inputs and data is stored in the working directory.
 
 4. **Understand the output figure files**
 
-All the figures (in the **Figures Format** defined by the user) are stored in subdirectories in the **Label** folder, created in the working directory. 
+All the figures (in the *Figures Format* defined by the user) are stored in subdirectories in the **Label** folder, created in the working directory.
 
-*Rays.Figures format*
-
-A figure to show how rays develop in 3D for the Peak Delay and Q measurements. It plots them on three slices (WE, SN, Z). The fourth panel shows the location of the area on the Earth.
 
 ------------
-*Kernel-Qc.Figures format* 
-
-Two panels showing the sensitivity kernels in the entire 3D space (left) and the normalised kernels in the chosen inversion grid (right). This reduction implies several hypotheses: among these the most important is that most of the energy is still comprised in the grid (the difference is general < 1% if all source and stations are in the inversion grid.
+**Rays_Checks directory**
 
 ------------
-*Qc_Peak_Delay.Figures format*
+*Rays_...Figures format*
 
-A figure to evaluate the appropriate peak-delay and coda inputs. The upper panel should show a constant inverse Qc with travel time. The lower panel should show a linearly-increasing peak delay with travel time.
-
-------------
-*Lc_Qc.Figures format and Lc_CN.Figures format*
-
-L-curves corresponding to the coda-attenuation and total-attenuation inversion. After they appear, a prompt asks which damping parameter the user wants to pick. 
+These figures show how rays develop in 3D for the Peak Delay and Q measurements. It plots them on three slices (WE, SN, Z). The fourth panel shows the location of the area on the Earth.
 
 ------------
-*Picard_Qc.Figures format and Picard_CN.Figures format*
+*Kernel....Figures format*
 
-These plots show the result of the Picard criterium, necessary to evaluate how many of the inversion parameters are correctively solved in the coda-attenuation and total-attenuation inversions, respectively. The two figures do not appear during computation.
+Each figure has two panels showing the sensitivity kernels in the entire 3D space (left) and the normalised kernels in the chosen inversion grid (right). This reduction implies several hypotheses: among these the most important is that most of the energy is still comprised in the grid (the difference is general < 1% if all source and stations are in the inversion grid.
+
+------------
+*Qc_Analysis_Frequency.Figures format*, *PD_Analysis_Frequency.Figures format*, and *CN_Analysis_Frequency.Figures format*
+
+Three figures to evaluate the appropriate peak-delay and coda inputs. TRead the documentation for further clarifications.
+
+------------
+*L_curve...Figures format*
+
+L-curves and cost functions (depending on inversion method) for the Qc and Q inversions necessary to set the damping parameters. The user can ask for a prompt or set the damping parameters from start.
+
+------------
+**Results directory**
 
 ------------
 *Peak-delay-3D.fig*, *Qc-3D.fig* and *Q-3D.fig*
 
 These plots show the result of the peak-delay, Qc and Q 3D tomography in the grid's reference system. All in Matlab .fig format, use the .vtk and Paraview for publication-quality figures.
-
-------------
-*Qc-checkerboard.fig*, *Qc-spike.fig*
-
-These plots show input and output of the checkerboard and spike tests for the Qc and Q mapping in the grid's reference system.
 
 ------------
 *Parameter_space_variations.Figures format*
@@ -140,9 +139,27 @@ The plot shows the separation of the scattering and absorption parameters in the
 The parameter space separation as it is apparent in the 3D space. Each block is characterized by the color corresponding to its scattering and absorption characteristics
 
 ------------
-*V_model.fig*
+*Velocity_model.fig*
 
-The 3D velocity model is also available as 3D figures in Matlab format. They can be loaded in Matlab and will show the vertical and horizontal slices defined in **Figures Sections**.
+If available, the 3D velocity model is also shown as a 3D figure in Matlab format. They can be loaded in Matlab and will show the vertical and horizontal slices defined in *Figures Sections*.
+
+------------
+*Velocity_model.fig*
+
+The 3D velocity model is also available as 3D figures in Matlab format. They can be loaded in Matlab and will show the vertical and horizontal slices defined in *Figures Sections*.
+
+------------
+*Qc_vs_frequency*
+Relationship between Qc and frequency.
+
+------------
+**Resolution directory**
+------------
+
+*Qc-checkerboard.fig*, *Qc-spike.fig*
+
+These plots show input and output of the checkerboard and spike tests for the Qc and Q mapping in the grid's reference system.
+
 
 *Citing MuRAT*
 ------------
