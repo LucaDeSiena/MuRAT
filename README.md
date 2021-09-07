@@ -1,4 +1,4 @@
-![MuRAT is a code for attenuation, scattering and absorption tomography.](https://github.com/LucaDeSiena/MuRAT/blob/Update_2021/MuRAT.jpg)
+![MuRAT is a code for attenuation, scattering and absorption tomography.](https://github.com/LucaDeSiena/MuRAT/blob/master/MuRAT.jpg)
 
 MuRAT - Multi-Resolution seismic Attenuation Tomography
 =======
