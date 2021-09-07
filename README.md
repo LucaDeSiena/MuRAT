@@ -154,11 +154,13 @@ Relationship between Qc and frequency.
 
 ------------
 **Resolution directory**
-------------
 
+------------
 *Qc-checkerboard.fig*, *Qc-spike.fig*
 
 These plots show input and output of the checkerboard and spike tests for the Qc and Q mapping in the grid's reference system.
+
+------------
 
 
 *Citing MuRAT*
@@ -167,26 +169,26 @@ These plots show input and output of the checkerboard and spike tests for the Qc
 If you use MuRAT for your research and publications, please consider mentioning the GitHub internet site and citing the following papers, depending on the techniques you are going to use
 
 
-*Q (Total attenuation)*:
+**Q (Total attenuation)**:
 
-1. De Siena, L., C. Thomas, and R. Aster. "Multi-scale reasonable attenuation tomography analysis (MuRAT): An imaging algorithm designed for volcanic regions." Journal of Volcanology and Geothermal Research 277 (2014): 22-35. - **Older release that discusses the code for coda-normalisation, also used in the early works of Prudencio et al. 2015,a,b, GJI**
+1. De Siena, L., C. Thomas, and R. Aster. "Multi-scale reasonable attenuation tomography analysis (MuRAT): An imaging algorithm designed for volcanic regions." Journal of Volcanology and Geothermal Research 277 (2014): 22-35. - *Older release that discusses the code for coda-normalisation, also used in the early works of Prudencio et al. 2015,a,b, GJI*
 
-2. De Siena, L., G. Chiodini, G. Vilardo, E. Del Pezzo, M. Castellano, S. Colombelli, N. Tisato, and G. Ventura, 2017. Source and dynamics of a volcanic caldera unrest: Campi Flegrei, 1983–84. Scientific reports: Nature Journals 7, 8099. - **Recent implementation of the Coda Normalization method with correction for coda attenuation variations**
+2. De Siena, L., G. Chiodini, G. Vilardo, E. Del Pezzo, M. Castellano, S. Colombelli, N. Tisato, and G. Ventura, 2017. Source and dynamics of a volcanic caldera unrest: Campi Flegrei, 1983–84. Scientific reports: Nature Journals 7, 8099. - *Recent implementation of the Coda Normalization method with correction for coda attenuation variations*
 
-3. Sketsiou P., L. De Siena, S. Gabrielli, F. Napolitano, 2021. 3-D attenuation image of fluid storage and tectonic interactions across the Pollino fault network. Geophysical Journal International, 226(1), 536-547. - **Most recent application of MuRAT**
+3. Sketsiou P., L. De Siena, S. Gabrielli, F. Napolitano, 2021. 3-D attenuation image of fluid storage and tectonic interactions across the Pollino fault network. Geophysical Journal International, 226(1), 536-547. - *Most recent application of Q imaging with MuRAT*
 
-*Qc and Peak Delay (Absorption and scattering)*:
+**Qc and Peak Delay (Absorption and scattering)**:
 
 1. De Siena L., Calvet, M., Watson, K.J., Jonkers, A.R.T. and Thomas, C., 2016. Seismic
-scattering and absorption mapping of debris flows, feeding paths, and tectonic units at Mount St. Helens volcano. Earth and Planetary Science Letters, 442, pp.21-31. - **Implementation of the older peak delay and Qc technique, both with regionalisation**
+scattering and absorption mapping of debris flows, feeding paths, and tectonic units at Mount St. Helens volcano. Earth and Planetary Science Letters, 442, pp.21-31. - *Implementation of the older peak delay and Qc technique, both with regionalisation*
 
 2. De Siena L., A. Amoruso, E. Del Pezzo, Z. Wakeford, M. Castellano, L. Crescentini, 2017.
 Space-weighted seismic attenuation mapping of the aseismic source of Campi Flegrei 1983–84
-unrest. Geophysical Research Letters, 44.4 pp. 1740-1748. - **First implementation with kernels for Qc**
+unrest. Geophysical Research Letters, 44.4 pp. 1740-1748. - *First implementation with kernels for Qc*
 
-3. Del Pezzo, E., De La Torre, A., Bianco, F., Ibanez, J., Gabrielli, S., and De Siena, L. (2018). Numerically Calculated 3D Space-Weighting Functions to Image Crustal Volcanic Structures Using Diffuse Coda Waves. - **Numerical implementation of kernel functions**
+3. Del Pezzo, E., De La Torre, A., Bianco, F., Ibanez, J., Gabrielli, S., and De Siena, L. (2018). Numerically Calculated 3D Space-Weighting Functions to Image Crustal Volcanic Structures Using Diffuse Coda Waves. - *Numerical implementation of kernel functions*
 
-4. Sketsiou P., F. Napolitano, A. Zenonos, L. De Siena, (2020). New insights into seismic absorption imaging. Physics of the Earth and Planetary Interiors, 298, 106337. - **Comprehensive review of the method and future outlooks**
+4. Sketsiou P., F. Napolitano, A. Zenonos, L. De Siena, (2020). New insights into seismic absorption imaging. Physics of the Earth and Planetary Interiors, 298, 106337. - *Comprehensive review of the method and future outlooks*
 
 *Disclaimer*
 ------------
