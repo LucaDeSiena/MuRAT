@@ -1,150 +1,132 @@
-![Campi Flegrei direct-wave attenuation model.](https://github.com/LucaDeSiena/MuRAT/blob/Murat_ID/MuRAT_CF.png "A 3D attenuation model obtained with the coda-normalization method. The model is plotted using the Voxler software.")
+![MuRAT is a code for attenuation, scattering and absorption tomography.](https://github.com/LucaDeSiena/MuRAT/blob/Update_2021/MuRAT.jpg)
 
-MuRAT - Multi-Resolution Seismic Attenuation Tomography
+MuRAT - Multi-Resolution seismic Attenuation Tomography
 =======
 
-Getting Started
--------
+MuRAT is a Matlab Package for seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves at multiple frequencies.
 
-MuRAT is a Matlab Package for Seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves. 
+MuRAT measures seismic attenuation, scattering, and absorption from passive and active data, and models 3D variations of these parameters in space.
 
-
-*Features*
---------
-
-* MuRAT is a complete software package for measuring seismic attenuation, scattering, and absorption from passive and active data, and model 3D variations of these parameters in space.
-
-* MuRAT1.0 was first developed by Luca De Siena (Johannes Gutenberg University, Mainz, Germany) during his PhD at the INGV-Osservatorio Vesuviano, Italy, and published in 2014 while he was research assistant at the Westfälisches Wilhelms Universität, Münster. Murat1.0 allowed 3D total attenuation imaging with the coda-normalization method (*Del Pezzo et al. 2006, PEPI; De Siena et al. 2008 PEPI; De Siena et al. 2009, JGR; De Siena et al. 2014a, JVGR; De Siena et al. 2014a, JVGR; De Siena et al. 2014b, JGR; Prudencio et al. 2015a, Surv. in Geoph.; Prudencio et al. 2015b, Surv. in Geoph.*).
-
-* MuRAT2.0 is the result of the activity of the Volcano Earth Imaging group, led by De Siena during his stint as permanent Lecturer at the University of Aberdeen, UK and now as Associate Professor in Geophysics at JGU Mainz. Murat2.0 adds to Murat1.0 the choice to produce 2D seismic scattering (peak delay) and absorption (Qc at late lapse time - kernel-based or not. It is ideal for small datasets and in case no previous velocity information is available (*Calvet et al. 2013, Tectonophysics; De Siena et al. 2016; Borleanu et al. 2017; De Siena et al. 2017a, GRL; De Siena et al. 2017b, Sci. Rep.; Akande et al. 2019; Napolitano et al. 2020, Geoscience Frontiers; Sketsiou et al. 2020, PEPI*).
-
-* The group of active users (providing questions, feedback, snippets of code) is the Volcano Earth Imaging group - www.lucadesiena.com.
+The group of active users (providing questions, feedback, snippets of code) is the [Volcano Earth Imaging group](https://www.lucadesiena.com).
 
 *History*
 -------
 
-* 2006-2010: MuRAT (at the time named "Multi-scale reasonable attenuation tomography analysis") is built using Matlab, c++, csh and Fortran codes mostly developed at INGV-Osservatorio.
+* *2006-2010*: MuRAT is built first by Luca De Siena during his PhD at the INGV-Osservatorio Vesuviano (Italy) using Matlab, c++, csh and Fortran codes.
 
-* 2010-2013: MuRAT1.0 is developed as a 3D direct-wave attenuation imaging Matlab-only code with the contribution of Christine Thomas (WWU Münster) and Richard Aster (Colorado State University).
+* *2010-2013*: MuRAT1.0 was developed and published in 2014 while De Siena was research assistant at the Westfälisches Wilhelms Universität, Münster (Germany). Murat1.0 allowed 3D total attenuation imaging with the coda-normalization method. Important contributions were given by Christine Thomas (WWU Münster) and Richard Aster (Colorado State University).
 
-* 2014: MuRAT1.0 is published in De Siena et al. 2014, JVGR, with two sample datasets (Mount St. Helens and Vesuvius) [JVGR article](https://www.sciencedirect.com/science/article/abs/pii/S0377027314000961)
+* *2014*: MuRAT1.0 is published in [De Siena et al. 2014, JVGR](https://www.sciencedirect.com/science/article/abs/pii/S0377027314000961) with two sample datasets (Mount St. Helens and Vesuvius).
 
-* 2018: MuRAT2.0 is released including 2D scattering/absorption mapping and kernel-based inversion and re-branded Multi-Resolution Seismic Attenuation Tomography. [GitHub Repository] (https://github.com/LucaDeSiena/MuRAT)
+* *2018*: [MuRAT2D](https://github.com/LucaDeSiena/MuRAT2D) is the result of the activity of the [Volcano Earth Imaging group](https://www.lucadesiena.com), led by De Siena during his stint as Lecturer at the University of Aberdeen (UK). It images 2D seismic scattering (peak delay) and absorption (Qc at late lapse time - kernel-based). It is ideal for small datasets and in case no previous velocity information is available.
 
-* 2019: MuRAT2.1 is released, fixing most of the bugs and adding the Pollino dataset.
-
-* January 2021: MuRAt3.0 is released as a parallelized code for full 3D attenuation, scattering and absorption imaging using peak delays, coda attenuation and coda-normalized energies.
+* *2021*: [MuRAT3D](https://github.com/LucaDeSiena/MuRAT) is released as a multi-frequency parallelized code for full 3D attenuation, scattering and absorption imaging using peak delays, coda attenuation and coda-normalized energies.
 
 *Documentation*
 -------------
+The full documentation for MuRAT3.0 can be found in the Documentation PDF inside the folder. Additional html files associated with the software are present in the corresponding folder. This README file and the linked internet sites are to be used as a reference.
 
-The full documentation for MuRAT3.0 can be found in html files associated with the software. This README file and the linked internet sites are to be used as a reference. 
-
-*Installation and running*
+*System*
 ------------
-
-SYSTEM: The program works on Mac, Linux and Windows systems equipped with Matlab R2019a.
+The program works on Mac, Linux and Windows systems equipped with Matlab R2019a.
 
 Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing and Mapping. The Parallel Computing Toolbox is recommended for speed.
 
-Two sample datasets (Mount St. Helens and Romania) are included and allow the user to obtain sample models. The  datasets work with the two input .mlx files that are provided and show examples of what the user can obtain with the code. 
+Custom toolboxes not included in standard Matlab installations are also provided with the package. These are:
+
+1. Routines to read SAC files created by Zhigang Peng and available from [his SAC tutorial page](http://geophysics.eas.gatech.edu/classes/SAC/).
+2. The [Regularization Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/52-regtools?s_tid=prof_contriblnk) created by Per Christian Hansen and available from Matlab File Exchange.
+3. The [IRTools](https://github.com/jnagy1/IRtools/tree/ebd70d4036c3cd8c82fc1e17033351491fddf11f), linked to MuRAT as a submodule.
+4. Functions from the [Geometry and Image-Based Bioengineering add-On for MATLAB](https://github.com/gibbonCode/GIBBON).
+
+Three sample datasets (Mount St. Helens, Romania, and Toba) are included and allow the user to obtain sample models. The  datasets work with the three corresponding *input.mlx* files that show examples of what the user can obtain with the code.
+
+*Instructions in a nutshell*
+------------
 
 The current version works following these steps:
 
-1. Download the package at https://github.com/LucaDeSiena/MuRAT.
+1. Download or clone the package at https://github.com/LucaDeSiena/MuRAT.
 
-2. Open one of the two input .mlx files that provide a step by step explanation of all inputs (Murat_input_MSH.mlx or Murat_input_Romania.mlx) and create your own. The API documentation is created as html files from the .mlx of the primary functions used by the code.
+2. Work in the downloaded folder after moving it to an appropriate location on your system.
 
-3. MuRAT works with SAC files (https://ds.iris.edu/files/sac-manual/) that must be stored all into a single folder and be possibly corrected for the instrument function. The files must have populated headers, although the code can work using only the following header fields:
+3. Check that the IRTools have been downloaded in the corresponding folder in the working directory. Otherwise download them from https://github.com/jnagy1/IRtools/tree/ebd70d4036c3cd8c82fc1e17033351491fddf11f.
 
-              a. The P-wave picking in the reference system of the waveform.
+4. Open one of the three input .mlx files, providing a step-by-step explanation of all inputs (*Murat_inputMSH.mlx*, *Murat_inputRomania.mlx*, or *Murat_inputToba.mlx*) and create your own.
+
+5. MuRAT works with [SAC files](https://ds.iris.edu/files/sac-manual/) that must be stored into a single folder and corrected for the instrument function. The files must have populated headers, although the code can work using just the following header fields:
+
+              a. The P-wave picking in the reference time of the waveform.
               b. The coordinates of the event.
               c. The coordinates of the station.
               d. The origin time of the event (optional).
 
-4. Run MuRAT3 and select the name of the input file desired.
+5. Run MuRAT3 and select the name of the input file desired.
 
-*Instructions*
-------------
+*What the code does*
+--------
 
-To work with MuRAT, follow these steps:
+To understand what MuRAT3D does:
 
-1. **Start from the Murat_input.. files**
+1. **Start from the Murat_input..mlx files**
 
-The input files are self-explicative .mlx files providing detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model use the MSH file otherwise pick MuRAT_Romania.
-
-------------
+The input files are self-explanatory and provide detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model use *MuRAT_InputMSH.mlx* otherwise start from either *MuRAT_InputRomania.mlx* or *MuRAT_InputRomania.mlx*, the examples for 2- and 3-component data.
 
 2. **Read the html**
 
-The package has a html folder that explains what the code does: read each file to understand the approximations used to process data, forward model kernels, and invert observations. Follow this workflow:
+The package has a html folder where each file explains one of the primary functions of MuRAT: read them to understand the approximations used to process data, forward model kernels, and invert observations. Particularly important are:
 
-* Murat3.html: explains how to run the code in general. Here you find the names of the primary functions.
-* MuRAT_MSH.html: You want to start with this input  file to work at the local scale. It contains information on how to use the code with the standard settings and includes examples on how to add features (e.g., use three instead of one-component seismograms). Please beware of the import option: in this file, we include a deprecated import solution from SAC header and external files. For a better import solution use MSH_Romania.htlm.
-* MSH_Romania.html: the best input if you want a model at the regional scale and containing the correct import option only from SAC files.
+* MuRAT3.html: is the *make* code and can be run in sections. Here you find the names of the primary functions.
 * Murat_plot.htlm: the plot function shows at which lines of the code figures are produced, providing additional information on the output.
 
-If you want to obtain model at a larger regional scale you can then run MSH_Romania.mlx.
+3. **Understand the output text files**
 
-------------
-
-
-3. **The output text files**
-
-All the output files (.txt), figures and .vtk files (for visualisation in Paraview) are stored in sub-directories in the **Label** folder, created in the **Working Directory**. Use the html Murat_plot html file to have information about what each plot means and how it is created. In the following, a list of the output files and what they contain is provided.
+All the output files (.txt), figures and .vtk files (for visualisation in Paraview) are stored in sub-directories in the **Label** folder, created in the working directory. Use the html Murat_plot html file to have information about what each plot means and how it is created. In the following, a list of the output files and what they contain is provided.
 
 Inside the *TXT* subfolder, the first three columns of each output file correspond to WE, SN, and depth. The fourth column is the mapped parameter. In ascii format, they contain a minimum of five columns (for *Peak Delay*) that can be imported to show the locations of the anomalies in a simple (x,y,z) reference system. The fifth columns shows blocks hit by at least one ray.
 
-*Qc.txt* and *Q3D.txt* are solved with an inversion and thus have:
+*peakdelay_Frequency*, *Qc_Frequency.txt* and *Q_Frequency.txt* are the 3D models of the parameters at different frequencies. The last two are solved with an inversion and thus have:
 
       A. a sixth and seventh columns that corresponds to the input and output of the checkerboard test;
-      B. eight and nineth columns that corresponds to the input and output of the spike test;
-      C. a 10th column for the model resolution matrix.
+      B. eight and nineth columns that corresponds to the input and output of the spike test.
 
-All the .vtk files are stored into the VTK subfolder.
+All the .vtk files with the same names are stored into the *VTK* subfolder. A Matlab structure ('Murat.mat') containing all inputs and data is stored in the working directory.
 
-4. **The output figure files**
+4. **Understand the output figure files**
 
-All the figures (in the **Figures Format** defined by the user) are stored in subdirectories in the **Label** folder, created in the **Working Directory**. 
+All the figures (in the *Figures Format* defined by the user) are stored in subdirectories in the **Label** folder, created in the working directory.
 
-*Rays.Figures format*
-
-A figure to show how rays develop in 3D for the Peak Delay and Q measurements. It plots them on three slices (WE, SN, Z). The fourth panel shows the location of the area on the Earth.
 
 ------------
-*Kernel-Qc.Figures format* 
-
-Two panels showing the sensitivity kernels in the entire 3D space (left) and the normalised kernels in the chosen inversion grid (right). This reduction implies several hypotheses: among these the most important is that most of the energy is still comprised in the grid (the difference is general < 1% if all source and stations are in the inversion grid.
+**Rays_Checks directory**
 
 ------------
-*Qc_Peak_Delay.Figures format*
+*Rays_...Figures format*
 
-A figure to evaluate the appropriate peak-delay and coda inputs. The upper panel should show a constant inverse Qc with travel time. The lower panel should show a linearly-increasing peak delay with travel time.
-
-------------
-*Lc_Qc.Figures format and Lc_CN.Figures format*
-
-L-curves corresponding to the coda-attenuation and total-attenuation inversion. After they appear, a prompt asks which damping parameter the user wants to pick. 
+These figures show how rays develop in 3D for the Peak Delay and Q measurements. It plots them on three slices (WE, SN, Z). The fourth panel shows the location of the area on the Earth.
 
 ------------
-*Picard_Qc.Figures format and Picard_CN.Figures format*
+*Kernel....Figures format*
 
-These plots show the result of the Picard criterium, necessary to evaluate how many of the inversion parameters are correctively solved in the coda-attenuation and total-attenuation inversions, respectively. The two figures do not appear during computation.
+Each figure has two panels showing the sensitivity kernels in the entire 3D space (left) and the normalised kernels in the chosen inversion grid (right). This reduction implies several hypotheses: among these the most important is that most of the energy is still comprised in the grid (the difference is general < 1% if all source and stations are in the inversion grid.
 
 ------------
-*Peak_delay-3D.fig*, *Qc-3D.fig* and *Q-3D.fig*
+*Qc_Analysis_Frequency.Figures format*, *PD_Analysis_Frequency.Figures format*, and *CN_Analysis_Frequency.Figures format*
+
+Three figures to evaluate the appropriate peak-delay and coda inputs. TRead the documentation for further clarifications.
+
+------------
+*L_curve...Figures format*
+
+L-curves and cost functions (depending on inversion method) for the Qc and Q inversions necessary to set the damping parameters. The user can ask for a prompt or set the damping parameters from start.
+
+------------
+**Results directory**
+
+------------
+*Peak-delay-3D.fig*, *Qc-3D.fig* and *Q-3D.fig*
 
 These plots show the result of the peak-delay, Qc and Q 3D tomography in the grid's reference system. All in Matlab .fig format, use the .vtk and Paraview for publication-quality figures.
-
-------------
-*Qc_checkerboard_input.fig*, *Qc_checkerboard_output.fig*, *Q_checkerboard_input.fig*, and *Q_checkerboard_output.fig*
-
-These plots show the result of the checkerboard test for the Qc and Q mapping in the grid's reference system.
-
-------------
-*Qc_spike_input.fig*, *Qc_spike_output.fig*, *Q_spike_input.fig*, and *Q_spike_output.fig*
-
-These plots show the result of the spike test for the Qc and Q mapping in the grid's reference system.
 
 ------------
 *Parameter_space_variations.Figures format*
@@ -152,9 +134,32 @@ These plots show the result of the spike test for the Qc and Q mapping in the gr
 The plot shows the separation of the scattering and absorption parameters in their parameter space. Grey dots correspond to parameters too near to the average to be interpreted as scattering or absorption variations - the threshold is pre-defined at 5% of the maximum variation of each parameter. Red = High scattering and absorption; Cyan = High scattering and low absorption; Orange = Low scattering and high absorption; Green = Low scattering and absorption.
 
 ------------
-*V_model.fig*
+*Parameter-Map.fig*
 
-The 3D velocity model is also available as 3D figures in Matlab format. They can be loaded in Matlab and will show the vertical and horizontal slices defined in **Figures Sections**.
+The parameter space separation as it is apparent in the 3D space. Each block is characterized by the color corresponding to its scattering and absorption characteristics
+
+------------
+*Velocity_model.fig*
+
+If available, the 3D velocity model is also shown as a 3D figure in Matlab format. They can be loaded in Matlab and will show the vertical and horizontal slices defined in *Figures Sections*.
+
+------------
+*Velocity_model.fig*
+
+The 3D velocity model is also available as 3D figures in Matlab format. They can be loaded in Matlab and will show the vertical and horizontal slices defined in *Figures Sections*.
+
+------------
+*Qc_vs_frequency*
+Relationship between Qc and frequency.
+
+------------
+**Resolution directory**
+------------
+
+*Qc-checkerboard.fig*, *Qc-spike.fig*
+
+These plots show input and output of the checkerboard and spike tests for the Qc and Q mapping in the grid's reference system.
+
 
 *Citing MuRAT*
 ------------
@@ -164,25 +169,24 @@ If you use MuRAT for your research and publications, please consider mentioning 
 
 *Q (Total attenuation)*:
 
-1) De Siena, L., C. Thomas, and R. Aster. "Multi-scale reasonable attenuation tomography analysis (MuRAT): An imaging algorithm designed for volcanic regions." Journal of Volcanology and Geothermal Research 277 (2014): 22-35. - **Older release that discusses the code for coda-normalisation, also used in the early works of Prudencio et al. 2015a,b**
+1. De Siena, L., C. Thomas, and R. Aster. "Multi-scale reasonable attenuation tomography analysis (MuRAT): An imaging algorithm designed for volcanic regions." Journal of Volcanology and Geothermal Research 277 (2014): 22-35. - **Older release that discusses the code for coda-normalisation, also used in the early works of Prudencio et al. 2015,a,b, GJI**
 
-2) De Siena, L., Giovanni Chiodini, Giuseppe Vilardo, Edoardo Del Pezzo, Mario Castellano,
-Simona Colombelli, Nicola Tisato, and Guido Ventura, 2017. Source and dynamics of a volcanic caldera unrest: Campi Flegrei, 1983–84. Scientific reports: Nature Journals 7, 8099. - **More recent implementation of the Coda Normalization method with correction for coda attenuation variations**
+2. De Siena, L., G. Chiodini, G. Vilardo, E. Del Pezzo, M. Castellano, S. Colombelli, N. Tisato, and G. Ventura, 2017. Source and dynamics of a volcanic caldera unrest: Campi Flegrei, 1983–84. Scientific reports: Nature Journals 7, 8099. - **Recent implementation of the Coda Normalization method with correction for coda attenuation variations**
 
+3. Sketsiou P., L. De Siena, S. Gabrielli, F. Napolitano, 2021. 3-D attenuation image of fluid storage and tectonic interactions across the Pollino fault network. Geophysical Journal International, 226(1), 536-547. - **Most recent application of MuRAT**
 
 *Qc and Peak Delay (Absorption and scattering)*:
 
-3) De Siena L., Calvet, M., Watson, K.J., Jonkers, A.R.T. and Thomas, C., 2016. Seismic
+1. De Siena L., Calvet, M., Watson, K.J., Jonkers, A.R.T. and Thomas, C., 2016. Seismic
 scattering and absorption mapping of debris flows, feeding paths, and tectonic units at Mount St. Helens volcano. Earth and Planetary Science Letters, 442, pp.21-31. - **Implementation of the older peak delay and Qc technique, both with regionalisation**
 
-4) De Siena L., A. Amoruso, E. Del Pezzo, Z. Wakeford, M. Castellano, L. Crescentini, 2017.
+2. De Siena L., A. Amoruso, E. Del Pezzo, Z. Wakeford, M. Castellano, L. Crescentini, 2017.
 Space-weighted seismic attenuation mapping of the aseismic source of Campi Flegrei 1983–84
 unrest. Geophysical Research Letters, 44.4 pp. 1740-1748. - **First implementation with kernels for Qc**
 
-5) Del Pezzo, E., De La Torre, A., Bianco, F., Ibanez, J., Gabrielli, S., and De Siena, L. (2018). Numerically Calculated 3D Space-Weighting Functions to Image Crustal Volcanic Structures Using Diffuse Coda Waves. - **Numerical implementation of kernel functions**
+3. Del Pezzo, E., De La Torre, A., Bianco, F., Ibanez, J., Gabrielli, S., and De Siena, L. (2018). Numerically Calculated 3D Space-Weighting Functions to Image Crustal Volcanic Structures Using Diffuse Coda Waves. - **Numerical implementation of kernel functions**
 
-6) Sketsiou P., F. Napolitano, A. Zenonos, L. De Siena, (2020). New insights into seismic
-absorption imaging. Physics of the Earth and Planetary Interiors, 298, 106337. - **Comprehensive review of the method and future outlooks**
+4. Sketsiou P., F. Napolitano, A. Zenonos, L. De Siena, (2020). New insights into seismic absorption imaging. Physics of the Earth and Planetary Interiors, 298, 106337. - **Comprehensive review of the method and future outlooks**
 
 *Disclaimer*
 ------------
