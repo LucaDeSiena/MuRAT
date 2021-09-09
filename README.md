@@ -54,14 +54,16 @@ The current version works following these steps:
 
 4. Open one of the three input .mlx files, providing a step-by-step explanation of all inputs (*Murat_inputMSH.mlx*, *Murat_inputRomania.mlx*, or *Murat_inputToba.mlx*) and create your own.
 
-5. MuRAT works with [SAC files](https://ds.iris.edu/files/sac-manual/) that must be stored into a single folder and corrected for the instrument function. The files must have populated headers, although the code can work using just the following header fields:
+4. Test your SAC headers with the functions Murat\_test and Murat\_testAll.
+
+6. MuRAT works with [SAC files](https://ds.iris.edu/files/sac-manual/) that must be stored into a single folder and corrected for the instrument function. The files must have populated headers, although the code can work using just the following header fields:
 
               a. The P-wave picking in the reference time of the waveform.
               b. The coordinates of the event.
               c. The coordinates of the station.
               d. The origin time of the event (optional).
 
-5. Run MuRAT3 and select the name of the input file desired.
+7. Run MuRAT3 and select the name of the input file desired.
 
 *What the code does*
 --------
