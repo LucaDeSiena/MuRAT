@@ -1,7 +1,7 @@
 name: Generate Test Artifacts on GitHub-Hosted Runner
 on: [push]
 jobs:
-  my-job:
+  test_on_ubuntu:
     name: Run MATLAB Tests and Generate Artifacts
     runs-on: ubuntu-18.04
     steps:
@@ -21,7 +21,7 @@ jobs:
         uses: matlab-actions/run-command@v1
         with:
           command: addpath('Tests'),test
-  my-job:
+  test_on_mac:
     name: Run MATLAB Tests and Generate Artifacts
     runs-on: macos-10.15
     steps:
