@@ -1,4 +1,4 @@
-name: Generate Test Artifacts on GitHub-Hosted Runner
+name: test
 on: [push]
 jobs:
   test_on_ubuntu:
