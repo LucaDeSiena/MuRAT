@@ -6,6 +6,7 @@ threshold=0.5;
 e(1)=abs(calculated-reference)>threshold; % error1 occured
 e(2)=0; % error2 not occured
 e(3)=0; % error3 occured
+e(1)=
 
 fprintf('test result \n');
 disp(e)
