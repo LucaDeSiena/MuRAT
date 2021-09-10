@@ -1,5 +1,5 @@
 ![MuRAT is a code for attenuation, scattering and absorption tomography.](https://github.com/LucaDeSiena/MuRAT/blob/master/MuRAT.jpg)
-
+[![Runtests](https://github.com/deconvolution/JSWAP/actions/workflows/Runtests.yml/badge.svg?branch=with_test)](https://github.com/deconvolution/JSWAP/actions/workflows/Runtests.yml)
 MuRAT - Multi-Resolution seismic Attenuation Tomography
 =======
 
