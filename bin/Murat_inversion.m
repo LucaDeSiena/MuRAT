@@ -56,9 +56,9 @@ residualQc                          =   zeros(1,lMF(2));
 %%
 % Loops over all frequencies and parameter models
 for k = 1:lMF(2)
-    modv_pd(:,1:3,k)                =   modv;
-    modv_Qc(:,1:3,k)                =   modv;
-    modv_Q(:,1:3,k)                 =   modv;
+    modv_pd(:,1:3,k)                =   modv(:,1:3);
+    modv_Qc(:,1:3,k)                =   modv(:,1:3);
+    modv_Q(:,1:3,k)                 =   modv(:,1:3);
     cf_k                            =   cf(k);
     fcName                          =   num2str(cf_k);
     if find(fcName == '.')
