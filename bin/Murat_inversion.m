@@ -56,9 +56,9 @@ residualQc                          =   zeros(1,lMF(2));
 %%
 % Loops over all frequencies and parameter models
 for k = 1:lMF(2)
-    modv_pd(:,1:4,k)                =   modv;
-    modv_Qc(:,1:4,k)                =   modv;
-    modv_Q(:,1:4,k)                 =   modv;
+    modv_pd(:,1:3,k)                =   modv;
+    modv_Qc(:,1:3,k)                =   modv;
+    modv_Q(:,1:3,k)                 =   modv;
     cf_k                            =   cf(k);
     fcName                          =   num2str(cf_k);
     if find(fcName == '.')
@@ -73,7 +73,7 @@ for k = 1:lMF(2)
     lpdelta_k                       =   lpdelta(rtpd_k,k);
     
     mpd                             =   sum(Apd_k.*lpdelta_k,1)';
-    modv_pd(rcpd_k,5,k)             =   mpd;
+    modv_pd(rcpd_k,4,k)             =   mpd;
     
     %%
     % Qc inversion
@@ -95,7 +95,7 @@ for k = 1:lMF(2)
            Murat_tikhonovQc(outputLCurve,Gc,bQm,lCurveQc_k);
         
         residualQc(1,k)             =   residualQc_k;
-        modv_Qc(rcQc_k,5,k)         =   mtik0C;
+        modv_Qc(rcQc_k,4,k)         =   mtik0C;
         
     elseif isequal(inversionMethod,'Iterative')
         disp(['Qc L-curve and cost functions at ', num2str(cf_k), ' Hz.'])
@@ -105,7 +105,7 @@ for k = 1:lMF(2)
            Murat_minimise(outputLCurve,Gc,bQm,lCurveQc_k,FName);
                                     
         residualQc(1,k)             =   min(infoVectorQm.Rnrm);
-        modv_Qc(rcQc_k,5,k)         =   minimizeVectorQm;
+        modv_Qc(rcQc_k,4,k)         =   minimizeVectorQm;
         
     else
         error('Unknown inversion method.')
@@ -137,7 +137,7 @@ for k = 1:lMF(2)
            Murat_tikhonovQ(outputLCurve,A_k,d1,lCurveQ_k,1);
 
         residualQ(:,k)              =   residualQ_k;
-        modv_Q(rcQ_k,5,k)           =   mtik0;
+        modv_Q(rcQ_k,4,k)           =   mtik0;
         
     elseif isequal(inversionMethod,'Iterative')
         disp(['Q L-curve and cost functions at ', num2str(cf_k), ' Hz.'])
@@ -146,7 +146,7 @@ for k = 1:lMF(2)
            Murat_minimise(outputLCurve,A_k,d1,lCurveQ_k,FName);
                                     
         residualQ(1,k)              =   min(infoVectorQ.Rnrm);
-        modv_Q(rcQ_k,5,k)           =   minimizeVectorQ;
+        modv_Q(rcQ_k,4,k)           =   minimizeVectorQ;
         
     end
     

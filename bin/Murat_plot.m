@@ -202,9 +202,9 @@ for k = 1:lMF(2)
     modv_pd_k                       =   modv_pd(:,:,k);
     modv_Qc_k                       =   modv_Qc(:,:,k);
     modv_Q_k                        =   modv_Q(:,:,k);
-    [X,Y,Z1,mPD]                    =   Murat_fold(x,y,z,modv_pd_k(:,5));
-    [~,~,~,mQc]                     =   Murat_fold(x,y,z,modv_Qc_k(:,5));
-    [~,~,~,mQ]                      =   Murat_fold(x,y,z,modv_Q_k(:,5));
+    [X,Y,Z1,mPD]                    =   Murat_fold(x,y,z,modv_pd_k(:,4));
+    [~,~,~,mQc]                     =   Murat_fold(x,y,z,modv_Qc_k(:,4));
+    [~,~,~,mQ]                      =   Murat_fold(x,y,z,modv_Q_k(:,4));
     Z                               =   Z1/1000;
     evestaz_Qc                      =   evestaz(rtQck,:);
     %%
