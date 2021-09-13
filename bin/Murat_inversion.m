@@ -201,7 +201,7 @@ for k = 1:lMF(2)
     FName                           =   ['peakdelay_' fcName '_Hz.txt'];
     save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_pd_k','-ascii');
     
-    modv_Qc_k                       =   modv_pd(:,:,k);
+    modv_Qc_k                       =   modv_Qc(:,:,k);
     FName                           =   ['Qc_' fcName '_Hz.txt'];
     save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_Qc_k','-ascii');
     
