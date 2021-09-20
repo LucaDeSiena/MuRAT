@@ -1,9 +1,40 @@
 % ADDITIONAL input variables that are not set by the user.
 function Murat                  =   Murat_checks(Murat)
-% Creating folder to store results
 
-Label                           =   ['./',Murat.input.label];
+% INPUTS
+Label                           =   ['./' Murat.input.label];
+dataDirectory                   =   ['./' Murat.input.dataDirectory];
 
+PTime                           =   ['SAChdr.times.' Murat.input.PTime];
+
+
+if isempty(Murat.input.originTime)
+    originTime                  =   'SAChdr.times.o';
+else
+    originTime                  =...
+        ['SAChdr.times.' Murat.input.originTime];
+end
+
+if isempty(Murat.input.STime)
+    STime                  =   'SAChdr.times.t0';
+else
+    STime                  =...
+        ['SAChdr.times.' Murat.input.originTime];
+end
+
+Murat.input.originTime          =   originTime;
+Murat.input.PTime               =   PTime;
+Murat.input.STime               =   STime;
+
+origin                          =   Murat.input.origin;
+ending                          =   Murat.input.end;
+nLat                            =   Murat.input.gridLat;
+nLong                           =   Murat.input.gridLong;
+nzc                             =   Murat.input.gridZ;
+velocityModel                   =   ['velocity_models/',Murat.input.namev];
+
+
+% Creating folders to store results
 if exist(Label,'dir')==7    
     rmdir(Label,'s')
 end
@@ -15,17 +46,25 @@ mkdir([Label,'/Resolution'])
 mkdir([Label,'/VTK'])
 mkdir([Label,'/TXT'])
 
-% Get general paths/data options
-[Murat.input.listSac,~]         =	createsList(Murat.input.dataDirectory);
-%% VELOCITY MODELS: ORIGINAL, INVERSION, and PROPAGATION
-% Loading inputs to create the additional parameters
-origin                          =   Murat.input.origin;
-ending                          =   Murat.input.end;
-nLat                            =   Murat.input.gridLat;
-nLong                           =   Murat.input.gridLong;
-nzc                             =   Murat.input.gridZ;
-velocityModel                   =   ['velocity_models/',Murat.input.namev];
+if exist('./temp','dir')==7    
+    delete('./temp/*')
+else
+    mkdir('./temp')
+end
 
+% Checking data
+[Murat.input.listSac,~]         =...
+    createsList([dataDirectory '/*.sac']);
+[Murat.input.header,flag]       =...
+    Murat_testData(dataDirectory,originTime,PTime,STime);
+if isequal(flag,1)
+    warning('Missing origin times.')
+end
+
+if isequal(flag,2)
+    warning('Missing S-wave times.')
+end
+%% VELOCITY MODELS: ORIGINAL, INVERSION, and PROPAGATION
 % Save x,y,z in degrees switching as longitude comes second
 Murat.input.x                   =   linspace(origin(2),ending(2),nLong);
 Murat.input.y                   =   linspace(origin(1),ending(1),nLat);
