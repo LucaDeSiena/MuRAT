@@ -56,7 +56,7 @@ end
 [Murat.input.listSac,~]         =...
     createsList([dataDirectory '/*.sac']);
 [Murat.input.header,flag]       =...
-    Murat_testData(dataDirectory,originTime,PTime,STime);
+    Murat_testData(dataDirectory,originTime,PTime,STime,Label);
 if isequal(flag,1)
     warning('Missing origin times.')
 end
