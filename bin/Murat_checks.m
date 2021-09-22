@@ -19,7 +19,7 @@ if isempty(Murat.input.STime)
     STime                  =   'SAChdr.times.t0';
 else
     STime                  =...
-        ['SAChdr.times.' Murat.input.originTime];
+        ['SAChdr.times.' Murat.input.STime];
 end
 
 Murat.input.originTime          =   originTime;
