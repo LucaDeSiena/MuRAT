@@ -1,4 +1,4 @@
-function [inverseQc_i, uncertaintyQc_i]	=   Murat_Qc(cf,sped,sp_i,...
+function [inverseQc_i, uncertaintyQc_i]     =   Murat_Qc(cf,sped,sp_i,...
     cursorCodaStart_i,cursorCodaEnd_i,tCoda_i,srate_i,QcMeasurement)
 % function [inverseQc_i, uncertaintyQc_i]	=   Murat_Qc(cf,sped,sp_i,...
 %     cursorCodaStart_i,cursorCodaEnd_i,tCoda_i,srate_i,QcMeasurement)
@@ -18,22 +18,22 @@ function [inverseQc_i, uncertaintyQc_i]	=   Murat_Qc(cf,sped,sp_i,...
 %    inverseQc_i:       inverse coda attenuation factor
 %    uncertaintyQc_i:   uncertainty on inverse coda attenuation factor
 
-lcf                                     =   length(cf);
-inverseQc_i                             =   zeros(lcf,1);
-uncertaintyQc_i                         =   zeros(lcf,1);
+lcf                                         =   length(cf);
+inverseQc_i                                 =   zeros(lcf,1);
+uncertaintyQc_i                             =   zeros(lcf,1);
 
 for i = 1:lcf
     
-    envelopeC                           =...
+    envelopeC                               =...
         sp_i(cursorCodaStart_i:cursorCodaEnd_i,i);
-    lEnvelopeC                          =   length(envelopeC);
+    lEnvelopeC                              =   length(envelopeC);
     
-    cf_i                                =   cf(i);
+    cf_i                                    =   cf(i);
     
     if isempty(envelopeC)
         
-        inverseQc_i(i)                    =   0;
-        uncertaintyQc_i(i)                =   0;
+        inverseQc_i(i)                      =   0;
+        uncertaintyQc_i(i)                  =   0;
         
     else
         
@@ -77,25 +77,25 @@ for i = 1:lcf
     
 end
 
-uncertaintyQc_i(inverseQc_i==0)         =   0;
+uncertaintyQc_i(inverseQc_i==0)             =   0;
 
 end
 %%
 % Calculations in the linarized case.
-function [linearFit, uncertaintyFit]    =...
+function [linearFit, uncertaintyFit]        =...
     estimatesLinear(lapseT,envelopeC,lEnvelopeC,sped,cf_i)
 
 %Only evaluate central time series
-edgeC                                   =   floor(0.05*lEnvelopeC);
-lapseTime                               =   lapseT(edgeC:end-edgeC);
-spcm1                                   =   envelopeC(edgeC:end-edgeC);
+edgeC                                       =   floor(0.05*lEnvelopeC);
+lapseTime                                   =   lapseT(edgeC:end-edgeC);
+spcm1                                       =   envelopeC(edgeC:end-edgeC);
 
-weigthEnergy                            =   spcm1.*lapseTime.^sped;
-logWEnergy                              =   log(weigthEnergy)/2/pi/cf_i;
+weigthEnergy                                =   spcm1.*lapseTime.^sped;
+logWEnergy                                  =   log(weigthEnergy)/2/pi/cf_i;
 
-linearFit                               =...
+linearFit                                   =...
     polyfit(lapseTime,logWEnergy,1);
-uncertaintyFit                          =...
+uncertaintyFit                              =...
     corrcoef([lapseTime,logWEnergy]);
 
 end
@@ -104,32 +104,33 @@ end
 %%
 % Calculations in the non-linar (grid-search) case.
 
-function [nonLinearFit, uncertaintyFit] =...
+function [nonLinearFit, uncertaintyFit]     =...
     estimatesNonLinear(lapseT,envelopeC,QValues,sped,lWindow,cf_i,srate_i)
 
-lQValues                                =   length(QValues);
+lQValues                                    =   length(QValues);
 
-dObs                                    =   zeros(lWindow,1);
+dObs                                        =   zeros(lWindow,1);
 
 for k = 1:lWindow
-    ntm                                 =   (k-1)*srate_i + 1:k*srate_i;
-    dObs(k,1)                           =   mean(envelopeC(floor(ntm)));
+    ntm                                     =   (k-1)*srate_i + 1:k*srate_i;
+    dObs(k,1)                               =   mean(envelopeC(floor(ntm)));
 end
 
-dObserved                               =   dObs(1:end-1)/dObs(end);
+dObserved                                   =   dObs(1:end-1)/dObs(end);
 
-E                                       =   zeros(lQValues,1);
+E                                           =   zeros(lQValues,1);
 for n = 1:lQValues
-    dPre                                =...
+    dPre                                    =...
         lapseT.^(-sped).*exp(-2*pi*cf_i.*lapseT*QValues(n));
     
-    dPredicted                          =   dPre(1:end-1)/dPre(end);
-    E(n,1)                              =   sum(abs(dObserved-dPredicted));
+    dPredicted                              =   dPre(1:end-1)/dPre(end);
+    E(n,1)                                  =...
+        sum(abs(dObserved-dPredicted));
 end
 
-[Emin, indexEmin]                       =   min(E);
-nonLinearFit                            =   QValues(indexEmin);
-uncertaintyFit                          =   1/Emin;
+[Emin, indexEmin]                           =   min(E);
+nonLinearFit                                =   QValues(indexEmin);
+uncertaintyFit                              =   1/Emin;
 
 end
 

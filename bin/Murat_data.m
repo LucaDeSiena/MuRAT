@@ -92,11 +92,11 @@ for i = 1:lengthData
         Murat_originTime(pktime_i,originTime,v_i,locationM_i,SAChdr_i);
 
     % Calculates the window where to search for peak delay
-    cursorPeakDelay_i      =...
+    cursorPeakDelay_i                   =...
         Murat_peakDelayCheck(tempis,cursorPick_i,maxtpde,srate_i);
 
     % Calculates peak delay time
-    peakDelay_i            =...
+    peakDelay_i                         =...
         Murat_peakDelay(sp_i,cursorPick_i,srate_i,cursorPeakDelay_i);
     
     % Calculates rays for the right component    
