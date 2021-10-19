@@ -1,5 +1,5 @@
 function [muratHeader,flag] =...
-    Murat_testData(folderPath,originTime,PTime,STime,Label)
+    Murat_testData(folderPath,originTime,PTime,STime)
 % TEST all seismograms in a folder for the input parameters and
 % CREATES a file storing the parameters and flagging those missing
 %
@@ -104,8 +104,6 @@ end
 
 muratHeader                 =   table(Names,Origin,P,S,EvLat,EvLon,...
     EvDepth,StLat,StLon,StElev);
-
-writetable(muratHeader,[Label,'/Rays_Checks','/DataHeaders.xls']);
 
 end
 %%

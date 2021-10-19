@@ -40,10 +40,9 @@ else
 end
 
 % Checking data
-[Murat.input.listSac,~]         =...
-    createsList([dataDirectory '/*.sac']);
+[Murat.input.listSac,~]         =   createsList([dataDirectory '/*.sac']);
 [Murat.input.header,flag]       =...
-    Murat_testData(dataDirectory,originTime,PTime,STime,Label);
+    Murat_testData(dataDirectory,originTime,PTime,STime);
 
 if isequal(flag,1)
     warning('Missing origin times.')
@@ -176,7 +175,7 @@ elseif Murat.input.availableVelocity ==  1
     gridPropagation.z           =   sort(unique(modvp(:,3)),'descend');
     Murat.input.gridPropagation =   gridPropagation;
    
-%     Murat_test_vel_models(modv_m,modv_o,mV,X,Y,Z,pvel,Xq,Yq,Zq,origin)
+    Murat_test_vel_models(modv_m,modv_o,mV,X,Y,Z,pvel,Xq,Yq,Zq,origin)
 end
 
 Murat.input.pvel                =   pvel;
