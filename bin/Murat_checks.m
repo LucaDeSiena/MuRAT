@@ -1,24 +1,31 @@
 % ADDITIONAL input variables that are not set by the user.
 function Murat                  =   Murat_checks(Murat)
-% Creating folder to store results
 
-Label                           =   ['./',Murat.input.label];
+% INPUTS
+Label                           =   ['./' Murat.input.label];
+dataDirectory                   =   ['./' Murat.input.dataDirectory];
 
-if exist(Label,'dir')==7    
-    rmdir(Label,'s')
+PTime                           =   ['SAChdr.times.' Murat.input.PTime];
+
+
+if isempty(Murat.input.originTime)
+    originTime                  =   'SAChdr.times.o';
+else
+    originTime                  =...
+        ['SAChdr.times.' Murat.input.originTime];
 end
 
-mkdir(Label)
-mkdir([Label,'/Rays_Checks'])
-mkdir([Label,'/Results'])
-mkdir([Label,'/Resolution'])
-mkdir([Label,'/VTK'])
-mkdir([Label,'/TXT'])
+if isempty(Murat.input.STime)
+    STime                  =   'SAChdr.times.t0';
+else
+    STime                  =...
+        ['SAChdr.times.' Murat.input.STime];
+end
 
-% Get general paths/data options
-[Murat.input.listSac,~]         =	createsList(Murat.input.dataDirectory);
-%% VELOCITY MODELS: ORIGINAL, INVERSION, and PROPAGATION
-% Loading inputs to create the additional parameters
+Murat.input.originTime          =   originTime;
+Murat.input.PTime               =   PTime;
+Murat.input.STime               =   STime;
+
 origin                          =   Murat.input.origin;
 ending                          =   Murat.input.end;
 nLat                            =   Murat.input.gridLat;
@@ -26,6 +33,26 @@ nLong                           =   Murat.input.gridLong;
 nzc                             =   Murat.input.gridZ;
 velocityModel                   =   ['velocity_models/',Murat.input.namev];
 
+if exist('./temp','dir')==7    
+    delete('./temp/*')
+else
+    mkdir('./temp')
+end
+
+% Checking data
+[Murat.input.listSac,~]         =...
+    createsList([dataDirectory '/*.sac']);
+[Murat.input.header,flag]       =...
+    Murat_testData(dataDirectory,originTime,PTime,STime,Label);
+
+if isequal(flag,1)
+    warning('Missing origin times.')
+end
+
+if isequal(flag,2)
+    warning('Missing S-wave times.')
+end
+%% VELOCITY MODELS: ORIGINAL, INVERSION, and PROPAGATION
 % Save x,y,z in degrees switching as longitude comes second
 Murat.input.x                   =   linspace(origin(2),ending(2),nLong);
 Murat.input.y                   =   linspace(origin(1),ending(1),nLat);
@@ -38,18 +65,18 @@ dist_x                          =   deg2km(dist_xdeg)*1000;
 dist_y                          =   deg2km(dist_ydeg)*1000;
 
 % Coordinates of inversion points in meters
-xMeters                         =   linspace(0,dist_x,nLong);
-yMeters                         =   linspace(0,dist_y,nLat);
-zMeters                         =   linspace(origin(3),ending(3),nzc);
+xM                         =   linspace(0,dist_x,nLong);
+yM                         =   linspace(0,dist_y,nLat);
+zM                         =   linspace(origin(3),ending(3),nzc);
 
-Murat.input.gridStepX           =   xMeters(2)-xMeters(1);
-Murat.input.gridStepY           =   yMeters(2)-yMeters(1);
+Murat.input.gridStepX           =   xM(2)-xM(1);
+Murat.input.gridStepY           =   yM(2)-yM(1);
 
 if Murat.input.availableVelocity ==  0
     % The velocity model is a false 3D, it is used as
     % both inversion and propagation model
     modv                        =...
-        Murat_unfold(xMeters',yMeters',zMeters');
+        Murat_unfoldXYZ(xM',yM',zM');
     modv1D                      =   load(velocityModel);
     zIasp91                     =   -modv1D(:,1)*1000;
     
@@ -66,9 +93,9 @@ if Murat.input.availableVelocity ==  0
     end
     
     % Grid for ray tracing
-    gridPropagation.x           =   xMeters';
-    gridPropagation.y           =   yMeters';
-    gridPropagation.z           =   zMeters';
+    gridPropagation.x           =   xM';
+    gridPropagation.y           =   yM';
+    gridPropagation.z           =   zM';
     Murat.input.gridPropagation =   gridPropagation;
     
     % Nodes of the original velocity model
@@ -83,62 +110,73 @@ if Murat.input.availableVelocity ==  0
     Murat.input.modvPlot        =   [];
     
 elseif Murat.input.availableVelocity ==  1
-    % This works in [x,y,z][m]. If you have a 1D you need
-    % to prepare a 3D from it spanning the horizontal space.
+    % Original 3D velocity model from text file, in Lat/Log/Depth/V.
+    modv_m                      =   load(velocityModel);
     
-    % Original 3D velocity model from text file.
-    modv_o                      =   load(velocityModel);
-    
+    modv_m1                     =   modv_m;
+
+    modvDEG                     =...
+        [modv_m1(:,1)-origin(1) modv_m1(:,2)-origin(2)...
+        modv_m1(:,3:4)];
+
+    % Switch as [lat,long] is [y,x] - the velocity in Murat format
+    modv_o                      =   sortrows(...
+        [deg2km(modvDEG(:,2))*1000 deg2km(modvDEG(:,1))*1000 ...
+        modvDEG(:,3:4)],[1,2,-3]);
+
     % Nodes of the original velocity model
     xD                          =   unique(modv_o(:,1));
     yD                          =   unique(modv_o(:,2));
     zD                          =   sort(unique(modv_o(:,3)),'descend');
     
-    % Create its meshgrid
+    % Uses meshgrid - fold switches again for interpolation and plot
     [XD,YD,ZD,V]                =   Murat_fold(xD,yD,zD,modv_o(:,4));
     
     % Interpolated axes for inversion model
-    [X,Y,Z]                     =   meshgrid(yMeters,xMeters,zMeters);
+    [X,Y,Z]                     =   meshgrid(xM,yM,zM);
     
     % Interpolated 3D inversion model
-    mV                          =   interp3(XD,YD,ZD,V,X,Y,Z);
+    mV                          =   griddata(XD,YD,ZD,V,X,Y,Z);
     
-    %In case limits outside of the grid interpolate better
+    %In case limits outside of the grid: interpolate
     if find(isnan(mV))
         mV                      =   inpaintn(mV);
     end
     Murat.input.modvPlot        =   mV;
     
-    %Create the classical velocity model for inversion
-    Murat.input.modv            =...
-        Murat_unfold(xMeters',yMeters',zMeters',mV);
+    %Create the classical velocity model for inversion - again Murat format
+    Murat.input.modv            =   Murat_unfold(X,Y,Z,mV);
     
     %Interpolated model for ray-tracing - half grid step for original
-    resol2x                     =   abs(xD(2)-xD(1))/2;
-    resol2y                     =   abs(yD(2)-yD(1))/2;
-    resol2z                     =   abs(zD(2)-zD(1))/2;
+    resol2x                     =   abs(xM(2)-xM(1))/2;
+    resol2y                     =   abs(yM(2)-yM(1))/2;
+    resol2z                     =   abs(zM(2)-zM(1))/2;
     
     % Interpolated vectors
-    xp                          =   xD(1):resol2x:xD(end);
-    yp                          =   yD(1):resol2y:yD(end);
-    zp                          =   zD(1):-resol2z:zD(end);
-    
-    % Grid for ray tracing
-    gridPropagation.x           =   xp;
-    gridPropagation.y           =   yp;
-    gridPropagation.z           =   zp;
-    Murat.input.gridPropagation =   gridPropagation;
-    
+    xp                          =   xM(1):resol2x:xM(end);
+    yp                          =   yM(1):resol2y:yM(end);
+    zp                          =   zM(1):-resol2z:zM(end);
+     
     % Meshes for interpolation
-    [Xq,Yq,Zq]                  =   meshgrid(yp,xp,zp);
+    [Xq,Yq,Zq]                  =   meshgrid(xp',yp',zp');
     
-    % pvel is the propagation velocity 3D grid
-    pvel                        =   interp3(XD,YD,ZD,V,Xq,Yq,Zq);
+    % pvel is the propagation velocity model
+    pvel                        =   griddata(XD,YD,ZD,V,Xq,Yq,Zq);
+    if find(isnan(pvel))
+        pvel                    =   inpaintn(pvel);
+    end
     
     % Standard unpacking of the velocity model for propagation
-    modvp                       =   Murat_unfold(xp',yp',zp',pvel);
+    modvp                       =   Murat_unfold(Xq,Yq,Zq,pvel);
     Murat.input.modvp           =   modvp(:,1:4);
     
+    % Nodes of the propagation model
+    gridPropagation.x           =   unique(modvp(:,1));
+    gridPropagation.y           =   unique(modvp(:,2));
+    gridPropagation.z           =   sort(unique(modvp(:,3)),'descend');
+    Murat.input.gridPropagation =   gridPropagation;
+   
+%     Murat_test_vel_models(modv_m,modv_o,mV,X,Y,Z,pvel,Xq,Yq,Zq,origin)
 end
 
 Murat.input.pvel                =   pvel;

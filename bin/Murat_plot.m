@@ -3,8 +3,8 @@ function Murat                      =   Murat_plot(Murat)
 %%
 % Importing all the necessary inputs and data for plotting
 FLabel                              =   Murat.input.label;
-origin1                             =   Murat.input.origin;
-ending1                             =   Murat.input.end;
+origin                              =   Murat.input.origin;
+ending                              =   Murat.input.end;
 x                                   =   Murat.input.x;
 y                                   =   Murat.input.y;
 z                                   =   Murat.input.z;
@@ -65,15 +65,9 @@ cyanpink                            =   colMapGen([1,0,1],[0,1,1],256);
 purpleorange                        =...
     colMapGen([0.5 0 0.5],[0.91 0.41 0.17],256);
 
-%%
-% Due to the input (lat/long), the code needs to switch 1 and 2.
-% The same happens with events and stations.
-origin                              =   [origin1(2) origin1(1) origin1(3)];
-ending                              =   [ending1(2) ending1(1) ending1(3)];
-[WE_origin, SN_origin]              =   deg2utm(origin(2),origin(1));
 evestaz                             =...
-    [evestazDegrees(:,2) evestazDegrees(:,1) -evestazDegrees(:,3)/1000 ...
-    evestazDegrees(:,5) evestazDegrees(:,4) evestazDegrees(:,6)/1000];
+    [evestazDegrees(:,1:2) -evestazDegrees(:,3)/1000 ...
+    evestazDegrees(:,4:5) evestazDegrees(:,6)/1000];
 
 %% PLOTS - coverage and sensitivity
 % Murat_plot starts plotting the ray distribution if asked by the user.
@@ -96,11 +90,10 @@ for k = 1:lMF(2)
     FName_peakDelay                 =   ['Rays_PeakDelay_' fcName '_Hz'];
     rma_pd                          =   rma(:,2:4,rtpdk)/1000;
     evestaz_pd                      =   evestaz(rtpdk,:);
-    rays_peakDelay                  =...
-        Murat_imageRays(rma_pd,origin,ending,evestaz_pd,...
-        x,y,z,FName_peakDelay);
-    saveas(rays_peakDelay,...
-        fullfile(FPath, FLabel, storeFolder, FName_peakDelay), fformat);
+    rays_peakDelay                  =   Murat_imageRays(rma_pd,origin,...
+        ending,evestaz_pd,x,y,z,FName_peakDelay);
+    saveas(rays_peakDelay,fullfile(FPath,FLabel,storeFolder,...
+        FName_peakDelay));
     close(rays_peakDelay)
     %%
     % The next figure shows the rays for the total attenuation (Q)
@@ -111,7 +104,7 @@ for k = 1:lMF(2)
     rays_Q                          =...
         Murat_imageRays(rma_Q,origin,ending,evestaz_Q,...
         x,y,z,FName_Q);
-    saveas(rays_Q,fullfile(FPath, FLabel, storeFolder, FName_Q), fformat);
+    saveas(rays_Q,fullfile(FPath, FLabel, storeFolder, FName_Q));
     close(rays_Q)
     %%
     % The next sensitivity to check is the one for coda attenuation. The code creates
@@ -202,9 +195,9 @@ for k = 1:lMF(2)
     modv_pd_k                       =   modv_pd(:,:,k);
     modv_Qc_k                       =   modv_Qc(:,:,k);
     modv_Q_k                        =   modv_Q(:,:,k);
-    [X,Y,Z1,mPD]                    =   Murat_fold(x,y,z,modv_pd_k(:,5));
-    [~,~,~,mQc]                     =   Murat_fold(x,y,z,modv_Qc_k(:,5));
-    [~,~,~,mQ]                      =   Murat_fold(x,y,z,modv_Q_k(:,5));
+    [X,Y,Z1,mPD]                    =   Murat_fold(x,y,z,modv_pd_k(:,4));
+    [~,~,~,mQc]                     =   Murat_fold(x,y,z,modv_Qc_k(:,4));
+    [~,~,~,mQ]                      =   Murat_fold(x,y,z,modv_Q_k(:,4));
     Z                               =   Z1/1000;
     evestaz_Qc                      =   evestaz(rtQck,:);
     %%
@@ -364,11 +357,12 @@ for k = 1:lMF(2)
     %% SAVE all results as VTK for visualization in PARAVIEW
     % Converting Lon/Lat to km for paraview visualization with ndgrid
     storeFolder                     =   'VTK';
-    x_origin                        =   x - origin(1);
-    y_origin                        =   y - origin(2);
+    [WE_origin, SN_origin]          =   deg2utm(origin(2),origin(1));
+    x_origin                        =   x - origin(2);
+    y_origin                        =   y - origin(1);
     UTM_WE                          =   WE_origin + deg2km(x_origin)*1000;
     UTM_SN                          =   SN_origin + deg2km(y_origin)*1000;
-    [X_UTM,Y_UTM,~]                 =   ndgrid(UTM_WE,UTM_SN,z);
+    [X_UTM,Y_UTM,~]                 =   meshgrid(UTM_WE,UTM_SN,z);
     %%
     % Writes the four models to vtk
     vtkwrite(fullfile(FPath, FLabel,storeFolder,[FName_PDMap '.vtk']),...

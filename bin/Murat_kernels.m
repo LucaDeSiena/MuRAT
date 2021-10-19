@@ -1,7 +1,7 @@
 function [K_grid,r_grid1]	=...
     Murat_kernels(T,event,station,modv,v,kT,B0,Le_1,lapseTimeMethod)
 % function [K_grid,r_grid1]	=...
-%     Murat_kernels(T,event,station,modv,v,kT,B0,Le_1)
+%     Murat_kernels(T,event,station,modv,v,kT,B0,Le_1,lapseTimeMethod)
 %
 % COMPUTATION of kernel integral for an event-station couple in a
 %   3D grid (modv format), to be used for coda tomography. There is the
@@ -96,7 +96,7 @@ if Nxyz>50e6
 end
 
 % Sets the 3D matrix
-r_grid                      =   Murat_unfold(x_grid',y_grid',z_grid');
+r_grid                      =   Murat_unfoldXYZ(x_grid',y_grid',z_grid');
 
 
 % Distances r1 and r2, from each point of the grid to source or to receptor

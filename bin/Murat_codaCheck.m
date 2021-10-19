@@ -31,7 +31,7 @@ lengthTempis                                    =   length(tempis);
 if isequal(peakDelayMethod,'Peak')
     
     tCoda_i                                     =...
-        (pktime_i-originTime_i)+peakDelay_i/srate_i;
+        (pktime_i-originTime_i)+peakDelay_i;
     
 elseif isequal(peakDelayMethod,'Constant')
     
@@ -49,7 +49,6 @@ cursorCodaStart_i                               =...
 
 cursorCodaEnd_i                                 =...
     floor(cursorCodaStart_i + tWm * srate_i - 1);
-
 
 if cursorCodaEnd_i > lengthTempis
     cursorCodaEnd_i                             =   lengthTempis;

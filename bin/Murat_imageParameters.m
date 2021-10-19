@@ -16,11 +16,11 @@ function [image,para_condition,para_map]= ...
 %    para_condition:    condition on the parameters to image
 %    para_map:          parameter map
 
-para_map                                =   Murat_unfold(x',y',z');
-condition                               =   abs(modv_pd_k(:,5))>10^(-10);
+para_map                                =   Murat_unfoldXYZ(x',y',z');
+condition                               =   abs(modv_pd_k(:,4))>10^(-10);
 para_condition                          =   para_map(condition,:);
-pd_condition                            =   modv_pd_k(condition,5);
-Qc_condition                            =   modv_Qc_k(condition,5);
+pd_condition                            =   modv_pd_k(condition,4);
+Qc_condition                            =   modv_Qc_k(condition,4);
 
 pdd                                     =...
     fitdist(pd_condition,'ExtremeValue');

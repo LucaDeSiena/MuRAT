@@ -32,14 +32,13 @@ yp                      =   y(1)-diviy:diviy:y(end)+diviy;
 zp                      =   z(1)-diviz:diviz:z(end)+diviz;
 zp                      =   zp/1000;
 
-[Xp,Yp,Zp]              =   meshgrid(yp,xp,zp);
+[Xp,Yp,Zp]              =   meshgrid(xp,yp,zp);
 mVp                     =   interp3(X,Y,Z,V,Xp,Yp,Zp);
 z                       =   sort(z)/1000;
 
 image                   =...
-    slice(Xp, Yp, Zp, mVp, sections(1), sections(2), sections(3));
+    slice(Xp, Yp, Zp, mVp, sections(2), sections(1), sections(3));
 
-set(gca,'Ydir','reverse')
 colormap(color);
 colorbar
 shading flat
@@ -53,14 +52,15 @@ scatter3(evestaz(:,2),evestaz(:,1),evestaz(:,3),60,'c',...
 scatter3(evestaz(:,5),evestaz(:,4),evestaz(:,6),60,'^',...
     'MarkerEdgeColor',[1 1 1], 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 
-xlabel('SN','FontSize',16,'FontWeight','bold','Color','k')
-ylabel('WE','FontSize',16,'FontWeight','bold','Color','k')
+xlabel('WE','FontSize',16,'FontWeight','bold','Color','k')
+ylabel('SN','FontSize',16,'FontWeight','bold','Color','k')
 zlabel('Depth (km)','FontSize',16,'FontWeight','bold','Color','k')
 
-xticks(y); set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
-yticks(x); set(gca,'yticklabel',num2str(get(gca,'ytick')','%.2f'))
+xticks(x); set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
+yticks(y); set(gca,'yticklabel',num2str(get(gca,'ytick')','%.2f'))
 zticks(z); set(gca,'zticklabel',num2str(get(gca,'ztick')','%.2f'))
 axis tight
 
 SetFDefaults();
 hold off
+end

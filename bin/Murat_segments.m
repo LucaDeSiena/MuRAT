@@ -61,13 +61,13 @@ BLy                         =   lgy1:deltastepy:lgy1+mn1;
 BLv                         =   lvg1:deltastepz:lvg;
 
 % Check that all x-y elements are more than zero
-fallr                       =   find(rma(:,1)>0 & rma(:,2)>0);
+fallr                       =   find(rma(:,2)>0 & rma(:,3)>0);
 
 % Define the vectors
 xpolo                       =   rma(fallr,2);
 ypolo                       =   rma(fallr,3);
 
-% Need to switch as rma is with positive depths
+% Need to change as rma is with positive depths
 zpolo                       =   rma(fallr,4);
 tot                         =   length(xpolo);
 
@@ -103,7 +103,7 @@ inte                        =   zeros(100,6);
 inte(1,1:6)                 =   [sorg(1),sorg(2),sorg(3),0,0,0];
 inte(2,6)                   =   bSS;
 
-diffLoc                         =   zeros(tot,1);
+diffLoc                     =   zeros(tot,1);
 k1                          =   1;
 for k = 2:tot
     ewS                     =	xpolo(k-1); 

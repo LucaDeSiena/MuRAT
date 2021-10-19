@@ -1,53 +1,33 @@
-function r                  =   Murat_unfold(x,y,z,mV)
-% function r                  =   Murat_unfold(x,y,z,mV)
+function modv               =   Murat_unfold(X,Y,Z,mV)
+% function modv                  =   Murat_unfold(X,Y,Z,mV)
 %
-% ACCEPTS vertical vectors and unfolds them in standard format
+% ACCEPTS matrices created by meshgrid and unfolds them in MuRAT format
 %
 % Input parameters:
-%    x:         x vector
-%    y:         y vector
-%    z:         z vector
-%    v:         field vector
+%    x:         X matrix from meshgrid
+%    y:         Y matrix from meshgrid
+%    z:         Z matrix from meshgrid
+%    v:         V matrix from meshgrid
 %
 % Output parameters:
-%    r:         field in Murat format
+%    modv:      field in Murat format
 
-lx                          =   length(x);
-ly                          =   length(y);
-lz                          =   length(z);
-lxyz                        =   lx*ly*lz;
-
-r                           =   zeros(lxyz,3);
-
-index                       =   1;
-for i = 1:lx
-    index1                  =   index+ly*lz-1;
-    gx                      =   repmat(x(i),ly*lz,1);
-    r(index:index1,1)       =   gx;
-    index                   =   index1+1;
-end
-
-index                       =   1;
-ry                          =   zeros(ly*lz,1);
-for i = 1:ly
-    index1                  =   index+lz-1;
-    gy                      =   repmat(y(i),lz,1);
-    ry(index:index1,1)      =   gy;
-    index                   =   index1+1;
-end
-
-r(:,2)                      =   repmat(ry,lx,1);
-r(:,3)                      =   repmat(z,lx*ly,1);
-
+ly =size(X,1);
+lx =size(X,2);
+lz =size(X,3);
+modv=zeros(lx*ly*lz,4);
 if (nargin==4)
     index                   =   0;
     for i=1:lx
         for j=1:ly
             for k=1:lz
-                index       =   index+1;
-                r(index,4)  =   mV(i,j,k);
+                index       =   index+1;                
+                modv(index,1:4)...
+                            =   [X(j,i,k) Y(j,i,k) Z(j,i,k) mV(j,i,k)];
             end
         end
     end
 end
-    
+
+% Line to get it in Murat format;
+end
