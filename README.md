@@ -14,7 +14,7 @@ The group of active users (providing questions, feedback, snippets of code) is t
 *History*
 -------
 
-* *2006-2010*: MuRAT is built first by Luca De Siena during his PhD at the INGV-Osservatorio Vesuviano (Italy) using Matlab, c++, csh and Fortran codes.
+* *2006-2010*: MuRAT was built first by Luca De Siena during his PhD at the INGV-Osservatorio Vesuviano (Italy) using Matlab, c++, csh and Fortran codes.
 
 * *2010-2013*: MuRAT1.0 was developed and published in 2014 while De Siena was research assistant at the Westfälisches Wilhelms Universität, Münster (Germany). Murat1.0 allowed 3D total attenuation imaging with the coda-normalization method. Important contributions were given by Christine Thomas (WWU Münster) and Richard Aster (Colorado State University).
 
@@ -73,130 +73,94 @@ Test your SAC headers with the functions Murat\_test and Murat\_testAll in the f
 
 To understand what MuRAT3D does:
 
-1. **Start from the Murat_input..mlx files**
+  1. ***Start from the Murat_input..mlx files***
 
 The input files are self-explanatory and provide detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model use *MuRAT_InputMSH.mlx* otherwise start from either *MuRAT_InputRomania.mlx* or *MuRAT_InputToba.mlx*, the examples for 2- and 3-component data.
 
-2. **Read the Documentation**
+  2. ***Read the Documentation***
 
 The Documentation includes a summary of the theory underlying attenuation imaging: read it to understand the approximations used to process data, forward model kernels, and invert observations.
 
-3. **Understand the output text files**
+  3. ***Understand the output text files***
 
 All the output files (.mat, .txt and xlsx), figures and .vtk files (for visualisation in Paraview) are stored in the **TXT** and **VTK** sub-directories in the **Label** folder, created in the working directory. In the following, a list of the output files and what they contain is provided.
 
-------------
-**TXT directory**
+  4. **Understand the output figure files**
 
-*peakdelay__.txt*, *Qc__.txt* and *Q__.txt*
-The 3D models of the parameters at different frequencies. The first three columns of all text files correspond to WE, SN, and altitude. The fourth column is the mapped parameter. They contain a minimum of five columns (for *Peak Delay*) that can be imported to show the locations of the anomalies in a simple (x,y,z) reference system. The fifth columns shows blocks hit by at least one ray. Qc and Q are solved with an inversion and thus have: (1) sixth and seventh columns that corresponds to the input and output of the checkerboard test; (2) eight and ninth columns that corresponds to the input and output of the spike test.
+All the figures are stored in subdirectories in the **Label** folder, created in the working directory:
 
-------------
-*Murat.mat*
-A Matlab structure containing all inputs and data produced by the code.
+*Structure of the Label Folder, where results are stored*
+--------
 
-------------
-*DataHeaders.xls*
-A file containing all headers variables of the SAC files.
+  1. **TXT directory** and **VTK directory**
 
-------------
-**VTK directory**
-All the .vtk files are stored in this folder.
+*peakdelay__.txt*, *Qc__.txt* and *Q__.txt*:  The 3D models of the parameters at different frequencies. The first three columns of all text files correspond to WE, SN, and altitude. The fourth column is the mapped parameter. They contain a minimum of five columns (for *Peak Delay*) that can be imported to show the locations of the anomalies in a simple (x,y,z) reference system. The fifth columns shows blocks hit by at least one ray. Qc and Q are solved with an inversion and thus have: (1) sixth and seventh columns that corresponds to the input and output of the checkerboard test; (2) eight and ninth columns that corresponds to the input and output of the spike test. All the .vtk files are stored in omonimous folder.
 
-4. **Understand the output figure files**
+*Murat.mat*: A Matlab structure containing all inputs and data produced by the code.
 
-All the figures (in the *Figures Format* defined by the user) are stored in subdirectories in the **Label** folder, created in the working directory.
+*DataHeaders.xls*: A file containing all headers variables of the SAC files used for the mapping.
 
-------------
-**Checkerboard directory**
+  ------------
+  2. **Checkerboard directory**
 
       Qc subdirectory
 
-*Qc-Checkerboard__.tif* and *Qc-Checkerboard__.fig*
+*Qc-Checkerboard__.tif* and *Qc-Checkerboard__.fig*: These figures show input and output of the Qc checkerboard test in the 3D space (*.fig*) and across sections (*.tif*).
 
-These figures show input and output of the Qc checkerboard test in the 3D space (*.fig*) and across sections (*.tif*).
-
-------------
       Q subdirectory
 
-*Q-Checkerboard__.tif* and *Q-Checkerboard__.fig*
+*Q-Checkerboard__.tif* and *Q-Checkerboard__.fig*: These figures show input and output of the Q checkerboard test in the 3D space (*.fig*) and across sections (*.tif*).
 
-These figures show input and output of the Q checkerboard test in the 3D space (*.fig*) and across sections (*.tif*).
+  ------------
+  3. **RaysKernels directory**
 
-**RaysKernels directory**
+*Rays__.tif*: These figures show how rays develop in 3D for the Peak Delay and Q measurements. It plots them on three slices (WE, SN, Z). The fourth panel shows the location of the area on the Earth.
 
-*Rays__.tif*
+*Kernel__.tif* and *Kernel__.fig*: Each *.fig* figure has two panels showing the sensitivity kernels in the entire 3D space (left) and the normalised kernels in the chosen inversion grid (right). This reduction implies several hypotheses: among these the most important is that most of the energy is still comprised in the grid (the difference is general < 1% if all source and stations are in the inversion grid. The *.tif* figures are sections in the WE, SN, and Z directions. Figures are produced for all frequencies.
 
-These figures show how rays develop in 3D for the Peak Delay and Q measurements. It plots them on three slices (WE, SN, Z). The fourth panel shows the location of the area on the Earth.
+  ------------
+  4. **Results directory**
 
-------------
-*Kernel__.tif* and *Kernel__.fig*
-
-Each *.fig* figure has two panels showing the sensitivity kernels in the entire 3D space (left) and the normalised kernels in the chosen inversion grid (right). This reduction implies several hypotheses: among these the most important is that most of the energy is still comprised in the grid (the difference is general < 1% if all source and stations are in the inversion grid. The *.tif* figures are sections in the WE, SN, and Z directions. Figures are produced for all frequencies.
-
-------------
-**Results directory**
 
       Parameter subdirectory
 
-*Parameter__.tif* and *Parameter__.fig*
-
-Parameter maps in 3D (*.fig*) and across sections (*.tif*).
+*Parameter__.tif* and *Parameter__.fig*: Parameter maps in 3D (*.fig*) and across sections (*.tif*).
 
       PeakDelay subdirectory
 
-*Peak-Delay__.tif* and *Peak-Delay__.fig*
-
-Peak delay maps in 3D (*.fig*) and across sections (*.tif*).
+*Peak-Delay__.tif* and *Peak-Delay__.fig*: Peak delay maps in 3D (*.fig*) and across sections (*.tif*).
 
       Q subdirectory
 
-*Q__.tif* and *Q__.fig*
-
-Total attenuation maps in 3D (*.fig*) and across sections (*.tif*).
+*Q__.tif* and *Q__.fig*: Total attenuation maps in 3D (*.fig*) and across sections (*.tif*).
 
       Qc subdirectory
 
-*Qc__.tif* and *Qc__.fig*
+*Qc__.tif* and *Qc__.fig*: Coda attenuation maps in 3D (*.fig*) and across sections (*.tif*).
 
-Coda attenuation maps in 3D (*.fig*) and across sections (*.tif*).
-
-------------
-**Spike directory**
+  ------------
+  5. **Spike directory**
 
       Qc subdirectory
 
-*Qc-Spike__.tif* and *Qc-Spike__.fig*
+*Qc-Spike__.tif* and *Qc-Spike__.fig*: These figures show input and output of the Qc spike test in the 3D space (*.fig*) and across sections (*.tif*).
 
-These figures show input and output of the Qc spike test in the 3D space (*.fig*) and across sections (*.tif*).
-
-------------
       Q subdirectory
 
-*Q-Spike__.tif* and *Q-Spike__.fig*
+*Q-Spike__.tif* and *Q-Spike__.fig*: These figures show input and output of the Q spike test in the 3D space (*.fig*) and across sections (*.tif*).
 
-These figures show input and output of the Q spike test in the 3D space (*.fig*) and across sections (*.tif*).
-
-------------
-**Tests directory**
+  ------------
+  6. **Tests directory**
 
 *Qc_Analysis__.tif*, *PD_Analysis__.tif*, and *CN_Analysis__.tif*
 
 Three figures to evaluate the appropriate peak-delay and coda inputs. Read the documentation for further clarifications.
 
-------------
-*L_curve__.fig*
+*L_curve__.fig*: L-curves and cost functions (depending on inversion method) for the Qc and Q inversions necessary to set the damping parameters. The user can ask for a prompt or set the damping parameters from start.
 
-L-curves and cost functions (depending on inversion method) for the Qc and Q inversions necessary to set the damping parameters. The user can ask for a prompt or set the damping parameters from start.
+*Qc_vs_frequency*: Relationship between coda attenuation and frequency.
 
-------------
-*Qc_vs_frequency*
-Relationship between coda attenuation and frequency.
-
-------------
-*Velocity_model.fig*
-
-The 3D velocity model is also available as a figure in Matlab format. They can be loaded in Matlab and will show the vertical and horizontal slices defined in *Figures Sections*.
+*Velocity_model.fig*: The 3D velocity model is also available as a figure in Matlab format. They can be loaded in Matlab and will show the vertical and horizontal slices defined in *Figures Sections*.
 
 *Citing MuRAT*
 ------------
