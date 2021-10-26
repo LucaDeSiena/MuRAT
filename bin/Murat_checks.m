@@ -4,7 +4,7 @@ function Murat                  =   Murat_checks
 [file,path]                     =   uigetfile;
 
 if isequal(file,0)
-   error('User selected Cancel!');   
+   error('User selected Cancel!');
 else
    disp(['User selected ', fullfile(path,file)]);
 end
@@ -43,7 +43,7 @@ Murat.input.PTime               =   PTime;
 Murat.input.STime               =   STime;
 
 
-if exist('./temp','dir')==7    
+if exist('./temp','dir')==7
     delete('./temp/*')
 else
     mkdir('./temp')
@@ -85,27 +85,27 @@ if availableVelocity ==  0
     gridPropagation.x           =   xM';
     gridPropagation.y           =   yM';
     gridPropagation.z           =   zM';
-    
+
     [modv,pvel]                 =...
         Murat_modv1D(modvXYZ,modvOriginal,PorS);
-    
+
     Murat.input.modv            =   modv;
     Murat.input.modvp           =   modv;
     Murat.input.modvPlot        =   [];
-    
+
 elseif availableVelocity ==  1
-    
+
     [modvP,modvI,modvIP,pvel]          =...
         Murat_modv3D(modvXYZ,modvOriginal,origin,0);
-    
+
     gridPropagation.x           =   unique(modvP(:,1));
     gridPropagation.y           =   unique(modvP(:,2));
     gridPropagation.z           =   sort(unique(modvP(:,3)),'descend');
-    
+
     Murat.input.modv            =   modvI;
-    Murat.input.modvp           =   modvP(:,1:4);    
+    Murat.input.modvp           =   modvP(:,1:4);
     Murat.input.modvPlot        =   modvIP;
-    
+
 end
 
 Murat.input.gridPropagation     =   gridPropagation;
