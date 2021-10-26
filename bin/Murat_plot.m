@@ -428,7 +428,6 @@ if Murat.input.availableVelocity == 1
 
 end
 
-storeFolder                         =   'Results';
 Murat.data.averageQcFrequency       =   averageQcFrequency;
 Qcf_title                           =   'Qc vs Frequency';
 QcFrequency                         =   Murat_imageQcFrequency(cf,...
