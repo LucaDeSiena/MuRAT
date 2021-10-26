@@ -3,7 +3,6 @@ function Murat                      =   Murat_inversion(Murat)
 %%
 % Importing all the necessary inputs and data for plotting
 FLabel                              =   Murat.input.label;
-fformat                             =   Murat.input.format;
 outputLCurve                        =   Murat.input.lCurve;
 tWm                                 =   Murat.input.codaWindow;
 cf                                  =   Murat.input.centralFrequency;
@@ -25,6 +24,7 @@ QcM                                 =   Murat.input.QcMeasurement;
 inversionMethod                     =   Murat.input.inversionMethod;
 lCurveQc                            =   Murat.input.lCurveQc;
 lCurveQ                             =   Murat.input.lCurveQ;
+muratHeader                         =   Murat.input.header;
 
 Apd_i                               =...
     Murat.data.inversionMatrixPeakDelay;
@@ -52,6 +52,29 @@ modv_Q                              =   zeros(lMF(1),10,lMF(2));
 const_Qc                            =   zeros(size(rapsp));
 residualQ                           =   zeros(1,lMF(2));
 residualQc                          =   zeros(1,lMF(2));
+
+%%
+% Creating folders to store results
+if exist(FLabel,'dir')==7    
+    rmdir(FLabel,'s')
+end
+
+mkdir(FLabel)
+mkdir([FLabel,'/RaysKernels'])
+mkdir([FLabel,'/Tests'])
+mkdir([FLabel,'/Results'])
+mkdir([FLabel,'/Results/PeakDelay'])
+mkdir([FLabel,'/Results/Qc'])
+mkdir([FLabel,'/Results/Q'])
+mkdir([FLabel,'/Results/Parameter'])
+mkdir([FLabel,'/Checkerboard'])
+mkdir([FLabel,'/Checkerboard/Qc'])
+mkdir([FLabel,'/Checkerboard/Q'])
+mkdir([FLabel,'/Spike'])
+mkdir([FLabel,'/Spike/Qc'])
+mkdir([FLabel,'/Spike/Q'])
+mkdir([FLabel,'/VTK'])
+mkdir([FLabel,'/TXT'])
 
 %%
 % Loops over all frequencies and parameter models
@@ -111,7 +134,7 @@ for k = 1:lMF(2)
         error('Unknown inversion method.')
         
     end
-    saveas(LcQc,fullfile(FPath, FLabel,'Rays_Checks',FName));
+    saveas(LcQc,fullfile(FPath, FLabel,'Tests',FName));
     close(LcQc)  
     
     %%
@@ -150,7 +173,7 @@ for k = 1:lMF(2)
         
     end
     
-    saveas(LcCN,fullfile(FPath, FLabel,'Rays_Checks',FName),fformat);
+    saveas(LcCN,fullfile(FPath, FLabel,'Tests',FName));
     close(LcCN)
     
     %% Checkerboards and spike inputs and checkerboard inversion
@@ -218,3 +241,6 @@ Murat.data.residualQ                =   residualQ;
 Murat.data.modvPeakDelay            =   modv_pd;
 Murat.data.modvQc                   =   modv_Qc;
 Murat.data.modvQ                    =   modv_Q;
+writetable(muratHeader,[FLabel,'/TXT/DataHeaders.xls']);
+
+

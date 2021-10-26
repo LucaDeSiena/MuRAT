@@ -10,10 +10,10 @@ compon                                  =   Murat.input.components;
 
 modv                                    =   Murat.input.modv;
 lengthParameterModel                    =   length(modv(:,1));
-
-stepgXYZ                                =   (modv(2,1:3) - modv(1,1:3))/2;
-modvQc                                  =   [modv(:,1) + stepgXYZ(1)...
-    modv(:,2)+stepgXYZ(2) modv(:,3)+stepgXYZ(3)];
+gridStep                                =   [Murat.input.gridStepX/2 ...
+    Murat.input.gridStepY/2 (modv(2,3) - modv(1,3))/2];
+modvQc                                  =   [modv(:,1) + gridStep(1)...
+    modv(:,2)+gridStep(2) modv(:,3)+gridStep(3)];
 
 gridD                                   =   Murat.input.gridPropagation;
 pvel                                    =   Murat.input.pvel;
@@ -65,12 +65,6 @@ rayCrossing                             =...
 
 parfor i = 1:lengthData
     
-    if isequal(mod(i,1000),0)
-        
-        disp(['Waveform number is ', num2str(i)])
-        
-    end
-    
     listSac_i                           =   listSac{i};
     
     % Calculates envelopes
@@ -92,11 +86,11 @@ parfor i = 1:lengthData
         Murat_originTime(pktime_i,originTime,v_i,locationM_i,SAChdr_i);
 
     % Calculates the window where to search for peak delay
-    cursorPeakDelay_i      =...
+    cursorPeakDelay_i                   =...
         Murat_peakDelayCheck(tempis,cursorPick_i,maxtpde,srate_i);
 
     % Calculates peak delay time
-    peakDelay_i            =...
+    peakDelay_i                         =...
         Murat_peakDelay(sp_i,cursorPick_i,srate_i,cursorPeakDelay_i);
     
     % Calculates rays for the right component    

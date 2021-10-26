@@ -35,3 +35,4 @@ A_i(blocch(lb))                         =   -lunpar(lb)/1000.*s(lb);
 lrma                                    =   rma(end,1);
 in_rma                                  =   floor(linspace(1,lrma,100));
 rma_i                                   =   rma(in_rma,:);
+end

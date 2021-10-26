@@ -22,7 +22,7 @@ zGrid           =   gridD.z;
 
 [ip,jp,kp,flag]	=   Murat_cornering(xx,yy,zz,gridD);
 if flag>0
-    v           =   pvel(ip,jp,kp);
+    v           =   pvel(jp,ip,kp);
     return
 end
 
@@ -38,16 +38,16 @@ xf              =   (xx - xGrid(ip))/xd;
 yf              =   (yy - yGrid(jp))/yd;
 zf              =   (zz - zGrid(kp))/zd;
 
-v1              =   pvel(ip,jp,kp) + (pvel(ip1,jp,kp) -pvel(ip,jp,kp))*xf;
+v1              =   pvel(jp,ip,kp) + (pvel(jp1,ip,kp) -pvel(jp,ip,kp))*xf;
 
-v2              =   pvel(ip,jp1,kp)+(pvel(ip1,jp1,kp) -pvel(ip,jp1,kp))*xf;
+v2              =   pvel(jp,ip1,kp)+(pvel(jp1,ip1,kp) -pvel(jp,ip1,kp))*xf;
 
 v3              =   v1 + (v2 - v1)*yf;
 
-v4              =   pvel(ip,jp,kp1)+(pvel(ip1,jp,kp1) -pvel(ip,jp,kp1))*xf;
+v4              =   pvel(jp,ip,kp1)+(pvel(jp1,ip,kp1) -pvel(jp,ip,kp1))*xf;
 
-v5              =   pvel(ip,jp1,kp1)+...
-    (pvel(ip1,jp1,kp1) - pvel(ip,jp1,kp1))*xf;
+v5              =   pvel(jp,ip1,kp1)+...
+    (pvel(jp1,ip1,kp1) - pvel(jp,ip1,kp1))*xf;
 
 v6              =   v4 + (v5 - v4)*yf;
 

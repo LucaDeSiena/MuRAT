@@ -26,11 +26,11 @@ The group of active users (providing questions, feedback, snippets of code) is t
 
 *Documentation*
 -------------
-The full documentation for MuRAT3.0 can be found in the Documentation PDF inside the folder. Additional html files associated with the software are present in the corresponding folder. This README file and the linked internet sites are to be used as a reference.
+The file Documentation.pdf in this folder serves as full documentation for MuRAT3.0. This README file and the *Input_.mlx* files in this folder act as additional documentation.
 
 *System*
 ------------
-The program works on Mac, Linux and Windows systems equipped with Matlab R2019a.
+The program works on Mac, Linux and Windows systems equipped with Matlab version R2017a or higher.
 
 Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing and Mapping. The Parallel Computing Toolbox is recommended for speed.
 
@@ -56,7 +56,7 @@ The current version works following these steps:
 
 4. Open one of the three input .mlx files, providing a step-by-step explanation of all inputs (*Murat_inputMSH.mlx*, *Murat_inputRomania.mlx*, or *Murat_inputToba.mlx*) and create your own.
 
-4. Test your SAC headers with the functions Murat\_test and Murat\_testAll.
+5. Use a velocity model, storing it in the corresponding folder. The format is [Latitude, Longitde, Altitude (meters)]
 
 6. MuRAT works with [SAC files](https://ds.iris.edu/files/sac-manual/) that must be stored into a single folder and corrected for the instrument function. The files must have populated headers, although the code can work using just the following header fields:
 
@@ -64,6 +64,7 @@ The current version works following these steps:
               b. The coordinates of the event.
               c. The coordinates of the station.
               d. The origin time of the event (optional).
+Test your SAC headers with the functions Murat\_test and Murat\_testAll in the folder **Utilities**.
 
 7. Run MuRAT3 and select the name of the input file desired.
 
@@ -74,98 +75,128 @@ To understand what MuRAT3D does:
 
 1. **Start from the Murat_input..mlx files**
 
-The input files are self-explanatory and provide detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model use *MuRAT_InputMSH.mlx* otherwise start from either *MuRAT_InputRomania.mlx* or *MuRAT_InputRomania.mlx*, the examples for 2- and 3-component data.
+The input files are self-explanatory and provide detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model use *MuRAT_InputMSH.mlx* otherwise start from either *MuRAT_InputRomania.mlx* or *MuRAT_InputToba.mlx*, the examples for 2- and 3-component data.
 
-2. **Read the html**
+2. **Read the Documentation**
 
-The package has a html folder where each file explains one of the primary functions of MuRAT: read them to understand the approximations used to process data, forward model kernels, and invert observations. Particularly important are:
-
-* MuRAT3.html: is the *make* code and can be run in sections. Here you find the names of the primary functions.
-* Murat_plot.htlm: the plot function shows at which lines of the code figures are produced, providing additional information on the output.
+The Documentation includes a summary of the theory underlying attenuation imaging: read it to understand the approximations used to process data, forward model kernels, and invert observations.
 
 3. **Understand the output text files**
 
-All the output files (.txt), figures and .vtk files (for visualisation in Paraview) are stored in sub-directories in the **Label** folder, created in the working directory. Use the html Murat_plot html file to have information about what each plot means and how it is created. In the following, a list of the output files and what they contain is provided.
+All the output files (.mat, .txt and xlsx), figures and .vtk files (for visualisation in Paraview) are stored in the **TXT** and **VTK** sub-directories in the **Label** folder, created in the working directory. In the following, a list of the output files and what they contain is provided.
 
-Inside the *TXT* subfolder, the first three columns of each output file correspond to WE, SN, and depth. The fourth column is the mapped parameter. In ascii format, they contain a minimum of five columns (for *Peak Delay*) that can be imported to show the locations of the anomalies in a simple (x,y,z) reference system. The fifth columns shows blocks hit by at least one ray.
+------------
+**TXT directory**
 
-*peakdelay_Frequency*, *Qc_Frequency.txt* and *Q_Frequency.txt* are the 3D models of the parameters at different frequencies. The last two are solved with an inversion and thus have:
+*peakdelay__.txt*, *Qc__.txt* and *Q__.txt*
+The 3D models of the parameters at different frequencies. The first three columns of all text files correspond to WE, SN, and altitude. The fourth column is the mapped parameter. They contain a minimum of five columns (for *Peak Delay*) that can be imported to show the locations of the anomalies in a simple (x,y,z) reference system. The fifth columns shows blocks hit by at least one ray. Qc and Q are solved with an inversion and thus have: (1) sixth and seventh columns that corresponds to the input and output of the checkerboard test; (2) eight and ninth columns that corresponds to the input and output of the spike test.
 
-      A. a sixth and seventh columns that corresponds to the input and output of the checkerboard test;
-      B. eight and nineth columns that corresponds to the input and output of the spike test.
+------------
+*Murat.mat*
+A Matlab structure containing all inputs and data produced by the code.
 
-All the .vtk files with the same names are stored into the *VTK* subfolder. A Matlab structure ('Murat.mat') containing all inputs and data is stored in the working directory.
+------------
+*DataHeaders.xls*
+A file containing all headers variables of the SAC files.
+
+------------
+**VTK directory**
+All the .vtk files are stored in this folder.
 
 4. **Understand the output figure files**
 
 All the figures (in the *Figures Format* defined by the user) are stored in subdirectories in the **Label** folder, created in the working directory.
 
+------------
+**Checkerboard directory**
+
+      Qc subdirectory
+
+*Qc-Checkerboard__.tif* and *Qc-Checkerboard__.fig*
+
+These figures show input and output of the Qc checkerboard test in the 3D space (*.fig*) and across sections (*.tif*).
 
 ------------
-**Rays_Checks directory**
+      Q subdirectory
 
-------------
-*Rays_...Figures format*
+*Q-Checkerboard__.tif* and *Q-Checkerboard__.fig*
+
+These figures show input and output of the Q checkerboard test in the 3D space (*.fig*) and across sections (*.tif*).
+
+**RaysKernels directory**
+
+*Rays__.tif*
 
 These figures show how rays develop in 3D for the Peak Delay and Q measurements. It plots them on three slices (WE, SN, Z). The fourth panel shows the location of the area on the Earth.
 
 ------------
-*Kernel....Figures format*
+*Kernel__.tif* and *Kernel__.fig*
 
-Each figure has two panels showing the sensitivity kernels in the entire 3D space (left) and the normalised kernels in the chosen inversion grid (right). This reduction implies several hypotheses: among these the most important is that most of the energy is still comprised in the grid (the difference is general < 1% if all source and stations are in the inversion grid.
-
-------------
-*Qc_Analysis_Frequency.Figures format*, *PD_Analysis_Frequency.Figures format*, and *CN_Analysis_Frequency.Figures format*
-
-Three figures to evaluate the appropriate peak-delay and coda inputs. TRead the documentation for further clarifications.
-
-------------
-*L_curve...Figures format*
-
-L-curves and cost functions (depending on inversion method) for the Qc and Q inversions necessary to set the damping parameters. The user can ask for a prompt or set the damping parameters from start.
+Each *.fig* figure has two panels showing the sensitivity kernels in the entire 3D space (left) and the normalised kernels in the chosen inversion grid (right). This reduction implies several hypotheses: among these the most important is that most of the energy is still comprised in the grid (the difference is general < 1% if all source and stations are in the inversion grid. The *.tif* figures are sections in the WE, SN, and Z directions. Figures are produced for all frequencies.
 
 ------------
 **Results directory**
 
+      Parameter subdirectory
+
+*Parameter__.tif* and *Parameter__.fig*
+
+Parameter maps in 3D (*.fig*) and across sections (*.tif*).
+
+      PeakDelay subdirectory
+
+*Peak-Delay__.tif* and *Peak-Delay__.fig*
+
+Peak delay maps in 3D (*.fig*) and across sections (*.tif*).
+
+      Q subdirectory
+
+*Q__.tif* and *Q__.fig*
+
+Total attenuation maps in 3D (*.fig*) and across sections (*.tif*).
+
+      Qc subdirectory
+
+*Qc__.tif* and *Qc__.fig*
+
+Coda attenuation maps in 3D (*.fig*) and across sections (*.tif*).
+
 ------------
-*Peak-delay-3D.fig*, *Qc-3D.fig* and *Q-3D.fig*
+**Spike directory**
 
-These plots show the result of the peak-delay, Qc and Q 3D tomography in the grid's reference system. All in Matlab .fig format, use the .vtk and Paraview for publication-quality figures.
+      Qc subdirectory
 
-------------
-*Parameter_space_variations.Figures format*
+*Qc-Spike__.tif* and *Qc-Spike__.fig*
 
-The plot shows the separation of the scattering and absorption parameters in their parameter space. Grey dots correspond to parameters too near to the average to be interpreted as scattering or absorption variations - the threshold is pre-defined at 5% of the maximum variation of each parameter. Red = High scattering and absorption; Cyan = High scattering and low absorption; Orange = Low scattering and high absorption; Green = Low scattering and absorption.
-
-------------
-*Parameter-Map.fig*
-
-The parameter space separation as it is apparent in the 3D space. Each block is characterized by the color corresponding to its scattering and absorption characteristics
+These figures show input and output of the Qc spike test in the 3D space (*.fig*) and across sections (*.tif*).
 
 ------------
-*Velocity_model.fig*
+      Q subdirectory
 
-If available, the 3D velocity model is also shown as a 3D figure in Matlab format. They can be loaded in Matlab and will show the vertical and horizontal slices defined in *Figures Sections*.
+*Q-Spike__.tif* and *Q-Spike__.fig*
+
+These figures show input and output of the Q spike test in the 3D space (*.fig*) and across sections (*.tif*).
 
 ------------
-*Velocity_model.fig*
+**Tests directory**
 
-The 3D velocity model is also available as 3D figures in Matlab format. They can be loaded in Matlab and will show the vertical and horizontal slices defined in *Figures Sections*.
+*Qc_Analysis__.tif*, *PD_Analysis__.tif*, and *CN_Analysis__.tif*
+
+Three figures to evaluate the appropriate peak-delay and coda inputs. Read the documentation for further clarifications.
+
+------------
+*L_curve__.fig*
+
+L-curves and cost functions (depending on inversion method) for the Qc and Q inversions necessary to set the damping parameters. The user can ask for a prompt or set the damping parameters from start.
 
 ------------
 *Qc_vs_frequency*
-Relationship between Qc and frequency.
+Relationship between coda attenuation and frequency.
 
 ------------
-**Resolution directory**
+*Velocity_model.fig*
 
-------------
-*Qc-checkerboard.fig*, *Qc-spike.fig*
-
-These plots show input and output of the checkerboard and spike tests for the Qc and Q mapping in the grid's reference system.
-
-------------
-
+The 3D velocity model is also available as a figure in Matlab format. They can be loaded in Matlab and will show the vertical and horizontal slices defined in *Figures Sections*.
 
 *Citing MuRAT*
 ------------

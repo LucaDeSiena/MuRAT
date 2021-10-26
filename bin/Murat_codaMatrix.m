@@ -41,7 +41,7 @@ if find(isnan(mK))
     mK(mK == 0)                 =   10^-100;
     if isempty(find(mK, 1))
         
-        mod_K                   =   Murat_unfold(x,y,z);
+        mod_K                   =   Murat_unfoldXYZ(x,y,z);
         mod_K(:,4)              =   0;
         [~,maxK]                =   max(K_grid);
         rmax                    =   r_grid(maxK,:);
@@ -56,16 +56,16 @@ end
 % Kernel in its grid space
 if flag == 1
     sections1                   =   [sections(2) sections(1) sections(3)];
-    Xk1                         =   origin(1) + km2deg(Xk/1000);
-    Yk1                         =   origin(2) + km2deg(Yk/1000);
-    X1                          =   origin(1) + km2deg(X/1000);
-    Y1                          =   origin(2) + km2deg(Y/1000);
+    Xk1                         =   origin(2) + km2deg(Xk/1000);
+    Yk1                         =   origin(1) + km2deg(Yk/1000);
+    X1                          =   origin(2) + km2deg(X/1000);
+    Y1                          =   origin(1) + km2deg(Y/1000);
 
     subplot(1,2,1)
-    Murat_imageKernels(Xk1,Yk1,Zk,log(K),'default',sections1)
+    Murat_imageKernels(Xk1,Yk1,Zk,log(K),inferno,sections1)
     
     subplot(1,2,2)
-    Murat_imageKernels(X1,Y1,Z,log(mK),'default',sections1)
+    Murat_imageKernels(X1,Y1,Z,log(mK),inferno,sections1)
     
 end
 
@@ -79,7 +79,7 @@ for i=1:lx
     for j=1:ly
         for k=1:lz
             index               =   index+1;
-            AQc_i(index)        =   mK(i,j,k);
+            AQc_i(index)        =   mK(j,i,k);
         end
     end
 end
