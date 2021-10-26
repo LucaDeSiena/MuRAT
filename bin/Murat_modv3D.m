@@ -40,7 +40,7 @@ zD                                  =...
 % Uses meshgrid - fold switches again for interpolation and plot
 [XD,YD,ZD,V]                        =   Murat_fold(xD,yD,zD,modv_o(:,4));
 % Interpolated 3D inversion model
-modvIP                              =   griddata(XD,YD,ZD,V,X,Y,Z);
+modvIP                              =   interp3(XD,YD,ZD,V,X,Y,Z);
 
 %In case limits outside of the grid: interpolate
 if find(isnan(modvIP))
@@ -62,7 +62,7 @@ zp                                  =   zM(1):-resol2z:zM(end);
 [Xq,Yq,Zq]                          =   meshgrid(xp',yp',zp');
 
 % pvel is the propagation velocity model in matrix format
-pvel                                =   griddata(XD,YD,ZD,V,Xq,Yq,Zq);
+pvel                                =   interp3(XD,YD,ZD,V,Xq,Yq,Zq);
 if find(isnan(pvel))
     pvel                            =   inpaintn(pvel);
 end

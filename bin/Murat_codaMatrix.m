@@ -33,7 +33,7 @@ z                               =   sort(unique(modvQc(:,3)),'descend');
 [X,Y,Z,~]                       =   Murat_fold(x,y,z);
 
 % Kernel in inversion grid space
-mK                              =   griddata(Xk,Yk,Zk,K,X,Y,Z);
+mK                              =   interp3(Xk,Yk,Zk,K,X,Y,Z);
 
 %In case limits outside of the grid interpolate better
 if find(isnan(mK))
