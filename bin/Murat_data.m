@@ -62,7 +62,7 @@ inversionMatrixQc                       =...
 rayCrossing                             =...
     zeros(lengthData,lengthParameterModel);
 %=========================================================================
-
+count_trash = 0;
 for i = 1:lengthData
     
     if isequal(mod(i,1000),0)
@@ -98,6 +98,9 @@ for i = 1:lengthData
     % Calculates peak delay time
     peakDelay_i                         =...
         Murat_peakDelay(sp_i,cursorPick_i,srate_i,cursorPeakDelay_i);
+    if peakDelay_i == 0
+        keyboard
+    end
     
     % Calculates rays for the right component    
     calculateRays                       =   recognizeComponents(i,compon);
@@ -120,6 +123,20 @@ for i = 1:lengthData
     [tCoda_i, cursorCodaStart_i, cursorCodaEnd_i]=...
         Murat_codaCheck(originTime_i,pktime_i,srate_i,tCm,tWm,tempis,...
         peakDelay_i,lapseTimeMethod);
+    
+    if (cursorCodaEnd_i -cursorCodaStart_i)< (tWm*srate_i)-2 || ...
+            (pktime_i-originTime_i)>12
+        %disp(listSac_i)
+        peakDelay(i,:)                      =   NaN;
+        inverseQc(i,:)                      =   0;
+        energyRatioBodyCoda(i,:)            =   0;
+        locationM(i,:)                      =   locationM_i;
+        theoreticalTime(i,1)                =   theoreticalTime_i;
+        uncertaintyQc(i,:)                  =   0; 
+        tCoda(i,:)                          =   tCoda_i;
+        count_trash = count_trash +1;
+        continue
+    end
     
     % Measures Qc and its uncertainty
     [inverseQc_i, uncertaintyQc_i]      =   Murat_Qc(cf,sped,...
@@ -179,6 +196,9 @@ Murat.data.energyRatioCodaNoise         =   energyRatioCodaNoise;
 Murat.data.tCoda                        =   tCoda;
 
 Murat                                   =   Murat_selection(Murat);
+
+ratio                                   =   count_trash/i*(100);
+disp(['trash ', num2str(ratio)])
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function calculateValue                 =...
     recognizeComponents(index,components)
