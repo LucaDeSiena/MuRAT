@@ -39,6 +39,7 @@ bodyWindow                              =   Murat.input.bodyWindow;
 startNoise                              =   Murat.input.startNoise;
 QcM                                     =   Murat.input.QcMeasurement;
 lapseTimeMethod                         =   Murat.input.lapseTimeMethod;
+maxtravel                               =   Murat.input.maxtravel;
 
 % Set up variables to save
 locationDeg                             =   zeros(lengthData,6); 
@@ -98,9 +99,6 @@ for i = 1:lengthData
     % Calculates peak delay time
     peakDelay_i                         =...
         Murat_peakDelay(sp_i,cursorPick_i,srate_i,cursorPeakDelay_i);
-    if peakDelay_i == 0
-        keyboard
-    end
     
     % Calculates rays for the right component    
     calculateRays                       =   recognizeComponents(i,compon);
@@ -125,15 +123,17 @@ for i = 1:lengthData
         peakDelay_i,lapseTimeMethod);
     
     if (cursorCodaEnd_i -cursorCodaStart_i)< (tWm*srate_i)-2 || ...
-            (pktime_i-originTime_i)>12
-        %disp(listSac_i)
-        peakDelay(i,:)                      =   NaN;
-        inverseQc(i,:)                      =   0;
-        energyRatioBodyCoda(i,:)            =   0;
+            (pktime_i-originTime_i)>maxtravel
+
         locationM(i,:)                      =   locationM_i;
         theoreticalTime(i,1)                =   theoreticalTime_i;
-        uncertaintyQc(i,:)                  =   0; 
+        peakDelay(i,:)                      =   NaN;
+        inverseQc(i,:)                      =   NaN;
+        uncertaintyQc(i,:)                  =   NaN;
+        energyRatioBodyCoda(i,:)            =   NaN;
+        energyRatioCodaNoise(i,:)           =   NaN;
         tCoda(i,:)                          =   tCoda_i;
+        
         count_trash = count_trash +1;
         continue
     end

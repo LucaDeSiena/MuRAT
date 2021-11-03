@@ -39,6 +39,7 @@ bodyWindow                              =   Murat.input.bodyWindow;
 startNoise                              =   Murat.input.startNoise;
 QcM                                     =   Murat.input.QcMeasurement;
 lapseTimeMethod                         =   Murat.input.lapseTimeMethod;
+maxtravel                               =   Murat.input.maxtravel;
 
 % Set up variables to save
 locationDeg                             =   zeros(lengthData,6); 
@@ -62,7 +63,7 @@ inversionMatrixQc                       =...
 rayCrossing                             =...
     zeros(lengthData,lengthParameterModel);
 %=========================================================================
-
+count_trash =0;
 parfor i = 1:lengthData
     
     listSac_i                           =   listSac{i};
@@ -114,6 +115,20 @@ parfor i = 1:lengthData
     [tCoda_i, cursorCodaStart_i, cursorCodaEnd_i]=...
         Murat_codaCheck(originTime_i,pktime_i,srate_i,tCm,tWm,tempis,...
         peakDelay_i,lapseTimeMethod);
+    
+    if (cursorCodaEnd_i -cursorCodaStart_i)< (tWm*srate_i)-2 || ...
+            (pktime_i-originTime_i)>maxtravel
+        %disp(listSac_i)
+        peakDelay(i,:)                      =   NaN;
+        inverseQc(i,:)                      =   NaN;
+        energyRatioBodyCoda(i,:)            =   NaN;
+        locationM(i,:)                      =   locationM_i;
+        theoreticalTime(i,1)                =   theoreticalTime_i;
+        uncertaintyQc(i,:)                  =   NaN; 
+        tCoda(i,:)                          =   tCoda_i;
+        count_trash = count_trash +1;
+        continue
+    end
     
     % Measures Qc and its uncertainty
     [inverseQc_i, uncertaintyQc_i]      =   Murat_Qc(cf,sped,...
@@ -173,6 +188,9 @@ Murat.data.energyRatioCodaNoise         =   energyRatioCodaNoise;
 Murat.data.tCoda                        =   tCoda;
 
 Murat                                   =   Murat_selection(Murat);
+
+ratio                                   =   count_trash/lengthData*(100);
+disp(['trash ', num2str(ratio)])
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function calculateValue                 =...
     recognizeComponents(index,components)
