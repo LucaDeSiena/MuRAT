@@ -63,8 +63,14 @@ inversionMatrixQc                       =...
 rayCrossing                             =...
     zeros(lengthData,lengthParameterModel);
 %=========================================================================
-count_trash =0;
+count_trash = 0;
 parfor i = 1:lengthData
+    
+    if isequal(mod(i,1000),0)
+        
+        disp(['Waveform number is ', num2str(i)])
+        
+    end
     
     listSac_i                           =   listSac{i};
     
@@ -118,14 +124,16 @@ parfor i = 1:lengthData
     
     if (cursorCodaEnd_i -cursorCodaStart_i)< (tWm*srate_i)-2 || ...
             (pktime_i-originTime_i)>maxtravel
-        %disp(listSac_i)
-        peakDelay(i,:)                      =   NaN;
-        inverseQc(i,:)                      =   NaN;
-        energyRatioBodyCoda(i,:)            =   NaN;
+
         locationM(i,:)                      =   locationM_i;
         theoreticalTime(i,1)                =   theoreticalTime_i;
-        uncertaintyQc(i,:)                  =   NaN; 
+        peakDelay(i,:)                      =   NaN;
+        inverseQc(i,:)                      =   NaN;
+        uncertaintyQc(i,:)                  =   NaN;
+        energyRatioBodyCoda(i,:)            =   NaN;
+        energyRatioCodaNoise(i,:)           =   NaN;
         tCoda(i,:)                          =   tCoda_i;
+        
         count_trash = count_trash +1;
         continue
     end
@@ -190,7 +198,12 @@ Murat.data.tCoda                        =   tCoda;
 Murat                                   =   Murat_selection(Murat);
 
 ratio                                   =   count_trash/lengthData*(100);
-disp(['trash ', num2str(ratio)])
+disp(['Ratio of removed recordings: ', num2str(ratio)])
+
+if ~isempty(Murat.input.declustering)
+    Murat                           =...
+        Murat_declustering(Murat,Murat.input.declustering);
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function calculateValue                 =...
     recognizeComponents(index,components)

@@ -197,8 +197,13 @@ Murat.data.tCoda                        =   tCoda;
 
 Murat                                   =   Murat_selection(Murat);
 
-ratio                                   =   count_trash/i*(100);
-disp(['trash ', num2str(ratio)])
+ratio                                   =   count_trash/lengthData*(100);
+disp(['Ratio of removed recordings: ', num2str(ratio)])
+
+if ~isempty(Murat.input.declustering)
+    Murat                           =...
+        Murat_declustering(Murat,Murat.input.declustering);
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function calculateValue                 =...
     recognizeComponents(index,components)
