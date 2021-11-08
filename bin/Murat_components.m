@@ -40,7 +40,7 @@ for i = 1:comp:dataL
             noQ1                                =   compMissing(i+1,j,3);
             
             if noPD && noPD1
-                peakd(index,j)                  =   0; %#ok<*AGROW>
+                peakd(index,j)                  =   NaN; %#ok<*AGROW>
                 
             elseif noPD && ~noPD1
                 peakd(index,j)                  =   peakd1(i+1,j);
@@ -55,8 +55,8 @@ for i = 1:comp:dataL
             end
             
             if noQc && noQc1
-                Qm(index,j)                     =   0;
-                RZZ(index,j)                    =   0;
+                Qm(index,j)                     =   NaN;
+                RZZ(index,j)                    =   NaN;
                 
             elseif noQc && ~noQc1
                 Qm(index,j)                     =   Qm1(i+1,j);
@@ -75,8 +75,8 @@ for i = 1:comp:dataL
             end
             
             if noQ && noQ1
-                rapsp(index,j)                  =   0;
-                rapspcn(index,j)                =   0;
+                rapsp(index,j)                  =   NaN;
+                rapspcn(index,j)                =   NaN;
                 
             elseif noQc && ~noQc1
                 rapsp(index,j)                  =   rapsp1(i+1,j);
@@ -108,7 +108,7 @@ for i = 1:comp:dataL
             noQ2                                =   compMissing(i+2,j,3);
             
             if noPD && noPD1 && noPD2
-                peakd(index,j)                  =   0;
+                peakd(index,j)                  =   NaN;
                 
             elseif noPD && noPD1 && ~noPD2
                 peakd(index,j)                  =   peakd1(i+2,j);
@@ -135,8 +135,8 @@ for i = 1:comp:dataL
             end
             
             if noQc && noQc1 && noQc2
-                Qm(index,j)                     =   0;
-                RZZ(index,j)                    =   0;
+                Qm(index,j)                     =   NaN;
+                RZZ(index,j)                    =   NaN;
                 
             elseif noQc && noQc1 && ~noQc2
                 Qm(index,j)                     =   Qm1(i+2,j);
@@ -174,8 +174,8 @@ for i = 1:comp:dataL
             end
             
             if noQ && noQ1 && noQ2
-                rapsp(index,j)                  =   0;
-                rapspcn(index,j)                =   0;
+                rapsp(index,j)                  =   NaN;
+                rapspcn(index,j)                =   NaN;
                 
             elseif noQ && noQ1 && ~noQ2
                 rapsp(index,j)                  =   rapsp1(i+2,j);

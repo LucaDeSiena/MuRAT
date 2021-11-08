@@ -101,7 +101,9 @@ for i = 1:dataFreq
     Murat_retainQc(fT,Qm_i,RZZ_i,Ac_i,QcM);
     
     % Coda-normalization
-    retain_Q_i                      =   rapspcn(:,i)>=tresholdnoise;
+    retain_Q_t                      =   rapspcn(:,i)>=tresholdnoise;
+    retain_Q_nn                     =   ~isnan(Qm_i);
+    retain_Q_i                      =   retain_Q_nn & retain_Q_t;
     A_retain_Q_i                    =   A_i(retain_Q_i,:);
     ray_crosses_Q_i                 =   sum(A_retain_Q_i)~=0;
     

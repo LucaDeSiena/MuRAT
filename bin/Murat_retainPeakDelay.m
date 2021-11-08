@@ -27,7 +27,7 @@ pab                             =   [fitrobust_i.p1 fitrobust_i.p2];
 
 l10pdt                          =   polyval(pab,t_phase);
 lpdelta_i                       =   l10pd_i-l10pdt;
-I                               =   abs(lpdelta_i) >= 2*std(lpdelta_i);
+I                               =   abs(lpdelta_i) >= 2*std(lpdelta_i,'omitnan');
 outliers                        =...
     excludedata(t_phase(yesPD_i),lpdelta_i(yesPD_i),'indices',I(yesPD_i));
 outlierspd(yesPD_i)             =   outliers;

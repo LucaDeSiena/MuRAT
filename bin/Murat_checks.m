@@ -1,18 +1,8 @@
 % ADDITIONAL input variables that are not set by the user.
-function Murat                  =   Murat_checks
-
-[file,path]                     =   uigetfile;
-
-if isequal(file,0)
-   error('User selected Cancel!');   
-else
-   disp(['User selected ', fullfile(path,file)]);
-end
-
-run(fullfile(path, file));
+function Murat                  =   Murat_checks(Murat)
 
 % INPUTS
-dataDirectory                   =   ['./' Murat.input.dataDirectory]; %#ok<NODEF>
+dataDirectory                   =   ['./' Murat.input.dataDirectory];
 PTime                           =   ['SAChdr.times.' Murat.input.PTime];
 PorS                            =   Murat.input.POrS;
 

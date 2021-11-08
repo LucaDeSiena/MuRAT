@@ -26,7 +26,7 @@ z                       =   sort(z)/1000;
 lrma                    =   length(rma(1,1,:));
 
 subplot(2,2,1)
-geoshow(coastlat,coastlon);
+%geoshow(coastlat,coastlon);
 rma(:,1,:)              =   origin(2) + km2deg(rma(:,1,:));
 rma(:,2,:)              =   origin(1) + km2deg(rma(:,2,:));
 for i = 1:lrma
@@ -43,6 +43,9 @@ for i = 1:lrma
     subplot(2,2,3)
     hold on
     plot(ray(:,1),ray(:,3),'k');
+    
+    % save start and end point of ray
+    evestaz_ray(i,:) = [ray(1,2),ray(1,1),ray(1,3),ray(end,2),ray(end,1),ray(end,3)];
 end
 
 centreGrid              =   [origin(2) + (ending(2) - origin(2))/2 ...
@@ -50,16 +53,18 @@ centreGrid              =   [origin(2) + (ending(2) - origin(2))/2 ...
 
 subplot(2,2,1)
 hold on
-scatter(evestaz(:,2),evestaz(:,1),60,'c','MarkerEdgeColor',[1 1 1],...
+% scatter(evestaz(:,2),evestaz(:,1),60,'c','MarkerEdgeColor',[1 1 1],...
+%     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
+scatter(evestaz_ray(:,2),evestaz_ray(:,1),60,'c','MarkerEdgeColor','b',...
     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
-scatter(evestaz(:,5),evestaz(:,4),60,'^','MarkerEdgeColor',[1 1 1],...
+scatter(evestaz(:,5),evestaz(:,4),60,'^','MarkerEdgeColor','m',...
     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
+axis equal
 xlim([origin(2) ending(2)]);
 ylim([origin(1) ending(1)]);
 
 xlabel('WE','FontSize',16,'FontWeight','bold','Color','k')
 ylabel('SN','FontSize',16,'FontWeight','bold','Color','k')
-
 xticks(x(1:2:end-1))
 set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
 yticks(y(1:2:end-1))
@@ -68,11 +73,14 @@ set(gca,'yticklabel',num2str(get(gca,'ytick')','%.2f'))
 SetFDefaults();
 hold off
 
+
 subplot(2,2,2)
 hold on
-scatter(evestaz(:,1),evestaz(:,3),60,'c','MarkerEdgeColor',[1 1 1],...
+% scatter(evestaz(:,1),evestaz(:,3),60,'c','MarkerEdgeColor',[1 1 1],...
+%     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
+scatter(evestaz_ray(:,1),evestaz_ray(:,3),60,'c','MarkerEdgeColor','b',...
     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
-scatter(evestaz(:,4),evestaz(:,6),60,'^','MarkerEdgeColor',[1 1 1],...
+scatter(evestaz(:,4),evestaz(:,6),60,'^','MarkerEdgeColor','m',...
     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 xlim([origin(1) ending(1)]);
 
@@ -80,23 +88,25 @@ xlabel('SN','FontSize',12,'FontWeight','bold','Color','k')
 ylabel('Depth (km)','FontSize',12,'FontWeight','bold','Color','k')
 xticks(y(1:2:end-1))
 set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
-yticks(z(1:2:end-1))
+yticks(z(1:end-1))
 set(gca,'yticklabel',num2str(get(gca,'ytick')','%.2f'))
 SetFDefaults();
 hold off
 
 subplot(2,2,3)
 hold on
-scatter(evestaz(:,2),evestaz(:,3),60,'c','MarkerEdgeColor',[1 1 1],...
+% scatter(evestaz(:,2),evestaz(:,3),60,'c','MarkerEdgeColor',[1 1 1],...
+%     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
+scatter(evestaz_ray(:,2),evestaz_ray(:,3),60,'c','MarkerEdgeColor','b',...
     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
-scatter(evestaz(:,5),evestaz(:,6),60,'^','MarkerEdgeColor',[1 1 1],...
+scatter(evestaz(:,5),evestaz(:,6),60,'^','MarkerEdgeColor','m',...
     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 xlim([origin(2) ending(2)]);
 xlabel('WE','FontSize',12,'FontWeight','bold','Color','k')
 ylabel('Depth (km)','FontSize',12,'FontWeight','bold','Color','k')
 xticks(x(1:2:end-1))
 set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
-yticks(z(1:2:end-1))
+yticks(z(1:end-1))
 set(gca,'zticklabel',num2str(get(gca,'ytick')','%.2f'))
 SetFDefaults();
 hold off
@@ -105,7 +115,7 @@ subplot(2,2,4)
 hold on
 
 geoshow(coastlat,coastlon,'Color','k');
-scatter(centreGrid(1),centreGrid(2),100,'c','MarkerEdgeColor',[1 1 1],...
+scatter(centreGrid(1),centreGrid(2),100,'c','MarkerEdgeColor','g',...
     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 
 xticks(centreGrid(1))

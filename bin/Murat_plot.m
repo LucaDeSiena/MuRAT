@@ -54,6 +54,7 @@ residualQ                           =   Murat.data.residualQ;
 locationM                           =   Murat.data.locationsM;
 tCoda                               =   Murat.data.tCoda;
 rapsp                               =   Murat.data.energyRatioBodyCoda;
+locDegOriginal                      =   Murat.data.locDegOriginal;
 
 FPath                               =   './';
 sizeTitle                           =   18;
@@ -65,15 +66,27 @@ cyanpink                            =   colMapGen([1,0,1],[0,1,1],256);
 purpleorange                        =...
     colMapGen([0.5 0 0.5],[0.91 0.41 0.17],256);
 
+%% PLOTS - coverage and sensitivity
+% Declustering is done before any frequency analysis, here we show the 2D
+% rays before and after
+FName_Cluster                       =   'Clustering';
+clustering                          =   Murat_imageDeclustering(...
+    locDegOriginal,evestazDegrees,origin,ending,FName_Cluster);
+storeFolder                     =   'RaysKernels';
+pathFolder                      =...
+        fullfile(FPath,FLabel,storeFolder,FName_Cluster);
+saveas(clustering,pathFolder,'tif');
+close(clustering)
+
 evestaz                             =...
     [evestazDegrees(:,1:2) -evestazDegrees(:,3)/1000 ...
     evestazDegrees(:,4:5) evestazDegrees(:,6)/1000];
 
-%% PLOTS - coverage and sensitivity
-% Murat_plot starts plotting the ray distribution if asked by the user.
-% It stores  the files in the corresponding folder.
 averageQcFrequency                  =   zeros(2,lMF(2));
+
 for k = 1:lMF(2)
+    % Murat_plot starts plotting the ray distribution if asked by the user.
+    % It stores  the files in the corresponding folder.
     storeFolder                     =   'RaysKernels';
     cf_k                            =   cf(k);
     fcName                          =   num2str(cf_k);
@@ -95,6 +108,7 @@ for k = 1:lMF(2)
     pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_peakDelay);
     saveas(rays_peakDelay,pathFolder,'tif');
+    close(rays_peakDelay)
     %%
     % The next figure shows the rays for the total attenuation (Q)
     FName_Q                         =   ['Rays_Q_' fcName '_Hz'];
@@ -105,6 +119,7 @@ for k = 1:lMF(2)
     pathFolder                      =...
         fullfile(FPath, FLabel, storeFolder, FName_Q);
     saveas(rays_Q,pathFolder,'tif');
+    close(rays_Q)
     %%
     % The next figure to check sensitivity for coda attenuation. The code creates
     % figures that show sections in the sensitivity kernels. The left panel shows
@@ -146,7 +161,7 @@ for k = 1:lMF(2)
         residualQc_k,luntot_Qc,Ac,sizeTitle,Qc_title,QcM);
     saveas(Qc_analysis, fullfile(FPath,FLabel,storeFolder,...
         ['Qc_analysis_' fcName '_Hz']),'tif');
-    
+    close(Qc_analysis)
     %%
     % Then it shows the peak delay relative to the travel time.
     peakData_k                      =   peakData(rtpdk,k);
@@ -158,7 +173,7 @@ for k = 1:lMF(2)
     time0PD,fitrobust_k,peakData_k,sizeTitle,pd_title);
     saveas(pd_analysis, fullfile(FPath,FLabel,storeFolder,...
         ['PD_analysis_' fcName '_Hz']),'tif');
-    
+    close(pd_analysis)
     %%
     % Then it plots first the logarithm of the energy ratio versus travel
     % time.
@@ -174,18 +189,16 @@ for k = 1:lMF(2)
     Q_k                             =   Qm(rtQk,k);
     
     CN_title                        =...
-        ['Coda Normalization check ' fcName ' Hz'];   
-    
+        ['Coda Normalization check ' fcName ' Hz'];    
     [d1, ~,spreadAverageQ, equationQ]...
                                     =...
         Murat_lsqlinQmean(tCm,tWm,Q_k,cf_k,sped,luntot_k,time0_k,rapsp_k);
-    
     CN_analysis                     =...
         Murat_imageCheckCN(equationQ,residualQ_k,d1,spreadAverageQ,...
         luntot_k,time0_k,energyRatio_k,A_k,Edirect_k,CN_title);
     saveas(CN_analysis, fullfile(FPath,FLabel,storeFolder,...
         ['CN_analysis_' fcName '_Hz']),'tif');
-    
+    close(CN_analysis)
     %% PLOT - RESULTS
     % Set up matrices. The points are set to the upper SW vertices to
     % work with the function "slice". All stored in the sub-folder.
@@ -425,7 +438,7 @@ if Murat.input.availableVelocity == 1
     pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_Vimage);
     saveas(Vimage,pathFolder);
-
+    close(Vimage)
 end
 
 Murat.data.averageQcFrequency       =   averageQcFrequency;
@@ -434,4 +447,4 @@ QcFrequency                         =   Murat_imageQcFrequency(cf,...
     averageQcFrequency,sizeTitle,Qcf_title);
 FName                               =   'Qc_vs_frequency';
 saveas(QcFrequency, fullfile(FPath,FLabel,storeFolder,FName));
-close(QcFrequency)
+close all

@@ -39,6 +39,7 @@ bodyWindow                              =   Murat.input.bodyWindow;
 startNoise                              =   Murat.input.startNoise;
 QcM                                     =   Murat.input.QcMeasurement;
 lapseTimeMethod                         =   Murat.input.lapseTimeMethod;
+maxtravel                               =   Murat.input.maxtravel;
 
 % Set up variables to save
 locationDeg                             =   zeros(lengthData,6); 
@@ -62,7 +63,7 @@ inversionMatrixQc                       =...
 rayCrossing                             =...
     zeros(lengthData,lengthParameterModel);
 %=========================================================================
-
+count_trash = 0;
 for i = 1:lengthData
     
     if isequal(mod(i,1000),0)
@@ -120,6 +121,22 @@ for i = 1:lengthData
     [tCoda_i, cursorCodaStart_i, cursorCodaEnd_i]=...
         Murat_codaCheck(originTime_i,pktime_i,srate_i,tCm,tWm,tempis,...
         peakDelay_i,lapseTimeMethod);
+    
+    if (cursorCodaEnd_i -cursorCodaStart_i)< (tWm*srate_i)-2 || ...
+            (pktime_i-originTime_i)>maxtravel
+
+        locationM(i,:)                      =   locationM_i;
+        theoreticalTime(i,1)                =   theoreticalTime_i;
+        peakDelay(i,:)                      =   NaN;
+        inverseQc(i,:)                      =   NaN;
+        uncertaintyQc(i,:)                  =   NaN;
+        energyRatioBodyCoda(i,:)            =   NaN;
+        energyRatioCodaNoise(i,:)           =   NaN;
+        tCoda(i,:)                          =   tCoda_i;
+        
+        count_trash = count_trash +1;
+        continue
+    end
     
     % Measures Qc and its uncertainty
     [inverseQc_i, uncertaintyQc_i]      =   Murat_Qc(cf,sped,...
@@ -179,6 +196,14 @@ Murat.data.energyRatioCodaNoise         =   energyRatioCodaNoise;
 Murat.data.tCoda                        =   tCoda;
 
 Murat                                   =   Murat_selection(Murat);
+
+ratio                                   =   count_trash/lengthData*(100);
+disp(['Ratio of removed recordings: ', num2str(ratio)])
+
+if ~isempty(Murat.input.declustering)
+    Murat                           =...
+        Murat_declustering(Murat,Murat.input.declustering);
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function calculateValue                 =...
     recognizeComponents(index,components)
