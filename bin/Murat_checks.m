@@ -63,9 +63,9 @@ yM                              =   linspace(0,dist_y,nLat)';
 zM                              =   linspace(origin(3),ending(3),nzc)';
 modvXYZ                         =   Murat_unfoldXYZ(xM,yM,zM);
 
-Murat.input.x                   =   linspace(origin(2),ending(2),nLong);
-Murat.input.y                   =   linspace(origin(1),ending(1),nLat);
-Murat.input.z                   =   linspace(origin(3),ending(3),nzc);
+Murat.input.x                   =   linspace(origin(2),ending(2),nLong)';
+Murat.input.y                   =   linspace(origin(1),ending(1),nLat)';
+Murat.input.z                   =   linspace(origin(3),ending(3),nzc)';
 Murat.input.gridStepX           =   xM(2)-xM(1);
 Murat.input.gridStepY           =   yM(2)-yM(1);
 

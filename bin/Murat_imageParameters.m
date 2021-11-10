@@ -16,7 +16,7 @@ function [image,para_condition,para_map]= ...
 %    para_condition:    condition on the parameters to image
 %    para_map:          parameter map
 
-para_map                                =   Murat_unfoldXYZ(x',y',z');
+para_map                                =   Murat_unfoldXYZ(x,y,z);
 condition                               =   abs(modv_pd_k(:,4))>10^(-10);
 para_condition                          =   para_map(condition,:);
 pd_condition                            =   modv_pd_k(condition,4);
