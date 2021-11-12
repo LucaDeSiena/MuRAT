@@ -24,6 +24,7 @@ QcM                                 =   Murat.input.QcMeasurement;
 inversionMethod                     =   Murat.input.inversionMethod;
 lCurveQc                            =   Murat.input.lCurveQc;
 lCurveQ                             =   Murat.input.lCurveQ;
+origin                              =   Murat.input.origin;
 muratHeader                         =   Murat.input.header;
 
 Apd_i                               =...
@@ -95,7 +96,8 @@ for k = 1:lMF(2)
     Apd_k                           =	Apd_i(rtpd_k,rcpd_k);
     lpdelta_k                       =   lpdelta(rtpd_k,k);
     
-    mpd                             =   sum(Apd_k.*lpdelta_k,1)';
+    mpd                             =...
+        sum(Apd_k.*lpdelta_k,1)'/sum(Apd_k);
     modv_pd(rcpd_k,4,k)             =   mpd;
     
     %%
@@ -220,17 +222,42 @@ for k = 1:lMF(2)
     
     %%
     % Save peak-delay, Qc, Q
+    [WE,SN,~]                       = deg2utm(origin(1),origin(2));
+    modLLD                          =   Murat_unfoldXYZ(x,y,z);
+    modUTM                          =   [modLLD(:,1)+WE ...
+        modLLD(:,2)+SN modLLD(:,3)];
     modv_pd_k                       =   modv_pd(:,:,k);
-    FName                           =   ['peakdelay_' fcName '_Hz.txt'];
-    save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_pd_k','-ascii');
+    
+    modv_pd_k(:,1:3)                =   modUTM;
+    FName                           =...
+        ['peakdelay_' fcName '_Cartesian_Hz.txt'];
+    writematrix(modv_pd_k,fullfile(FPath, FLabel, 'TXT', FName));
+    
+    modv_pd_k(:,1:3)                =   modLLD;
+    FName                           =...
+        ['peakdelay_' fcName '_Degrees_Hz.txt'];
+    writematrix(modv_pd_k,fullfile(FPath, FLabel, 'TXT', FName));
     
     modv_Qc_k                       =   modv_Qc(:,:,k);
-    FName                           =   ['Qc_' fcName '_Hz.txt'];
-    save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_Qc_k','-ascii');
+    
+    modv_Qc_k(:,1:3)                =   modUTM;
+    FName                           =   ['Qc_' fcName '_Cartesian_Hz.txt'];
+    writematrix(modv_Qc_k,fullfile(FPath, FLabel, 'TXT', FName));
+    
+    modv_Qc_k(:,1:3)                =   modLLD;
+    FName                           =   ['Qc_' fcName '_Degrees_Hz.txt'];
+    writematrix(modv_Qc_k,fullfile(FPath, FLabel, 'TXT', FName));
     
     modv_Q_k                        =   modv_Q(:,:,k);
-    FName                           =   ['Q_' fcName '_Hz.txt'];
-    save(fullfile(FPath, FLabel, 'TXT', FName), 'modv_Q_k','-ascii');
+    
+    modv_Q_k(:,1:3)                 =   modUTM;
+    FName                           =   ['Q_' fcName '_Cartesian_Hz.txt'];
+    writematrix(modv_Q_k,fullfile(FPath, FLabel, 'TXT', FName));
+    
+    modv_Q_k(:,1:3)                 =   modLLD;
+    FName                           =   ['Q_' fcName '_Degrees_Hz.txt'];
+    writematrix(modv_Q_k,fullfile(FPath, FLabel, 'TXT', FName));
+    
     
 end
 %%
@@ -241,6 +268,6 @@ Murat.data.residualQ                =   residualQ;
 Murat.data.modvPeakDelay            =   modv_pd;
 Murat.data.modvQc                   =   modv_Qc;
 Murat.data.modvQ                    =   modv_Q;
-writetable(muratHeader,[FLabel,'/TXT/DataHeaders.xls']);
+writetable(muratHeader,fullfile(FPath, FLabel, 'TXT', 'DataHeaders.xls'));
 
 
