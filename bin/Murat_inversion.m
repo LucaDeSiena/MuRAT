@@ -97,7 +97,7 @@ for k = 1:lMF(2)
     lpdelta_k                       =   lpdelta(rtpd_k,k);
     
     mpd                             =...
-        sum(Apd_k.*lpdelta_k,1)'./sum(Apd_k);
+        sum(Apd_k.*lpdelta_k,1)'./sum(Apd_k,1)';
     modv_pd(rcpd_k,4,k)             =   mpd;
     
     %%
