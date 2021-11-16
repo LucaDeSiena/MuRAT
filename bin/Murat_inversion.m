@@ -98,7 +98,7 @@ for k = 1:lMF(2)
     
     mpd                             =...
         sum(Apd_k.*lpdelta_k,1)'./sum(Apd_k,1)';
-    mpd(isnan(mpd))                 =   0;
+    mpd(isnan(mpd))                 =   mean(mpd(~isnan(mpd)));
     
     modv_pd(rcpd_k,4,k)             =   mpd;
     
