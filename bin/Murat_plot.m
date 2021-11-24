@@ -202,6 +202,7 @@ for k = 1:lMF(2)
     modv_Qc_k                       =   modv_Qc(:,:,k);
     modv_Q_k                        =   modv_Q(:,:,k);
     [X,Y,Z1,mPD]                    =   Murat_fold(x,y,z,modv_pd_k(:,4));
+    [X,Y,Z1,PD_cts]                 =   Murat_fold(x,y,z,modv_pd_k(:,5));
     [~,~,~,mQc]                     =   Murat_fold(x,y,z,modv_Qc_k(:,4));
     [~,~,~,mQ]                      =   Murat_fold(x,y,z,modv_Q_k(:,4));
     Z                               =   Z1/1000;
@@ -218,12 +219,29 @@ for k = 1:lMF(2)
         fullfile(FPath, FLabel, storeFolder, FName_PDMap);
     Murat_saveFigures(peakDelaymap,pathFolder);
     
+    % only keep cells with more than x% of data
+    factor = 5;
+    keep_bins                       =   PD_cts>((max(PD_cts(:))/100)*factor);
+    mPD_red                         =   mPD.*keep_bins;
+        
+    FName_PDMap                     =   ['Peak-Delay-3D_' fcName '_Hz_',num2str(factor),'_perc'];
+    peakDelaymap_red                =   Murat_image3D(X,Y,Z,mPD_red,...
+        redblue,sections,evestaz_pd,x,y,z,FName_PDMap);
+    title('Peak-delay variations',...
+        'FontSize',sizeTitle,'FontWeight','bold','Color','k');
+    pathFolder                      =...
+        fullfile(FPath, FLabel, storeFolder, FName_PDMap);
+    Murat_saveFigures(peakDelaymap_red,pathFolder);
+    
+    rem_modv_pd_k                   =   Murat_unfold(X,Y,Z,mPD_red);
+    modv_pd_k(:,4)                  =   rem_modv_pd_k(:,4);
+    
     %%
     % Qc results
     storeFolder                     =   'Results/Qc';
     FName_QcMap                     =   ['Qc-3D_' fcName '_Hz'];
     Qcmap                           =   Murat_image3D(X,Y,Z,mQc,...
-        spring,sections,evestaz_Qc,x,y,z,FName_QcMap);
+        turbo,sections,evestaz_Qc,x,y,z,FName_QcMap);
     title('Coda attenuation',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     pathFolder                      =...
