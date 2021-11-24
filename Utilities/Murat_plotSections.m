@@ -1,5 +1,5 @@
-% function  Murat_plotAfter(Murat)
-% PLOTS sections of the desired model with specified 
+% function  Murat_plotSections(Murat)
+% PLOTS sections of the desired model
 %
 %	Input Parameters:
 %       nameWaveform:           name of the SAC file
@@ -21,8 +21,14 @@ else
 end
 figure                      =   openfig(fullfile(path,file),'visible');
 SetFDefaults
-limits                      =   input('Axes limits ([min max])?');
-caxis(limits)
+    
+view(-90,0)
+saveas(figure,fullfile('./',Murat.input.label,'Results','WE'), 'png');
+view(0,0)
+saveas(figure,fullfile('./',Murat.input.label,'Results','SN'), 'png');  
+view(-90,90)
+saveas(figure,fullfile('./',Murat.input.label,'Results','Horizontal'),...
+    'png');
 
 function SetFDefaults()
 % DEFAULT settings for MuRAt figures
