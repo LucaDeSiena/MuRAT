@@ -463,6 +463,5 @@ Qcf_title                           =   'Qc vs Frequency';
 QcFrequency                         =   Murat_imageQcFrequency(cf,...
     averageQcFrequency,sizeTitle,Qcf_title);
 FName                               =   'Qc_vs_frequency';
-saveas(QcFrequency, fullfile(FPath,FLabel,storeFolder,FName),...
-    'visible','off');
+saveas(QcFrequency, fullfile(FPath,FLabel,storeFolder,FName));
 close all
