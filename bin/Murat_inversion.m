@@ -96,12 +96,29 @@ for k = 1:lMF(2)
     Apd_k                           =	Apd_i(rtpd_k,rcpd_k);
     lpdelta_k                       =   lpdelta(rtpd_k,k);
     
+    A_boxes                         =   Apd_k>0;
+    cts_box                         =   sum(A_boxes,1);
     mpd                             =...
-        sum(Apd_k.*lpdelta_k,1)'./sum(Apd_k,1)';
-    mpd(isnan(mpd))                 =   0;
+        sum(A_boxes.*lpdelta_k,1)'./sum(A_boxes,1)';
+    
+%     norm_ray                        =   Apd_k./sum(Apd_k,2);
+%     mpd_distr                       =   lpdelta_k.*norm_ray;
+%     max_ray                         =   max(Apd_k(:));
+%     Apd_k_norm                      =   max_ray./Apd_k;
+%     mpd_fill                        =   mpd_distr.*Apd_k_norm;
+%     mpd                             =   sum(mpd_fill,1,'omitnan')./sum(Apd_k>0,1);
+    
+%     mpd_norm_block                  =   Apd_k./sum(Apd_k,1);
+%     mpd_sum                         =   lpdelta_k.*mpd_norm_block;
+%     mpd                             =   sum(mpd_sum,1)';  
+    
+%     mpd                             =...
+%         sum(Apd_k.*lpdelta_k,1)'./sum(Apd_k,1)';
+    
+    mpd(isnan(mpd))                 =   mean(mpd,'omitnan');
     
     modv_pd(rcpd_k,4,k)             =   mpd;
-    
+    modv_pd(rcpd_k,5,k)             =   cts_box;
     %%
     % Qc inversion
     rcQc_k                          =   ray_crosses_Qc(:,k);
