@@ -86,7 +86,7 @@ The Documentation includes a summary of the theory underlying attenuation imagin
 
   3. ***Understand the output text files***
 
-All the output files (.mat, .txt and xlsx), figures and .vtk files (for visualisation in Paraview) are stored in the **TXT** and **VTK** sub-directories in the **Label** folder, created in the working directory. In the following, a list of the output files and what they contain is provided.
+All the output files (.mat, .txt and xlsx), figures and .vtk files (for visualisation in Paraview) are stored in the **TXT** and **VTK** sub-directories in the **Label** folder, created in the working directory. In the following, a list of the output files and what they contain is provided. Ascii files contain the models in degrees and UTM. We strongly suggest imaging the TXT files using the [GeophysicalModelGenerator](https://github.com/JuliaGeodynamics/GeophysicalModelGenerator.jl).
 
   4. **Understand the output figure files**
 

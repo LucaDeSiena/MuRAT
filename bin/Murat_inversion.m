@@ -227,14 +227,14 @@ for k = 1:lMF(2)
     %%
     % Save peak-delay, Qc, Q
     [WE,SN,~]                       = deg2utm(origin(1),origin(2));
-    modLLD                          =   Murat_unfoldXYZ(x,y,z);
+    modLLD                          =   Murat_unfoldXYZ(x,y,z/1000);
     modUTM                          =   [modLLD(:,1)+WE ...
         modLLD(:,2)+SN modLLD(:,3)];
     modv_pd_k                       =   modv_pd(:,:,k);
     
     modv_pd_k(:,1:3)                =   modUTM;
     FName                           =...
-        ['peakdelay_' fcName '_Cartesian_Hz.txt'];
+        ['peakdelay_' fcName '_UTM_Hz.txt'];
     writematrix(modv_pd_k,fullfile(FPath, FLabel, 'TXT', FName));
     
     modv_pd_k(:,1:3)                =   modLLD;
@@ -245,7 +245,7 @@ for k = 1:lMF(2)
     modv_Qc_k                       =   modv_Qc(:,:,k);
     
     modv_Qc_k(:,1:3)                =   modUTM;
-    FName                           =   ['Qc_' fcName '_Cartesian_Hz.txt'];
+    FName                           =   ['Qc_' fcName '_UTM_Hz.txt'];
     writematrix(modv_Qc_k,fullfile(FPath, FLabel, 'TXT', FName));
     
     modv_Qc_k(:,1:3)                =   modLLD;
@@ -255,13 +255,12 @@ for k = 1:lMF(2)
     modv_Q_k                        =   modv_Q(:,:,k);
     
     modv_Q_k(:,1:3)                 =   modUTM;
-    FName                           =   ['Q_' fcName '_Cartesian_Hz.txt'];
+    FName                           =   ['Q_' fcName '_UTM_Hz.txt'];
     writematrix(modv_Q_k,fullfile(FPath, FLabel, 'TXT', FName));
     
     modv_Q_k(:,1:3)                 =   modLLD;
     FName                           =   ['Q_' fcName '_Degrees_Hz.txt'];
     writematrix(modv_Q_k,fullfile(FPath, FLabel, 'TXT', FName));
-    
     
 end
 %%

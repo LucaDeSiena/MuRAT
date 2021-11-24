@@ -62,10 +62,6 @@ sizeTitle                           =   18;
 lMF                                 =   size(ray_crosses_pd);
 sections(3)                         =   sections(3)/1000;
 
-cyanpink                            =   colMapGen([1,0,1],[0,1,1],256);
-purpleorange                        =...
-    colMapGen([0.5 0 0.5],[0.91 0.41 0.17],256);
-
 %% PLOTS - coverage and sensitivity
 % Declustering is done before any frequency analysis, here we show the 2D
 % rays before and after
@@ -227,7 +223,7 @@ for k = 1:lMF(2)
     storeFolder                     =   'Results/Qc';
     FName_QcMap                     =   ['Qc-3D_' fcName '_Hz'];
     Qcmap                           =   Murat_image3D(X,Y,Z,mQc,...
-        cyanpink,sections,evestaz_Qc,x,y,z,FName_QcMap);
+        spring,sections,evestaz_Qc,x,y,z,FName_QcMap);
     title('Coda attenuation',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     pathFolder                      =...
@@ -240,7 +236,7 @@ for k = 1:lMF(2)
     FName_QMap                      =   ['Q-3D_' fcName '_Hz'];
     Qmap                            =...
         Murat_image3D(X,Y,Z,mQ,...
-        purpleorange,sections,evestaz_Q,x,y,z,FName_QMap);
+        winter,sections,evestaz_Q,x,y,z,FName_QMap);
     title('Total attenuation',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     pathFolder                      =...
@@ -316,12 +312,12 @@ for k = 1:lMF(2)
     
     subplot(1,2,1)
     Murat_image3D_2panels(X,Y,Z,spike_inputQc,...
-        cyanpink,sections,evestaz_Qc,x,y,z);
+        spring,sections,evestaz_Qc,x,y,z);
     title('Input spike Qc',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     subplot(1,2,2)
     Murat_image3D_2panels(X,Y,Z,spike_outputQc,...
-        cyanpink,sections,evestaz_Qc,x,y,z);
+        spring,sections,evestaz_Qc,x,y,z);
     title('Output spike Qc',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     
@@ -338,12 +334,12 @@ for k = 1:lMF(2)
     
     subplot(1,2,1)
     Murat_image3D_2panels(X,Y,Z,spike_inputQ,...
-        purpleorange,sections,evestaz_Q,x,y,z);
+        winter,sections,evestaz_Q,x,y,z);
     title('Input spike Q',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     subplot(1,2,2)
     Murat_image3D_2panels(X,Y,Z,spike_outputQ,...
-        purpleorange,sections,evestaz_Q,x,y,z);
+        winter,sections,evestaz_Q,x,y,z);
     title('Output spike Q',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     
@@ -446,6 +442,5 @@ Qcf_title                           =   'Qc vs Frequency';
 QcFrequency                         =   Murat_imageQcFrequency(cf,...
     averageQcFrequency,sizeTitle,Qcf_title);
 FName                               =   'Qc_vs_frequency';
-saveas(QcFrequency, fullfile(FPath,FLabel,storeFolder,FName),...
-    'visible','off');
+saveas(QcFrequency, fullfile(FPath,FLabel,storeFolder,FName));
 close all
