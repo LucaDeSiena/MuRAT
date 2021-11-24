@@ -17,8 +17,8 @@ function Qc_analysis        =   Murat_imageCheckQc(Qm_k,RZZ_k,...
 % Output parameters:
 %    Qc_analysis:   figure for Qc check
 
-Qc_analysis                 =   figure('Name',...
-        Qc_title,'NumberTitle','off','Position',[20,400,1200,1000]);
+Qc_analysis                 =   figure('Name',Qc_title,...
+    'NumberTitle','off','Position',[20,400,1200,1000],'visible','off');
     
 mQm                         =   mean(Qm_k);
 Wc                          =   Murat_weighting(RZZ_k,QcM);

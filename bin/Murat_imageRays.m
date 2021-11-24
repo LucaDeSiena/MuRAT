@@ -19,7 +19,7 @@ function rays           =...
 %    rays:              image produced
 
 rays                    =   figure('Name',name,...
-    'NumberTitle','off','Position',[20,400,1200,1000]);
+    'NumberTitle','off','Position',[20,400,1200,1000],'visible','off');
 
 load coastlines coastlat coastlon
 z                       =   sort(z)/1000;

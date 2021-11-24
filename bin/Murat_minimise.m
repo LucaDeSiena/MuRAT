@@ -87,7 +87,7 @@ disp(['Minimum of L2 cost function is ',num2str(minCostL2)...
     ' for epsilonL2 = ' num2str(epsilon(indexCostL2))]);
 
 image                           =   figure('Name',name,...
-    'NumberTitle','off','Position',[20,400,1200,1000]);
+    'NumberTitle','off','Position',[20,400,1200,1000],'visible','off');
 
 subplot(2,2,1)
 loglog(epsilonRND(:,2),epsilonRND(:,3),'k','LineWidth',2);

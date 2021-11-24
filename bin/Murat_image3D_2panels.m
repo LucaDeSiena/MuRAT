@@ -47,10 +47,10 @@ hcb.FontSize            =   14;
 
 hold on
 scatter3(evestaz(:,2),evestaz(:,1),evestaz(:,3),60,'c',...
-    'MarkerEdgeColor',[1 1 1], 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
+    'MarkerEdgeColor','b', 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 
 scatter3(evestaz(:,5),evestaz(:,4),evestaz(:,6),60,'^',...
-    'MarkerEdgeColor',[1 1 1], 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
+    'MarkerEdgeColor','m', 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 
 xlabel('WE','FontSize',16,'FontWeight','bold','Color','k')
 ylabel('SN','FontSize',16,'FontWeight','bold','Color','k')

@@ -31,7 +31,8 @@ if figOutput == 1
     tsisma                  =   tu.*sisma;
         
     image                   =   figure('Name',['Test Seismograms: '...
-        nameWaveform],'NumberTitle','off','Position',[20,400,1200,1000]);
+        nameWaveform],'NumberTitle','off','Position',[20,400,1200,1000],...
+        'visible','off');
     lengthFrequencies       =   length(centralFrequencies);
     plotFrequencies         =   1:2:2*lengthFrequencies;
     

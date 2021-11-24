@@ -14,8 +14,8 @@ function QcFrequency        =   Murat_imageQcFrequency(cf,...
 % Output parameters:
 %    QcFrequency:           figure for Qc vs frequency
 
-QcFrequency                 =   figure('Name',...
-    Qcf_title,'NumberTitle','off','Position',[20,400,1200,1000]);
+QcFrequency                 =   figure('Name',Qcf_title,...
+    'NumberTitle','off','Position',[20,400,1200,1000],'visible','off');
 
 Qc_1                        =   averageQcFrequency(1,:);
 uncQc_1                     =   averageQcFrequency(2,:);

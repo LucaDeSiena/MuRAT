@@ -20,6 +20,9 @@ function image          = ...
 %
 % Output parameters:
 %    image:     image produced
+close all
+image                   =   figure('Name',name,...
+    'NumberTitle','off','Position',[20,400,1200,1000],'visible','off');
 
 stepgXYZ                =   [x(2)-x(1) y(2)-y(1) z(2)-z(1)];
 divi                    =   5;
@@ -35,9 +38,6 @@ zp                      =   zp/1000;
 [Xp,Yp,Zp]              =   meshgrid(xp,yp,zp);
 mVp                     =   interp3(X,Y,Z,V,Xp,Yp,Zp);
 z                       =   sort(z)/1000;
-
-image                   =   figure('Name',name,...
-    'NumberTitle','off','Position',[20,400,1200,1000]);
 
 slice(Xp, Yp, Zp, mVp, sections(2), sections(1), sections(3))
 
@@ -60,10 +60,10 @@ hcb.FontSize            =   14;
 
 hold on
 scatter3(evestaz(:,2),evestaz(:,1),evestaz(:,3),60,'c',...
-    'MarkerEdgeColor',[1 1 1], 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
+    'MarkerEdgeColor','b', 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 
 scatter3(evestaz(:,5),evestaz(:,4),evestaz(:,6),60,'^',...
-    'MarkerEdgeColor',[1 1 1], 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
+    'MarkerEdgeColor','m', 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 
 xlabel('WE','FontSize',16,'FontWeight','bold','Color','k')
 ylabel('SN','FontSize',16,'FontWeight','bold','Color','k')
