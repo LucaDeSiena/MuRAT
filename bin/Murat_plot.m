@@ -103,23 +103,23 @@ for k = 1:lMF(2)
     FName_peakDelay                 =   ['Rays_PeakDelay_' fcName '_Hz'];
     rma_pd                          =   rma(:,2:4,rtpdk)/1000;
     evestaz_pd                      =   evestaz(rtpdk,:);
-    rays_peakDelay                  =   Murat_imageRays(rma_pd,origin,...
-        ending,evestaz_pd,x,y,z,FName_peakDelay);
-    pathFolder                      =...
-        fullfile(FPath,FLabel,storeFolder,FName_peakDelay);
-    saveas(rays_peakDelay,pathFolder,'tif');
-    close(rays_peakDelay)
+%     rays_peakDelay                  =   Murat_imageRays(rma_pd,origin,...
+%         ending,evestaz_pd,x,y,z,FName_peakDelay);
+%     pathFolder                      =...
+%         fullfile(FPath,FLabel,storeFolder,FName_peakDelay);
+%     saveas(rays_peakDelay,pathFolder,'tif');
+%     close(rays_peakDelay)
     %%
     % The next figure shows the rays for the total attenuation (Q)
     FName_Q                         =   ['Rays_Q_' fcName '_Hz'];
     rma_Q                           =   rma(:,2:4,rtQk)/1000;
     evestaz_Q                       =   evestaz(rtQk,:);
-    rays_Q                          =...
-        Murat_imageRays(rma_Q,origin,ending,evestaz_Q,x,y,z,FName_Q);
-    pathFolder                      =...
-        fullfile(FPath, FLabel, storeFolder, FName_Q);
-    saveas(rays_Q,pathFolder,'tif');
-    close(rays_Q)
+%     rays_Q                          =...
+%         Murat_imageRays(rma_Q,origin,ending,evestaz_Q,x,y,z,FName_Q);
+%     pathFolder                      =...
+%         fullfile(FPath, FLabel, storeFolder, FName_Q);
+%     saveas(rays_Q,pathFolder,'tif');
+%     close(rays_Q)
     %%
     % The next figure to check sensitivity for coda attenuation. The code creates
     % figures that show sections in the sensitivity kernels. The left panel shows
@@ -169,11 +169,11 @@ for k = 1:lMF(2)
     time0PD                         =   time0(rtpdk);
     
     pd_title                        =   ['Peak Delay check ' fcName ' Hz'];
-    pd_analysis                     =   Murat_imageCheckPeakDelay(...
-    time0PD,fitrobust_k,peakData_k,sizeTitle,pd_title);
-    saveas(pd_analysis, fullfile(FPath,FLabel,storeFolder,...
-        ['PD_analysis_' fcName '_Hz']),'tif');
-    close(pd_analysis)
+%     pd_analysis                     =   Murat_imageCheckPeakDelay(...
+%     time0PD,fitrobust_k,peakData_k,sizeTitle,pd_title);
+%     saveas(pd_analysis, fullfile(FPath,FLabel,storeFolder,...
+%         ['PD_analysis_' fcName '_Hz']),'tif');
+%     close(pd_analysis)
     %%
     % Then it plots first the logarithm of the energy ratio versus travel
     % time.
@@ -193,12 +193,12 @@ for k = 1:lMF(2)
     [d1, ~,spreadAverageQ, equationQ]...
                                     =...
         Murat_lsqlinQmean(tCm,tWm,Q_k,cf_k,sped,luntot_k,time0_k,rapsp_k);
-    CN_analysis                     =...
-        Murat_imageCheckCN(equationQ,residualQ_k,d1,spreadAverageQ,...
-        luntot_k,time0_k,energyRatio_k,A_k,Edirect_k,CN_title);
-    saveas(CN_analysis, fullfile(FPath,FLabel,storeFolder,...
-        ['CN_analysis_' fcName '_Hz']),'tif');
-    close(CN_analysis)
+%     CN_analysis                     =...
+%         Murat_imageCheckCN(equationQ,residualQ_k,d1,spreadAverageQ,...
+%         luntot_k,time0_k,energyRatio_k,A_k,Edirect_k,CN_title);
+%     saveas(CN_analysis, fullfile(FPath,FLabel,storeFolder,...
+%         ['CN_analysis_' fcName '_Hz']),'tif');
+%     close(CN_analysis)
     %% PLOT - RESULTS
     % Set up matrices. The points are set to the upper SW vertices to
     % work with the function "slice". All stored in the sub-folder.
@@ -206,6 +206,7 @@ for k = 1:lMF(2)
     modv_Qc_k                       =   modv_Qc(:,:,k);
     modv_Q_k                        =   modv_Q(:,:,k);
     [X,Y,Z1,mPD]                    =   Murat_fold(x,y,z,modv_pd_k(:,4));
+    [X,Y,Z1,PD_cts]                 =   Murat_fold(x,y,z,modv_pd_k(:,5));
     [~,~,~,mQc]                     =   Murat_fold(x,y,z,modv_Qc_k(:,4));
     [~,~,~,mQ]                      =   Murat_fold(x,y,z,modv_Q_k(:,4));
     Z                               =   Z1/1000;
@@ -222,12 +223,29 @@ for k = 1:lMF(2)
         fullfile(FPath, FLabel, storeFolder, FName_PDMap);
     Murat_saveFigures(peakDelaymap,pathFolder);
     
+    % only keep cells with more than x% of data
+    factor = 5;
+    keep_bins                       =   PD_cts>((max(PD_cts(:))/100)*factor);
+    mPD_red                         =   mPD.*keep_bins;
+        
+    FName_PDMap                     =   ['Peak-Delay-3D_' fcName '_Hz_',num2str(factor),'_perc'];
+    peakDelaymap_red                =   Murat_image3D(X,Y,Z,mPD_red,...
+        redblue,sections,evestaz_pd,x,y,z,FName_PDMap);
+    title('Peak-delay variations',...
+        'FontSize',sizeTitle,'FontWeight','bold','Color','k');
+    pathFolder                      =...
+        fullfile(FPath, FLabel, storeFolder, FName_PDMap);
+    Murat_saveFigures(peakDelaymap_red,pathFolder);
+    
+    rem_modv_pd_k                   =   Murat_unfold(X,Y,Z,mPD_red);
+    modv_pd_k(:,4)                  =   rem_modv_pd_k(:,4);
+    
     %%
     % Qc results
     storeFolder                     =   'Results/Qc';
     FName_QcMap                     =   ['Qc-3D_' fcName '_Hz'];
     Qcmap                           =   Murat_image3D(X,Y,Z,mQc,...
-        cyanpink,sections,evestaz_Qc,x,y,z,FName_QcMap);
+        turbo,sections,evestaz_Qc,x,y,z,FName_QcMap);
     title('Coda attenuation',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     pathFolder                      =...
