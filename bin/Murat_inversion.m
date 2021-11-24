@@ -90,17 +90,19 @@ for k = 1:lMF(2)
     end
     
     %%
-    % Peak delay regionalization
+    % Peak delay weighted regionalization
     rcpd_k                          =   ray_crosses_pd(:,k);
     rtpd_k                          =   retain_pd(:,k);
     Apd_k                           =	Apd_i(rtpd_k,rcpd_k);
     lpdelta_k                       =   lpdelta(rtpd_k,k);
     
+    A_boxes                         =   Apd_k>0;
+    cts_box                         =   sum(A_boxes,1);
     mpd                             =...
-        sum(Apd_k.*lpdelta_k,1)'./sum(Apd_k,1)';
-    mpd(isnan(mpd))                 =   mean(mpd(~isnan(mpd)));
-    
+        sum(A_boxes.*lpdelta_k,1)'./sum(A_boxes,1)';
+    mpd(isnan(mpd))                 =   mean(mpd,'omitnan');
     modv_pd(rcpd_k,4,k)             =   mpd;
+    modv_pd(rcpd_k,5,k)             =   cts_box;
     
     %%
     % Qc inversion
