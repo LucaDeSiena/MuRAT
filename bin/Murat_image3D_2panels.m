@@ -11,8 +11,8 @@ function image          = ...
 %    Z:         3D z matrix
 %    V:         3D field matrix
 %    color:     name of the colormap
-%    sections:  location of sections   
-%    evestaz:   locations of earthquakes and stations in meters  
+%    sections:  location of sections
+%    evestaz:   locations of earthquakes and stations in meters
 %    x:         x vector
 %    y:         y vector
 %    z:         z vector

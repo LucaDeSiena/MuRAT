@@ -11,8 +11,8 @@ function image          = ...
 %    Z:         3D z matrix
 %    V:         3D field matrix
 %    color:     name of the colormap
-%    sections:  location of sections   
-%    evestaz:   locations of earthquakes and stations in meters  
+%    sections:  location of sections
+%    evestaz:   locations of earthquakes and stations in meters
 %    x:         x vector
 %    y:         y vector
 %    z:         z vector
@@ -41,8 +41,8 @@ z                       =   sort(z)/1000;
 
 slice(Xp, Yp, Zp, mVp, sections(2), sections(1), sections(3))
 
-scale_mVp(1)            =   max(mVp(:)); 
-scale_mVp(2)            =   abs(min(mVp(:))); 
+scale_mVp(1)            =   max(mVp(:));
+scale_mVp(2)            =   abs(min(mVp(:)));
 max_scale               =   max(scale_mVp);
 if max_scale            <   1
     max_scale           =   round(max_scale,2);

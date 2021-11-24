@@ -56,7 +56,7 @@ residualQc                          =   zeros(1,lMF(2));
 
 %%
 % Creating folders to store results
-if exist(FLabel,'dir')==7    
+if exist(FLabel,'dir')==7
     rmdir(FLabel,'s')
 end
 
@@ -88,31 +88,31 @@ for k = 1:lMF(2)
     if find(fcName == '.')
         fcName(fcName == '.')       =   '_';
     end
-    
+
     %%
     % Peak delay weighted regionalization
     rcpd_k                          =   ray_crosses_pd(:,k);
     rtpd_k                          =   retain_pd(:,k);
     Apd_k                           =	Apd_i(rtpd_k,rcpd_k);
     lpdelta_k                       =   lpdelta(rtpd_k,k);
-    
+
     A_boxes                         =   Apd_k>0;
     cts_box                         =   sum(A_boxes,1);
     mpd                             =...
         sum(A_boxes.*lpdelta_k,1)'./sum(A_boxes,1)';
 <<<<<<< HEAD
-    
+
 %     norm_ray                        =   Apd_k./sum(Apd_k,2);
 %     mpd_distr                       =   lpdelta_k.*norm_ray;
 %     max_ray                         =   max(Apd_k(:));
 %     Apd_k_norm                      =   max_ray./Apd_k;
 %     mpd_fill                        =   mpd_distr.*Apd_k_norm;
 %     mpd                             =   sum(mpd_fill,1,'omitnan')./sum(Apd_k>0,1);
-    
+
 %     mpd_norm_block                  =   Apd_k./sum(Apd_k,1);
 %     mpd_sum                         =   lpdelta_k.*mpd_norm_block;
-%     mpd                             =   sum(mpd_sum,1)';  
-    
+%     mpd                             =   sum(mpd_sum,1)';
+
 %     mpd                             =...
 %         sum(Apd_k.*lpdelta_k,1)'./sum(Apd_k,1)';
 =======
@@ -120,9 +120,9 @@ for k = 1:lMF(2)
     modv_pd(rcpd_k,4,k)             =   mpd;
     modv_pd(rcpd_k,5,k)             =   cts_box;
 >>>>>>> c226ba3a6419fd09c78234c7851e3d6b92b8dc41
-    
+
     mpd(isnan(mpd))                 =   mean(mpd,'omitnan');
-    
+
     modv_pd(rcpd_k,4,k)             =   mpd;
     modv_pd(rcpd_k,5,k)             =   cts_box;
     %%
@@ -135,35 +135,35 @@ for k = 1:lMF(2)
     Wc                              =   Murat_weighting(RZZ_k,QcM);
     Gc                              =   Wc*Ac_k;
     FName                           =   ['L-curve_Qc_' fcName '_Hz'];
-    
+
     bQm                             =   Wc*Qm_k;
     lCurveQc_k                      =   lCurveQc(k);
-    
+
     if isequal(inversionMethod,'Tikhonov')
         [mtik0C,residualQc_k,LcQc,tik0_regC]...
                                     =...
            Murat_tikhonovQc(outputLCurve,Gc,bQm,lCurveQc_k);
-        
+
         residualQc(1,k)             =   residualQc_k;
         modv_Qc(rcQc_k,4,k)         =   mtik0C;
-        
+
     elseif isequal(inversionMethod,'Iterative')
         disp(['Qc L-curve and cost functions at ', num2str(cf_k), ' Hz.'])
-        
+
         [LcQc, minimizeVectorQm,infoVectorQm,tik0_regC]...
                                     =...
            Murat_minimise(outputLCurve,Gc,bQm,lCurveQc_k,FName);
-                                    
+
         residualQc(1,k)             =   min(infoVectorQm.Rnrm);
         modv_Qc(rcQc_k,4,k)         =   minimizeVectorQm;
-        
+
     else
         error('Unknown inversion method.')
-        
+
     end
     saveas(LcQc,fullfile(FPath, FLabel,'Tests',FName));
-    close(LcQc)  
-    
+    close(LcQc)
+
     %%
     % Q inversion
     rcQ_k                           =   ray_crosses_Q(:,k);
@@ -172,13 +172,13 @@ for k = 1:lMF(2)
     Q_k                             =   Qm(rtQ_k,k);
     luntot_k                        =   luntot(rtQ_k);
     time0_k                         =   time0(rtQ_k);
-    rapsp_k                         =   rapsp(rtQ_k,k);    
+    rapsp_k                         =   rapsp(rtQ_k,k);
     tCm                             =   tCoda(rtQ_k,k);
-    
+
     [d1, const_Qc_k, ~, ~]          =   Murat_lsqlinQmean(tCm,tWm,Q_k,...
                                     cf_k,sped,luntot_k,time0_k,rapsp_k);
     const_Qc(rtQ_k,k)               =   const_Qc_k;
-    
+
     lCurveQ_k                       =   lCurveQ(k);
     FName                           =   ['L-curve_Q_' fcName '_Hz'];
     if isequal(inversionMethod,'Tikhonov')
@@ -188,35 +188,35 @@ for k = 1:lMF(2)
 
         residualQ(:,k)              =   residualQ_k;
         modv_Q(rcQ_k,4,k)           =   mtik0;
-        
+
     elseif isequal(inversionMethod,'Iterative')
         disp(['Q L-curve and cost functions at ', num2str(cf_k), ' Hz.'])
         [LcCN, minimizeVectorQ,infoVectorQ,tik0_reg]...
                                     =...
            Murat_minimise(outputLCurve,A_k,d1,lCurveQ_k,FName);
-                                    
+
         residualQ(1,k)              =   min(infoVectorQ.Rnrm);
         modv_Q(rcQ_k,4,k)           =   minimizeVectorQ;
-        
+
     end
-    
+
     saveas(LcCN,fullfile(FPath, FLabel,'Tests',FName));
     close(LcCN)
-    
+
     %% Checkerboards and spike inputs and checkerboard inversion
     % Qc
     siz                             =   [nxc nyc nzc];
     I                               =   checkerBoard3D(siz,sizea);
     [checkInput,spikeInput]         =...
                                Murat_inputTesting(I,spike_o,spike_e,x,y,z);
-    
+
     modv_Qc(checkInput==1,6,k)      =   latt;
     modv_Qc(checkInput==0,6,k)      =   hatt;
     modv_Qc(:,8,k)                  =   mean(Qm_k);
     modv_Qc(spikeInput,8,k)         =   spike_v;
     Qc_ch                           =   modv_Qc(rcQc_k,6,k);
     re_checkQc                           =   Gc*Qc_ch;
-    
+
     modv_Qc(rcQc_k,7,k)             =...
         Murat_outputTesting(Gc,re_checkQc,tik0_regC,inversionMethod);
     %%
@@ -224,27 +224,27 @@ for k = 1:lMF(2)
     modv_Q(:,6:8,k)                 =   modv_Qc(:,6:8,k);
     Q_ch                            =   modv_Q(rcQ_k,6,k);
     re_Q                            =   A_k*Q_ch;
-    
+
     modv_Q(rcQ_k,7,k)               =...
         Murat_outputTesting(A_k,re_Q,tik0_reg,inversionMethod);
-    
+
     %%
     % Inverting spike for Qc and Q at user discretion
     if ~isempty(spike_o)
         Qc_sp                       =   modv_Qc(rcQc_k,8,k);
         re_spikeQc                       =   Gc*Qc_sp;
-        
+
         modv_Qc(rcQc_k,9,k)         =...
             Murat_outputTesting(Gc,re_spikeQc,tik0_regC,inversionMethod);
-        
+
         Q_sp                        =   modv_Q(rcQ_k,8,k);
         re_spikeQ                        =   A_k*Q_sp;
-        
+
         modv_Q(rcQ_k,9,k)           =...
             Murat_outputTesting(A_k,re_spikeQ,tik0_reg,inversionMethod);
-        
+
     end
-    
+
     %%
     % Save peak-delay, Qc, Q
     [WE,SN,~]                       = deg2utm(origin(1),origin(2));
@@ -252,37 +252,38 @@ for k = 1:lMF(2)
     modUTM                          =   [modLLD(:,1)+WE ...
         modLLD(:,2)+SN modLLD(:,3)];
     modv_pd_k                       =   modv_pd(:,:,k);
-    
+
     modv_pd_k(:,1:3)                =   modUTM;
     FName                           =...
         ['peakdelay_' fcName '_UTM_Hz.txt'];
     writematrix(modv_pd_k,fullfile(FPath, FLabel, 'TXT', FName));
-    
+
     modv_pd_k(:,1:3)                =   modLLD;
     FName                           =...
         ['peakdelay_' fcName '_Degrees_Hz.txt'];
     writematrix(modv_pd_k,fullfile(FPath, FLabel, 'TXT', FName));
-    
+
     modv_Qc_k                       =   modv_Qc(:,:,k);
-    
+
     modv_Qc_k(:,1:3)                =   modUTM;
     FName                           =   ['Qc_' fcName '_UTM_Hz.txt'];
     writematrix(modv_Qc_k,fullfile(FPath, FLabel, 'TXT', FName));
-    
+
     modv_Qc_k(:,1:3)                =   modLLD;
     FName                           =   ['Qc_' fcName '_Degrees_Hz.txt'];
     writematrix(modv_Qc_k,fullfile(FPath, FLabel, 'TXT', FName));
-    
+
     modv_Q_k                        =   modv_Q(:,:,k);
-    
+
     modv_Q_k(:,1:3)                 =   modUTM;
     FName                           =   ['Q_' fcName '_UTM_Hz.txt'];
     writematrix(modv_Q_k,fullfile(FPath, FLabel, 'TXT', FName));
-    
+
     modv_Q_k(:,1:3)                 =   modLLD;
     FName                           =   ['Q_' fcName '_Degrees_Hz.txt'];
     writematrix(modv_Q_k,fullfile(FPath, FLabel, 'TXT', FName));
-    
+
+
 end
 %%
 % Save in Murat
@@ -293,5 +294,3 @@ Murat.data.modvPeakDelay            =   modv_pd;
 Murat.data.modvQc                   =   modv_Qc;
 Murat.data.modvQ                    =   modv_Q;
 writetable(muratHeader,fullfile(FPath, FLabel, 'TXT', 'DataHeaders.xls'));
-
-
