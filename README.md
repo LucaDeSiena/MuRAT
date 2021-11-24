@@ -26,10 +26,12 @@ The group of active users (providing questions, feedback, snippets of code) is t
 
 *Documentation*
 -------------
+
 The file Documentation.pdf in this folder serves as full documentation for MuRAT3.0. This README file and the *Input_.mlx* files in this folder act as additional documentation.
 
 *System*
 ------------
+
 The program works on Mac, Linux and Windows systems equipped with Matlab version R2017a or higher.
 
 Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing and Mapping. The Parallel Computing Toolbox is recommended for speed.
@@ -38,7 +40,7 @@ Custom toolboxes not included in standard Matlab installations are also provided
 
 1. Routines to read SAC files created by Zhigang Peng and available from [his SAC tutorial page](http://geophysics.eas.gatech.edu/classes/SAC/).
 2. The [Regularization Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/52-regtools?s_tid=prof_contriblnk) created by Per Christian Hansen and available from Matlab File Exchange.
-3. The [IRTools](https://github.com/jnagy1/IRtools/tree/ebd70d4036c3cd8c82fc1e17033351491fddf11f), linked to MuRAT as a submodule.
+3. The [IRTools](https://github.com/jnagy1/IRtools/tree/ebd70d4036c3cd8c82fc1e17033351491fddf11f), included in MuRAT as a zipped folder.
 4. Functions from the [Geometry and Image-Based Bioengineering add-On for MATLAB](https://github.com/gibbonCode/GIBBON).
 
 Three sample datasets (Mount St. Helens, Romania, and Toba) are included and allow the user to obtain sample models. The  datasets work with the three corresponding *input.mlx* files that show examples of what the user can obtain with the code.
@@ -48,11 +50,11 @@ Three sample datasets (Mount St. Helens, Romania, and Toba) are included and all
 
 The current version works following these steps:
 
-1. Download or clone the package at https://github.com/LucaDeSiena/MuRAT.
+1. Download or clone the package at <https://github.com/LucaDeSiena/MuRAT>.
 
 2. Work in the downloaded folder after moving it to an appropriate location on your system.
 
-3. Check that the IRTools have been downloaded in the corresponding folder in the working directory. Otherwise download them from https://github.com/jnagy1/IRtools/tree/ebd70d4036c3cd8c82fc1e17033351491fddf11f.
+3. Check that the IRTools have been downloaded as a zipped folder in the corresponding folder in the working directory. Otherwise download them from <https://github.com/jnagy1/IRtools/tree/ebd70d4036c3cd8c82fc1e17033351491fddf11f>.
 
 4. Open one of the three input .mlx files, providing a step-by-step explanation of all inputs (*Murat_inputMSH.mlx*, *Murat_inputRomania.mlx*, or *Murat_inputToba.mlx*) and create your own.
 
@@ -64,6 +66,7 @@ The current version works following these steps:
               b. The coordinates of the event.
               c. The coordinates of the station.
               d. The origin time of the event (optional).
+
 Test your SAC headers with the functions Murat\_test and Murat\_testAll in the folder **Utilities**.
 
 7. Run MuRAT3 and select the name of the input file desired.
@@ -87,7 +90,7 @@ All the output files (.mat, .txt and xlsx), figures and .vtk files (for visualis
 
   4. **Understand the output figure files**
 
-All the figures are stored in subdirectories in the **Label** folder, created in the working directory:
+Beware, *.fig* figures are created with the invisible option in Matlab. Use the function *openfig(..,'visible','on')* to open them from the command window. All the figures are stored in subdirectories in the **Label** folder, created in the working directory:
 
 *Structure of the Label Folder, where results are stored*
 --------
@@ -101,6 +104,7 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 *DataHeaders.xls*: A file containing all headers variables of the SAC files used for the mapping.
 
   ------------
+
   2. **Checkerboard directory**
 
       Qc subdirectory
@@ -112,6 +116,7 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 *Q-Checkerboard__.tif* and *Q-Checkerboard__.fig*: These figures show input and output of the Q checkerboard test in the 3D space (*.fig*) and across sections (*.tif*).
 
   ------------
+
   3. **RaysKernels directory**
 
 *Rays__.tif*: These figures show how rays develop in 3D for the Peak Delay and Q measurements. It plots them on three slices (WE, SN, Z). The fourth panel shows the location of the area on the Earth.
@@ -119,8 +124,8 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 *Kernel__.tif* and *Kernel__.fig*: Each *.fig* figure has two panels showing the sensitivity kernels in the entire 3D space (left) and the normalised kernels in the chosen inversion grid (right). This reduction implies several hypotheses: among these the most important is that most of the energy is still comprised in the grid (the difference is general < 1% if all source and stations are in the inversion grid. The *.tif* figures are sections in the WE, SN, and Z directions. Figures are produced for all frequencies.
 
   ------------
-  4. **Results directory**
 
+  4. **Results directory**
 
       Parameter subdirectory
 
@@ -139,6 +144,7 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 *Qc__.tif* and *Qc__.fig*: Coda attenuation maps in 3D (*.fig*) and across sections (*.tif*).
 
   ------------
+
   5. **Spike directory**
 
       Qc subdirectory
@@ -150,6 +156,7 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 *Q-Spike__.tif* and *Q-Spike__.fig*: These figures show input and output of the Q spike test in the 3D space (*.fig*) and across sections (*.tif*).
 
   ------------
+
   6. **Tests directory**
 
 *Qc_Analysis__.tif*, *PD_Analysis__.tif*, and *CN_Analysis__.tif*
@@ -166,7 +173,6 @@ Three figures to evaluate the appropriate peak-delay and coda inputs. Read the d
 ------------
 
 If you use MuRAT for your research and publications, please consider mentioning the GitHub internet site and citing the following papers, depending on the techniques you are going to use
-
 
 **Q (Total attenuation)**:
 

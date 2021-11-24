@@ -127,7 +127,7 @@ for k = 1:lMF(2)
     % kernel in the inversion grid.
     FName_Qc                        =   ['Kernel_Qc' fcName '_Hz'];
     kernels                         =   figure('Name',FName_Qc,...
-        'NumberTitle','off','Position',[20,400,1200,1000]);
+        'NumberTitle','off','Position',[20,400,1200,1000],'visible','off');
     
     % Calculates kernels
     [K_grid, r_grid]                =...
@@ -259,7 +259,7 @@ for k = 1:lMF(2)
     storeFolder                     =   'Checkerboard/Qc';
     FName_QcCheck                   =   ['Qc-Checkerboard_' fcName '_Hz'];
     Qc_check                        =   figure('Name',FName_QcCheck,...
-        'NumberTitle','off','Position',[20,400,2000,1000]);
+        'NumberTitle','off','Position',[20,400,2000,1000],'visible','off');
     
     subplot(1,2,1)
     Murat_image3D_2panels(X,Y,Z,check_inputQc,...
@@ -282,7 +282,7 @@ for k = 1:lMF(2)
     storeFolder                     =   'Checkerboard/Q';
     FName_QCheck                    =   ['Q-Checkerboard_' fcName '_Hz'];
     Q_check                         =   figure('Name',FName_QCheck,...
-        'NumberTitle','off','Position',[20,400,2000,1000]);
+        'NumberTitle','off','Position',[20,400,2000,1000],'visible','off');
     
     subplot(1,2,1)
     Murat_image3D_2panels(X,Y,Z,check_inputQ,...
@@ -312,7 +312,7 @@ for k = 1:lMF(2)
     storeFolder                     =   'Spike/Qc';
     FName_QcSpike                    =   ['Qc-Spike_' fcName '_Hz'];
     Qc_spike                        =   figure('Name',FName_QcSpike,...
-        'NumberTitle','off','Position',[20,400,2000,1000]);
+        'NumberTitle','off','Position',[20,400,2000,1000],'visible','off');
     
     subplot(1,2,1)
     Murat_image3D_2panels(X,Y,Z,spike_inputQc,...
@@ -334,7 +334,7 @@ for k = 1:lMF(2)
     storeFolder                     =   'Spike/Q';
     FName_QSpike                     =   ['Q-Spike_' fcName '_Hz'];
     Q_spike                         =   figure('Name',FName_QSpike,...
-        'NumberTitle','off','Position',[20,400,2000,1000]);
+        'NumberTitle','off','Position',[20,400,2000,1000],'visible','off');
     
     subplot(1,2,1)
     Murat_image3D_2panels(X,Y,Z,spike_inputQ,...
@@ -366,8 +366,8 @@ for k = 1:lMF(2)
         ['Parameter_space_variations_' fcName '_Hz'];
     [param_plot,par,para_map]       =...
         Murat_imageParameters(x,y,z,modv_pd_k,modv_Qc_k,sizeTitle); 
-    saveas(param_plot,...
-        fullfile(FPath,FLabel,storeFolder,FName_Parameters));
+    saveas(param_plot,fullfile(FPath,FLabel,storeFolder,...
+        FName_Parameters));
     close(param_plot)
     
     %%
@@ -446,5 +446,6 @@ Qcf_title                           =   'Qc vs Frequency';
 QcFrequency                         =   Murat_imageQcFrequency(cf,...
     averageQcFrequency,sizeTitle,Qcf_title);
 FName                               =   'Qc_vs_frequency';
-saveas(QcFrequency, fullfile(FPath,FLabel,storeFolder,FName));
+saveas(QcFrequency, fullfile(FPath,FLabel,storeFolder,FName),...
+    'visible','off');
 close all

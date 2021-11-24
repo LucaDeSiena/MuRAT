@@ -22,8 +22,8 @@ function CN_analysis    =   Murat_imageCheckCN(equationQ,residualQ_k,d1,...
 % Output parameters:
 %    CN_analysis:   figure for coda normalization check
 
-CN_analysis             =   figure('Name',...
-    CN_title,'NumberTitle','off','Position',[20,400,1200,1000]);
+CN_analysis             =   figure('Name',CN_title,'NumberTitle','off',...
+    'Position',[20,400,1200,1000],'visible','off');
 
 dRatio                  =	log(energyRatio_k);
 luntotQ                 =   luntot_k/1000;

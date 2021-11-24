@@ -35,7 +35,7 @@ s                               =   diag(S);
 
 if flagShow == 1
     LcCN                            =...
-        figure('Name','L-curve Q','NumberTitle','off');
+        figure('Name','L-curve Q','NumberTitle','off','visible','off');
     [rho,eta,reg_param]             =...
         l_curve_tikh_svd(U,s,d1,100);
     plot_lc(rho,eta,'-',1,reg_param)

@@ -37,7 +37,7 @@ mVp                     =   interp3(X,Y,Z,V,Xp,Yp,Zp);
 z                       =   sort(z)/1000;
 
 image                   =   figure('Name',name,...
-    'NumberTitle','off','Position',[20,400,1200,1000]);
+    'NumberTitle','off','Position',[20,400,1200,1000],'visible','off');
 
 slice(Xp, Yp, Zp, mVp, sections(2), sections(1), sections(3))
 colormap(color);
