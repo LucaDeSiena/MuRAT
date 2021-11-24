@@ -333,12 +333,12 @@ for k = 1:lMF(2)
 
     subplot(1,2,1)
     Murat_image3D_2panels(X,Y,Z,spike_inputQc,...
-        cyanpink,sections,evestaz_Qc,x,y,z);
+        turbo,sections,evestaz_Qc,x,y,z);
     title('Input spike Qc',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     subplot(1,2,2)
     Murat_image3D_2panels(X,Y,Z,spike_outputQc,...
-        cyanpink,sections,evestaz_Qc,x,y,z);
+        turbo,sections,evestaz_Qc,x,y,z);
     title('Output spike Qc',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
 
