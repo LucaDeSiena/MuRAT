@@ -40,6 +40,18 @@ image                   =   figure('Name',name,...
     'NumberTitle','off','Position',[20,400,1200,1000]);
 
 slice(Xp, Yp, Zp, mVp, sections(2), sections(1), sections(3))
+
+scale_mVp(1)            =   max(mVp(:)); 
+scale_mVp(2)            =   abs(min(mVp(:))); 
+max_scale               =   max(scale_mVp);
+if max_scale            <   1
+    max_scale           =   round(max_scale,2);
+    caxis([-max_scale max_scale])
+elseif max_scale        >   5
+    max_scale           =   ceil(max_scale);
+    caxis([-max_scale max_scale])
+end
+
 colormap(color);
 colorbar
 shading flat
