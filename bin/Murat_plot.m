@@ -244,7 +244,7 @@ for k = 1:lMF(2)
     storeFolder                     =   'Results/Qc';
     FName_QcMap                     =   ['Qc-3D_' fcName '_Hz'];
     Qcmap                           =   Murat_image3D(X,Y,Z,mQc,...
-        turbo,sections,evestaz_Qc,x,y,z,FName_QcMap);
+        winter,sections,evestaz_Qc,x,y,z,FName_QcMap);
     title('Coda attenuation',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     pathFolder                      =...
@@ -333,12 +333,12 @@ for k = 1:lMF(2)
 
     subplot(1,2,1)
     Murat_image3D_2panels(X,Y,Z,spike_inputQc,...
-        turbo,sections,evestaz_Qc,x,y,z);
+        winter,sections,evestaz_Qc,x,y,z);
     title('Input spike Qc',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     subplot(1,2,2)
     Murat_image3D_2panels(X,Y,Z,spike_outputQc,...
-        turbo,sections,evestaz_Qc,x,y,z);
+        winter,sections,evestaz_Qc,x,y,z);
     title('Output spike Qc',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
 
