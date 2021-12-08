@@ -1,9 +1,9 @@
+MuRAT - Multi-Resolution seismic Attenuation Tomography
+=======
+
 ![MuRAT is a code for attenuation, scattering and absorption tomography.](https://github.com/LucaDeSiena/MuRAT/blob/master/MuRAT.jpg)
 
 [![test](https://github.com/deconvolution/MuRAT/actions/workflows/run_test.yml/badge.svg?branch=with_test)](https://github.com/deconvolution/MuRAT/actions/workflows/run_test.yml)
-
-MuRAT - Multi-Resolution seismic Attenuation Tomography
-=======
 
 MuRAT is a Matlab Package for seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves at multiple frequencies.
 
@@ -60,21 +60,16 @@ The current version works following these steps:
 
 5. Use a velocity model, storing it in the corresponding folder. The format is [Latitude, Longitde, Altitude (meters)]
 
-6. MuRAT works with [SAC files](https://ds.iris.edu/files/sac-manual/) that must be stored into a single folder and corrected for the instrument function. The files must have populated headers, although the code can work using just the following header fields:
-
-              a. The P-wave picking in the reference time of the waveform.
-              b. The coordinates of the event.
-              c. The coordinates of the station.
-              d. The origin time of the event (optional).
-
-Test your SAC headers with the functions Murat\_test and Murat\_testAll in the folder **Utilities**.
+6. MuRAT works with [SAC files](https://ds.iris.edu/files/sac-manual/) that must be stored into a single folder and corrected for the instrument function. The files must have populated headers. Your SAC headers get tested anyway and the result is shown in an excel file. The code takes from the header the following fields:
+***a)*** The P-wave picking in the reference time of the waveform;
+***b)*** The coordinates of the event;
+***c)*** The coordinates of the station;
+***d)*** The origin time of the event (optional).
 
 7. Run MuRAT3 and select the name of the input file desired.
 
-*What the code does*
+*Workflow*
 --------
-
-To understand what MuRAT3D does:
 
 A. ***Start from the Murat_input..mlx files***
 
@@ -92,10 +87,14 @@ D. **Understand the output figure files**
 
 Beware, *.fig* figures are created with the invisible option in Matlab. Use the function *openfig(..,'visible')* to open them from the command window. All the figures are stored in subdirectories in the **Label** folder, created in the working directory:
 
-*Structure of the Label Folder, where results are stored*
+*Structure of the Label Folder*
 --------
 
-  1. **TXT directory** and **VTK directory**
+------------
+
+* **TXT directory** and **VTK directory**
+
+------------
 
 *peakdelay__.txt*, *Qc__.txt* and *Q__.txt*:  The 3D models of the parameters at different frequencies. The first three columns of all text files correspond to WE, SN, and altitude. The fourth column is the mapped parameter. They contain a minimum of five columns (for *Peak Delay*) that can be imported to show the locations of the anomalies in a simple (x,y,z) reference system. The fifth columns shows blocks hit by at least one ray. Qc and Q are solved with an inversion and thus have: (1) sixth and seventh columns that corresponds to the input and output of the checkerboard test; (2) eight and ninth columns that corresponds to the input and output of the spike test. All the .vtk files are stored in omonimous folder.
 
@@ -103,9 +102,11 @@ Beware, *.fig* figures are created with the invisible option in Matlab. Use the 
 
 *DataHeaders.xls*: A file containing all headers variables of the SAC files used for the mapping.
 
-  ------------
+------------
 
-  2. **Checkerboard directory**
+* ***Checkerboard directory***
+
+------------
 
       Qc subdirectory
 
@@ -115,17 +116,21 @@ Beware, *.fig* figures are created with the invisible option in Matlab. Use the 
 
 *Q-Checkerboard__.tif* and *Q-Checkerboard__.fig*: These figures show input and output of the Q checkerboard test in the 3D space (*.fig*) and across sections (*.tif*).
 
-  ------------
+------------
 
-  3. **RaysKernels directory**
+* ***RaysKernels directory***
+
+------------
 
 *Rays__.tif*: These figures show how rays develop in 3D for the Peak Delay and Q measurements. It plots them on three slices (WE, SN, Z). The fourth panel shows the location of the area on the Earth.
 
 *Kernel__.tif* and *Kernel__.fig*: Each *.fig* figure has two panels showing the sensitivity kernels in the entire 3D space (left) and the normalised kernels in the chosen inversion grid (right). This reduction implies several hypotheses: among these the most important is that most of the energy is still comprised in the grid (the difference is general < 1% if all source and stations are in the inversion grid. The *.tif* figures are sections in the WE, SN, and Z directions. Figures are produced for all frequencies.
 
-  ------------
+------------
 
-  4. **Results directory**
+* ***Results directory***
+
+------------
 
       Parameter subdirectory
 
@@ -145,8 +150,9 @@ Beware, *.fig* figures are created with the invisible option in Matlab. Use the 
 
   ------------
 
-  5. **Spike directory**
+* ***Spike directory***
 
+------------
       Qc subdirectory
 
 *Qc-Spike__.tif* and *Qc-Spike__.fig*: These figures show input and output of the Qc spike test in the 3D space (*.fig*) and across sections (*.tif*).
@@ -155,9 +161,11 @@ Beware, *.fig* figures are created with the invisible option in Matlab. Use the 
 
 *Q-Spike__.tif* and *Q-Spike__.fig*: These figures show input and output of the Q spike test in the 3D space (*.fig*) and across sections (*.tif*).
 
-  ------------
+------------
 
-  6. **Tests directory**
+* ***Tests directory***
+
+------------
 
 *Qc_Analysis__.tif*, *PD_Analysis__.tif*, and *CN_Analysis__.tif*
 
@@ -168,6 +176,8 @@ Three figures to evaluate the appropriate peak-delay and coda inputs. Read the d
 *Qc_vs_frequency*: Relationship between coda attenuation and frequency.
 
 *Velocity_model.fig*: The 3D velocity model is also available as a figure in Matlab format. They can be loaded in Matlab and will show the vertical and horizontal slices defined in *Figures Sections*.
+
+------------
 
 *Citing MuRAT*
 ------------
