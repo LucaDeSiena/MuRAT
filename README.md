@@ -11,23 +11,12 @@ MuRAT measures seismic attenuation, scattering, and absorption from passive and 
 
 The group of active users (providing questions, feedback, snippets of code) is the [Volcano Earth Imaging group](https://www.lucadesiena.com).
 
-*History*
--------
-
-* *2006-2010*: MuRAT was built first by Luca De Siena during his PhD at the INGV-Osservatorio Vesuviano (Italy) using Matlab, c++, csh and Fortran codes.
-
-* *2010-2013*: MuRAT1.0 was developed and published in 2014 while De Siena was research assistant at the Westfälisches Wilhelms Universität, Münster (Germany). Murat1.0 allowed 3D total attenuation imaging with the coda-normalization method. Important contributions were given by Christine Thomas (WWU Münster) and Richard Aster (Colorado State University).
-
-* *2014*: MuRAT1.0 is published in [De Siena et al. 2014, JVGR](https://www.sciencedirect.com/science/article/abs/pii/S0377027314000961) with two sample datasets (Mount St. Helens and Vesuvius).
-
-* *2018*: [MuRAT2D](https://github.com/LucaDeSiena/MuRAT2D) is the result of the activity of the [Volcano Earth Imaging group](https://www.lucadesiena.com), led by De Siena during his stint as Lecturer at the University of Aberdeen (UK). It images 2D seismic scattering (peak delay) and absorption (Qc at late lapse time - kernel-based). It is ideal for small datasets and in case no previous velocity information is available.
-
-* *2021*: [MuRAT3D](https://github.com/LucaDeSiena/MuRAT) is released as a multi-frequency parallelized code for full 3D attenuation, scattering and absorption imaging using peak delays, coda attenuation and coda-normalized energies.
-
 *Documentation*
 -------------
 
 The file Documentation.pdf in this folder serves as full documentation for MuRAT3.0. This README file and the *Input_.mlx* files in this folder act as additional documentation.
+
+The Wiki for MuRAT is under construction, but you can already check a bit of the history of the code.
 
 *System*
 ------------
