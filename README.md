@@ -76,19 +76,19 @@ Test your SAC headers with the functions Murat\_test and Murat\_testAll in the f
 
 To understand what MuRAT3D does:
 
-  1. ***Start from the Murat_input..mlx files***
+A. ***Start from the Murat_input..mlx files***
 
 The input files are self-explanatory and provide detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model use *MuRAT_InputMSH.mlx* otherwise start from either *MuRAT_InputRomania.mlx* or *MuRAT_InputToba.mlx*, the examples for 2- and 3-component data.
 
-  2. ***Read the Documentation***
+B. ***Read the Documentation***
 
 The Documentation includes a summary of the theory underlying attenuation imaging: read it to understand the approximations used to process data, forward model kernels, and invert observations.
 
-  3. ***Understand the output text files***
+C. ***Understand the output text files***
 
 All the output files (.mat, .txt and xlsx), figures and .vtk files (for visualisation in Paraview) are stored in the **TXT** and **VTK** sub-directories in the **Label** folder, created in the working directory. In the following, a list of the output files and what they contain is provided. Ascii files contain the models in degrees and UTM. We strongly suggest imaging the TXT files using the [GeophysicalModelGenerator](https://github.com/JuliaGeodynamics/GeophysicalModelGenerator.jl).
 
-  4. **Understand the output figure files**
+D. **Understand the output figure files**
 
 Beware, *.fig* figures are created with the invisible option in Matlab. Use the function *openfig(..,'visible')* to open them from the command window. All the figures are stored in subdirectories in the **Label** folder, created in the working directory:
 
