@@ -205,7 +205,7 @@ for k = 1:lMF(2)
     modv_Qc_k                       =   modv_Qc(:,:,k);
     modv_Q_k                        =   modv_Q(:,:,k);
     [X,Y,Z1,mPD]                    =   Murat_fold(x,y,z,modv_pd_k(:,4));
-    [X,Y,Z1,PD_cts]                 =   Murat_fold(x,y,z,modv_pd_k(:,5));
+    [~,~,~,PD_cts]                 =   Murat_fold(x,y,z,modv_pd_k(:,5));
     [~,~,~,mQc]                     =   Murat_fold(x,y,z,modv_Qc_k(:,4));
     [~,~,~,mQ]                      =   Murat_fold(x,y,z,modv_Q_k(:,4));
     Z                               =   Z1/1000;
@@ -390,12 +390,27 @@ for k = 1:lMF(2)
     %%
     % Imaging the parameters in 3D
     FName_PMap                      =   ['Parameter-Map_' fcName '_Hz'];
-    ParaMap                         =   Murat_imageParametersMaps(par,...
-        para_map,x,y,z,X,Y,Z,evestaz_Qc,...
-        sections,sizeTitle,FName_PMap);
+    [ParaMap,para_map]              =   Murat_imageParametersMaps(par,...
+        para_map,x,y,z,X,Y,Z,evestaz_Qc,sections,sizeTitle,FName_PMap);
+    
+    [WE,SN,~]                       =   deg2utm(origin(1),origin(2));
+    modLLD                          =   Murat_unfoldXYZ(x,y,z/1000);
+    modUTM                          =   [modLLD(:,1)+WE ...
+        modLLD(:,2)+SN modLLD(:,3)];
+    
+
     pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_PMap);
     Murat_saveFigures(ParaMap,pathFolder);
+    
+    FName                           =...
+        ['parameterMap_' fcName '_UTM_Hz.txt'];
+    writematrix(para_map,fullfile(FPath, FLabel, 'TXT', FName));
+    
+    para_map(:,1:3)                 =   modUTM;
+    FName                           =...
+        ['parameterMap_' fcName '_Degrees_Hz.txt'];
+    writematrix(para_map,fullfile(FPath, FLabel, 'TXT', FName));
 
     %% SAVE all results as VTK for visualization in PARAVIEW
     % Converting Lon/Lat to km for paraview visualization with ndgrid

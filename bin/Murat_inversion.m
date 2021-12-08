@@ -227,7 +227,7 @@ for k = 1:lMF(2)
 
     %%
     % Save peak-delay, Qc, Q
-    [WE,SN,~]                       = deg2utm(origin(1),origin(2));
+    [WE,SN,~]                       =   deg2utm(origin(1),origin(2));
     modLLD                          =   Murat_unfoldXYZ(x,y,z/1000);
     modUTM                          =   [modLLD(:,1)+WE ...
         modLLD(:,2)+SN modLLD(:,3)];
