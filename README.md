@@ -61,10 +61,10 @@ The current version works following these steps:
 5. Use a velocity model, storing it in the corresponding folder. The format is [Latitude, Longitde, Altitude (meters)]
 
 6. MuRAT works with [SAC files](https://ds.iris.edu/files/sac-manual/) that must be stored into a single folder and corrected for the instrument function. The files must have populated headers. Your SAC headers get tested anyway and the result is shown in an excel file. The code takes from the header the following fields:
-***a)*** The P-wave picking in the reference time of the waveform;
-***b)*** The coordinates of the event;
-***c)*** The coordinates of the station;
-***d)*** The origin time of the event (optional).
+***a)*** The P-wave picking in the reference time of the waveform (in seconds);
+***b)*** The coordinates of the event in degrees - beware, *the earthquake depth must be in kilometers*;
+***c)*** The coordinates of the station - beware, *the station elevation must be in meters*;
+***d)*** The origin time of the event (optional) in seconds.
 
 7. Run MuRAT3 and select the name of the input file desired.
 
