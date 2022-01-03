@@ -11,9 +11,15 @@ function Murat_imageKernels(X,Y,Z,V,color,sections)
 %    color:     name of the colormap
 %    sections:  location of sections   
 
-V(isinf(V))             =   10^-100;
+V(isinf(V))             =   min(V(~isinf(V)));
 slice(X, Y, Z, V, sections(1), sections(2), sections(3))
-shading flat; colormap(color); colorbar
+shading flat; colormap(color);
+xlabel('Longitude (°)');
+ylabel('Latitude (°)');
+zlabel('Altitude (m)');
+cH                      =   colorbar;
+ylabel(cH, 'Log-sensitivity');
+set(cH,'FontSize',18);
 grid on
 ax                      =   gca;
 ax.GridLineStyle        =   '-';

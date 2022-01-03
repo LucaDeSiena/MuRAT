@@ -56,7 +56,7 @@ colormap(color);
 colorbar
 shading flat
 hcb                     =   colorbar;
-hcb.FontSize            =   14;
+hcb.FontSize            =   18;
 
 hold on
 scatter3(evestaz(:,2),evestaz(:,1),evestaz(:,3),60,'c',...
@@ -65,9 +65,9 @@ scatter3(evestaz(:,2),evestaz(:,1),evestaz(:,3),60,'c',...
 scatter3(evestaz(:,5),evestaz(:,4),evestaz(:,6),60,'^',...
     'MarkerEdgeColor','m', 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 
-xlabel('WE','FontSize',16,'FontWeight','bold','Color','k')
-ylabel('SN','FontSize',16,'FontWeight','bold','Color','k')
-zlabel('Depth (km)','FontSize',16,'FontWeight','bold','Color','k')
+xlabel('Longitude (°)','FontSize',16,'FontWeight','bold','Color','k')
+ylabel('Latitude (°)','FontSize',16,'FontWeight','bold','Color','k')
+zlabel('Altitude (km)','FontSize',16,'FontWeight','bold','Color','k')
 
 xticks(x); set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
 yticks(y); set(gca,'yticklabel',num2str(get(gca,'ytick')','%.2f'))
