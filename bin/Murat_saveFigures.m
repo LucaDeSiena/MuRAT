@@ -12,8 +12,10 @@ function  Murat_saveFigures(figureName,Path)
 SetFDefaults
 saveas(figureName,Path);    
 view(90,0)
+ytickangle(45)
 saveas(figureName,[Path '_SN'], 'tif');
 view(0,0)
+xtickangle(45)
 saveas(figureName,[Path '_WE'], 'tif');
 view(0,90)
 saveas(figureName,[Path '_H'], 'tif');

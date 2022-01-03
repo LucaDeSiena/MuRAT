@@ -62,8 +62,8 @@ sizeTitle                           =   18;
 lMF                                 =   size(ray_crosses_pd);
 sections(3)                         =   sections(3)/1000;
 
-purpleorange                        =...
-    colMapGen([0.5 0 0.5],[0.91 0.41 0.17],256);
+% purpleorange                        =...
+%     colMapGen([0.5 0 0.5],[0.91 0.41 0.17],256);
 
 %% PLOTS - coverage and sensitivity
 % Declustering is done before any frequency analysis, here we show the 2D
@@ -120,7 +120,7 @@ for k = 1:lMF(2)
     saveas(rays_Q,pathFolder,'tif');
     close(rays_Q)
     %%
-    % The next figure to check sensitivity for coda attenuation. The code creates
+    % The next figure checks the sensitivity of coda attenuation measurements. The code creates
     % figures that show sections in the sensitivity kernels. The left panel shows
     % the sensitivity kernel in the full space while the rigth panel shows the normalized
     % kernel in the inversion grid.
@@ -216,7 +216,7 @@ for k = 1:lMF(2)
     FName_PDMap                     =   ['Peak-Delay-3D_' fcName '_Hz'];
     peakDelaymap                    =   Murat_image3D(X,Y,Z,mPD,...
         redblue,sections,evestaz_pd,x,y,z,FName_PDMap);
-    title('Peak-delay variations',...
+    title('Log. peak-delay variations',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     pathFolder                      =...
         fullfile(FPath, FLabel, storeFolder, FName_PDMap);
@@ -245,7 +245,7 @@ for k = 1:lMF(2)
     FName_QcMap                     =   ['Qc-3D_' fcName '_Hz'];
     Qcmap                           =   Murat_image3D(X,Y,Z,mQc,...
         winter,sections,evestaz_Qc,x,y,z,FName_QcMap);
-    title('Coda attenuation',...
+    title('Coda attenuation variations',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_QcMap);
@@ -257,8 +257,8 @@ for k = 1:lMF(2)
     FName_QMap                      =   ['Q-3D_' fcName '_Hz'];
     Qmap                            =...
         Murat_image3D(X,Y,Z,mQ,...
-        purpleorange,sections,evestaz_Q,x,y,z,FName_QMap);
-    title('Total attenuation',...
+        hot,sections,evestaz_Q,x,y,z,FName_QMap);
+    title('Total attenuation variations',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_QMap);
@@ -355,12 +355,12 @@ for k = 1:lMF(2)
 
     subplot(1,2,1)
     Murat_image3D_2panels(X,Y,Z,spike_inputQ,...
-        purpleorange,sections,evestaz_Q,x,y,z);
+        hot,sections,evestaz_Q,x,y,z);
     title('Input spike Q',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     subplot(1,2,2)
     Murat_image3D_2panels(X,Y,Z,spike_outputQ,...
-        purpleorange,sections,evestaz_Q,x,y,z);
+        hot,sections,evestaz_Q,x,y,z);
     title('Output spike Q',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
 
@@ -478,5 +478,5 @@ Qcf_title                           =   'Qc vs Frequency';
 QcFrequency                         =   Murat_imageQcFrequency(cf,...
     averageQcFrequency,sizeTitle,Qcf_title);
 FName                               =   'Qc_vs_frequency';
-saveas(QcFrequency, fullfile(FPath,FLabel,storeFolder,FName));
+saveas(QcFrequency, fullfile(FPath,FLabel,storeFolder,FName),'tif');
 close all

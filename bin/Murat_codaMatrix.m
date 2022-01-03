@@ -63,6 +63,7 @@ if flag == 1
 
     subplot(1,2,1)
     Murat_imageKernels(Xk1,Yk1,Zk,log(K),inferno,sections1)
+    SetFDefaults();
     
     subplot(1,2,2)
     Murat_imageKernels(X1,Y1,Z,log(mK),inferno,sections1)

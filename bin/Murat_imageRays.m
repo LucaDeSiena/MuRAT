@@ -24,6 +24,7 @@ rays                    =   figure('Name',name,...
 load coastlines coastlat coastlon
 z                       =   sort(z)/1000;
 lrma                    =   length(rma(1,1,:));
+evestaz_ray             =   zeros(lrma,6);
 
 subplot(2,2,1)
 %geoshow(coastlat,coastlon);
@@ -63,13 +64,14 @@ axis equal
 xlim([origin(2) ending(2)]);
 ylim([origin(1) ending(1)]);
 
-xlabel('WE','FontSize',16,'FontWeight','bold','Color','k')
-ylabel('SN','FontSize',16,'FontWeight','bold','Color','k')
+xlabel('Longitude (°)','FontSize',16,'FontWeight','bold','Color','k')
+ylabel('Latitude (°)','FontSize',16,'FontWeight','bold','Color','k')
 xticks(x(1:2:end-1))
 set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
 yticks(y(1:2:end-1))
 set(gca,'yticklabel',num2str(get(gca,'ytick')','%.2f'))
-
+xtickangle(45)
+ytickangle(45)
 SetFDefaults();
 hold off
 
@@ -84,12 +86,14 @@ scatter(evestaz(:,4),evestaz(:,6),60,'^','MarkerEdgeColor','m',...
     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 xlim([origin(1) ending(1)]);
 
-xlabel('SN','FontSize',12,'FontWeight','bold','Color','k')
-ylabel('Depth (km)','FontSize',12,'FontWeight','bold','Color','k')
+xlabel('Latitude (°)','FontSize',16,'FontWeight','bold','Color','k')
+ylabel('Altitude (km)','FontSize',16,'FontWeight','bold','Color','k')
 xticks(y(1:2:end-1))
 set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
 yticks(z(1:end-1))
 set(gca,'yticklabel',num2str(get(gca,'ytick')','%.2f'))
+xtickangle(45)
+ytickangle(45)
 SetFDefaults();
 hold off
 
@@ -102,12 +106,14 @@ scatter(evestaz_ray(:,2),evestaz_ray(:,3),60,'c','MarkerEdgeColor','b',...
 scatter(evestaz(:,5),evestaz(:,6),60,'^','MarkerEdgeColor','m',...
     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 xlim([origin(2) ending(2)]);
-xlabel('WE','FontSize',12,'FontWeight','bold','Color','k')
-ylabel('Depth (km)','FontSize',12,'FontWeight','bold','Color','k')
+xlabel('Longitude (°)','FontSize',16,'FontWeight','bold','Color','k')
+ylabel('Altitude (km)','FontSize',16,'FontWeight','bold','Color','k')
 xticks(x(1:2:end-1))
 set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
 yticks(z(1:end-1))
 set(gca,'zticklabel',num2str(get(gca,'ytick')','%.2f'))
+xtickangle(45)
+ytickangle(45)
 SetFDefaults();
 hold off
 
@@ -117,12 +123,15 @@ hold on
 geoshow(coastlat,coastlon,'Color','k');
 scatter(centreGrid(1),centreGrid(2),100,'c','MarkerEdgeColor','g',...
     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
-
+xlabel('Longitude (°)','FontSize',16,'FontWeight','bold','Color','k')
+ylabel('Latitude (°)','FontSize',16,'FontWeight','bold','Color','k')
 xticks(centreGrid(1))
 set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
 yticks(centreGrid(2))
 set(gca,'yticklabel',num2str(get(gca,'ytick')','%.2f'))
 axis auto
+xtickangle(45)
+ytickangle(45)
 SetFDefaults();
 
 hold off

@@ -36,17 +36,19 @@ deltam                      =   1.96*sqrt(diag(covG));
 
 dpre                        =   exp(G*m);
 errorbar(cf,Qc,uncQc,'ko','LineWidth',2,'MarkerSize',12)
+
+Q0                          =   exp(m(1));
+unQ0                        =   exp(deltam(1));
+
 hold on
 plot(cf,dpre,'k','LineWidth',2);
 hold off
-title('Dependence of Qc on frequency','FontSize',sizeTitle);
+title(['Dependence on frequency: Qc = '...
+    num2str(Q0) '*f^{' num2str(unQ0) '}'],'FontSize',sizeTitle);
 
 xlabel('Frequency (Hz)','FontSize',sizeTitle,'FontWeight','bold',...
     'Color','k')
-ylabel('Quality factor','FontSize',sizeTitle,...
+ylabel('Coda quality factor','FontSize',sizeTitle,...
     'FontWeight','bold','Color','k')
-disp(['Constant = ' num2str(m(1)) ' +/- ' num2str(deltam(1))]);           
-disp(['Frequency depencence = ', num2str(m(2)),...
-    ' +/- ', num2str(deltam(2))]);
 
 SetFDefaults()
