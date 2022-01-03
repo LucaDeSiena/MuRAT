@@ -27,7 +27,6 @@ lrma                    =   length(rma(1,1,:));
 evestaz_ray             =   zeros(lrma,6);
 
 subplot(2,2,1)
-%geoshow(coastlat,coastlon);
 rma(:,1,:)              =   origin(2) + km2deg(rma(:,1,:));
 rma(:,2,:)              =   origin(1) + km2deg(rma(:,2,:));
 for i = 1:lrma
@@ -54,8 +53,6 @@ centreGrid              =   [origin(2) + (ending(2) - origin(2))/2 ...
 
 subplot(2,2,1)
 hold on
-% scatter(evestaz(:,2),evestaz(:,1),60,'c','MarkerEdgeColor',[1 1 1],...
-%     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 scatter(evestaz_ray(:,2),evestaz_ray(:,1),60,'c','MarkerEdgeColor','b',...
     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 scatter(evestaz(:,5),evestaz(:,4),60,'^','MarkerEdgeColor','m',...
@@ -63,7 +60,6 @@ scatter(evestaz(:,5),evestaz(:,4),60,'^','MarkerEdgeColor','m',...
 axis equal
 xlim([origin(2) ending(2)]);
 ylim([origin(1) ending(1)]);
-
 xlabel('Longitude (°)','FontSize',16,'FontWeight','bold','Color','k')
 ylabel('Latitude (°)','FontSize',16,'FontWeight','bold','Color','k')
 xticks(x(1:2:end-1))
@@ -78,8 +74,6 @@ hold off
 
 subplot(2,2,2)
 hold on
-% scatter(evestaz(:,1),evestaz(:,3),60,'c','MarkerEdgeColor',[1 1 1],...
-%     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 scatter(evestaz_ray(:,1),evestaz_ray(:,3),60,'c','MarkerEdgeColor','b',...
     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 scatter(evestaz(:,4),evestaz(:,6),60,'^','MarkerEdgeColor','m',...
@@ -99,8 +93,6 @@ hold off
 
 subplot(2,2,3)
 hold on
-% scatter(evestaz(:,2),evestaz(:,3),60,'c','MarkerEdgeColor',[1 1 1],...
-%     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 scatter(evestaz_ray(:,2),evestaz_ray(:,3),60,'c','MarkerEdgeColor','b',...
     'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 scatter(evestaz(:,5),evestaz(:,6),60,'^','MarkerEdgeColor','m',...
