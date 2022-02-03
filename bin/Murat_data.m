@@ -63,10 +63,13 @@ inversionMatrixQc                       =...
 rayCrossing                             =...
     zeros(lengthData,lengthParameterModel);
 %=========================================================================
-count_trash = 0;
+% Count waveforms that must be eliminated because of peak-delay contraints
+% on peak delays and coda attenuation.
+count_trash                             =   0;
+
 for i = 1:lengthData
     
-    if isequal(mod(i,1000),0)
+    if isequal(mod(i,100),0)
         
         disp(['Waveform number is ', num2str(i)])
         
@@ -75,8 +78,7 @@ for i = 1:lengthData
     listSac_i                           =   listSac{i};
     
     % Calculates envelopes
-    [tempis,sp_i,SAChdr_i,srate_i]      =...
-        Murat_envelope(cf,listSac_i);
+    [tempis,sp_i,SAChdr_i,srate_i]      =   Murat_envelope(cf,listSac_i);
     
     % Set earthquake and stations locations in degrees or meters
     [locationDeg_i, locationM_i]        =...
@@ -84,9 +86,8 @@ for i = 1:lengthData
     locationDeg(i,:)                    =   locationDeg_i;
     
     % Checks direct-wave picking on the trace and outputs it 
-    [cursorPick_i, pktime_i, v_i]  =...
-        Murat_picking(tempis,PTime,STime,PorS,vP,vS,srate_i,listSac_i,...
-        SAChdr_i);
+    [cursorPick_i, pktime_i, v_i]       =   Murat_picking(tempis,...
+        PTime,STime,PorS,vP,vS,srate_i,listSac_i,SAChdr_i);
 
     % Conditions in case the zero time is missing in the header
     [theoreticalTime_i, originTime_i]   =...
@@ -118,23 +119,24 @@ for i = 1:lengthData
     end
                 
     % Sets the lapse time
-    [tCoda_i, cursorCodaStart_i, cursorCodaEnd_i]=...
+    [tCoda_i, cursorCodaStart_i,...
+        cursorCodaEnd_i]                =...
         Murat_codaCheck(originTime_i,pktime_i,srate_i,tCm,tWm,tempis,...
         peakDelay_i,lapseTimeMethod);
     
-    if (cursorCodaEnd_i -cursorCodaStart_i)< (tWm*srate_i)-2 || ...
+    if (cursorCodaEnd_i - cursorCodaStart_i) < (tWm*srate_i)-2 || ...
             (pktime_i-originTime_i)>maxtravel
 
-        locationM(i,:)                      =   locationM_i;
-        theoreticalTime(i,1)                =   theoreticalTime_i;
-        peakDelay(i,:)                      =   NaN;
-        inverseQc(i,:)                      =   NaN;
-        uncertaintyQc(i,:)                  =   NaN;
-        energyRatioBodyCoda(i,:)            =   NaN;
-        energyRatioCodaNoise(i,:)           =   NaN;
-        tCoda(i,:)                          =   tCoda_i;
+        locationM(i,:)                  =   locationM_i;
+        theoreticalTime(i,1)            =   theoreticalTime_i;
+        peakDelay(i,:)                  =   NaN;
+        inverseQc(i,:)                  =   NaN;
+        uncertaintyQc(i,:)              =   NaN;
+        energyRatioBodyCoda(i,:)        =   NaN;
+        energyRatioCodaNoise(i,:)       =   NaN;
+        tCoda(i,:)                      =   tCoda_i;
         
-        count_trash = count_trash +1;
+        count_trash                     =   count_trash +1;
         continue
     end
     
@@ -161,9 +163,8 @@ for i = 1:lengthData
     end
                 
     % Measures Q
-    [energyRatioBodyCoda_i,...
-        energyRatioCodaNoise_i]         =   Murat_body(bodyWindow,...
-        startNoise,srate_i,sp_i,cursorPick_i,...
+    [energyRatioBodyCoda_i,energyRatioCodaNoise_i]=...
+        Murat_body(bodyWindow,startNoise,srate_i,sp_i,cursorPick_i,...
         cursorCodaStart_i,cursorCodaEnd_i);
     
     % Saving
@@ -201,7 +202,7 @@ ratio                                   =   count_trash/lengthData*(100);
 disp(['Ratio of removed recordings: ', num2str(ratio)])
 
 if ~isempty(Murat.input.declustering)
-    Murat                           =...
+    Murat                               =...
         Murat_declustering(Murat,Murat.input.declustering);
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

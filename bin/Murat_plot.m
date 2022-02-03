@@ -62,9 +62,6 @@ sizeTitle                           =   18;
 lMF                                 =   size(ray_crosses_pd);
 sections(3)                         =   sections(3)/1000;
 
-% purpleorange                        =...
-%     colMapGen([0.5 0 0.5],[0.91 0.41 0.17],256);
-
 %% PLOTS - coverage and sensitivity
 % Declustering is done before any frequency analysis, here we show the 2D
 % rays before and after
@@ -97,6 +94,7 @@ for k = 1:lMF(2)
     rcQk                            =   ray_crosses_Q(:,k);
     rtQck                           =   retainQc(:,k);
     rcQck                           =   ray_crosses_Qc(:,k);
+    
     %%
     % The rays are visualized for different techniques, starting with the peak delay
     FName_peakDelay                 =   ['Rays_PeakDelay_' fcName '_Hz'];
@@ -108,6 +106,7 @@ for k = 1:lMF(2)
         fullfile(FPath,FLabel,storeFolder,FName_peakDelay);
     saveas(rays_peakDelay,pathFolder,'tif');
     close(rays_peakDelay)
+    
     %%
     % The next figure shows the rays for the total attenuation (Q)
     FName_Q                         =   ['Rays_Q_' fcName '_Hz'];
@@ -119,10 +118,12 @@ for k = 1:lMF(2)
         fullfile(FPath, FLabel, storeFolder, FName_Q);
     saveas(rays_Q,pathFolder,'tif');
     close(rays_Q)
+    
     %%
-    % The next figure checks the sensitivity of coda attenuation measurements. The code creates
-    % figures that show sections in the sensitivity kernels. The left panel shows
-    % the sensitivity kernel in the full space while the rigth panel shows the normalized
+    % The next figure checks the sensitivity of coda attenuation
+    % measurements. The code creates figures that show sections in the
+    % sensitivity kernels. The left panel shows the sensitivity kernel in
+    % the full space while the rigth panel shows the normalized
     % kernel in the inversion grid.
     FName_Qc                        =   ['Kernel_Qc' fcName '_Hz'];
     kernels                         =   figure('Name',FName_Qc,...
@@ -137,6 +138,7 @@ for k = 1:lMF(2)
     pathFolder                      =...
         fullfile(FPath, FLabel, storeFolder, FName_Qc);
     Murat_saveFigures_2panels(kernels,pathFolder);
+    
     %% Plot - Tests
     % In this section Murat_plot makes checks on the three parameters.
     % These plots are always visualised. They check that:
@@ -161,6 +163,7 @@ for k = 1:lMF(2)
     saveas(Qc_analysis, fullfile(FPath,FLabel,storeFolder,...
         ['Qc_analysis_' fcName '_Hz']),'tif');
     close(Qc_analysis)
+    
     %%
     % Then it shows the peak delay relative to the travel time.
     peakData_k                      =   peakData(rtpdk,k);
@@ -173,6 +176,7 @@ for k = 1:lMF(2)
     saveas(pd_analysis, fullfile(FPath,FLabel,storeFolder,...
         ['PD_analysis_' fcName '_Hz']),'tif');
     close(pd_analysis)
+    
     %%
     % Then it plots first the logarithm of the energy ratio versus travel
     % time.
@@ -198,6 +202,7 @@ for k = 1:lMF(2)
     saveas(CN_analysis, fullfile(FPath,FLabel,storeFolder,...
         ['CN_analysis_' fcName '_Hz']),'tif');
     close(CN_analysis)
+    
     %% PLOT - RESULTS
     % Set up matrices. The points are set to the upper SW vertices to
     % work with the function "slice". All stored in the sub-folder.
@@ -205,61 +210,70 @@ for k = 1:lMF(2)
     modv_Qc_k                       =   modv_Qc(:,:,k);
     modv_Q_k                        =   modv_Q(:,:,k);
     [X,Y,Z1,mPD]                    =   Murat_fold(x,y,z,modv_pd_k(:,4));
-    [~,~,~,PD_cts]                 =   Murat_fold(x,y,z,modv_pd_k(:,5));
+    [~,~,~,PD_cts]                  =   Murat_fold(x,y,z,modv_pd_k(:,5));
     [~,~,~,mQc]                     =   Murat_fold(x,y,z,modv_Qc_k(:,4));
     [~,~,~,mQ]                      =   Murat_fold(x,y,z,modv_Q_k(:,4));
     Z                               =   Z1/1000;
     evestaz_Qc                      =   evestaz(rtQck,:);
+    
     %%
-    % Peak delays results
+    % Peak delays results, using interpolation defined by 'divi'.
+    divi                            =   5;
     storeFolder                     =   'Results/PeakDelay';
     FName_PDMap                     =   ['Peak-Delay-3D_' fcName '_Hz'];
     peakDelaymap                    =   Murat_image3D(X,Y,Z,mPD,...
-        redblue,sections,evestaz_pd,x,y,z,FName_PDMap);
+        redblue,sections,evestaz_pd,x,y,z,divi,FName_PDMap);
     title('Log. peak-delay variations',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     pathFolder                      =...
         fullfile(FPath, FLabel, storeFolder, FName_PDMap);
     Murat_saveFigures(peakDelaymap,pathFolder);
 
-    % only keep cells with more than x% of data
-    factor = 5;
-    keep_bins                       =   PD_cts>((max(PD_cts(:))/100)*factor);
+    %%
+    % Plots peak delays only keeping cells with more than 'factor'% of data
+    factor                          =   5;
+    keep_bins                       =...
+        PD_cts > ((max(PD_cts(:))/100)*factor);
     mPD_red                         =   mPD.*keep_bins;
 
-    FName_PDMap                     =   ['Peak-Delay-3D_' fcName '_Hz_',num2str(factor),'_perc'];
-    peakDelaymap_red                =   Murat_image3D(X,Y,Z,mPD_red,...
-        redblue,sections,evestaz_pd,x,y,z,FName_PDMap);
-    title('Peak-delay variations',...
-        'FontSize',sizeTitle,'FontWeight','bold','Color','k');
+    FName_PDMap                     =...
+        ['Peak-Delay-3D_' fcName '_Hz_',num2str(factor),'_perc'];
+    [peakDelaymap_red,pd_inter,~,~,~,Xi,Yi,Zi]...
+                                    =   Murat_image3D(X,Y,Z,mPD_red,...
+        redblue,sections,evestaz_pd,x,y,z,divi,FName_PDMap);
+    title('Peak-delay variations','FontSize',sizeTitle,...
+        'FontWeight','bold','Color','k');
     pathFolder                      =...
         fullfile(FPath, FLabel, storeFolder, FName_PDMap);
     Murat_saveFigures(peakDelaymap_red,pathFolder);
-
-    rem_modv_pd_k                   =   Murat_unfold(X,Y,Z,mPD_red);
-    modv_pd_k(:,4)                  =   rem_modv_pd_k(:,4);
+    
+    % interpolated for the parameter map
+    interp_modv_pd_k                =   Murat_unfold(Xi,Yi,Zi,pd_inter);
 
     %%
     % Qc results
     storeFolder                     =   'Results/Qc';
     FName_QcMap                     =   ['Qc-3D_' fcName '_Hz'];
-    Qcmap                           =   Murat_image3D(X,Y,Z,mQc,...
-        winter,sections,evestaz_Qc,x,y,z,FName_QcMap);
-    title('Coda attenuation variations',...
+    [Qcmap,qc_inter,xi,yi,zi,Xi,Yi,Zi]...
+                                    =   Murat_image3D(X,Y,Z,mQc,...
+        turbo,sections,evestaz_Qc,x,y,z,divi,FName_QcMap);
+    title('Coda attenuation',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_QcMap);
     Murat_saveFigures(Qcmap,pathFolder);
 
+    % interpolated for the parameter map
+    interp_modv_qc_k                =   Murat_unfold(Xi,Yi,Zi,qc_inter);
+
     %%
     % Q results
     storeFolder                     =   'Results/Q';
     FName_QMap                      =   ['Q-3D_' fcName '_Hz'];
-    Qmap                            =...
-        Murat_image3D(X,Y,Z,mQ,...
-        hot,sections,evestaz_Q,x,y,z,FName_QMap);
-    title('Total attenuation variations',...
-        'FontSize',sizeTitle,'FontWeight','bold','Color','k');
+    Qmap                            =   Murat_image3D(X,Y,Z,mQ,...
+        hot,sections,evestaz_Q,x,y,z,divi,FName_QMap);
+    title('Total attenuation variations','FontSize',sizeTitle,...
+        'FontWeight','bold','Color','k');
     pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_QMap);
     Murat_saveFigures(Qmap,pathFolder);
@@ -271,6 +285,7 @@ for k = 1:lMF(2)
     [~,~,~,check_outputQc]          =   Murat_fold(x,y,z,modv_Qc_k(:,7));
     [~,~,~,check_inputQ]            =   Murat_fold(x,y,z,modv_Qc_k(:,6));
     [~,~,~,check_outputQ]           =   Murat_fold(x,y,z,modv_Q_k(:,7));
+    
     %%
     % Checkerboard Qc: Input and Output
     storeFolder                     =   'Checkerboard/Qc';
@@ -281,14 +296,14 @@ for k = 1:lMF(2)
     subplot(1,2,1)
     Murat_image3D_2panels(X,Y,Z,check_inputQc,...
         'bone',sections,evestaz_Qc,x,y,z);
-    title('Input checkerboard Qc',...
-        'FontSize',sizeTitle,'FontWeight','bold','Color','k');
+    title('Input checkerboard Qc','FontSize',sizeTitle,...
+        'FontWeight','bold','Color','k');
 
     subplot(1,2,2)
     Murat_image3D_2panels(X,Y,Z,check_outputQc,...
         'bone',sections,evestaz_Qc,x,y,z);
-    title('Output checkerboard Qc',...
-        'FontSize',sizeTitle,'FontWeight','bold','Color','k');
+    title('Output checkerboard Qc','FontSize',sizeTitle,...
+        'FontWeight','bold','Color','k');
 
     pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_QcCheck);
@@ -304,8 +319,8 @@ for k = 1:lMF(2)
     subplot(1,2,1)
     Murat_image3D_2panels(X,Y,Z,check_inputQ,...
         'bone',sections,evestaz_Q,x,y,z);
-    title('Input checkerboard Q',...
-        'FontSize',sizeTitle,'FontWeight','bold','Color','k');
+    title('Input checkerboard Q','FontSize',sizeTitle,...
+        'FontWeight','bold','Color','k');
 
     subplot(1,2,2)
     Murat_image3D_2panels(X,Y,Z,check_outputQ,...
@@ -318,29 +333,30 @@ for k = 1:lMF(2)
     Murat_saveFigures_2panels(Q_check,pathFolder);
 
     %% PLOT - SPIKES
-    % In this section Murat_plot shows input and output of the spike tests for
-    % Q and Qc.
+    % In this section Murat_plot shows input and output of the spike tests
+    % for Q and Qc.
     [~,~,~,spike_inputQc]           =   Murat_fold(x,y,z,modv_Qc_k(:,8));
     [~,~,~,spike_outputQc]          =   Murat_fold(x,y,z,modv_Qc_k(:,9));
     [~,~,~,spike_inputQ]            =   Murat_fold(x,y,z,modv_Qc_k(:,8));
     [~,~,~,spike_outputQ]           =   Murat_fold(x,y,z,modv_Q_k(:,9));
+    
     %%
     % Spike Qc: Input and Output
     storeFolder                     =   'Spike/Qc';
-    FName_QcSpike                    =   ['Qc-Spike_' fcName '_Hz'];
+    FName_QcSpike                   =   ['Qc-Spike_' fcName '_Hz'];
     Qc_spike                        =   figure('Name',FName_QcSpike,...
         'NumberTitle','off','Position',[20,400,2000,1000],'visible','off');
 
     subplot(1,2,1)
     Murat_image3D_2panels(X,Y,Z,spike_inputQc,...
         winter,sections,evestaz_Qc,x,y,z);
-    title('Input spike Qc',...
-        'FontSize',sizeTitle,'FontWeight','bold','Color','k');
+    title('Input spike Qc','FontSize',sizeTitle,...
+        'FontWeight','bold','Color','k');
     subplot(1,2,2)
     Murat_image3D_2panels(X,Y,Z,spike_outputQc,...
         winter,sections,evestaz_Qc,x,y,z);
-    title('Output spike Qc',...
-        'FontSize',sizeTitle,'FontWeight','bold','Color','k');
+    title('Output spike Qc','FontSize',sizeTitle,...
+        'FontWeight','bold','Color','k');
 
     pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_QcSpike);
@@ -349,20 +365,19 @@ for k = 1:lMF(2)
     %%
     % Spike Q: Input and Output
     storeFolder                     =   'Spike/Q';
-    FName_QSpike                     =   ['Q-Spike_' fcName '_Hz'];
+    FName_QSpike                    =   ['Q-Spike_' fcName '_Hz'];
     Q_spike                         =   figure('Name',FName_QSpike,...
         'NumberTitle','off','Position',[20,400,2000,1000],'visible','off');
 
     subplot(1,2,1)
-    Murat_image3D_2panels(X,Y,Z,spike_inputQ,...
-        hot,sections,evestaz_Q,x,y,z);
-    title('Input spike Q',...
-        'FontSize',sizeTitle,'FontWeight','bold','Color','k');
+    Murat_image3D_2panels(X,Y,Z,spike_inputQ,hot,sections,evestaz_Q,x,y,z);
+    title('Input spike Q','FontSize',sizeTitle,...
+        'FontWeight','bold','Color','k');
     subplot(1,2,2)
     Murat_image3D_2panels(X,Y,Z,spike_outputQ,...
         hot,sections,evestaz_Q,x,y,z);
-    title('Output spike Q',...
-        'FontSize',sizeTitle,'FontWeight','bold','Color','k');
+    title('Output spike Q','FontSize',sizeTitle,...
+        'FontWeight','bold','Color','k');
 
     pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_QSpike);
@@ -370,35 +385,39 @@ for k = 1:lMF(2)
 
     %% PARAMETER PLOT
     % The final figure is the parameter plot separation.
-    %%
     % First Qc and Peak delay are separated in 4 quadrants.
     % The second part produces the spatial plot, setting each node to the
     %   corresponding color. The four options are: (1) high for both (red);
     %   (2) low for both (green); (3) high for peak delays only (cyan);
     %   (4) high for inverse Qc only (orange).
     storeFolder                     =   'Results/Parameter';
+    
     %%
     % Define all the parameters for imaging
     FName_Parameters                =...
         ['Parameter_space_variations_' fcName '_Hz'];
-    [param_plot,par,para_map]       =...
+    [param_plot,~,~]       =...
         Murat_imageParameters(x,y,z,modv_pd_k,modv_Qc_k,sizeTitle);
-    saveas(param_plot,fullfile(FPath,FLabel,storeFolder,...
-        FName_Parameters));
+    saveas(param_plot,fullfile(FPath,FLabel,storeFolder,FName_Parameters));
     close(param_plot)
+
+    % use interpolated peakdelay and Qc
+    zi = (zi*1000)';
+    [~,par_inter,para_map_inter]    =   Murat_imageParameters(xi',yi',...
+        zi,interp_modv_pd_k,interp_modv_qc_k,sizeTitle);
 
     %%
     % Imaging the parameters in 3D
     FName_PMap                      =   ['Parameter-Map_' fcName '_Hz'];
-    [ParaMap,para_map]              =   Murat_imageParametersMaps(par,...
-        para_map,x,y,z,X,Y,Z,evestaz_Qc,sections,sizeTitle,FName_PMap);
+    [ParaMap,para_map]              =...
+        Murat_imageParametersMaps(par_inter,para_map_inter,xi',yi',zi,...
+        Xi,Yi,Zi,evestaz_Qc,sections,sizeTitle,FName_PMap);
     
     [WE,SN,~]                       =   deg2utm(origin(1),origin(2));
-    modLLD                          =   Murat_unfoldXYZ(x,y,z/1000);
-    modUTM                          =   [modLLD(:,1)+WE ...
-        modLLD(:,2)+SN modLLD(:,3)];
+    modLLD                          =   Murat_unfoldXYZ(xi,yi,zi/1000);
+    modUTM                          =   [modLLD(:,1)+WE modLLD(:,2)+SN...
+        modLLD(:,3)];
     
-
     pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_PMap);
     Murat_saveFigures(ParaMap,pathFolder);
@@ -421,6 +440,7 @@ for k = 1:lMF(2)
     UTM_WE                          =   WE_origin + deg2km(x_origin)*1000;
     UTM_SN                          =   SN_origin + deg2km(y_origin)*1000;
     [X_UTM,Y_UTM,~]                 =   meshgrid(UTM_WE,UTM_SN,z);
+    
     %%
     % Writes the four models to vtk
     vtkwrite(fullfile(FPath, FLabel,storeFolder,[FName_PDMap '.vtk']),...
@@ -446,6 +466,7 @@ for k = 1:lMF(2)
         'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Spike_Q',...
         spike_outputQ)
 end
+
 %%
 % Also showing the velocity model in case it is available, only once
 vtkwrite(fullfile(FPath, FLabel,storeFolder,'Velocity_model.vtk'),...
@@ -456,6 +477,7 @@ vtkwrite(fullfile(FPath, FLabel,storeFolder,'Input_checkerboards.vtk'),...
 vtkwrite(fullfile(FPath, FLabel,storeFolder,'Input_spikes.vtk'),...
     'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Input_spikes',...
     spike_inputQc)
+
 %%
 % Final figures are the velocity model and Qc/frequency relation
 storeFolder                         =   'Tests';
@@ -464,7 +486,7 @@ if Murat.input.availableVelocity == 1
 
     FName_Vimage                    =   'Velocity_model';
     Vimage                          =   Murat_image3D(X,Y,Z,plotV,...
-        inferno,sections,evestaz_Q,x,y,z,FName_Vimage);
+        inferno,sections,evestaz_Q,x,y,z,divi,FName_Vimage);
     title('Velocity Model',...
         'FontSize',sizeTitle,'FontWeight','bold','Color','k');
     pathFolder                      =...

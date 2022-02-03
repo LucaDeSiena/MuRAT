@@ -90,12 +90,12 @@ for k = 1:lMF(2)
     end
 
     %%
-    % Peak delay weighted regionalization
+    % Peak delay standard regionalization (for now)
     rcpd_k                          =   ray_crosses_pd(:,k);
     rtpd_k                          =   retain_pd(:,k);
     Apd_k                           =	Apd_i(rtpd_k,rcpd_k);
     lpdelta_k                       =   lpdelta(rtpd_k,k);
-
+    
     A_boxes                         =   Apd_k>0;
     cts_box                         =   sum(A_boxes,1);
     mpd                             =...
@@ -195,10 +195,11 @@ for k = 1:lMF(2)
     modv_Qc(:,8,k)                  =   mean(Qm_k);
     modv_Qc(spikeInput,8,k)         =   spike_v;
     Qc_ch                           =   modv_Qc(rcQc_k,6,k);
-    re_checkQc                           =   Gc*Qc_ch;
+    re_checkQc                      =   Gc*Qc_ch;
 
     modv_Qc(rcQc_k,7,k)             =...
         Murat_outputTesting(Gc,re_checkQc,tik0_regC,inversionMethod);
+    
     %%
     % Q
     modv_Q(:,6:8,k)                 =   modv_Qc(:,6:8,k);
@@ -212,13 +213,13 @@ for k = 1:lMF(2)
     % Inverting spike for Qc and Q at user discretion
     if ~isempty(spike_o)
         Qc_sp                       =   modv_Qc(rcQc_k,8,k);
-        re_spikeQc                       =   Gc*Qc_sp;
+        re_spikeQc                  =   Gc*Qc_sp;
 
         modv_Qc(rcQc_k,9,k)         =...
             Murat_outputTesting(Gc,re_spikeQc,tik0_regC,inversionMethod);
 
         Q_sp                        =   modv_Q(rcQ_k,8,k);
-        re_spikeQ                        =   A_k*Q_sp;
+        re_spikeQ                   =   A_k*Q_sp;
 
         modv_Q(rcQ_k,9,k)           =...
             Murat_outputTesting(A_k,re_spikeQ,tik0_reg,inversionMethod);
@@ -229,8 +230,8 @@ for k = 1:lMF(2)
     % Save peak-delay, Qc, Q
     [WE,SN,~]                       =   deg2utm(origin(1),origin(2));
     modLLD                          =   Murat_unfoldXYZ(x,y,z/1000);
-    modUTM                          =   [modLLD(:,1)+WE ...
-        modLLD(:,2)+SN modLLD(:,3)];
+    modUTM                          =   [modLLD(:,1)+WE modLLD(:,2)+SN...
+        modLLD(:,3)];
     modv_pd_k                       =   modv_pd(:,:,k);
 
     modv_pd_k(:,1:3)                =   modUTM;
@@ -262,9 +263,8 @@ for k = 1:lMF(2)
     modv_Q_k(:,1:3)                 =   modLLD;
     FName                           =   ['Q_' fcName '_Degrees_Hz.txt'];
     writematrix(modv_Q_k,fullfile(FPath, FLabel, 'TXT', FName));
-
-
 end
+
 %%
 % Save in Murat
 Murat.data.residualQc               =   residualQc;

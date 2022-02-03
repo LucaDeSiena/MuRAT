@@ -1,5 +1,5 @@
-function image          = ...
-    Murat_image3D(X,Y,Z,V,color,sections,evestaz,x,y,z,name)
+function [image,mVp,xp,yp,zp,Xp,Yp,Zp]                    = ...
+    Murat_image3D(X,Y,Z,V,color,sections,evestaz,x,y,z,divi,name)
 % function image          = ...
 %     Murat_image3D(X,Y,Z,V,color,sections,evestaz,x,y,z,name)
 %
@@ -16,16 +16,20 @@ function image          = ...
 %    x:         x vector
 %    y:         y vector
 %    z:         z vector
+%    divi:      division for interpolation
 %    name:      name of the title of the figure
 %
 % Output parameters:
 %    image:     image produced
+%    mVp:       interpolated field for parameter map
+%    xp,yp,zp:  interpolated coords for parameter map
+%    Xp,Yp,Zp:  interpolated matrices for parameter map
+
 close all
 image                   =   figure('Name',name,...
     'NumberTitle','off','Position',[20,400,1200,1000],'visible','off');
 
 stepgXYZ                =   [x(2)-x(1) y(2)-y(1) z(2)-z(1)];
-divi                    =   5;
 divix                   =   stepgXYZ(1)/divi;
 diviy                   =   stepgXYZ(2)/divi;
 diviz                   =   stepgXYZ(3)/divi;
@@ -37,7 +41,6 @@ zp                      =   zp/1000;
 
 [Xp,Yp,Zp]              =   meshgrid(xp,yp,zp);
 mVp                     =   interp3(X,Y,Z,V,Xp,Yp,Zp);
-z                       =   sort(z)/1000;
 
 slice(Xp, Yp, Zp, mVp, sections(2), sections(1), sections(3))
 
@@ -69,9 +72,13 @@ xlabel('Longitude (°)','FontSize',16,'FontWeight','bold','Color','k')
 ylabel('Latitude (°)','FontSize',16,'FontWeight','bold','Color','k')
 zlabel('Altitude (km)','FontSize',16,'FontWeight','bold','Color','k')
 
-xticks(x); set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
-yticks(y); set(gca,'yticklabel',num2str(get(gca,'ytick')','%.2f'))
-zticks(z); set(gca,'zticklabel',num2str(get(gca,'ztick')','%.2f'))
+xtick                   =   linspace(x(1),x(end),6);
+ytick                   =   linspace(y(1),y(end),6);
+ztick                   =   linspace(x(1),x(end),6);
+
+xticks(xtick); set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
+yticks(ytick); set(gca,'yticklabel',num2str(get(gca,'ytick')','%.2f'))
+zticks(ztick); set(gca,'zticklabel',num2str(get(gca,'ztick')','%.2f'))
 axis tight
 
 SetFDefaults();

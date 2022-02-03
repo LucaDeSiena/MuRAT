@@ -1,7 +1,7 @@
 function  [retain_Qm_i,ray_crosses_Qc_i]    =...
     Murat_retainQc(fT,Qm_i,RZZ_i,Ac_i,QcM)
-% function  [retain_Qm_i,ray_crosses_Qc_i,QcM]    =...
-%     Murat_retainQc(fT,Qm_i,RZZ_i,Ac_i)
+% function  [retain_Qm_i,ray_crosses_Qc_i]  =...
+%     Murat_retainQc(fT,Qm_i,RZZ_i,Ac_i,QcM)
 %
 % Creates all constraints for Qc inversion
 %
@@ -9,7 +9,7 @@ function  [retain_Qm_i,ray_crosses_Qc_i]    =...
 %    fT:                treshold on uncertainty
 %    Qm_i:              values of coda attenuation
 %    RZZ_i:             values of uncertainty
-%    Apd_i:             coda attenuation matrix
+%    Ac_i:              coda attenuation matrix
 %    QcM:               Linearized or Non Linear measurement
 %
 % Output parameters:
@@ -32,7 +32,6 @@ elseif isequal(QcM,'NonLinear')
     Ac_retain_Qc_i(Ac_retain_Qc_i<10^(-4))  =   0;
     s_Qc                                    =   sum(Ac_retain_Qc_i);
     ray_crosses_Qc_i                        =   s_Qc > 0.1;
-    
     
 end
 

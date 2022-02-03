@@ -48,10 +48,9 @@ scatter(Qc_condition(c),pd_condition(c),65,'filled',...
     'MarkerFaceColor',[0 0.8 0])
 
 hold on
-line([0 0],[mipdm mapdm],'Color',[0 0 0],...
-    'LineWidth',3)
-line([miQcm maQcm],[0 0],'Color',[0 0 0],...
-    'LineWidth',3)
+line([0 0],[mipdm mapdm],'Color',[0 0 0],'LineWidth',3)
+line([miQcm maQcm],[0 0],'Color',[0 0 0],'LineWidth',3)
+
 c                                       =...
     Qc_condition<-treQc & pd_condition>trepd;
 para_condition(c,4)                     =   2;
