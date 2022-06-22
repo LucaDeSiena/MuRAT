@@ -1,7 +1,7 @@
 function [theoreticalTime_i, originTime_i] =...
-    Murat_originTime(pktime_i,originTime,v,sst_i,SAChdr) %#ok<INUSD>
+    Murat_originTime(pktime_i,originTime,v,sst_i,i_label)
 % function [theoreticalTime_i, originTime_i] =...
-%     Murat_originTime(pktime_i,originTime,v,sst_i,SAChdr_i)
+%     Murat_originTime(pktime_i,originTime,v,sst_i,i_label)
 %
 % CHECKS in case the zero time is missing in the header and CREATES it
 %
@@ -10,6 +10,7 @@ function [theoreticalTime_i, originTime_i] =...
 %    originTime:        input origin time
 %    v:                 average velocity
 %    sst_i:             locations of earthquakes and stations
+%    i_laabel:          waveform corresponding to error
 %
 % Output parameters:
 %    theoreticalTime_i: Theoretical time to include in computations
