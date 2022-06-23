@@ -91,7 +91,7 @@ for i = 1:lengthData
 
     % Conditions in case the zero time is missing in the header
     [theoreticalTime_i, originTime_i]   =...
-        Murat_originTime(pktime_i,originTime,v_i,locationM_i,i);
+        Murat_originTime(pktime_i,originTime,v_i,locationM_i,SAChdr_i,i);
 
     % Calculates the window where to search for peak delay
     cursorPeakDelay_i                   =...
