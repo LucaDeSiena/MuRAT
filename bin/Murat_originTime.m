@@ -1,5 +1,5 @@
 function [theoreticalTime_i, originTime_i] =...
-    Murat_originTime(pktime_i,originTime,v,sst_i,SAChdr_i,i_label) %#ok<INUSL>
+    Murat_originTime(pktime_i,originTime,v,sst_i,SAChdr,i_label) %#ok<INUSL>
 % function [theoreticalTime_i, originTime_i] =...
 %     Murat_originTime(pktime_i,originTime,v,sst_i,SAChdr_i,i_label)
 %
