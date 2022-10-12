@@ -142,6 +142,7 @@ for k = 1:lMF(2)
 
     end
     saveas(LcQc,fullfile(FPath, FLabel,'Tests',FName));
+    saveas(LcQc,fullfile(FPath, FLabel,'Tests',FName),'tif');
     close(LcQc)
 
     %%
@@ -181,6 +182,7 @@ for k = 1:lMF(2)
     end
 
     saveas(LcCN,fullfile(FPath, FLabel,'Tests',FName));
+    saveas(LcCN,fullfile(FPath, FLabel,'Tests',FName),'tif');
     close(LcCN)
 
     %% Checkerboards and spike inputs and checkerboard inversion

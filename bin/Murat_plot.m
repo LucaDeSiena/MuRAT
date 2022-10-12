@@ -54,7 +54,6 @@ residualQ                           =   Murat.data.residualQ;
 locationM                           =   Murat.data.locationsM;
 tCoda                               =   Murat.data.tCoda;
 rapsp                               =   Murat.data.energyRatioBodyCoda;
-locDegOriginal                      =   Murat.data.locDegOriginal;
 
 FPath                               =   './';
 sizeTitle                           =   18;
@@ -65,14 +64,17 @@ sections(3)                         =   sections(3)/1000;
 %% PLOTS - coverage and sensitivity
 % Declustering is done before any frequency analysis, here we show the 2D
 % rays before and after
-FName_Cluster                       =   'Clustering';
-clustering                          =   Murat_imageDeclustering(...
-    locDegOriginal,evestazDegrees,origin,ending,FName_Cluster);
-storeFolder                     =   'RaysKernels';
-pathFolder                      =...
+if Murat.input.declustering > 0
+    locDegOriginal                  =   Murat.data.locDegOriginal;
+    FName_Cluster                   =   'Clustering';
+    clustering                      =   Murat_imageDeclustering(...
+        locDegOriginal,evestazDegrees,origin,ending,FName_Cluster);
+    storeFolder                     =   'RaysKernels';
+    pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_Cluster);
-saveas(clustering,pathFolder,'tif');
-close(clustering)
+    saveas(clustering,pathFolder,'tif');
+    close(clustering)
+end
 
 evestaz                             =...
     [evestazDegrees(:,1:2) -evestazDegrees(:,3)/1000 ...
@@ -162,6 +164,8 @@ for k = 1:lMF(2)
         residualQc_k,luntot_Qc,Ac,sizeTitle,Qc_title,QcM);
     saveas(Qc_analysis, fullfile(FPath,FLabel,storeFolder,...
         ['Qc_analysis_' fcName '_Hz']),'tif');
+    saveas(Qc_analysis, fullfile(FPath,FLabel,storeFolder,...
+        ['Qc_analysis_' fcName '_Hz']));
     close(Qc_analysis)
     
     %%
@@ -175,6 +179,8 @@ for k = 1:lMF(2)
     time0PD,fitrobust_k,peakData_k,sizeTitle,pd_title);
     saveas(pd_analysis, fullfile(FPath,FLabel,storeFolder,...
         ['PD_analysis_' fcName '_Hz']),'tif');
+    saveas(pd_analysis, fullfile(FPath,FLabel,storeFolder,...
+        ['PD_analysis_' fcName '_Hz']));
     close(pd_analysis)
     
     %%
@@ -201,6 +207,8 @@ for k = 1:lMF(2)
         luntot_k,time0_k,energyRatio_k,A_k,Edirect_k,CN_title);
     saveas(CN_analysis, fullfile(FPath,FLabel,storeFolder,...
         ['CN_analysis_' fcName '_Hz']),'tif');
+    saveas(CN_analysis, fullfile(FPath,FLabel,storeFolder,...
+        ['CN_analysis_' fcName '_Hz']));
     close(CN_analysis)
     
     %% PLOT - RESULTS

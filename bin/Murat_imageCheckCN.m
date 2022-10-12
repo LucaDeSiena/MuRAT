@@ -36,25 +36,25 @@ plot(time0_k,dRatio,'o','MarkerSize',6,'MarkerEdgeColor',[0 0 0])
 hold on
 plot(time0_k,equationQ,'r*','MarkerSize',6)
 hold off
-xlabel('Travel time (s)','FontSize',12,'FontWeight','bold','Color','k')
-ylabel('Log-energy ratio','FontSize',12,...
-    'FontWeight','bold','Color','k')
-title(['Logarithmic energy ratios vs travel time. '...
-    'Geometrical spreading is: ' num2str(spreadAverageQ(1,1))...
-    '+/- ' num2str(spreadAverageQ(1,2))]);
+xlabel('Travel time (s)','FontSize',10,'FontWeight','bold','Color','k')
+ylabel('Log-energy ratio','FontSize',10,'FontWeight','bold','Color','k')
+title(['Log-energy ratios vs travel time - \gamma = '...
+    num2str(spreadAverageQ(1,1)) '+/- ' ...
+    num2str(spreadAverageQ(1,2))]);
 legend({'Q^{-1}',cat(2,'<Q> = ',num2str(1/spreadAverageQ(2,1)))},...
     'Location','northeast')
+
 SetFDefaults()
 %%
 %Plot of the direct energy versus distance.
 subplot(3,1,2)
 plot(log(luntotQ),log(Edirect_k),'o','MarkerSize',6,...
     'MarkerEdgeColor',[0 0 0])
-xlabel('Hypocentral distance (km)','FontSize',12,...
+xlabel('Hypocentral distance (km)','FontSize',10,...
     'FontWeight','bold','Color','k')
-ylabel('Log-direct energy (J/m^2)','FontSize',12,...
+ylabel('Log-energy (J/m^2)','FontSize',10,...
     'FontWeight','bold','Color','k')
-title('Dependence of logarithmic direct energy on hypocentral distance.');
+title('Log. direct energy vs hypocentral distance.');
 
 xti                     =   xticks;
 xt                      =   cell(length(xti),1);
@@ -67,5 +67,5 @@ SetFDefaults()
 % Then it checks the inversion with a Picard
 subplot(3,1,3)
 picard(U,diag(S),d1);
-title(['Picard condition. Residual is: ' num2str(residualQ_k)]);
+title(['Picard condition - Residual = ' num2str(residualQ_k)]);
 SetFDefaults()
