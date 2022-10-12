@@ -74,7 +74,13 @@ All the output files (.mat, .txt and xlsx), figures and .vtk files (for visualis
 
 D. **Understand the output figure files**
 
-Beware, *.fig* figures are created with the invisible option in Matlab. Use the function *openfig(..,'visible')* to open them from the command window. All the figures are stored in subdirectories in the **Label** folder, created in the working directory:
+Beware, *.fig* figures are created with the invisible option in Matlab. There are two ways opening them:
+
+(1) Use the function *openfig(..,'visible')* to open them from the command window.
+
+(2) Click twice on the figure file and wite *shg* in the command window.
+
+All the figures are stored in subdirectories in the **Label** folder, created in the working directory:
 
 *Structure of the Label Folder*
 --------
