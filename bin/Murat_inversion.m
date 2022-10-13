@@ -132,7 +132,17 @@ for k = 1:lMF(2)
 
         [LcQc, minimizeVectorQm,infoVectorQm,tik0_regC]...
                                     =...
-           Murat_minimise(outputLCurve,Gc,bQm,lCurveQc_k,FName);
+           Murat_minimiseCGLS(outputLCurve,Gc,bQm,lCurveQc_k,FName);
+
+        residualQc(1,k)             =   min(infoVectorQm.Rnrm);
+        modv_Qc(rcQc_k,4,k)         =   minimizeVectorQm;
+
+    elseif isequal(inversionMethod,'Hybrid')
+        disp(['Qc cost function at ', num2str(cf_k), ' Hz.'])
+
+        [LcQc, minimizeVectorQm,infoVectorQm,tik0_regC]...
+                                    =...
+           Murat_minimiseHybrid(outputLCurve,Gc,bQm,lCurveQc_k,FName);
 
         residualQc(1,k)             =   min(infoVectorQm.Rnrm);
         modv_Qc(rcQc_k,4,k)         =   minimizeVectorQm;
@@ -174,7 +184,17 @@ for k = 1:lMF(2)
         disp(['Q L-curve and cost functions at ', num2str(cf_k), ' Hz.'])
         [LcCN, minimizeVectorQ,infoVectorQ,tik0_reg]...
                                     =...
-           Murat_minimise(outputLCurve,A_k,d1,lCurveQ_k,FName);
+           Murat_minimiseCGLS(outputLCurve,A_k,d1,lCurveQ_k,FName);
+
+        residualQ(1,k)              =   min(infoVectorQ.Rnrm);
+        modv_Q(rcQ_k,4,k)           =   minimizeVectorQ;
+
+    elseif isequal(inversionMethod,'Hybrid')
+        disp(['Qc cost function at ', num2str(cf_k), ' Hz.'])
+
+        [LcCN, minimizeVectorQ,infoVectorQ,tik0_reg]...
+                                    =...
+           Murat_minimiseHybrid(outputLCurve,A_k,d1,lCurveQ_k,FName);
 
         residualQ(1,k)              =   min(infoVectorQ.Rnrm);
         modv_Q(rcQ_k,4,k)           =   minimizeVectorQ;

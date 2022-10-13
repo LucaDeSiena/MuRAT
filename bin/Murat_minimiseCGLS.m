@@ -1,5 +1,5 @@
 function [image, minimizeVector,infoVector,minimizeValue]   =...
-    Murat_minimise(outputLCurve,G,bQ,lCurveQc_k,name)
+    Murat_minimiseCGLS(outputLCurve,G,bQ,lCurveQc_k,name)
 % function [image, minimizeVector,infoVector,minimizeValue]   =...
 %   Murat_minimise(outputLCurve,G,bQ,lCurveQc_k,name)
 % MINIMIZES both L2 and I cost functions with conjugate gradients

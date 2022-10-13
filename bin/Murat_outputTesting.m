@@ -1,5 +1,5 @@
 function m          =   Murat_outputTesting(G,d,reguParam,inversionMethod)
-% function m        =   Murat_outputTesting(G,d,reguParam)
+% function m        =   Murat_outputTesting(G,d,reguParam,inversionMethod)
 %
 % PRODUCES the outputs of checkerboard and spike tests
 %
@@ -7,6 +7,7 @@ function m          =   Murat_outputTesting(G,d,reguParam,inversionMethod)
 %    G:                 inversion matrix
 %    d:                 data vector
 %    reguParam:         regularization parameter
+%    inversionMethod:   choice of inversion technique
 %    
 % Output parameters:
 %    m:                 inversion solution
@@ -20,6 +21,12 @@ elseif isequal(inversionMethod,'Iterative')
         'IterBar','off','RegParam', reguParam,'verbosity','off');
     
     [m,~]           =   IRcgls(G,d,optionsI);
+    
+elseif isequal(inversionMethod,'Hybrid')
+    options         =   IRset('RegParam', reguParam,'IterBar','off',...
+    'verbosity','off');
+    
+    [m,~]           =   IRhybrid_lsqr(G, d, options);
     
 end
     
