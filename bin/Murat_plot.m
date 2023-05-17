@@ -1,4 +1,4 @@
-%% MURAT_PLOT Creates files for visualization in Matlab and Paraview
+%% MURAT_PLOT Creates files for visualization in Matlab
 function Murat                      =   Murat_plot(Murat)
 %%
 % Importing all the necessary inputs and data for plotting
@@ -431,60 +431,14 @@ for k = 1:lMF(2)
     Murat_saveFigures(ParaMap,pathFolder);
     
     FName                           =...
-        ['parameterMap_' fcName '_UTM_Hz.txt'];
+        ['parameterMap_' fcName '_Degrees_Hz.txt'];
     writematrix(para_map,fullfile(FPath, FLabel, 'TXT', FName));
     
     para_map(:,1:3)                 =   modUTM;
     FName                           =...
-        ['parameterMap_' fcName '_Degrees_Hz.txt'];
+        ['parameterMap_' fcName '_UTM_Hz.txt'];
     writematrix(para_map,fullfile(FPath, FLabel, 'TXT', FName));
-
-    %% SAVE all results as VTK for visualization in PARAVIEW
-    % Converting Lon/Lat to km for paraview visualization with ndgrid
-    storeFolder                     =   'VTK';
-    [WE_origin, SN_origin]          =   deg2utm(origin(2),origin(1));
-    x_origin                        =   x - origin(2);
-    y_origin                        =   y - origin(1);
-    UTM_WE                          =   WE_origin + deg2km(x_origin)*1000;
-    UTM_SN                          =   SN_origin + deg2km(y_origin)*1000;
-    [X_UTM,Y_UTM,~]                 =   meshgrid(UTM_WE,UTM_SN,z);
-    
-    %%
-    % Writes the four models to vtk
-    vtkwrite(fullfile(FPath, FLabel,storeFolder,[FName_PDMap '.vtk']),...
-        'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Peak_delay',mPD)
-    vtkwrite(fullfile(FPath, FLabel,storeFolder,[FName_QcMap '.vtk']),...
-        'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Qc',mQc)
-    vtkwrite(fullfile(FPath, FLabel,storeFolder,[FName_QMap '.vtk']),...
-        'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Q',mQ)
-    %%
-    % Write the input-output checkerboard
-    vtkwrite(fullfile(FPath, FLabel,storeFolder,[FName_QcCheck '.vtk']),...
-        'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Check_Qc',...
-        check_outputQc)
-    vtkwrite(fullfile(FPath, FLabel,storeFolder,[FName_QCheck '.vtk']),...
-        'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Check_Q',...
-        check_outputQ)
-    %%
-    % Writes the input-output spikes
-    vtkwrite(fullfile(FPath, FLabel,storeFolder,[FName_QSpike '.vtk']),...
-        'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Spike_Qc',...
-        spike_outputQc)
-    vtkwrite(fullfile(FPath, FLabel,storeFolder,[FName_QSpike '.vtk']),...
-        'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Spike_Q',...
-        spike_outputQ)
 end
-
-%%
-% Also showing the velocity model in case it is available, only once
-vtkwrite(fullfile(FPath, FLabel,storeFolder,'Velocity_model.vtk'),...
-    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','V',plotV)
-vtkwrite(fullfile(FPath, FLabel,storeFolder,'Input_checkerboards.vtk'),...
-    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Input_check',...
-    check_inputQc)
-vtkwrite(fullfile(FPath, FLabel,storeFolder,'Input_spikes.vtk'),...
-    'structured_grid',X_UTM,Y_UTM,Z1,'scalars','Input_spikes',...
-    spike_inputQc)
 
 %%
 % Final figures are the velocity model and Qc/frequency relation

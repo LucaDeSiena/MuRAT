@@ -74,7 +74,6 @@ mkdir([FLabel,'/Checkerboard/Q'])
 mkdir([FLabel,'/Spike'])
 mkdir([FLabel,'/Spike/Qc'])
 mkdir([FLabel,'/Spike/Q'])
-mkdir([FLabel,'/VTK'])
 mkdir([FLabel,'/TXT'])
 
 %%
