@@ -70,7 +70,7 @@ The Documentation includes a summary of the theory underlying attenuation imagin
 
 C. ***Understand the output text files***
 
-All the output files (.mat, .txt and xlsx), figures and .vtk files (for visualisation in Paraview) are stored in the **TXT** and **VTK** sub-directories in the **Label** folder, created in the working directory. In the following, a list of the output files and what they contain is provided. Ascii files contain the models in degrees and UTM. We strongly suggest imaging the TXT files using the [GeophysicalModelGenerator](https://github.com/JuliaGeodynamics/GeophysicalModelGenerator.jl).
+All the output files (.mat, .txt and xlsx) and figures are stored in the **TXT** sub-directories in the **Label** folder, created in the working directory. In the following, a list of the output files and what they contain is provided. Ascii files contain the models in degrees and UTM. We strongly suggest imaging the TXT files using the [GeophysicalModelGenerator](https://github.com/JuliaGeodynamics/GeophysicalModelGenerator.jl).
 
 D. **Understand the output figure files**
 
@@ -87,11 +87,11 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
 ------------
 
-* **TXT directory** and **VTK directory**
+* **TXT directory**
 
 ------------
 
-*peakdelay__.txt*, *Qc__.txt* and *Q__.txt*:  The 3D models of the parameters at different frequencies. The first three columns of all text files correspond to WE, SN, and altitude. The fourth column is the mapped parameter. They contain a minimum of five columns (for *Peak Delay*) that can be imported to show the locations of the anomalies in a simple (x,y,z) reference system. The fifth columns shows blocks hit by at least one ray. Qc and Q are solved with an inversion and thus have: (1) sixth and seventh columns that corresponds to the input and output of the checkerboard test; (2) eight and ninth columns that corresponds to the input and output of the spike test. All the .vtk files are stored in omonimous folder.
+*peakdelay__.txt*, *Qc__.txt* and *Q__.txt*:  The 3D models of the parameters at different frequencies. The first three columns of all text files correspond to WE, SN, and altitude. The fourth column is the mapped parameter. They contain a minimum of five columns (for *Peak Delay*) that can be imported to show the locations of the anomalies in a simple (x,y,z) reference system. The fifth columns shows blocks hit by at least one ray. Qc and Q are solved with an inversion and thus have: (1) sixth and seventh columns that corresponds to the input and output of the checkerboard test; (2) eight and ninth columns that corresponds to the input and output of the spike test.
 
 *Murat.mat*: A Matlab structure containing all inputs and data produced by the code.
 
