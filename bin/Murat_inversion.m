@@ -248,13 +248,27 @@ for k = 1:lMF(2)
     end
 
     %%
-    % Save peak-delay, Qc, Q
-    [WE,SN,~]                       =   deg2utm(origin(1),origin(2));
+    % calculate UTM coordinates
     modLLD                          =   Murat_unfoldXYZ(x,y,z/1000);
-    modUTM                          =   [modLLD(:,1)+WE modLLD(:,2)+SN...
-        modLLD(:,3)];
-    modv_pd_k                       =   modv_pd(:,:,k);
+    x_v=sort(unique(modLLD(:,1)));
+    y_v=sort(unique(modLLD(:,2)));
+    [or_x,or_y,~]                   =   deg2utm(y_v(1),x_v(1));
+    [WE,SN,~]                       =   deg2utm(y_v(2),x_v(2));
+    WE=WE-or_x;
+    SN=SN-or_y;
+    modUTM=zeros(length(modLLD(:,1)),length(modLLD(1,:)));
+    for in=1:length(x_v)
+        modUTM((modLLD(:,1)==x_v(in)),1)=or_x;
+        or_x=or_x+WE;
+    end
+    for in=1:length(y_v)
+        modUTM((modLLD(:,2)==y_v(in)),2)=or_y;
+        or_y=or_y+SN;
+    end
+    modUTM(:,3)=modLLD(:,3);
 
+    % Save peak-delay, Qc, Q
+    modv_pd_k                       =   modv_pd(:,:,k);
     modv_pd_k(:,1:3)                =   modUTM;
     FName                           =...
         ['peakdelay_' fcName '_UTM_Hz.txt'];
