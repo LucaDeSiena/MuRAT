@@ -248,7 +248,9 @@ for k = 1:lMF(2)
     end
 
     %%
-    % calculate UTM coordinates
+    % calculate UTM coordinates (assuming that thr first and the second 
+    % points are in the same UTM zone, it computes the increment to be 
+    % summed at each step)
     modLLD                          =   Murat_unfoldXYZ(x,y,z/1000);
     x_v=sort(unique(modLLD(:,1)));
     y_v=sort(unique(modLLD(:,2)));
