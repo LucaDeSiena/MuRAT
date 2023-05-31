@@ -32,19 +32,19 @@ end
 % For plotting
 locationsDeg_i              =   [even stati];
 
-dist_xdeg_even              =   even(2)-origin(2);
-dist_ydeg_even              =   even(1)-origin(1);
-dist_z_even                 =   -even(3);
-
-dist_xdeg_station           =   stati(2)-origin(2);
-dist_ydeg_station           =   stati(1)-origin(1);
-dist_z_station              =   stati(3);
+wgs84                       =   wgs84Ellipsoid("m");
+[distEven,azEven]           =...
+                     distance(origin(1),origin(2),even(1),even(2),wgs84);
+[distStati,azStati]         =...
+                     distance(origin(1),origin(2),stati(1),stati(2),wgs84);
 
 % Transforms in meters
-dist_x_even                 =   deg2km(dist_xdeg_even)*1000;
-dist_y_even                 =   deg2km(dist_ydeg_even)*1000;
-dist_x_station              =   deg2km(dist_xdeg_station)*1000;
-dist_y_station              =   deg2km(dist_ydeg_station)*1000;
+dist_x_even                 =   distEven*sin(azEven*2*pi/360);
+dist_y_even                 =   distEven*cos(azEven*2*pi/360);
+dist_x_station              =   distStati*sin(azStati*2*pi/360);
+dist_y_station              =   distStati*cos(azStati*2*pi/360);
+dist_z_even                 =   -even(3);
+dist_z_station              =   stati(3);
 
 % For ray tracing
 locationsM_i                =   [dist_x_even dist_y_even dist_z_even...

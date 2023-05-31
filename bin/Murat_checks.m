@@ -53,9 +53,12 @@ if isequal(flag,2)
 end
 %% VELOCITY MODELS: ORIGINAL, INVERSION, and PROPAGATION
 % Save x,y,z in degrees switching as longitude comes second
-% Find distance and azimuth to change in meters - requires longitude first
-dist_x                          =   deg2km(ending(2)-origin(2))*1000;
-dist_y                          =   deg2km(ending(1)-origin(1))*1000;
+% Find distance and azimuth to change in meters
+wgs84                           =   wgs84Ellipsoid("m");
+[d,az]                          =...
+                   distance(origin(1),origin(2),ending(1),ending(2),wgs84);
+dist_x                          =   d*sin(az*2*pi/360);
+dist_y                          =   d*cos(az*2*pi/360);
 
 % Coordinates of inversion points in meters
 xM                              =   linspace(0,dist_x,nLong)';
