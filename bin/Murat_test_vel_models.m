@@ -1,4 +1,4 @@
-function Murat_test_vel_models(orig_model,m_model,interp_model,X,Y,Z,prop_model,Xq,Yq,Zq,origin)
+function Murat_test_vel_models(orig_model,m_model,interp_model,X,Y,Z,prop_model,Xq,Yq,Zq)
 
 % first look at original model
 % use min and maximum lat / lon of model
@@ -22,16 +22,6 @@ view(0,90)
 colorbar
 title('original velocity model')
 
-
-% figure
-% slice(Xorig_model,Yorig_model,Zorig_model, mVorig_model, 14.13, 40.83,-1800)
-% colormap(color)
-% view(30,15)
-% colorbar
-% xlim([14.06 14.20])
-% ylim([40.7745 40.8700])
-% zlim([-5500 500])
-% title('cut original velocity model')
 
 %% check out centered model
 % use min and maximum lon / lat of model
@@ -57,17 +47,6 @@ view(0,90)
 colorbar
 title('cartesian velocity model')
 
-
-% figure
-% slice(Xm_model,Ym_model,Zm_model, mVm_model,x_slice,y_slice,z_slice)
-% colormap(color)
-% view(30,15)
-% colorbar
-% xlim([0 deg2km(14.13-origin(2))*1000])
-% ylim([0 deg2km(40.83-origin(1))*1000])
-% zlim([-5000 1000])
-% title('cut centered velocity model')
-
 %% now show interpolated model
 
 figure
@@ -75,9 +54,6 @@ slice(X,Y,Z,interp_model,x_slice,y_slice,z_slice)
 colormap(color)
 view(0,90)
 colorbar
-% xlim([0 deg2km(14.13-origin(2))*1000])
-% ylim([0 deg2km(40.83-origin(1))*1000])
-% zlim([-5000 1000])
 title('inversion velocity model')
 
 %% propagation model
@@ -88,9 +64,6 @@ slice(Xq,Yq,Zq,prop_model,y_slice,x_slice,z_slice)
 colormap(color)
 view(0,90)
 colorbar
-% xlim([0 deg2km(14.13-origin(2))*1000])
-% ylim([0 deg2km(40.83-origin(1))*1000])
-% zlim([-5000 1000])
 title('propagation velocity model')
 
 end
