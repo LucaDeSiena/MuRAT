@@ -3,6 +3,8 @@ function Murat                  =   Murat_checks(Murat)
 
 % INPUTS
 dataDirectory                   =   ['./' Murat.input.dataDirectory];
+FPath                           =   './';
+FLabel                          =   Murat.input.label;
 PTime                           =   ['SAChdr.times.' Murat.input.PTime];
 PorS                            =   Murat.input.POrS;
 
@@ -17,15 +19,13 @@ velocityModel                   =   ['velocity_models/',Murat.input.namev];
 if isempty(Murat.input.originTime)
     originTime                  =   'SAChdr.times.o';
 else
-    originTime                  =...
-        ['SAChdr.times.' Murat.input.originTime];
+    originTime                  =   ['SAChdr.times.' Murat.input.originTime];
 end
 
 if isempty(Murat.input.STime)
-    STime                  =   'SAChdr.times.t0';
+    STime                       =   'SAChdr.times.t0';
 else
-    STime                  =...
-        ['SAChdr.times.' Murat.input.STime];
+    STime                       =   ['SAChdr.times.' Murat.input.STime];
 end
 
 Murat.input.originTime          =   originTime;
@@ -39,10 +39,35 @@ else
     mkdir('./temp')
 end
 
-% Checking data
+%% Creating folders to store results
+if exist(FLabel,'dir')==7
+    rmdir(FLabel,'s')
+end
+
+mkdir(FLabel)
+mkdir([FLabel,'/RaysKernels'])
+mkdir([FLabel,'/Tests'])
+mkdir([FLabel,'/Results'])
+mkdir([FLabel,'/Results/PeakDelay'])
+mkdir([FLabel,'/Results/Qc'])
+mkdir([FLabel,'/Results/Q'])
+mkdir([FLabel,'/Results/Parameter'])
+mkdir([FLabel,'/Checkerboard'])
+mkdir([FLabel,'/Checkerboard/Qc'])
+mkdir([FLabel,'/Checkerboard/Q'])
+mkdir([FLabel,'/Spike'])
+mkdir([FLabel,'/Spike/Qc'])
+mkdir([FLabel,'/Spike/Q'])
+mkdir([FLabel,'/TXT'])
+
+%% Checking data
 [Murat.input.listSac,~]         =   createsList([dataDirectory '/*.sac']);
-[Murat.input.header,flag]       =...
+[header,flag]                   =...
     Murat_testData(dataDirectory,originTime,PTime,STime);
+mLat                            =...
+    [min(cell2mat(header{:,5})) max(cell2mat(header{:,5}))];
+mLon                            =...
+    [min(cell2mat(header{:,6})) max(cell2mat(header{:,6}))];
 
 if isequal(flag,1)
     warning('Missing origin times.')
@@ -54,9 +79,12 @@ end
 %% VELOCITY MODELS: ORIGINAL, INVERSION, and PROPAGATION
 % Save x,y,z in degrees switching as longitude comes second
 % Find distance and azimuth to change in meters
+
+modvOriginal                    =   load(velocityModel);
+
 wgs84                           =   wgs84Ellipsoid("m");
 [d,az]                          =...
-                   distance(origin(1),origin(2),ending(1),ending(2),wgs84);
+    distance(origin(1),origin(2),ending(1),ending(2),wgs84);
 dist_x                          =   d*sin(az*2*pi/360);
 dist_y                          =   d*cos(az*2*pi/360);
 
@@ -72,37 +100,38 @@ Murat.input.z                   =   linspace(origin(3),ending(3),nzc)';
 Murat.input.gridStepX           =   xM(2)-xM(1);
 Murat.input.gridStepY           =   yM(2)-yM(1);
 
-modvOriginal                    =   load(velocityModel);
 if availableVelocity ==  0
 
     gridPropagation.x           =   xM';
     gridPropagation.y           =   yM';
     gridPropagation.z           =   zM';
     
-    [modv,pvel]                 =...
-        Murat_modv1D(modvXYZ,modvOriginal,PorS);
+    [modv,pvel,modvPlot]        =...
+        Murat_modv1D(modvXYZ,modvOriginal,PorS,origin);
     
     Murat.input.modv            =   modv;
     Murat.input.modvp           =   modv;
-    Murat.input.modvPlot        =   [];
+    Murat.input.modvPlot        =   modvPlot;
+    
     
 elseif availableVelocity ==  1
     
-    [modvP,modvI,modvIP,pvel]          =...
-        Murat_modv3D(modvXYZ,modvOriginal,origin,0);
+    [modvP,pvel,modvEqS,modvPlo]=   Murat_modv3D(FPath,FLabel,...
+        modvOriginal,origin,mLat,mLon,nLat,nLong,nzc);
     
     gridPropagation.x           =   unique(modvP(:,1));
     gridPropagation.y           =   unique(modvP(:,2));
     gridPropagation.z           =   sort(unique(modvP(:,3)),'descend');
     
-    Murat.input.modv            =   modvI;
-    Murat.input.modvp           =   modvP(:,1:4);    
-    Murat.input.modvPlot        =   modvIP;
+    Murat.input.modv            =   modvEqS;
+    Murat.input.modvp           =   modvP;    
+    Murat.input.modvPlot        =   modvPlo;
     
 end
 
 Murat.input.gridPropagation     =   gridPropagation;
 Murat.input.pvel                =   pvel;
+Murat.input.header              =   header;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [listWithFolder,listNoFolder]...
                                 =   createsList(directory)
@@ -112,5 +141,5 @@ function [listWithFolder,listNoFolder]...
 list                            =   dir(directory);
 list                            =   list(~startsWith({list.name}, '.'));
 
-listWithFolder                  =	fullfile({list.folder},{list.name})';
-listNoFolder                    =   {list.name}';
+listWithFolder              =	fullfile({list.folder},{list.name})';
+listNoFolder                =   {list.name}';

@@ -38,13 +38,13 @@ lgx1                        =   min(modv(:,1));
 lgy1                        =   min(modv(:,2));
 lvg1                        =   max(modv(:,3));
 
-passox                      =   find(modv(:,1)~=modv(1,1),1,'first')-1;
-passoy                      =   find(modv(:,2)~=modv(1,2),1,'first')-1;
+passox                      =   abs(find(modv(:,1)~=modv(1,1),1,'first')-1);
+passoy                      =   abs(find(modv(:,2)~=modv(1,2),1,'first')-1);
 passoz                      =   1;
 
 % Find the index of variations in the velocity model
-deltastepx                  =   modv(1+passox,1);
-deltastepy                  =   modv(1+passoy,2);
+deltastepx                  =   modv(1+passox,1)-modv(1,1);
+deltastepy                  =   modv(1+passoy,2)-modv(1,2);
 
 % Decreases altitude
 deltastepz                  =   modv(1+passoz,3)-modv(1,3);
