@@ -46,7 +46,7 @@ if find(isnan(mK))
         [~,maxK]                =   max(K_grid);
         rmax                    =   r_grid(maxK,:);
         [~,min_K]               =   min(sqrt((mod_K(:,1)-rmax(1)).^2 ...
-        + (mod_K(:,2)-rmax(2)).^2 + (mod_K(:,3)-rmax(3)).^2));
+            + (mod_K(:,2)-rmax(2)).^2 + (mod_K(:,3)-rmax(3)).^2));
         mod_K(min_K,4)          =   1;
         [~,~,~,mK]              =   Murat_fold(x,y,z,mod_K(:,4));
 
@@ -56,18 +56,30 @@ end
 % Kernel in its grid space
 if flag == 1
     sections1                   =   [sections(2) sections(1) sections(3)];
+    wgs84                       =   wgs84Ellipsoid("m");
+    d                           =   sqrt(X.^2 + Y.^2);
+    az                          =   atan(X./Y)*360/2/pi;
+    az(isnan(az))               =   0;
+    [Y1,X1]                     =   reckon(origin(1),origin(2),d,az,wgs84);
+
+    x1                          =   linspace(min(X1(:)),max(X1(:)),length(x))';
+    y1                          =   linspace(min(Y1(:)),max(Y1(:)),length(y))';
+    z1                          =   z;
+    [XEqS,YEqS,ZEqS]            =   meshgrid(x1,y1,z1);
+
+    mEqSpace                    =...
+        griddata(X1,Y1,Z,log(mK),XEqS,YEqS,ZEqS);
+
     Xk1                         =   origin(2) + km2deg(Xk/1000);
     Yk1                         =   origin(1) + km2deg(Yk/1000);
-    X1                          =   origin(2) + km2deg(X/1000);
-    Y1                          =   origin(1) + km2deg(Y/1000);
-
+    
     subplot(1,2,1)
     Murat_imageKernels(Xk1,Yk1,Zk,log(K),inferno,sections1)
     SetFDefaults();
     
     subplot(1,2,2)
-    Murat_imageKernels(X1,Y1,Z,log(mK),inferno,sections1)
-    
+    Murat_imageKernels(XEqS,YEqS,ZEqS,mEqSpace,inferno,sections1)
+   
 end
 
 %pre-define 3D matrix in space

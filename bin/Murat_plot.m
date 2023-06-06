@@ -9,7 +9,6 @@ x                                   =   Murat.input.x;
 y                                   =   Murat.input.y;
 z                                   =   Murat.input.z;
 sections                            =   Murat.input.sections;
-plotV                               =   Murat.input.modvPlot;
 cf                                  =   Murat.input.centralFrequency;
 vS                                  =   Murat.input.averageVelocityS;
 tWm                                 =   Murat.input.codaWindow;
@@ -421,11 +420,6 @@ for k = 1:lMF(2)
         Murat_imageParametersMaps(par_inter,para_map_inter,xi',yi',zi,...
         Xi,Yi,Zi,evestaz_Qc,sections,sizeTitle,FName_PMap);
     
-    [WE,SN,~]                       =   deg2utm(origin(1),origin(2));
-    modLLD                          =   Murat_unfoldXYZ(xi,yi,zi/1000);
-    modUTM                          =   [modLLD(:,1)+WE modLLD(:,2)+SN...
-        modLLD(:,3)];
-    
     pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_PMap);
     Murat_saveFigures(ParaMap,pathFolder);
@@ -433,30 +427,11 @@ for k = 1:lMF(2)
     FName                           =...
         ['parameterMap_' fcName '_Degrees_Hz.txt'];
     writematrix(para_map,fullfile(FPath, FLabel, 'TXT', FName));
-    
-    para_map(:,1:3)                 =   modUTM;
-    FName                           =...
-        ['parameterMap_' fcName '_UTM_Hz.txt'];
-    writematrix(para_map,fullfile(FPath, FLabel, 'TXT', FName));
 end
 
 %%
-% Final figures are the velocity model and Qc/frequency relation
+% Final figure is the Qc vs frequency relation
 storeFolder                         =   'Tests';
-
-if Murat.input.availableVelocity == 1
-
-    FName_Vimage                    =   'Velocity_model';
-    Vimage                          =   Murat_image3D(X,Y,Z,plotV,...
-        inferno,sections,evestaz_Q,x,y,z,divi,FName_Vimage);
-    title('Velocity Model',...
-        'FontSize',sizeTitle,'FontWeight','bold','Color','k');
-    pathFolder                      =...
-        fullfile(FPath,FLabel,storeFolder,FName_Vimage);
-    saveas(Vimage,pathFolder);
-    close(Vimage)
-end
-
 Murat.data.averageQcFrequency       =   averageQcFrequency;
 Qcf_title                           =   'Qc vs Frequency';
 QcFrequency                         =   Murat_imageQcFrequency(cf,...

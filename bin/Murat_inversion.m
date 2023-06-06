@@ -7,24 +7,24 @@ outputLCurve                        =   Murat.input.lCurve;
 tWm                                 =   Murat.input.codaWindow;
 cf                                  =   Murat.input.centralFrequency;
 sped                                =   Murat.input.spectralDecay;
-nxc                                 =   Murat.input.gridLong;
-nyc                                 =   Murat.input.gridLat;
-nzc                                 =   Murat.input.gridZ;
 sizea                               =   Murat.input.sizeCheck;
 latt                                =   Murat.input.lowCheck;
 hatt                                =   Murat.input.highCheck;
-modv                                =   Murat.input.modv;
+modvP                               =   Murat.input.modvPlot;
 spike_o                             =   Murat.input.spikeLocationOrigin;
 spike_e                             =   Murat.input.spikeLocationEnd;
 spike_v                             =   Murat.input.spikeValue;
 x                                   =   Murat.input.x;
 y                                   =   Murat.input.y;
 z                                   =   Murat.input.z;
+nxc                                 =   length(x);
+nyc                                 =   length(y);
+nzc                                 =   length(z);
+nxyzc                               =   nxc*nyc*nzc;
 QcM                                 =   Murat.input.QcMeasurement;
 inversionMethod                     =   Murat.input.inversionMethod;
 lCurveQc                            =   Murat.input.lCurveQc;
 lCurveQ                             =   Murat.input.lCurveQ;
-origin                              =   Murat.input.origin;
 muratHeader                         =   Murat.input.header;
 
 Apd_i                               =...
@@ -47,41 +47,21 @@ tCoda                               =   Murat.data.tCoda;
 FPath                               =   './';
 
 lMF                                 =   size(ray_crosses_pd);
-modv_pd                             =   zeros(lMF(1),5,lMF(2));
-modv_Qc                             =   zeros(lMF(1),10,lMF(2));
-modv_Q                              =   zeros(lMF(1),10,lMF(2));
+modv_pd                             =   zeros(nxyzc,5,lMF(2));
+modv_Qc                             =   zeros(nxyzc,10,lMF(2));
+modv_Q                              =   zeros(nxyzc,10,lMF(2));
 const_Qc                            =   zeros(size(rapsp));
 residualQ                           =   zeros(1,lMF(2));
 residualQc                          =   zeros(1,lMF(2));
-
 %%
-% Creating folders to store results
-if exist(FLabel,'dir')==7
-    rmdir(FLabel,'s')
-end
-
-mkdir(FLabel)
-mkdir([FLabel,'/RaysKernels'])
-mkdir([FLabel,'/Tests'])
-mkdir([FLabel,'/Results'])
-mkdir([FLabel,'/Results/PeakDelay'])
-mkdir([FLabel,'/Results/Qc'])
-mkdir([FLabel,'/Results/Q'])
-mkdir([FLabel,'/Results/Parameter'])
-mkdir([FLabel,'/Checkerboard'])
-mkdir([FLabel,'/Checkerboard/Qc'])
-mkdir([FLabel,'/Checkerboard/Q'])
-mkdir([FLabel,'/Spike'])
-mkdir([FLabel,'/Spike/Qc'])
-mkdir([FLabel,'/Spike/Q'])
-mkdir([FLabel,'/TXT'])
-
-%%
+xOr                                 =   modvP(:,1);
+yOr                                 =   modvP(:,2);
+zOr                                 =   modvP(:,3);
 % Loops over all frequencies and parameter models
 for k = 1:lMF(2)
-    modv_pd(:,1:3,k)                =   modv(:,1:3);
-    modv_Qc(:,1:3,k)                =   modv(:,1:3);
-    modv_Q(:,1:3,k)                 =   modv(:,1:3);
+    modv_pd(:,1:3,k)                =   modvP(:,1:3);
+    modv_Qc(:,1:3,k)                =   modvP(:,1:3);
+    modv_Q(:,1:3,k)                 =   modvP(:,1:3);
     cf_k                            =   cf(k);
     fcName                          =   num2str(cf_k);
     if find(fcName == '.')
@@ -101,9 +81,9 @@ for k = 1:lMF(2)
         sum(A_boxes.*lpdelta_k,1)'./sum(A_boxes,1)';
 
     mpd(isnan(mpd))                 =   mean(mpd,'omitnan');
-
     modv_pd(rcpd_k,4,k)             =   mpd;
     modv_pd(rcpd_k,5,k)             =   cts_box;
+
     %%
     % Qc inversion
     rcQc_k                          =   ray_crosses_Qc(:,k);
@@ -124,7 +104,7 @@ for k = 1:lMF(2)
            Murat_tikhonovQc(outputLCurve,Gc,bQm,lCurveQc_k);
 
         residualQc(1,k)             =   residualQc_k;
-        modv_Qc(rcQc_k,4,k)         =   mtik0C;
+        mQc                         =   mtik0C;
 
     elseif isequal(inversionMethod,'Iterative')
         disp(['Qc L-curve and cost functions at ', num2str(cf_k), ' Hz.'])
@@ -134,7 +114,7 @@ for k = 1:lMF(2)
            Murat_minimiseCGLS(outputLCurve,Gc,bQm,lCurveQc_k,FName);
 
         residualQc(1,k)             =   min(infoVectorQm.Rnrm);
-        modv_Qc(rcQc_k,4,k)         =   minimizeVectorQm;
+        mQc                         =   minimizeVectorQm;
 
     elseif isequal(inversionMethod,'Hybrid')
         disp(['Qc cost function at ', num2str(cf_k), ' Hz.'])
@@ -144,12 +124,14 @@ for k = 1:lMF(2)
            Murat_minimiseHybrid(outputLCurve,Gc,bQm,lCurveQc_k,FName);
 
         residualQc(1,k)             =   min(infoVectorQm.Rnrm);
-        modv_Qc(rcQc_k,4,k)         =   minimizeVectorQm;
+        mQc                         =   minimizeVectorQm;
 
     else
         error('Unknown inversion method.')
 
     end
+    modv_Qc(rcQc_k,4,k)             =   mQc;
+       
     saveas(LcQc,fullfile(FPath, FLabel,'Tests',FName));
     saveas(LcQc,fullfile(FPath, FLabel,'Tests',FName),'tif');
     close(LcQc)
@@ -177,7 +159,7 @@ for k = 1:lMF(2)
            Murat_tikhonovQ(outputLCurve,A_k,d1,lCurveQ_k,1);
 
         residualQ(:,k)              =   residualQ_k;
-        modv_Q(rcQ_k,4,k)           =   mtik0;
+        mQ                          =   mtik0;
 
     elseif isequal(inversionMethod,'Iterative')
         disp(['Q L-curve and cost functions at ', num2str(cf_k), ' Hz.'])
@@ -186,20 +168,21 @@ for k = 1:lMF(2)
            Murat_minimiseCGLS(outputLCurve,A_k,d1,lCurveQ_k,FName);
 
         residualQ(1,k)              =   min(infoVectorQ.Rnrm);
-        modv_Q(rcQ_k,4,k)           =   minimizeVectorQ;
+        mQ                          =   minimizeVectorQ;
 
     elseif isequal(inversionMethod,'Hybrid')
-        disp(['Qc cost function at ', num2str(cf_k), ' Hz.'])
+        disp(['Q cost function at ', num2str(cf_k), ' Hz.'])
 
         [LcCN, minimizeVectorQ,infoVectorQ,tik0_reg]...
                                     =...
            Murat_minimiseHybrid(outputLCurve,A_k,d1,lCurveQ_k,FName);
 
         residualQ(1,k)              =   min(infoVectorQ.Rnrm);
-        modv_Q(rcQ_k,4,k)           =   minimizeVectorQ;
+        mQ                          =   minimizeVectorQ;
 
     end
-
+    modv_Q(rcQ_k,4,k)             =   mQ;
+        
     saveas(LcCN,fullfile(FPath, FLabel,'Tests',FName));
     saveas(LcCN,fullfile(FPath, FLabel,'Tests',FName),'tif');
     close(LcCN)
@@ -248,58 +231,16 @@ for k = 1:lMF(2)
     end
 
     %%
-    % calculate UTM coordinates (assuming that thr first and the second 
-    % points are in the same UTM zone, it computes the increment to be 
-    % summed at each step)
-    modLLD                          =   Murat_unfoldXYZ(x,y,z/1000);
-    x_v=sort(unique(modLLD(:,1)));
-    y_v=sort(unique(modLLD(:,2)));
-    [or_x,or_y,~]                   =   deg2utm(y_v(1),x_v(1));
-    [WE,SN,~]                       =   deg2utm(y_v(2),x_v(2));
-    WE=WE-or_x;
-    SN=SN-or_y;
-    modUTM=zeros(length(modLLD(:,1)),length(modLLD(1,:)));
-    for in=1:length(x_v)
-        modUTM((modLLD(:,1)==x_v(in)),1)=or_x;
-        or_x=or_x+WE;
-    end
-    for in=1:length(y_v)
-        modUTM((modLLD(:,2)==y_v(in)),2)=or_y;
-        or_y=or_y+SN;
-    end
-    modUTM(:,3)=modLLD(:,3);
-
     % Save peak-delay, Qc, Q
-    modv_pd_k                       =   modv_pd(:,:,k);
-    modv_pd_k(:,1:3)                =   modUTM;
-    FName                           =...
-        ['peakdelay_' fcName '_UTM_Hz.txt'];
-    writematrix(modv_pd_k,fullfile(FPath, FLabel, 'TXT', FName));
-
-    modv_pd_k(:,1:3)                =   modLLD;
     FName                           =...
         ['peakdelay_' fcName '_Degrees_Hz.txt'];
-    writematrix(modv_pd_k,fullfile(FPath, FLabel, 'TXT', FName));
+    writematrix(modv_pd(:,:,k),fullfile(FPath, FLabel, 'TXT', FName));
 
-    modv_Qc_k                       =   modv_Qc(:,:,k);
-
-    modv_Qc_k(:,1:3)                =   modUTM;
-    FName                           =   ['Qc_' fcName '_UTM_Hz.txt'];
-    writematrix(modv_Qc_k,fullfile(FPath, FLabel, 'TXT', FName));
-
-    modv_Qc_k(:,1:3)                =   modLLD;
     FName                           =   ['Qc_' fcName '_Degrees_Hz.txt'];
-    writematrix(modv_Qc_k,fullfile(FPath, FLabel, 'TXT', FName));
+    writematrix(modv_Qc(:,:,k),fullfile(FPath, FLabel, 'TXT', FName));
 
-    modv_Q_k                        =   modv_Q(:,:,k);
-
-    modv_Q_k(:,1:3)                 =   modUTM;
-    FName                           =   ['Q_' fcName '_UTM_Hz.txt'];
-    writematrix(modv_Q_k,fullfile(FPath, FLabel, 'TXT', FName));
-
-    modv_Q_k(:,1:3)                 =   modLLD;
     FName                           =   ['Q_' fcName '_Degrees_Hz.txt'];
-    writematrix(modv_Q_k,fullfile(FPath, FLabel, 'TXT', FName));
+    writematrix(modv_Q(:,:,k),fullfile(FPath, FLabel, 'TXT', FName));
 end
 
 %%

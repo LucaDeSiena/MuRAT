@@ -1,7 +1,7 @@
 function image          = ...
     Murat_image3Dparameters(X,Y,Z,V,color,sections,evestaz,x,y,z,name)
 % function image          = ...
-%     Murat_image3D(X,Y,Z,V,color,sections,evestaz,x,y,z,name)
+%     Murat_image3Dparameters(X,Y,Z,V,color,sections,evestaz,x,y,z,name)
 %
 % PLOTS a 3D image of the parameters, without interpolating.
 %

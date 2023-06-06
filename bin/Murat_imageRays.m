@@ -22,30 +22,38 @@ rays                    =   figure('Name',name,...
     'NumberTitle','off','Position',[20,400,1200,1000],'visible','off');
 
 load coastlines coastlat coastlon
-z                       =   sort(z)/1000;
+z1                      =   sort(z)/1000;
 lrma                    =   length(rma(1,1,:));
 evestaz_ray             =   zeros(lrma,6);
 
+wgs84                               =   wgs84Ellipsoid("m");
+
 subplot(2,2,1)
-rma(:,1,:)              =   origin(2) + km2deg(rma(:,1,:));
-rma(:,2,:)              =   origin(1) + km2deg(rma(:,2,:));
+
 for i = 1:lrma
-    ray                 =   rma(:,:,i);
+    ray                     =   rma(:,:,i)*1000;
+    ray(:,3)                =   rma(:,3,i);
     
+    d                       =   sqrt(ray(:,1).^2 + ray(:,2).^2);
+    az                      =   atan(ray(:,1)./ray(:,2))*360/2/pi;
+    az(isnan(az))           =   0;
+    [lat2,lon2]             =   reckon(origin(1),origin(2),d,az,wgs84);
+
     subplot(2,2,1)
     hold on
-    plot(ray(:,1),ray(:,2),'k');
+    plot(lon2,lat2,'k');
     
     subplot(2,2,2)
     hold on
-    plot(ray(:,2),ray(:,3),'k');
+    plot(lat2,ray(:,3),'k');
     
     subplot(2,2,3)
     hold on
-    plot(ray(:,1),ray(:,3),'k');
+    plot(lon2,ray(:,3),'k');
     
     % save start and end point of ray
-    evestaz_ray(i,:) = [ray(1,2),ray(1,1),ray(1,3),ray(end,2),ray(end,1),ray(end,3)];
+    evestaz_ray(i,:)        =   [lat2(1),lon2(1),ray(1,3),...
+        lat2(end),lon2(end),ray(end,3)];
 end
 
 centreGrid              =   [origin(2) + (ending(2) - origin(2))/2 ...
@@ -84,7 +92,7 @@ xlabel('Latitude (°)','FontSize',16,'FontWeight','bold','Color','k')
 ylabel('Altitude (km)','FontSize',16,'FontWeight','bold','Color','k')
 xticks(y(1:2:end-1))
 set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
-yticks(z(1:end-1))
+yticks(z1(1:end-1))
 set(gca,'yticklabel',num2str(get(gca,'ytick')','%.2f'))
 xtickangle(45)
 ytickangle(45)
@@ -102,7 +110,7 @@ xlabel('Longitude (°)','FontSize',16,'FontWeight','bold','Color','k')
 ylabel('Altitude (km)','FontSize',16,'FontWeight','bold','Color','k')
 xticks(x(1:2:end-1))
 set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
-yticks(z(1:end-1))
+yticks(z1(1:end-1))
 set(gca,'zticklabel',num2str(get(gca,'ytick')','%.2f'))
 xtickangle(45)
 ytickangle(45)

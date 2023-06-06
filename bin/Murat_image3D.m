@@ -78,11 +78,12 @@ zlabel('Altitude (km)','FontSize',16,'FontWeight','bold','Color','k')
 
 xtick                   =   linspace(x(1),x(end),6);
 ytick                   =   linspace(y(1),y(end),6);
-ztick                   =   linspace(x(1),x(end),6);
+ztick                   =   linspace(z(end),z(1),6)/1000;
 
 xticks(xtick); set(gca,'xticklabel',num2str(get(gca,'xtick')','%.2f'))
 yticks(ytick); set(gca,'yticklabel',num2str(get(gca,'ytick')','%.2f'))
-zticks(ztick); set(gca,'zticklabel',num2str(get(gca,'ztick')','%.2f'))
+zticks(ztick);
+set(gca,'zticklabel',num2str(get(gca,'ztick')','%.2f'))
 axis tight
 
 SetFDefaults();

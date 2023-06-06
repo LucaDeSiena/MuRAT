@@ -160,13 +160,10 @@ RF = 2; % relaxation factor
 if nargin<4 || isempty(m), m = 2; end
 Lambda = Lambda.^m;
 
-h = waitbar(0,'Inpainting...');
 for i = 1:n
         Gamma = 1./(1+s(i)*Lambda);
         y = RF*idctn(Gamma.*dctn(W.*(x-y)+y)) + (1-RF)*y;
-        waitbar(i/n,h)
 end
-close(h)
 
 y(W) = x(W);
 y = cast(y,class0);

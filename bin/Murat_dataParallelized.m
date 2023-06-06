@@ -17,10 +17,11 @@ modvQc                                  =   [modv(:,1) + gridStep(1)...
 
 gridD                                   =   Murat.input.gridPropagation;
 pvel                                    =   Murat.input.pvel;
-
+    
 cf                                      =   Murat.input.centralFrequency;
 lcf                                     =   length(cf);
 
+workers                                 =   Murat.input.workers;
 origin                                  =   Murat.input.origin;
 originTime                              =   Murat.input.originTime;
 PTime                                   =   Murat.input.PTime;
@@ -67,7 +68,7 @@ rayCrossing                             =...
 % on peak delays and coda attenuation.
 count_trash                             =   0;
 
-parfor i = 1:lengthData
+parfor (i = 1:lengthData,workers)
     
     if isequal(mod(i,100),0)
         
