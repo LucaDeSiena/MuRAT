@@ -25,12 +25,13 @@ hold on
 plot([locDegrees(:,2), locDegrees(:,5)],...
         [locDegrees(:,1),locDegrees(:,4)],'-r','LineWidth',2)
     
-scatter(locDegOriginal(:,2),locDegOriginal(:,1),80,'c',...
-    'MarkerEdgeColor','b', 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
+scatter(locDegOriginal(:,2),locDegOriginal(:,1),80,'c','MarkerEdgeColor','b',...
+    'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 
-scatter(locDegrees(:,5),locDegrees(:,4),80,'^',...
-    'MarkerEdgeColor','b', 'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
+scatter(locDegrees(:,5),locDegrees(:,4),80,'^','MarkerEdgeColor','m',...
+    'MarkerFaceColor',[.5 .5 .5], 'LineWidth',1)
 
+legend('Original rays','','Rays after declustering','','Earthquakes','Stations')
 title('Comparison between original and declustered data')
 axis equal
 xlim([origin(2) ending(2)]);
