@@ -232,15 +232,23 @@ for k = 1:lMF(2)
 
     %%
     % Save peak-delay, Qc, Q
+    DDcoordinates                       =   Murat.input.DDcoordinates;
+    modv_pd_dd                          =   modv_pd(:,:,k);
+    modv_pd_dd(:,1:3)                   =   DDcoordinates;
+    modv_Qc_dd                          =   modv_Qc(:,:,k);
+    modv_Qc_dd(:,1:3)                   =   DDcoordinates;
+    modv_Q_dd                           =   modv_Q(:,:,k);
+    modv_Q_dd(:,1:3)                    =   DDcoordinates;
+
     FName                           =...
         ['peakdelay_' fcName '_Degrees_Hz.txt'];
-    writematrix(modv_pd(:,:,k),fullfile(FPath, FLabel, 'TXT', FName));
+    writematrix(modv_pd_dd,fullfile(FPath, FLabel, 'TXT', FName));
 
     FName                           =   ['Qc_' fcName '_Degrees_Hz.txt'];
-    writematrix(modv_Qc(:,:,k),fullfile(FPath, FLabel, 'TXT', FName));
+    writematrix(modv_Qc_dd,fullfile(FPath, FLabel, 'TXT', FName));
 
     FName                           =   ['Q_' fcName '_Degrees_Hz.txt'];
-    writematrix(modv_Q(:,:,k),fullfile(FPath, FLabel, 'TXT', FName));
+    writematrix(modv_Q_dd,fullfile(FPath, FLabel, 'TXT', FName));
 end
 
 %%
