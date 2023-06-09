@@ -46,7 +46,7 @@ for i = 1:comp:dataL
                 peakd(index,j)                  =   peakd1(i+1,j);
                 
             elseif ~noPD && noPD1
-                peakd(index,j)                  =   peakd1(i+1,j);
+                peakd(index,j)                  =   peakd1(i,j);
                 
             else
                 peakd(index,j)                  =...
@@ -63,8 +63,8 @@ for i = 1:comp:dataL
                 RZZ(index,j)                    =   RZZ1(i+1,j);
                 
             elseif ~noQc && noQc1
-                Qm(index,j)                     =   Qm1(i+1,j);
-                RZZ(index,j)                    =   RZZ1(i+1,j);
+                Qm(index,j)                     =   Qm1(i,j);
+                RZZ(index,j)                    =   RZZ1(i,j);
                 
             else
                 Qm(index,j)                     =...
@@ -83,8 +83,8 @@ for i = 1:comp:dataL
                 rapspcn(index,j)                =   rapspcn1(i+1,j);
                 
             elseif ~noQc && noQc1
-                rapsp(index,j)                  =   rapsp1(i+1,j);
-                rapspcn(index,j)                =   rapspcn1(i+1,j);
+                rapsp(index,j)                  =   rapsp1(i,j);
+                rapspcn(index,j)                =   rapspcn1(i,j);
                 
             else
                 rapsp(index,j)                  =...
@@ -167,9 +167,9 @@ for i = 1:comp:dataL
                     (RZZ1(i+1,j) + RZZ1(i+2,j))/2;
             else
                 Qm(index,j)                     =...
-                    (Qm1(i+1,j) + Qm1(i+1,j) + Qm1(i+2,j))/3;
+                    (Qm1(i,j) + Qm1(i+1,j) + Qm1(i+2,j))/3;
                 RZZ(index,j)                    =...
-                    (RZZ1(i+1,j) + RZZ1(i+1,j) + RZZ1(i+2,j))/3;
+                    (RZZ1(i,j) + RZZ1(i+1,j) + RZZ1(i+2,j))/3;
                 
             end
             
@@ -206,7 +206,7 @@ for i = 1:comp:dataL
                     (rapspcn1(i+1,j) + rapspcn1(i+2,j))/2;
             else
                 rapsp(index,j)                  =...
-                    (rapsp1(i+1,j) + rapsp1(i+1,j) + rapsp1(i+2,j))/3;
+                    (rapsp1(i,j) + rapsp1(i+1,j) + rapsp1(i+2,j))/3;
                 rapspcn(index,j)                =...
                     (rapspcn1(i,j) + rapspcn1(i+1,j) +...
                     rapspcn1(i+2,j))/3;
