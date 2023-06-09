@@ -132,7 +132,7 @@ end
 Murat.input.gridPropagation     =   gridPropagation;
 Murat.input.pvel                =   pvel;
 Murat.input.header              =   header;
-DD_coord                        =   Murat_DDcoordinates(Murat);
+DD_coord                        =   Murat_DDcoordinates(origin,ending,nLat,nLong,nzc);
 Murat.input.DDcoordinates       =   DD_coord;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [listWithFolder,listNoFolder]...
