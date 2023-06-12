@@ -143,5 +143,5 @@ function [listWithFolder,listNoFolder]...
 list                            =   dir(directory);
 list                            =   list(~startsWith({list.name}, '.'));
 
-listWithFolder              =	fullfile({list.folder},{list.name})';
-listNoFolder                =   {list.name}';
+listWithFolder                  =	fullfile({list.folder},{list.name})';
+listNoFolder                    =   {list.name}';

@@ -27,27 +27,29 @@ yLat                            =   zeros(nLat,1);
 zDep                            =   zeros(nzc,1);
 lon=origin(2);
 for i=1:nLong
-    xLong(i)=lon;
-    lon=lon+lon_incr;
+    xLong(i)                    =   lon;
+    lon                         =   lon+lon_incr;
 end
-lat=origin(1);
+
+lat                             =   origin(1);
 for i=1:nLat
-    yLat(i)=lat;
-    lat=lat+lat_incr;
+    yLat(i)                     =   lat;
+    lat                         =   lat+lat_incr;
 end
-dep=origin(3);
+
+dep                             =   origin(3);
 for i=1:nzc
-    zDep(i)=dep;
-    dep=dep+dep_incr;
+    zDep(i)                     =   dep;
+    dep                         =   dep+dep_incr;
 end
 % Generating matrix of coordinates
-DD_coord=zeros(nLong*nLat*nzc,3);
-index=0;
+DD_coord                        =   zeros(nLong*nLat*nzc,3);
+index                           =   0;
 for i=1:nLong
     for j=1:nLat
         for k=1:nzc
-            index       =   index+1;                
-            DD_coord(index,1:3)   =   [xLong(i) yLat(j) zDep(k)];
+            index               =   index+1;                
+            DD_coord(index,1:3) =   [xLong(i) yLat(j) zDep(k)];
         end
     end
 end
