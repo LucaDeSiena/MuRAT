@@ -3,7 +3,7 @@ on: [push]
 jobs:
   test_on_ubuntu:
     name: test_on_ubuntu
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
