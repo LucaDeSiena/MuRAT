@@ -54,9 +54,6 @@ const_Qc                            =   zeros(size(rapsp));
 residualQ                           =   zeros(1,lMF(2));
 residualQc                          =   zeros(1,lMF(2));
 %%
-xOr                                 =   modvP(:,1);
-yOr                                 =   modvP(:,2);
-zOr                                 =   modvP(:,3);
 % Loops over all frequencies and parameter models
 for k = 1:lMF(2)
     modv_pd(:,1:3,k)                =   modvP(:,1:3);
@@ -132,8 +129,8 @@ for k = 1:lMF(2)
     end
     modv_Qc(rcQc_k,4,k)             =   mQc;
        
-    saveas(LcQc,fullfile(FPath, FLabel,'Tests',FName));
-    saveas(LcQc,fullfile(FPath, FLabel,'Tests',FName),'tif');
+    saveas(LcQc,fullfile(FPath, FLabel,'Tests/LCurve',FName));
+    saveas(LcQc,fullfile(FPath, FLabel,'Tests/LCurve',FName),'tif');
     close(LcQc)
 
     %%
@@ -183,8 +180,8 @@ for k = 1:lMF(2)
     end
     modv_Q(rcQ_k,4,k)             =   mQ;
         
-    saveas(LcCN,fullfile(FPath, FLabel,'Tests',FName));
-    saveas(LcCN,fullfile(FPath, FLabel,'Tests',FName),'tif');
+    saveas(LcCN,fullfile(FPath, FLabel,'Tests/LCurve',FName));
+    saveas(LcCN,fullfile(FPath, FLabel,'Tests/LCurve',FName),'tif');
     close(LcCN)
 
     %% Checkerboards and spike inputs and checkerboard inversion

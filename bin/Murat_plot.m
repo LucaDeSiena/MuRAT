@@ -68,7 +68,7 @@ if Murat.input.declustering > 0
     FName_Cluster                   =   'Clustering';
     clustering                      =   Murat_imageDeclustering(...
         locDegOriginal,evestazDegrees,origin,ending,FName_Cluster);
-    storeFolder                     =   'RaysKernels';
+    storeFolder                     =   'Tests';
     pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_Cluster);
     saveas(clustering,pathFolder,'tif');
@@ -84,7 +84,7 @@ averageQcFrequency                  =   zeros(2,lMF(2));
 for k = 1:lMF(2)
     % Murat_plot starts plotting the ray distribution if asked by the user.
     % It stores  the files in the corresponding folder.
-    storeFolder                     =   'RaysKernels';
+    storeFolder                     =   'Rays';
     cf_k                            =   cf(k);
     fcName                          =   num2str(cf_k);
     if find(fcName == '.')
@@ -126,6 +126,7 @@ for k = 1:lMF(2)
     % sensitivity kernels. The left panel shows the sensitivity kernel in
     % the full space while the rigth panel shows the normalized
     % kernel in the inversion grid.
+    storeFolder                     =   'Kernels';
     FName_Qc                        =   ['Kernel_Qc' fcName '_Hz'];
     kernels                         =   figure('Name',FName_Qc,...
         'NumberTitle','off','Position',[20,400,1200,1000],'visible','off');
@@ -148,7 +149,7 @@ for k = 1:lMF(2)
     % (3) amplitude ratios decay with hypocentral distance.
     % These plots are used to select measurements and understand how well
     % they follow the assumptions.
-    storeFolder                     =   'Tests';
+    storeFolder                     =   'Tests/Qc';
     Qm_k                            =   Qm(rtQck,k);
     RZZ_k                           =   RZZ(rtQck,k);
     residualQc_k                    =   residualQc(k);
@@ -169,6 +170,7 @@ for k = 1:lMF(2)
     
     %%
     % Then it shows the peak delay relative to the travel time.
+    storeFolder                     =   'Tests/PeakDelay';
     peakData_k                      =   peakData(rtpdk,k);
     fitrobust_k                     =   fitrobust(:,k);
     time0PD                         =   time0(rtpdk);
@@ -185,6 +187,7 @@ for k = 1:lMF(2)
     %%
     % Then it plots first the logarithm of the energy ratio versus travel
     % time.
+    storeFolder                     =   'Tests/Q';
     energyRatio_k                   =   energyRatio(rtQk,k);
     residualQ_k                     =   residualQ(k);
     Edirect_k                       =...

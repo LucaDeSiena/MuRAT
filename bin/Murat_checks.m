@@ -45,8 +45,13 @@ if exist(FLabel,'dir')==7
 end
 
 mkdir(FLabel)
-mkdir([FLabel,'/RaysKernels'])
+mkdir([FLabel,'/Rays'])
+mkdir([FLabel,'/Kernels'])
 mkdir([FLabel,'/Tests'])
+mkdir([FLabel,'/Tests/PeakDelay'])
+mkdir([FLabel,'/Tests/Qc'])
+mkdir([FLabel,'/Tests/Q'])
+mkdir([FLabel,'/Tests/LCurve'])
 mkdir([FLabel,'/Results'])
 mkdir([FLabel,'/Results/PeakDelay'])
 mkdir([FLabel,'/Results/Qc'])
