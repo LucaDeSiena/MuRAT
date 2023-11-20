@@ -210,3 +210,9 @@ Although we have cross-checked the whole code, we cannot warranty it is exempt f
 ------------
 
 MuRAT is released under EUPL v1.1
+
+*Funding*
+------------
+
+Some developments of this software package were funded by the Deutsche Forshungsgemeinshaft under grant number SI1748/4-1.
+
