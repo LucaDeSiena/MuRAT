@@ -2,7 +2,8 @@
 function Murat                  =   Murat_checks(Murat)
 
 % INPUTS
-dataDirectory                   =   ['./' Murat.input.dataDirectory];
+%dataDirectory                   =   ['./' Murat.input.dataDirectory];
+dataDirectory                   =   [Murat.input.dataDirectory]; %if data is outside of current folder
 FPath                           =   './';
 FLabel                          =   Murat.input.label;
 PTime                           =   ['SAChdr.times.' Murat.input.PTime];
