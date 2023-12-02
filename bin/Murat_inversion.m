@@ -256,4 +256,4 @@ Murat.data.residualQ                =   residualQ;
 Murat.data.modvPeakDelay            =   modv_pd;
 Murat.data.modvQc                   =   modv_Qc;
 Murat.data.modvQ                    =   modv_Q;
-writetable(muratHeader,fullfile(FPath, FLabel, 'TXT', 'DataHeaders.xls'));
+writetable(muratHeader,fullfile(FPath, FLabel, 'TXT', 'DataHeaders.xlsx'));
