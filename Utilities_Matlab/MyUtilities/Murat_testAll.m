@@ -94,7 +94,7 @@ end
 muratHeader                 =   table(Names,Origin,P,S,EvLat,EvLon,...
     EvDepth,StLat,StLon,StElev);
 
-writetable(muratHeader,'DataHeaders.xls');
+writetable(muratHeader,'DataHeaders.xlsx');
 
 end
 %%
