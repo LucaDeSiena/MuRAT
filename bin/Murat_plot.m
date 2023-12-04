@@ -242,8 +242,15 @@ for k = 1:lMF(2)
     %%
     % Plots peak delays only keeping cells with more than 'factor'% of data
     factor                          =   5;
-    keep_bins                       =...
-        PD_cts > ((max(PD_cts(:))/100)*factor);
+    
+    max_positive = max(mPD(mPD >= 0)); 
+    max_negative = min(mPD(mPD < 0)); 
+    positive_threshold = (max_positive / 100) * factor; 
+    negative_threshold = (max_negative / 100) * factor;  
+    keep_bins_positive = mPD > positive_threshold;  
+    keep_bins_negative = mPD < negative_threshold; 
+    keep_bins = keep_bins_positive | keep_bins_negative; 
+    
     mPD_red                         =   mPD.*keep_bins;
 
     FName_PDMap                     =...
