@@ -40,6 +40,7 @@ startNoise                              =   Murat.input.startNoise;
 QcM                                     =   Murat.input.QcMeasurement;
 lapseTimeMethod                         =   Murat.input.lapseTimeMethod;
 maxtravel                               =   Murat.input.maxtravel;
+mintravel                               =   Murat.input.mintravel;
 
 % Set up variables to save
 locationDeg                             =   zeros(lengthData,6); 
@@ -125,7 +126,8 @@ for i = 1:lengthData
         peakDelay_i,lapseTimeMethod);
     
     if (cursorCodaEnd_i - cursorCodaStart_i) < (tWm*srate_i)-2 || ...
-            (pktime_i-originTime_i)>maxtravel
+            (pktime_i-originTime_i)>maxtravel || ...
+            (pktime_i-originTime_i)<mintravel
 
         locationM(i,:)                  =   locationM_i;
         theoreticalTime(i,1)            =   theoreticalTime_i;
