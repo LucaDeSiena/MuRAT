@@ -1,4 +1,4 @@
-MuRAT - Multi-Resolution seismic Attenuation Tomography
+Tagni_MuRAT - Multi-Resolution seismic Attenuation Tomography
 =======
 
 ![MuRAT is a code for attenuation, scattering and absorption tomography.](./img/muratlogo.jpg)
@@ -214,5 +214,6 @@ MuRAT is released under EUPL v1.1
 *Funding*
 ------------
 
-Some developments of this software package were funded by the Deutsche Forshungsgemeinshaft under grant number SI1748/4-1.
+Some developments of this software package were funded by the Deutsche Forshungsgemeinshaft under grant number SI
+1748/4-1.
 
