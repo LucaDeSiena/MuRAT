@@ -6,17 +6,14 @@ function CN_analysis    =   Murat_imageCheckCN(equationQ,residualQ_k,d1,...
 % PLOTS the Qc checks
 %
 % Input parameters:
-%    rtQk:          retained Q data
-%    cfk:           central frequency
-%    outputLCurve:  decide if you want to see the L curve
-%    energyRatio_k: energy ratios at all frequencies
-%    residualQ_k:   residuals of Q inversions
-%    const_Qc_k:    the constants coming from Qc analysis
+%    equationQ:     sum of all three terms of the CN equation for average Q
+%    d1:            data for average Q inversion
+%    spreadAverageQ:values of average spreading and Q for labels
+%    luntot_k:      total length of ray
+%    time0_k:       travel time
+%    energyRatio_k: energy ratios
+%    A_k:         	CN inversion matrix
 %    Edirect_k:     direct energy
-%    luntot:        total length of ray
-%    time0:         travel time
-%    A_i:         	CN inversion matrix
-%    lcurveQ:       damping parameter
 %    CN_title:      title of the figure
 %
 % Output parameters:

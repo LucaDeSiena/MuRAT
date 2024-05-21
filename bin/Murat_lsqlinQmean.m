@@ -6,25 +6,21 @@ function [d1, const_Qc_k, constQmean_k, equationQ]   =...
 % INVERTS with weighted tikhonov and creates L-curve and data for Q.
 %
 % Input parameters:
-%    cfk:           central frequency
-%    rtQ:           selected Q waveforms
-%    outputLCurve:  flag to output the L curve
-%    rapsp_k:       energy ratios
-%    const_Qc_k:    constant from the average Qc
-%    luntot:        total length
-%    time0:         travel time
-%    A:             CN inversion matrix
-%    lCurveQ:       damping parameter input from start
-%    flagShow:      flag to decide if show L-curve
-%
+%    tCm:           lapse time
+%    tWm:           coda window
+%    Q_k:           inverse Qc
+%    cf_k:          central frequency
+%    sped:          spectral decay
+%    luntot_k:      total ray length
+%    time0_k:       total travel time
+%    rapsp_k:       energy ratio
+%    
 % Output parameters:
-%    mtik0:         inversion parameter
-%    residualQ_k:   residuals for Q inversion
-%    LcCN:          figure of L curve for the CN method
-%    tik0_reg:      regularization parameters
-%    d1k:           data of the inversion
-%    constQmean_k:  constant for the method
-
+%    d1:            data for average Q inversion
+%    const_Qc_k:    constant for average Q inversion depending on Qc
+%    constQmean_k:  average geometrical spreading and Q
+%    equationQ:     sum of all three terms of the CN equation
+%
 %%
 % Data creation for the true inversion, removing the pre-calculated
 % parameters.
