@@ -25,18 +25,22 @@ function [tCoda_i, cursorCodaStart_i, cursorCodaEnd_i]   =...
 %    cursorCodaStart_i:     coda starting time after check on trace
 %    cursorCodaEnd_i:       coda end time after check on trace
 
+%Define envelope duration
 t00                                             =   tempis(1);
 lengthTempis                                    =   length(tempis);
 
+% Method peak is generally valid for active seismics
 if isequal(peakDelayMethod,'Peak')
     
     tCoda_i                                     =...
         (pktime_i-originTime_i)+peakDelay_i;
-    
+
+% Method constant is the most used in small local tomography 
 elseif isequal(peakDelayMethod,'Constant')
     
     tCoda_i                                     =   tCm;
-    
+
+% Method travel is the standard at the regional scale
 elseif isequal(peakDelayMethod,'Travel')
     
     tCoda_i                                     =...
@@ -44,12 +48,14 @@ elseif isequal(peakDelayMethod,'Travel')
 
 end
 
+% Define the indexes along the seismogram
 cursorCodaStart_i                               =...
     floor((originTime_i - t00 + tCoda_i) * srate_i - 1);
 
 cursorCodaEnd_i                                 =...
     floor(cursorCodaStart_i + tWm * srate_i - 1);
 
+% Some seismograms are not long enough so you consider a shorter window
 if cursorCodaEnd_i > lengthTempis
     cursorCodaEnd_i                             =   lengthTempis;
 end

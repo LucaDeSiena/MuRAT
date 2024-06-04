@@ -130,7 +130,7 @@ for k = 1:lMF(2)
     modv_Qc(rcQc_k,4,k)             =   mQc;
        
     saveas(LcQc,fullfile(FPath, FLabel,'Tests/LCurve',FName));
-    saveas(LcQc,fullfile(FPath, FLabel,'Tests/LCurve',FName),'tif');
+    saveas(LcQc,fullfile(FPath, FLabel,'Tests/LCurve',FName),'png');
     close(LcQc)
 
     %%
@@ -181,7 +181,7 @@ for k = 1:lMF(2)
     modv_Q(rcQ_k,4,k)             =   mQ;
         
     saveas(LcCN,fullfile(FPath, FLabel,'Tests/LCurve',FName));
-    saveas(LcCN,fullfile(FPath, FLabel,'Tests/LCurve',FName),'tif');
+    saveas(LcCN,fullfile(FPath, FLabel,'Tests/LCurve',FName),'png');
     close(LcCN)
 
     %% Checkerboards and spike inputs and checkerboard inversion

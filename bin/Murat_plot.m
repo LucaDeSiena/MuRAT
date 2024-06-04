@@ -71,7 +71,7 @@ if Murat.input.declustering > 0
     storeFolder                     =   'Tests';
     pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_Cluster);
-    saveas(clustering,pathFolder,'tif');
+    saveas(clustering,pathFolder,'png');
     close(clustering)
 end
 
@@ -105,7 +105,7 @@ for k = 1:lMF(2)
         ending,evestaz_pd,x,y,z,FName_peakDelay);
     pathFolder                      =...
         fullfile(FPath,FLabel,storeFolder,FName_peakDelay);
-    saveas(rays_peakDelay,pathFolder,'tif');
+    saveas(rays_peakDelay,pathFolder,'png');
     close(rays_peakDelay)
     
     %%
@@ -117,7 +117,7 @@ for k = 1:lMF(2)
         Murat_imageRays(rma_Q,origin,ending,evestaz_Q,x,y,z,FName_Q);
     pathFolder                      =...
         fullfile(FPath, FLabel, storeFolder, FName_Q);
-    saveas(rays_Q,pathFolder,'tif');
+    saveas(rays_Q,pathFolder,'png');
     close(rays_Q)
     
     %%
@@ -163,7 +163,7 @@ for k = 1:lMF(2)
     Qc_analysis                     =   Murat_imageCheckQc(Qm_k,RZZ_k,...
         residualQc_k,luntot_Qc,Ac,sizeTitle,Qc_title,QcM);
     saveas(Qc_analysis, fullfile(FPath,FLabel,storeFolder,...
-        ['Qc_analysis_' fcName '_Hz']),'tif');
+        ['Qc_analysis_' fcName '_Hz']),'png');
     saveas(Qc_analysis, fullfile(FPath,FLabel,storeFolder,...
         ['Qc_analysis_' fcName '_Hz']));
     close(Qc_analysis)
@@ -179,7 +179,7 @@ for k = 1:lMF(2)
     pd_analysis                     =   Murat_imageCheckPeakDelay(...
     time0PD,fitrobust_k,peakData_k,sizeTitle,pd_title);
     saveas(pd_analysis, fullfile(FPath,FLabel,storeFolder,...
-        ['PD_analysis_' fcName '_Hz']),'tif');
+        ['PD_analysis_' fcName '_Hz']),'png');
     saveas(pd_analysis, fullfile(FPath,FLabel,storeFolder,...
         ['PD_analysis_' fcName '_Hz']));
     close(pd_analysis)
@@ -208,7 +208,7 @@ for k = 1:lMF(2)
         Murat_imageCheckCN(equationQ,residualQ_k,d1,spreadAverageQ,...
         luntot_k,time0_k,energyRatio_k,A_k,Edirect_k,CN_title);
     saveas(CN_analysis, fullfile(FPath,FLabel,storeFolder,...
-        ['CN_analysis_' fcName '_Hz']),'tif');
+        ['CN_analysis_' fcName '_Hz']),'png');
     saveas(CN_analysis, fullfile(FPath,FLabel,storeFolder,...
         ['CN_analysis_' fcName '_Hz']));
     close(CN_analysis)
@@ -447,5 +447,5 @@ Qcf_title                           =   'Qc vs Frequency';
 QcFrequency                         =   Murat_imageQcFrequency(cf,...
     averageQcFrequency,sizeTitle,Qcf_title);
 FName                               =   'Qc_vs_frequency';
-saveas(QcFrequency, fullfile(FPath,FLabel,storeFolder,FName),'tif');
+saveas(QcFrequency, fullfile(FPath,FLabel,storeFolder,FName),'png');
 close all

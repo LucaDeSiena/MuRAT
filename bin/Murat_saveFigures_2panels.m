@@ -4,7 +4,7 @@ function  Murat_saveFigures_2panels(figureName,Path)
 %
 %	Input Parameters:
 %       figureName:             Matlab 3D plot
-%       Path:                   name of sections (tif) and figure (fig)
+%       Path:                   name of sections (png) and figure (fig)
 %
 %   Output:
 %       Three sections and 1 3D figure with 2 panels
@@ -18,7 +18,7 @@ ytickangle(45)
 ax2             =   subplot(1,2,2);
 view(ax2,90,0)
 ytickangle(45)
-saveas(figureName,[Path '_SN'], 'tif');
+saveas(figureName,[Path '_SN'], 'png');
 
 ax1             =   subplot(1,2,1);
 view(ax1,0,0)
@@ -26,13 +26,13 @@ xtickangle(45)
 ax2             =   subplot(1,2,2);
 view(ax2,0,0)
 xtickangle(45)
-saveas(figureName,[Path '_WE'], 'tif');
+saveas(figureName,[Path '_WE'], 'png');
 
 ax1             =   subplot(1,2,1);
 view(ax1,0,90)
 ax2             =   subplot(1,2,2);
 view(ax2,0,90)
-saveas(figureName,[Path '_H'], 'tif');
+saveas(figureName,[Path '_H'], 'png');
 
 close(figureName)
 

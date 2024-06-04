@@ -20,18 +20,22 @@ function [energyRatioBodyCoda_i,energyRatioCodaNoise_i]...
 %    energyRatioBodyCoda_i:     energy ratio between body and coda waves
 %    energyRatioCodaNoise_i:    energy ratio between coda waves and noise
 
+% Redefine windows with sampling for noise and direct waves
 int                     =   bodyWindow*srate_i;
 lc                      =   length(cursorCodaStart_i:cursorCodaEnd_i);
 cursor0                 =	floor(startNoise*srate_i);
 cursor0_1               =   floor(cursor0 + int);
 cursor2                 =   floor(cursorPick_i + int-1);
 
+% Direct wave normalised by window length
 spamp                   =...
     trapz(sp_i(cursorPick_i:cursor2,:))/int;
 
+% Noise pre-pick normalised by window length
 spampn                  =...
     trapz(sp_i(cursor0:cursor0_1,:))/int;
 
+% Coda normalised by window length
 spampc                  =...
     trapz(sp_i(cursorCodaStart_i:cursorCodaEnd_i,:))/lc;
 
