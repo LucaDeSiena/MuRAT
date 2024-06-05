@@ -13,9 +13,9 @@ x                           =   Murat.input.x;
 y                           =   Murat.input.y;
 z                           =   Murat.input.z;
 
-locationsDeg                =   Murat.data.locationsDeg;
-uncertaintyQc               =   Murat.data.uncertaintyQc;
-Murat.data.locDegOriginal   =   locationsDeg;
+locationsDeg                =   Murat.rays.locationsDeg;
+uncertaintyQc               =   Murat.Qc.uncertaintyQc;
+Murat.rays.locDegOriginal   =   locationsDeg;
 
 disp(['used waveforms before declustering: ',...
     num2str(length(locationsDeg)*components)])
@@ -67,28 +67,26 @@ new_evestaz                 =   sortrows(new_evestaz,8);
 
 %% remove deleted data from Murat structure variable
 ind_to_keep                 =   new_evestaz(:,8);
-Murat.data.energyRatioBodyCoda  =...
-    Murat.data.energyRatioBodyCoda(ind_to_keep,:);
-Murat.data.energyRatioCodaNoise =...
-    Murat.data.energyRatioCodaNoise(ind_to_keep,:);
-Murat.data.inverseQc        =   Murat.data.inverseQc(ind_to_keep,:);
-Murat.data.inversionMatrixPeakDelay	=...
-    Murat.data.inversionMatrixPeakDelay(ind_to_keep,:);
-Murat.data.inversionMatrixQ =...
-    Murat.data.inversionMatrixQ(ind_to_keep,:);
-Murat.data.inversionMatrixQc=...
-    Murat.data.inversionMatrixQc(ind_to_keep,:);
-Murat.data.locationsDeg     =   Murat.data.locationsDeg(ind_to_keep,:);
-Murat.data.peakDelay        =   Murat.data.peakDelay(ind_to_keep,:);
-Murat.data.retainPeakDelay  =   Murat.data.retainPeakDelay(ind_to_keep,:);
-Murat.data.retainQ          =   Murat.data.retainQ(ind_to_keep,:);
-Murat.data.retainQc         =   Murat.data.retainQc(ind_to_keep,:);
-Murat.data.tCoda            =   Murat.data.tCoda(ind_to_keep,:);
-Murat.data.totalLengthRay   =   Murat.data.totalLengthRay(ind_to_keep,:);
-Murat.data.travelTime       =   Murat.data.travelTime(ind_to_keep,:);
-Murat.data.uncertaintyQc    =   Murat.data.uncertaintyQc(ind_to_keep,:);
-Murat.data.variationPeakDelay =...
-    Murat.data.variationPeakDelay(ind_to_keep,:);
+Murat.Q.energyRatioBodyCoda =...
+                            Murat.Q.energyRatioBodyCoda(ind_to_keep,:);
+Murat.Q.energyRatioCodaNoise=...
+    Murat.Q.energyRatioCodaNoise(ind_to_keep,:);
+Murat.Qc.inverseQc          =   Murat.Qc.inverseQc(ind_to_keep,:);
+Murat.PD.inversionMatrixPeakDelay...
+                            =...
+    Murat.PD.inversionMatrixPeakDelay(ind_to_keep,:);
+Murat.Q.inversionMatrixQ    =   Murat.Q.inversionMatrixQ(ind_to_keep,:);
+Murat.Qc.inversionMatrixQc  =   Murat.Qc.inversionMatrixQc(ind_to_keep,:);
+Murat.rays.locationsDeg     =   Murat.rays.locationsDeg(ind_to_keep,:);
+Murat.PD.peakDelay          =   Murat.PD.peakDelay(ind_to_keep,:);
+Murat.PD.retainPeakDelay    =   Murat.PD.retainPeakDelay(ind_to_keep,:);
+Murat.Q.retainQ             =   Murat.Q.retainQ(ind_to_keep,:);
+Murat.Qc.retainQc           =   Murat.Qc.retainQc(ind_to_keep,:);
+Murat.Qc.tCoda              =   Murat.Qc.tCoda(ind_to_keep,:);
+Murat.rays.totalLengthRay   =   Murat.rays.totalLengthRay(ind_to_keep,:);
+Murat.rays.travelTime       =   Murat.rays.travelTime(ind_to_keep,:);
+Murat.Qc.uncertaintyQc      =   Murat.Qc.uncertaintyQc(ind_to_keep,:);
+Murat.PD.variationPeakDelay =   Murat.PD.variationPeakDelay(ind_to_keep,:);
 
 disp(['used waveforms after declustering: ',...
     num2str(length(ind_to_keep)*components)])

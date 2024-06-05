@@ -27,32 +27,31 @@ modvQc(:,1)                         =   modvQc(:,1) + stepgX;
 modvQc(:,2)                         =   modvQc(:,2) + stepgY;
 modvQc(:,3)                         =   modvQc(:,3) + stepgZ;
 
-Qm                                  =   Murat.data.inverseQc;
-time0                               =   Murat.data.travelTime;
-retainPeakDelay                     =   Murat.data.retainPeakDelay;
-retainQc                            =   Murat.data.retainQc;
-retainQ                             =   Murat.data.retainQ;
-ray_crosses_pd                      =   Murat.data.raysPeakDelay;
-ray_crosses_Qc                      =   Murat.data.raysQc;
-ray_crosses_Q                       =   Murat.data.raysQ;
-fitrobust                           =   Murat.data.fitrobust;
-peakData                            =   Murat.data.peakDelay;
-luntot                              =   Murat.data.totalLengthRay;
-rma                                 =   Murat.data.raysPlot;
-modv_pd                             =   Murat.data.modvPeakDelay;
-modv_Qc                             =   Murat.data.modvQc;
-modv_Q                              =   Murat.data.modvQ;
-evestazDegrees                      =   Murat.data.locationsDeg;
-energyRatio                         =   Murat.data.energyRatioBodyCoda;
-codaNoiseRatio                      =   Murat.data.energyRatioCodaNoise;
-Ac_i                                =   Murat.data.inversionMatrixQc;
-RZZ                                 =   Murat.data.uncertaintyQc;
-A_i                                 =   Murat.data.inversionMatrixQ;
-residualQc                          =   Murat.data.residualQc;
-residualQ                           =   Murat.data.residualQ;
-locationM                           =   Murat.data.locationsM;
-tCoda                               =   Murat.data.tCoda;
-rapsp                               =   Murat.data.energyRatioBodyCoda;
+Qm                                  =   Murat.Qc.inverseQc;
+time0                               =   Murat.rays.travelTime;
+retainPeakDelay                     =   Murat.PD.retainPeakDelay;
+retainQc                            =   Murat.Qc.retainQc;
+retainQ                             =   Murat.Q.retainQ;
+ray_crosses_pd                      =   Murat.PD.raysPeakDelay;
+ray_crosses_Qc                      =   Murat.Qc.raysQc;
+ray_crosses_Q                       =   Murat.Q.raysQ;
+fitrobust                           =   Murat.PD.fitrobust;
+peakData                            =   Murat.PD.peakDelay;
+luntot                              =   Murat.rays.totalLengthRay;
+rma                                 =   Murat.rays.raysPlot;
+modv_pd                             =   Murat.PD.modvPeakDelay;
+modv_Qc                             =   Murat.Qc.modvQc;
+modv_Q                              =   Murat.Q.modvQ;
+evestazDegrees                      =   Murat.rays.locationsDeg;
+energyRatio                         =   Murat.Q.energyRatioBodyCoda;
+codaNoiseRatio                      =   Murat.Q.energyRatioCodaNoise;
+Ac_i                                =   Murat.Qc.inversionMatrixQc;
+RZZ                                 =   Murat.Qc.uncertaintyQc;
+A_i                                 =   Murat.Q.inversionMatrixQ;
+residualQc                          =   Murat.Qc.residualQc;
+residualQ                           =   Murat.Q.residualQ;
+locationM                           =   Murat.rays.locationsM;
+tCoda                               =   Murat.Qc.tCoda;
 
 FPath                               =   './';
 sizeTitle                           =   18;
@@ -64,7 +63,7 @@ sections(3)                         =   sections(3)/1000;
 % Declustering is done before any frequency analysis, here we show the 2D
 % rays before and after
 if Murat.input.declustering > 0
-    locDegOriginal                  =   Murat.data.locDegOriginal;
+    locDegOriginal                  =   Murat.rays.locDegOriginal;
     FName_Cluster                   =   'Clustering';
     clustering                      =   Murat_imageDeclustering(...
         locDegOriginal,evestazDegrees,origin,ending,FName_Cluster);
@@ -195,7 +194,7 @@ for k = 1:lMF(2)
     A_k                             =   A_i(rtQk,rcQk);
     luntot_k                        =   luntot(rtQk);
     time0_k                         =   time0(rtQk);
-    rapsp_k                         =   rapsp(rtQk,k);
+    rapsp_k                         =   energyRatio(rtQk,k);
     tCm                             =   tCoda(rtQk,k);
     Q_k                             =   Qm(rtQk,k);
 
@@ -220,7 +219,6 @@ for k = 1:lMF(2)
     modv_Qc_k                       =   modv_Qc(:,:,k);
     modv_Q_k                        =   modv_Q(:,:,k);
     [X,Y,Z1,mPD]                    =   Murat_fold(x,y,z,modv_pd_k(:,4));
-    [~,~,~,PD_cts]                  =   Murat_fold(x,y,z,modv_pd_k(:,5));
     [~,~,~,mQc]                     =   Murat_fold(x,y,z,modv_Qc_k(:,4));
     [~,~,~,mQ]                      =   Murat_fold(x,y,z,modv_Q_k(:,4));
     Z                               =   Z1/1000;
@@ -442,7 +440,7 @@ end
 %%
 % Final figure is the Qc vs frequency relation
 storeFolder                         =   'Tests';
-Murat.data.averageQcFrequency       =   averageQcFrequency;
+Murat.Qc.averageQcFrequency       =   averageQcFrequency;
 Qcf_title                           =   'Qc vs Frequency';
 QcFrequency                         =   Murat_imageQcFrequency(cf,...
     averageQcFrequency,sizeTitle,Qcf_title);

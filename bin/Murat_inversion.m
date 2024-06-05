@@ -27,23 +27,22 @@ lCurveQc                            =   Murat.input.lCurveQc;
 lCurveQ                             =   Murat.input.lCurveQ;
 muratHeader                         =   Murat.input.header;
 
-Apd_i                               =...
-    Murat.data.inversionMatrixPeakDelay;
-Ac_i                                =   Murat.data.inversionMatrixQc;
-A_i                                 =   Murat.data.inversionMatrixQ;
-luntot                              =   Murat.data.totalLengthRay;
-time0                               =   Murat.data.travelTime;
-Qm                                  =   Murat.data.inverseQc;
-RZZ                                 =   Murat.data.uncertaintyQc;
-lpdelta                             =   Murat.data.variationPeakDelay;
-rapsp                               =   Murat.data.energyRatioBodyCoda;
-retain_pd                           =   Murat.data.retainPeakDelay;
-retain_Qc                           =   Murat.data.retainQc;
-retain_Q                            =   Murat.data.retainQ;
-ray_crosses_pd                      =   Murat.data.raysPeakDelay;
-ray_crosses_Qc                      =   Murat.data.raysQc;
-ray_crosses_Q                       =   Murat.data.raysQ;
-tCoda                               =   Murat.data.tCoda;
+Apd_i                               =   Murat.PD.inversionMatrixPeakDelay;
+Ac_i                                =   Murat.Qc.inversionMatrixQc;
+A_i                                 =   Murat.Q.inversionMatrixQ;
+luntot                              =   Murat.rays.totalLengthRay;
+time0                               =   Murat.rays.travelTime;
+Qm                                  =   Murat.Qc.inverseQc;
+RZZ                                 =   Murat.Qc.uncertaintyQc;
+lpdelta                             =   Murat.PD.variationPeakDelay;
+rapsp                               =   Murat.Q.energyRatioBodyCoda;
+retain_pd                           =   Murat.PD.retainPeakDelay;
+retain_Qc                           =   Murat.Qc.retainQc;
+retain_Q                            =   Murat.Q.retainQ;
+ray_crosses_pd                      =   Murat.PD.raysPeakDelay;
+ray_crosses_Qc                      =   Murat.Qc.raysQc;
+ray_crosses_Q                       =   Murat.Q.raysQ;
+tCoda                               =   Murat.Qc.tCoda;
 FPath                               =   './';
 
 lMF                                 =   size(ray_crosses_pd);
@@ -250,10 +249,10 @@ end
 
 %%
 % Save in Murat
-Murat.data.residualQc               =   residualQc;
-Murat.data.const_Qc                 =   const_Qc;
-Murat.data.residualQ                =   residualQ;
-Murat.data.modvPeakDelay            =   modv_pd;
-Murat.data.modvQc                   =   modv_Qc;
-Murat.data.modvQ                    =   modv_Q;
+Murat.Qc.residualQc                 =   residualQc;
+Murat.Q.const_Qc                    =   const_Qc;
+Murat.Q.residualQ                   =   residualQ;
+Murat.PD.modvPeakDelay              =   modv_pd;
+Murat.Qc.modvQc                     =   modv_Qc;
+Murat.Q.modvQ                       =   modv_Q;
 writetable(muratHeader,fullfile(FPath, FLabel, 'TXT', 'DataHeaders.xlsx'));

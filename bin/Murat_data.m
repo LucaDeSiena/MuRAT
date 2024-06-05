@@ -21,6 +21,7 @@ pvel                                    =   Murat.input.pvel;
 cf                                      =   Murat.input.centralFrequency;
 lcf                                     =   length(cf);
 
+workers                                 =   Murat.input.workers;
 origin                                  =   Murat.input.origin;
 originTime                              =   Murat.input.originTime;
 PTime                                   =   Murat.input.PTime;
@@ -68,7 +69,7 @@ rayCrossing                             =...
 % on peak delays and coda attenuation.
 count_trash                             =   0;
 
-for i = 1:lengthData
+parfor (i = 1:lengthData,workers)
     
     if isequal(mod(i,100),0)
         
@@ -182,21 +183,21 @@ for i = 1:lengthData
 end
 
 % Setting up the final data vectors and matrices with checks on values
-Murat.data.locationsDeg                 =   locationDeg;
-Murat.data.locationsM                   =   locationM;
-Murat.data.theoreticalTime              =   theoreticalTime;
-Murat.data.peakDelay                    =   peakDelay;
-Murat.data.inversionMatrixPeakDelay     =   inversionMatrixPeakDelay;
-Murat.data.inversionMatrixQ             =   inversionMatrixQ;
-Murat.data.totalLengthRay               =   totalLengthRay;
-Murat.data.raysPlot                     =   raysPlot;
-Murat.data.rayCrossing                  =   sum(rayCrossing);
-Murat.data.inverseQc                    =   inverseQc; 
-Murat.data.uncertaintyQc                =   uncertaintyQc; 
-Murat.data.inversionMatrixQc            =   inversionMatrixQc;
-Murat.data.energyRatioBodyCoda          =   energyRatioBodyCoda; 
-Murat.data.energyRatioCodaNoise         =   energyRatioCodaNoise;
-Murat.data.tCoda                        =   tCoda;
+Murat.rays.locationsDeg                 =   locationDeg;
+Murat.rays.locationsM                   =   locationM;
+Murat.rays.theoreticalTime              =   theoreticalTime;
+Murat.PD.peakDelay                      =   peakDelay;
+Murat.PD.inversionMatrixPeakDelay       =   inversionMatrixPeakDelay;
+Murat.Q.inversionMatrixQ                =   inversionMatrixQ;
+Murat.rays.totalLengthRay               =   totalLengthRay;
+Murat.rays.raysPlot                     =   raysPlot;
+Murat.rays.rayCrossing                  =   sum(rayCrossing);
+Murat.Qc.inverseQc                      =   inverseQc; 
+Murat.Qc.uncertaintyQc                  =   uncertaintyQc; 
+Murat.Qc.inversionMatrixQc              =   inversionMatrixQc;
+Murat.Q.energyRatioBodyCoda             =   energyRatioBodyCoda; 
+Murat.Q.energyRatioCodaNoise            =   energyRatioCodaNoise;
+Murat.Qc.tCoda                          =   tCoda;
 
 Murat                                   =   Murat_selection(Murat);
 
