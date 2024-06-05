@@ -13,6 +13,7 @@ function [modvProp,modvP,modvEqSpace,modvPlot]...
 %    mLon:                  min/max longitudes of earthquakes
 %    nLat:                  number nodes latitude
 %    nLon:                  number nodes longitude
+%    nzc:                   number nodes vertical
 %
 % Output parameters:
 %    modvP:                 propagation velocity model in standard format

@@ -19,6 +19,7 @@ function  [problempd,problemQc,problemRZZ,problemQ,yes_pd,compMissing,...
 %    rapspcn:           coda to noise ratio
 %    comp:           	components
 %    flag:           	flag to change between one or more components
+%    QcM:           	chosen method to measure Qc between Lin e NonLin
 %
 % Output parameters:
 %    problempd:         stores the data not used because of peak delays

@@ -1,7 +1,7 @@
 function [image,mVp,xp,yp,zp,Xp,Yp,Zp]                    = ...
     Murat_image3D(X,Y,Z,V,color,sections,evestaz,x,y,z,divi,name)
 % function image          = ...
-%     Murat_image3D(X,Y,Z,V,color,sections,evestaz,x,y,z,name)
+%     Murat_image3D(X,Y,Z,V,color,sections,evestaz,x,y,z,divi,name)
 %
 % PLOTS a 3D image of a field on slices.
 %
@@ -50,13 +50,13 @@ max_scale               =   max(scale_mVp);
 if max_scale            <   1
     max_scale           =   round(max_scale,2);
     if max_scale        ==  0
-        caxis([-1 1])
+        clim([-1 1])
     else
-        caxis([-max_scale max_scale])
+        clim([-max_scale max_scale])
     end
 elseif max_scale        >   5
     max_scale           =   ceil(max_scale);
-    caxis([-max_scale max_scale])
+    clim([-max_scale max_scale])
 end
 
 colormap(color);

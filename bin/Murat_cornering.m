@@ -14,8 +14,8 @@ function [ip,jp,kp,flag]    =   Murat_cornering(xx,yy,zz,gridD)
 % Output parameters:
 %    ip:        index of minimum x grid coord - West;
 %    jp:        index of minimum y grid coord - South;
-%    kp:     i  ndex of maximum z grid coord - shallowest.
-
+%    kp:        index of maximum z grid coord - shallowest.
+%    flag:      flags if ray outside of grid
 
 % Coordinates of the propagation grid are unwrapped
 xGrid                       =   gridD.x;

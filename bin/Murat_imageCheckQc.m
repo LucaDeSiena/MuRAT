@@ -12,7 +12,7 @@ function Qc_analysis        =   Murat_imageCheckQc(Qm_k,RZZ_k,...
 %    Ac:            inverse coda attenuation matrix
 %    sizeTitle:     size of title font
 %    Qc_title:      title of Qc figure
-%    QcM:           Linearized or Non Linear measurement
+%    QcM:           Linearized or Non Linear Qc measurement
 %
 % Output parameters:
 %    Qc_analysis:   figure for Qc check

@@ -1,11 +1,14 @@
 function Murat = Murat_declustering(Murat,factor)
 % function Murat = Murat_declustering(Murat,factor)
 %
-% PLOTS rays before and after declustering
+% SAVES declustered variables and PLOTS rays before and after declustering.
+% The declustering is based on dividing the original grid into finer node
+% spacing and selecting those with the best coda decay. 
 %
 % Input parameters:
 %    Murat:                Murat structure variable
-%    factor:               factor by which original grid is divided into
+%    factor:               input factor used to divide the original grid
+
 components                  =   Murat.input.components;
 origin                      =   Murat.input.origin;
 ending                      =   Murat.input.end;

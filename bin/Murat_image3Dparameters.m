@@ -46,10 +46,10 @@ scale_mVp(2)            =   abs(min(mVp(:)));
 max_scale               =   max(scale_mVp);
 if max_scale            <   1
     max_scale           =   round(max_scale,2);
-    caxis([-max_scale max_scale])
+    clim([-max_scale max_scale])
 elseif max_scale        >   5
     max_scale           =   ceil(max_scale);
-    caxis([-max_scale max_scale])
+    clim([-max_scale max_scale])
 end
 
 colormap(color);

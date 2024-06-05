@@ -1,7 +1,7 @@
 function [modv,pvel,modvPlot]...
                             =...
                             Murat_modv1D(modvXYZ,modvOriginal,PorS,origin)
-% function [modv,pvel]      =...
+% function [modv,pvel,modvPlot]=...
 %                           Murat_modv1D(modvXYZ,modvOriginal,PorS,origin)
 % CREATES the velocity models when using a 1D input
 %
@@ -14,6 +14,7 @@ function [modv,pvel,modvPlot]...
 % Output parameters:
 %    modv:                  propagation and inversion velocity model
 %    pvel:                  propagation velocity model in matrix
+%    modvPlot:              velocity model to be plot
 
 modv                        =   modvXYZ;
 z1D                         =   -modvOriginal(:,1)*1000;
@@ -42,4 +43,3 @@ az(isnan(az))               =   0;
 modvPlot                    =   [lon2 lat2 modv(:,3:4)];
 
 end
-

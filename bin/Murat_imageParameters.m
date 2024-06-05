@@ -10,6 +10,7 @@ function [image,para_condition,para_map]= ...
 %    z:                 z vector
 %    modv_pd_k:         results of peak delay imaging
 %    modv_Qc_k:         results of Qc imaging
+%    sizeTitle:         size of the title font
 %
 % Output parameters:
 %    image:             image produced

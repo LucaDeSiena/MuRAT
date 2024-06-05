@@ -1,7 +1,7 @@
 function clustering       =   Murat_imageDeclustering(locDegOriginal,...
     locDegrees,origin,ending,name)
 % function clustering       =...
-%     Murat_imageDeclustering(locDegOriginal,locDegrees,origin,ending)
+%     Murat_imageDeclustering(locDegOriginal,locDegrees,origin,ending,name)
 %
 % PLOTS 2D rays before and after declustering.
 %

@@ -1,9 +1,7 @@
 % ADDITIONAL input variables that are not set by the user.
 function Murat                  =   Murat_checks(Murat)
 
-% INPUTS
-%dataDirectory                   =   ['./' Murat.input.dataDirectory];
-dataDirectory                   =   [Murat.input.dataDirectory]; %if data is outside of current folder
+dataDirectory                   =   [Murat.input.dataDirectory];
 FPath                           =   './';
 FLabel                          =   Murat.input.label;
 PTime                           =   ['SAChdr.times.' Murat.input.PTime];

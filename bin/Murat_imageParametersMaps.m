@@ -5,18 +5,24 @@ function [ParaMap,para_map]     = ...
 %     Murat_imageParametersMaps(par,para_map,x,y,z,X,Y,Z,evestaz_Qc,...
 %     sections,sizeTitle,FName_Parameters)
 %
-% PLOTS the parameter models in their space and on a 3D map
+% PLOTS the parameter models in a 3D map
 %
 % Input parameters:
+%    par:               condition on the parameters to image
+%    para_map:          parameter map
 %    x:                 x vector
 %    y:                 y vector
 %    z:                 z vector
-%    modv_pd_k:         results of peak delay imaging
-%    modv_Qc_k:         results of Qc imaging
+%    X:                 X matrix
+%    y:                 Y matrix
+%    z:                 Z matrix
+%    evestaz_Qc:        events and stations for Qc
+%    sections:          input sections
+%    sizeTitle:         font size for title
+%    FName_Parameters:  title of the image
 %
 % Output parameters:
-%    image:             image produced
-%    para_condition:    condition on the parameters to image
+%    ParaMap:           parameter map 3D image
 %    para_map:          parameter map
 
 for n = 1:length(par(:,1))

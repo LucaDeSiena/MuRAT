@@ -1,7 +1,7 @@
 function image          = ...
     Murat_image3D_2panels(X,Y,Z,V,color,sections,evestaz,x,y,z)
 % function image          = ...
-%     Murat_image3D(X,Y,Z,V,color,sections,evestaz,x,y,z,name)
+%     Murat_image3D(X,Y,Z,V,color,sections,evestaz,x,y,z)
 %
 % PLOTS a 3D image of a field on slices on two subpanels.
 %
@@ -16,7 +16,6 @@ function image          = ...
 %    x:         x vector
 %    y:         y vector
 %    z:         z vector
-%    name:      name of the title of the figure
 %
 % Output parameters:
 %    image:     image produced in one panel
