@@ -63,6 +63,14 @@ d                           =...
     sqrt(modvEqSpace(:,1).^2 + modvEqSpace(:,2).^2);
 az                          =...
     atan(modvEqSpace(:,1)./modvEqSpace(:,2))*360/2/pi;
+
+% Condition to avoid NaN
+if ~isempty(isnan(az))
+    d(isnan(az)) = 1;
+    az(isnan(az))= 45;
+end
+
+
 [lat2,lon2]                 =   reckon(origin(1),origin(2),d,az,wgs84);
 modvPlot                    =   [lon2 lat2 modvEqSpace(:,3:4)];
 
