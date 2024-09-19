@@ -6,8 +6,8 @@ function [lunpar, blocch, lunto, s, rayCrossing] =...
 % CREATES variables to compute ray-dependent inversion matrices and more
 %
 % Input parameters:
-%    modv:      velocity model
-%    rma:       ray in MuRAt format
+%    modv:          velocity model
+%    rma:           ray in MuRAT format
 %
 % Output parameters:
 %    lunpar:        the lenght of the segments in each block
@@ -25,7 +25,8 @@ function [lunpar, blocch, lunto, s, rayCrossing] =...
 % The code takes two points of the ray and checks if a
 %   boundary is crossed. If not, the length of the segment is added to
 %   the previous part. It the bounday is crossed, the segment is broken,
-%   and a new segment starts.
+%   and a new segment starts. The ray gets interpolated into smaller
+%   segments for hit check.
 
 lunpar                      =	zeros(100,1);
 blocch                      =	zeros(100,1);
@@ -63,13 +64,18 @@ BLv                         =   lvg1:deltastepz:lvg;
 % Check that all x-y elements are more than zero
 fallr                       =   find(rma(:,2)>0 & rma(:,3)>0);
 
-% Define the vectors
-xpolo                       =   rma(fallr,2);
-ypolo                       =   rma(fallr,3);
+% Define the interpolated vectors for hit count
+xpolo_noint                 =   rma(fallr,2);
+ypolo_noint                 =   rma(fallr,3);
+zpolo_noint                 =   rma(fallr,4);
 
-% Need to change as rma is with positive depths
-zpolo                       =   rma(fallr,4);
-tot                         =   length(xpolo);
+tot                         =   1000;
+xpolo                       =...
+    linspace(xpolo_noint(1),xpolo_noint(end),tot);
+ypolo                       =...
+    linspace(ypolo_noint(1),ypolo_noint(end),tot);
+zpolo                       =...
+    linspace(zpolo_noint(1),zpolo_noint(end),tot);
 
 % Read hypocenter coordinates
 sorg                        =   [xpolo(1) ypolo(1) zpolo(1)];
@@ -117,16 +123,18 @@ for k = 2:tot
     
     cx                      =   (ewS <= BLx & ewR > BLx) |...
         (ewS >=BLx & ewR < BLx);
+    [a_x, b_x]              = find(cx);
     cy                      =   (nsS <= BLy & nsR > BLy) |...
         (nsS >=BLy & nsR < BLy);
+    [a_y, b_y]              = find(cy);
     cv                      =   (vS <= BLv & vR > BLv) |...
         (vS >= BLv & vR < BLv);
+    [a_z, b_z]              = find(cv);
     
     % x crossing
-    if  find(cx) > 0
-        n                   =   find(cx>0, 1, 'first');
+    if  a_x > 0
         index               =   index + 1;
-        inte(index,1:5)     =   [BLx(n),nsR,vR,index-1,0];
+        inte(index,1:5)     =   [BLx(b_x),nsR,vR,index-1,0];
         lung                =   sum(diffLoc(k1:k));
         k1                  =   k;
         inte(index,5)       =   lung;
@@ -143,13 +151,12 @@ for k = 2:tot
                 break
             end
         end
-    end      
-        
-    % y crossing    
-    if find(cy) > 0
-        n                   =   find(cy>0, 1, 'first');
+    end
+
+    % y crossing
+    if a_y > 0
         index               =   index + 1;
-        inte(index,1:5)     =   [ewR,BLy(n),vR,index-1,0];
+        inte(index,1:5)     =   [ewR,BLy(b_y),vR,index-1,0];
         lung                =   sum(diffLoc(k1:k));
         k1                  =   k;
         inte(index,5)       =   lung;
@@ -166,14 +173,14 @@ for k = 2:tot
                 break
             end
         end
-    end   
-        
-    % z crossing    
-    if find(cv) > 0
-        n                   =   find(cv>0, 1, 'first');
+    end
+
+    % z crossing
+    if a_z > 0
         index               =   index + 1;
-        inte(index,1:5)     =   [ewR,nsR,BLv(n),index-1,0];
+        inte(index,1:5)     =   [ewR,nsR,BLv(b_z),index-1,0];
         lung                =   sum(diffLoc(k1:k));
+        k1                  =   k;
         inte(index,5)       =   lung;
         if vS <= vR
             if inte(index,6)+passoz < max(bv)
@@ -188,43 +195,43 @@ for k = 2:tot
                 break
             end
         end
-       
+        
     end
     continue
 end
-    
+
 % In case the receiver is in the grid.
 if k == tot
-    
+
     % receiver location
-    bR                      =   xv < ricev(1) & ricev(1)<xv+deltastepx...
+    bR                  =   xv < ricev(1) & ricev(1)<xv+deltastepx...
         & yv < ricev(2) & ricev(2)<yv+deltastepy...
         & zv+deltastepz<ricev(3) & ricev(3)<zv;
-    bRR                     =   bv(bR>0);
+    bRR                 =   bv(bR>0);
 
     if isempty(bRR) == 0
-        index               =   index + 1;
-        lung                =   sum(diffLoc(k1:end));
-        inte(index,1:5)     =   [ricev(1),ricev(2),ricev(3),index-1,lung];
+        index           =   index + 1;
+        lung            =   sum(diffLoc(k1:end));
+        inte(index,1:5) =   [ricev(1),ricev(2),ricev(3),index-1,lung];
     end
 end
 
 % Variable inte monitors the points where the rays cross the grid
-linte                       =   length(inte(:,1));
+linte                   =   length(inte(:,1));
 
-lunpar(1:linte,1)           =   inte(:,5);
-blocch(1:linte,1)           =   inte(:,6);
-lunto(1,1)                  =   sum(lunpar(:,1));
+lunpar(1:linte,1)       =   inte(:,5);
+blocch(1:linte,1)       =   inte(:,6);
+lunto(1,1)              =   sum(lunpar(:,1));
 
-s                           =   zeros(100,1);
-no                          =   blocch>length(modv(:,1));
-blocch(no)                  =   0;
-lunpar(no)                  =   0;
-bff                         =   find(blocch);
+s                       =   zeros(100,1);
+no                      =   blocch>length(modv(:,1));
+blocch(no)              =   0;
+lunpar(no)              =   0;
+bff                     =   find(blocch);
 
 if bff > 0
-    s(bff)                  =   1./modv(blocch(bff),4);
+    s(bff)              =   1./modv(blocch(bff),4);
     rayCrossing(blocch(bff))=   rayCrossing(blocch(bff))+1;
 end
-
+    
 end
