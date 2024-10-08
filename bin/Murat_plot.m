@@ -187,16 +187,16 @@ for k = 1:lMF(2)
     % Then it plots first the logarithm of the energy ratio versus travel
     % time.
     storeFolder                     =   'Tests/Q';
-    energyRatio_k                   =   energyRatio(rtQk,k);
+    energyRatio_k                   =   energyRatio(rtQk & rtQck,k);
     residualQ_k                     =   residualQ(k);
     Edirect_k                       =...
-        energyRatio_k./codaNoiseRatio(rtQk,k);
-    A_k                             =   A_i(rtQk,rcQk);
-    luntot_k                        =   luntot(rtQk);
-    time0_k                         =   time0(rtQk);
-    rapsp_k                         =   energyRatio(rtQk,k);
-    tCm                             =   tCoda(rtQk,k);
-    Q_k                             =   Qm(rtQk,k);
+        energyRatio_k./codaNoiseRatio(rtQk & rtQck,k);
+    A_k                             =   A_i(rtQk & rtQck,rcQk);
+    Q_k                             =   Qm(rtQk & rtQck,k);
+    luntot_k                        =   luntot(rtQk & rtQck);
+    time0_k                         =   time0(rtQk & rtQck);
+    rapsp_k                         =   energyRatio(rtQk & rtQck,k);
+    tCm                             =   tCoda(rtQk & rtQck,k);
 
     CN_title                        =...
         ['Coda Normalization check ' fcName ' Hz'];

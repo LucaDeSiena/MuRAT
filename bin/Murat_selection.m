@@ -10,6 +10,7 @@ maPD                                =   Murat.input.maximumPeakDelay;
 miPD                                =   Murat.input.minimumPeakDelay;
 fT                                  =   Murat.input.fitTresholdLinear;
 QcM                                 =   Murat.input.QcMeasurement;
+stDevPD                             =   Murat.input.stDevPD;
 
 Apd_i                               =   Murat.PD.inversionMatrixPeakDelay;
 A_i                                 =   Murat.Q.inversionMatrixQ;
@@ -91,7 +92,7 @@ for i = 1:dataFreq
     l10pd_i                         =   l10pd(:,i);
     [pab,lpdelta_i,retain_pd_i,ray_crosses_pd_i]...
                                     =...
-            Murat_retainPeakDelay(t_phase,l10pd_i,yesPD_i,Apd_i);
+            Murat_retainPeakDelay(t_phase,l10pd_i,yesPD_i,Apd_i,stDevPD);
     
     % Qc
     Qm_i                            =   Qm(:,i);
