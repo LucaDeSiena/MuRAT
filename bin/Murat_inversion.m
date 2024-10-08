@@ -136,16 +136,16 @@ for k = 1:lMF(2)
     % Q inversion
     rcQ_k                           =   ray_crosses_Q(:,k);
     rtQ_k                           =   retain_Q(:,k);
-    A_k                             =   A_i(rtQ_k,rcQ_k);
-    Q_k                             =   Qm(rtQ_k,k);
-    luntot_k                        =   luntot(rtQ_k);
-    time0_k                         =   time0(rtQ_k);
-    rapsp_k                         =   rapsp(rtQ_k,k);
-    tCm                             =   tCoda(rtQ_k,k);
+    A_k                             =   A_i(rtQ_k & rtQc_k,rcQ_k);
+    Q_k                             =   Qm(rtQ_k & rtQc_k,k);
+    luntot_k                        =   luntot(rtQ_k & rtQc_k);
+    time0_k                         =   time0(rtQ_k & rtQc_k);
+    rapsp_k                         =   rapsp(rtQ_k & rtQc_k,k);
+    tCm                             =   tCoda(rtQ_k & rtQc_k,k);
 
     [d1, const_Qc_k, ~, ~]          =   Murat_lsqlinQmean(tCm,tWm,Q_k,...
                                     cf_k,sped,luntot_k,time0_k,rapsp_k);
-    const_Qc(rtQ_k,k)               =   const_Qc_k;
+    const_Qc(rtQ_k & rtQc_k,k)      =   const_Qc_k;
 
     lCurveQ_k                       =   lCurveQ(k);
     FName                           =   ['L-curve_Q_' fcName '_Hz'];
