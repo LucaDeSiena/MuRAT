@@ -18,6 +18,8 @@ The file Documentation.pdf in this folder serves as complete documentation for M
 
 The Wiki for MuRAT is under construction, but you can already check a bit of the history of the code.
 
+We recorded a Video Tutorial! Just go to the [Volcano Earth Imaging group page](https://www.lucadesiena.com), scroll down click on the video under the Murat Suite link.
+
 *System*
 ------------
 
@@ -214,5 +216,6 @@ MuRAT is released under EUPL v1.1
 *Funding*
 ------------
 
-Some developments of this software package were funded by the Deutsche Forshungsgemeinshaft under grant number SI1748/4-1.
+Some developments of this software package were funded by the Deutsche Forshungsgemeinshaft under grant number SI
+1748/4-1.
 
