@@ -10,6 +10,6 @@ if isequal(file,0)
 else
    disp(['User selected ', fullfile(path,file)]);
 end
-Murat                       =   load(fullfile(path,file));
+load(fullfile(path,file));
 Murat.input.sections        =   sections;
 Murat                       =   Murat_plot(Murat);
