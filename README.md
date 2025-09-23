@@ -11,12 +11,18 @@ MuRAT measures seismic attenuation, scattering, and absorption from passive and 
 
 The group of active users (providing questions, feedback, and snippets of code) is the [Volcano Earth Imaging group](https://www.lucadesiena.com).
 
+The last release of the code is:
+
+Luca De Siena, mreissuf, Yi Zhang, GeoSeisUtilities, Aqeel Abbas, WMZ, Cheng Qingyang, Ferdinando Napolitano, & SimonaGabrielli. (2024). LucaDeSiena/MuRAT: 3.24.10.26 (v3.24.10.26). Zenodo. https://doi.org/10.5281/zenodo.13996752
+
 *Documentation*
 -------------
 
 The file Documentation.pdf in this folder serves as complete documentation for MuRAT3.0. This README file and the *Input_.mlx* files in this folder act as additional documentation.
 
 The Wiki for MuRAT is under construction, but you can already check a bit of the history of the code.
+
+We recorded a Video Tutorial! Just go to the [Volcano Earth Imaging group page](https://www.lucadesiena.com), scroll down click on the video under the Murat Suite link.
 
 *System*
 ------------
@@ -179,6 +185,10 @@ Three figures to evaluate the appropriate peak-delay and coda inputs. Read the d
 *Citing MuRAT*
 ------------
 
+The last release of the code is:
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13996752.svg)](https://doi.org/10.5281/zenodo.13996752)
+
 If you use MuRAT for your research and publications, please consider mentioning the GitHub internet site and citing the following papers, depending on the techniques you are going to use
 
 **Q (Total attenuation)**:
@@ -214,5 +224,6 @@ MuRAT is released under EUPL v1.1
 *Funding*
 ------------
 
-Some developments of this software package were funded by the Deutsche Forshungsgemeinshaft under grant number SI1748/4-1.
+Some developments of this software package were funded by the Deutsche Forshungsgemeinshaft under grant number SI
+1748/4-1.
 
