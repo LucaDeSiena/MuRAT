@@ -1,4 +1,64 @@
-
+# macOS
 .DS_Store
-sac_MSH/.DS_Store
-Utilities_Matlab/.DS_Store
+
+# MATLAB/Simulink temporary, backup, and user files
+*.asv
+*.autosave
+*~
+*.bak
+*.mat
+*.fig
+*.mltbx
+*.mlsettings
+.matlab/
+.history
+
+# MATLAB build / generated code / caches
+slprj/
+codegen/
+rtw/
+build/
+*_ert_rtw/
+*/.slx-cache/
+*.slxc
+*.slxautosave
+
+# Compiled / binary / object files
+*.mex*
+*.dll
+*.so
+*.dylib
+*.o
+*.obj
+*.pdb
+
+# Large data directories (keep out of repo)
+sac_MSH/
+sac_Romania/
+sac_Toba/
+
+# Binaries, archives, generated distributions
+bin/
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+# Logs, test results, coverage
+*.log
+TestResults/
+coverage/
+
+# IDE / editor
+.vscode/
+*.sublime-workspace
+*.sublime-project
+*.swp
+
+# Git metadata / lock files
+.gitattributes.lock
+
+# Python cache (if any)
+__pycache__/
+*.pyc
+

@@ -3,7 +3,7 @@ MuRAT - Multi-Resolution seismic Attenuation Tomography
 
 ![MuRAT is a code for attenuation, scattering and absorption tomography.](./img/muratlogo.jpg)
 
-[![test](https://github.com/deconvolution/MuRAT/actions/workflows/run_test.yml/badge.svg?branch=with_test)](https://github.com/deconvolution/MuRAT/actions/workflows/run_test.yml)
+[![test](https://github.com/deconvolution/MuRAT/actions/workflows/run_test.yml/badge.svg?branch=with_test)](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml)
 
 MuRAT is a Matlab Package for seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves at multiple frequencies.
 
@@ -13,12 +13,12 @@ The group of active users (providing questions, feedback, and snippets of code) 
 
 The last release of the code is:
 
-Luca De Siena, mreissuf, Yi Zhang, GeoSeisUtilities, Aqeel Abbas, WMZ, Cheng Qingyang, Ferdinando Napolitano, & SimonaGabrielli. (2024). LucaDeSiena/MuRAT: 3.24.10.26 (v3.24.10.26). Zenodo. https://doi.org/10.5281/zenodo.13996752
+Luca De Siena, mreissuf, Yi Zhang, Donato Talone, Aqeel Abbas, WMZ, Cheng Qingyang, Ferdinando Napolitano, & SimonaGabrielli. (2026). LucaDeSiena/MuRAT: Legacy MuRAT3.0 Code (v3.26.01.20). Zenodo. https://doi.org/10.5281/zenodo.18314469
 
 *Documentation*
 -------------
 
-The file Documentation.pdf in this folder serves as complete documentation for MuRAT3.0. This README file and the *Input_.mlx* files in this folder act as additional documentation.
+The file Documentation.pdf in this folder serves as complete documentation for MuRAT4.0. This README file and the *Input_.mlx* files in this folder act as additional documentation.
 
 The Wiki for MuRAT is under construction, but you can already check a bit of the history of the code.
 
@@ -27,7 +27,7 @@ We recorded a Video Tutorial! Just go to the [Volcano Earth Imaging group page](
 *System*
 ------------
 
-The program works on Mac, Linux and Windows systems with Matlab version R2017a or higher.
+The program works on Mac, Linux and Windows systems with Matlab version R2025b or higher.
 
 Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing and Mapping. The Parallel Computing Toolbox is recommended for speed.
 
@@ -35,8 +35,7 @@ Custom toolboxes not included in standard Matlab installations are also provided
 
 1. Routines to read SAC files created by Zhigang Peng and available from [his SAC tutorial page](http://geophysics.eas.gatech.edu/classes/SAC/).
 2. The [Regularization Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/52-regtools?s_tid=prof_contriblnk) was created by Per Christian Hansen and available from Matlab File Exchange.
-3. The [IRTools](https://github.com/jnagy1/IRtools/tree/ebd70d4036c3cd8c82fc1e17033351491fddf11f), included in MuRAT as a zipped folder.
-4. Functions from the [Geometry and Image-Based Bioengineering add-On for MATLAB](https://github.com/gibbonCode/GIBBON).
+3. Functions from the [Geometry and Image-Based Bioengineering add-On for MATLAB](https://github.com/gibbonCode/GIBBON).
 
 Three sample datasets (Mount St. Helens, Romania, and Toba) are included and allow the user to obtain sample models. The datasets work with the three corresponding *input.mlx* files that show examples of what the user can get with the code.
 
@@ -49,19 +48,17 @@ The current version works following these steps:
 
 2. Work in the downloaded folder after moving it to an appropriate location on your system.
 
-3. Check that the IRTools have been downloaded as a zipped folder in the corresponding folder in the working directory. Otherwise, download them from <https://github.com/jnagy1/IRtools/tree/ebd70d4036c3cd8c82fc1e17033351491fddf11f>.
+3. Open one of the three input .mlx files, providing a step-by-step explanation of all inputs (*Murat_inputMSH.mlx*, *Murat_inputRomania.mlx*, or *Murat_inputToba.mlx*) and create your own.
 
-4. Open one of the three input .mlx files, providing a step-by-step explanation of all inputs (*Murat_inputMSH.mlx*, *Murat_inputRomania.mlx*, or *Murat_inputToba.mlx*) and create your own.
+4. Use a velocity model, storing it in the corresponding folder. The format is [Latitude, Longitude, Altitude (meters)]
 
-5. Use a velocity model, storing it in the corresponding folder. The format is [Latitude, Longitude, Altitude (meters)]
-
-6. MuRAT works with [SAC files](https://ds.iris.edu/files/sac-manual/) that must be stored in a single folder and corrected for the instrument function. The files must have populated headers. Your SAC headers get tested anyway; the result is shown in an Excel file. The code takes from the header the following fields:
+5. MuRAT works with [SAC files](https://ds.iris.edu/files/sac-manual/) that must be stored in a single folder and corrected for the instrument function. The files must have populated headers. Your SAC headers get tested anyway; the result is shown in an Excel file. The code takes from the header the following fields:
 ***a)*** The P-wave picking in the reference time of the waveform (in seconds);
 ***b)*** The coordinates of the event in degrees - beware, *the earthquake depth must be in kilometers*;
 ***c)*** The coordinates of the station - beware, *the station elevation must be in meters*;
 ***d)*** The origin time of the event (optional) in seconds.
 
-7. Run MuRAT3 and select the name of the input file desired.
+6. Run MuRAT4 and select the name of the input file desired.
 
 *Workflow*
 --------
