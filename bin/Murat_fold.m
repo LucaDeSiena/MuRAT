@@ -15,25 +15,22 @@ function [X,Y,Z,VMesh]          =   Murat_fold(x,y,z,v)
 %    Z:         3D z matrix in meshgrid format
 %    VMesh:     3D field matrix in meshgrid format
 
-lx                          =   length(x);
-ly                          =   length(y);
-lz                          =   length(z);
-VMesh                       =   zeros(ly,lx,lz);
+x = x(:).';
+y = y(:).';
+z = z(:).';
+
+lx                          =   numel(x);
+ly                          =   numel(y);
+lz                          =   numel(z);
 
 [X,Y,Z]                     =   meshgrid(x,y,z);
-    
-if (nargin==4)
-    index                   =   0;
-    for i=1:lx
-        for j=1:ly
-            for k=1:lz
-                index       =   index+1;
-                VMesh(j,i,k)=   v(index);
-            end
-        end
-    end
-end
 
+% Ensure the field vector v is provided; if not, initialize VMesh to empty
+if nargin < 4
+    VMesh = [];
+else
+    VMesh = permute(reshape(v, [lz, ly, lx]), [2,3,1]);
+end
 end
 
     

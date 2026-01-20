@@ -1,5 +1,5 @@
-function  [retain_Qm_i,ray_crosses_Qc_i]    =...
-    Murat_retainQc(fT,Qm_i,RZZ_i,Ac_i,QcM)
+function  retain_Qm_i    =...
+    Murat_retainQc(fT,Qm_i,RZZ_i,QcM)
 % function  [retain_Qm_i,ray_crosses_Qc_i]  =...
 %     Murat_retainQc(fT,Qm_i,RZZ_i,Ac_i,QcM)
 %
@@ -20,19 +20,10 @@ if isequal(QcM,'Linearized')
     retainQmTemp                            =   Qm_i>0 & RZZ_i>fT;
     retain_Qm_i                             =   Qm_i>0 & RZZ_i>fT &...
         Qm_i < mean(Qm_i(retainQmTemp))+2*std(Qm_i(retainQmTemp));
-    
-    Ac_retain_Qc_i                          =   Ac_i(retain_Qm_i,:);
-    Ac_retain_Qc_i(Ac_retain_Qc_i<10^(-4))  =   0;
-    s_Qc                                    =   sum(Ac_retain_Qc_i);
-    ray_crosses_Qc_i                        =   s_Qc > 0.1;
 
 elseif isequal(QcM,'NonLinear')
     retain_Qm_i                             =   Qm_i>0;
-    Ac_retain_Qc_i                          =   Ac_i(retain_Qm_i,:);
-    Ac_retain_Qc_i(Ac_retain_Qc_i<10^(-4))  =   0;
-    s_Qc                                    =   sum(Ac_retain_Qc_i);
-    ray_crosses_Qc_i                        =   s_Qc > 0.1;
-    
+        
 end
 
 end

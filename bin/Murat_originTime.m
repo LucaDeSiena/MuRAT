@@ -18,23 +18,22 @@ function [theoreticalTime_i, originTime_i] =...
 %    originTime_i:      output origin time
 
 if isequal(originTime,[]) || isequal(eval(originTime),-12345)
-    
-    Distance                    =...
-    sqrt((sst_i(4)-sst_i(1))^2+(sst_i(5)-sst_i(2))^2+...
-    (sst_i(6)-sst_i(3))^2);
 
-    theoreticalTime_i           =   Distance/v/1000;
-    originTime_i                =   pktime_i-theoreticalTime_i;
-    
+    Distance            =   sqrt((sst_i(4)-sst_i(1))^2 +...
+        (sst_i(5)-sst_i(2))^2 + (sst_i(6)-sst_i(3))^2);
+
+    theoreticalTime_i   =   Distance/v/1000;
+    originTime_i        =   pktime_i-theoreticalTime_i;
+
 else
-    
-    originTime_i                =   eval(originTime);
-    theoreticalTime_i           =   pktime_i - originTime_i;
+
+    originTime_i        =   eval(originTime);
+    theoreticalTime_i   =   pktime_i - originTime_i;
     if theoreticalTime_i < 0
-       error(['The picking is set before the origin time for recording '...
-            num2str(i_label)]);
+        flag            =   num2str(i_label);
+        error(['Picking set before the origin time, recording ' flag]);
     end
-    
+
 end
 end
 

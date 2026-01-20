@@ -1,219 +1,251 @@
-function Murat                          =   Murat_data(Murat)
+function Murat      =   Murat_data(Murat)
 % MEASURES Qc, peak-delay and Q for each seismic trace located in a folder.
-%   This code is a collection of functions that do all the necessary.
 
-% Inputs
-listSac                                 =   Murat.input.listSac;
-lengthData                              =   length(listSac);
+% Refactored input unpacking and preallocation
+s                   =   Murat.input;
+FLabel              =   s.label;
+workers             =   s.workers; %#ok<NASGU>
 
-compon                                  =   Murat.input.components;
+%  Basic lists and sizes
+listSac             =   s.listSac;
+nData               =   numel(listSac);
+sacHeader           =   s.sacHeader;
 
-modv                                    =   Murat.input.modv;
-lengthParameterModel                    =   length(modv(:,1));
-gridStep                                =   [Murat.input.gridStepX/2 ...
-    Murat.input.gridStepY/2 (modv(2,3) - modv(1,3))/2];
-modvQc                                  =   [modv(:,1) + gridStep(1)...
+components          =   s.components;
+sections            =   s.sections;
+sections(3)         =   sections(3)/1000;
+modv                =   s.modv;
+nModelParams        =   size(modv(:,1),1);
+
+% Grid step and model grid coordinates
+gridStepZ           =   (modv(2,3) - modv(1,3))/2;
+gridStep            =   [s.gridStepX/2, s.gridStepY/2, gridStepZ];
+modvQc              =   [modv(:,1) + gridStep(1)...
     modv(:,2)+gridStep(2) modv(:,3)+gridStep(3)];
 
-gridD                                   =   Murat.input.gridPropagation;
-pvel                                    =   Murat.input.pvel;
-    
-cf                                      =   Murat.input.centralFrequency;
-lcf                                     =   length(cf);
+gridD               =   s.gridPropagation;
+pvel                =   s.pvel;
 
-workers                                 =   Murat.input.workers;
-origin                                  =   Murat.input.origin;
-originTime                              =   Murat.input.originTime;
-PTime                                   =   Murat.input.PTime;
-STime                                   =   Murat.input.STime;
-PorS                                    =   Murat.input.POrS;
-tCm                                     =   Murat.input.startLapseTime;
-vP                                      =   Murat.input.averageVelocityP;
-vS                                      =   Murat.input.averageVelocityS;
-maxtpde                                 =   Murat.input.maximumPeakDelay;
-tWm                                     =   Murat.input.codaWindow;
-sped                                    =   Murat.input.spectralDecay;
-kT                                      =   Murat.input.kernelTreshold;
-B0                                      =   Murat.input.albedo;
-Le1                                     =   Murat.input.extinctionLength;
-bodyWindow                              =   Murat.input.bodyWindow;
-startNoise                              =   Murat.input.startNoise;
-QcM                                     =   Murat.input.QcMeasurement;
-lapseTimeMethod                         =   Murat.input.lapseTimeMethod;
-maxtravel                               =   Murat.input.maxtravel;
-mintravel                               =   Murat.input.mintravel;
+% Frequencies
+cf                  =   s.centralFrequency;
+nCF                 =   numel(cf);
 
-% Set up variables to save
-locationDeg                             =   zeros(lengthData,6); 
-locationM                               =   zeros(lengthData,6); 
-theoreticalTime                         =   zeros(lengthData,1); 
-totalLengthRay                          =   zeros(lengthData,1);
-peakDelay                               =   zeros(lengthData,lcf); 
-inverseQc                               =   zeros(lengthData,lcf); 
-uncertaintyQc                           =   zeros(lengthData,lcf); 
-energyRatioBodyCoda                     =   zeros(lengthData,lcf); 
-energyRatioCodaNoise                    =   zeros(lengthData,lcf);
-raysPlot                                =   zeros(100,5,lengthData);
-tCoda                                   =   zeros(lengthData,lcf);
+% Event/origin and timing
+origin              =   s.origin;
+originTime          =   s.originTime;
+PTime               =   s.PTime;
+STime               =   s.STime;
+PorS                =   s.POrS;
+startLapse          =   s.startLapseTime;
 
-inversionMatrixPeakDelay                =...
-    zeros(lengthData,lengthParameterModel);
-inversionMatrixQ                        =...
-    zeros(lengthData,lengthParameterModel);
-inversionMatrixQc                       =...
-    zeros(lengthData,lengthParameterModel);
-rayCrossing                             =...
-    zeros(lengthData,lengthParameterModel);
-%=========================================================================
+% Velocities and travel times
+vP                  =   s.averageVelocityP;
+vS                  =   s.averageVelocityS;
+maxtpde             =   s.maximumPeakDelay;
+maxTravel           =   s.maxtravel;
+minTravel           =   s.mintravel;
+lapseTimeMethod     =   s.lapseTimeMethod;
+
+% Coda parameters
+tCodaWindow         =   s.codaWindow;
+kernelThresh        =   s.kernelTreshold;
+B0                  =   s.albedo;
+Le                  =   s.iExtinctionLength;
+bodyWindow          =   s.bodyWindow;
+startNoise          =   s.startNoise;
+QcMeasure           =   s.QcMeasurement;
+
+
+% Preallocate outputs
+locationDeg         =   zeros(nData,6); 
+locationM           =   zeros(nData,6); 
+theoreticalTime     =   zeros(nData,1); 
+totalLengthRay      =   zeros(nData,1);
+peakDelay           =   nan(nData,nCF);
+inverseQc           =   nan(nData,nCF);
+uncertaintyQc       =   nan(nData,nCF);
+energyRatioBCo      =   nan(nData,nCF);
+energyRatioCNo      =   nan(nData,nCF);
+raysPlot            =   zeros(100,5,nData);
+tCoda               =   zeros(nData,nCF);
+
+inversionMatrixPD   =   zeros(nData,nModelParams);
+inversionMatrixQ    =   zeros(nData,nModelParams);
+inversionMatrixQc   =   zeros(nData,nModelParams,nCF);
+rayCrossing         =   zeros(nData,nModelParams);
+
+storeFolderK        =   'Kernels';
+       
 % Count waveforms that must be eliminated because of peak-delay contraints
 % on peak delays and coda attenuation.
-count_trash                             =   0;
+countTrash          =   0;
+%=========================================================================
+SAChdrList = cell(nData,1);
+for k = 1:nData
+    fdl = sprintf('SAC_%g', k);
+    SAChdrList{k} = sacHeader.(fdl);
+end
 
-parfor (i = 1:lengthData,workers)
+for i = 1:nData
     
+    % Progress every 100 traces
     if isequal(mod(i,100),0)
-        
-        disp(['Waveform number is ', num2str(i)])
+
+        fprintf('Waveform number is %d\n', i);
         
     end
     
-    listSac_i                           =   listSac{i};
+    listSac_i       =   listSac{i};
+    SAChdr_i        =   SAChdrList{i};
+    srate_i         =   1/SAChdr_i.times.delta;
     
-    % Calculates envelopes
-    [tempis,sp_i,SAChdr_i,srate_i]      =   Murat_envelope(cf,listSac_i);
+    % Envelope and spectral preprocessing
+    [tempis,sp_i]   =   Murat_envelope(cf,listSac_i);
     
-    % Set earthquake and stations locations in degrees or meters
-    [locationDeg_i, locationM_i]        =...
-        Murat_location(origin,SAChdr_i);
-    locationDeg(i,:)                    =   locationDeg_i;
+    % Locations (deg and meters)
+    [locationDeg_i, locationM_i]    =   Murat_location(origin,SAChdr_i);
+    locationDeg(i,:)                =   locationDeg_i;
     
-    % Checks direct-wave picking on the trace and outputs it 
-    [cursorPick_i, pktime_i, v_i]       =   Murat_picking(tempis,...
+    % Checks direct-wave picking 
+    [cursorPick_i, pktime_i, v_i]   =   Murat_picking(tempis,...
         PTime,STime,PorS,vP,vS,srate_i,listSac_i,SAChdr_i);
 
-    % Conditions in case the zero time is missing in the header
+    % Missing origin-time corrections
     [theoreticalTime_i, originTime_i]   =...
         Murat_originTime(pktime_i,originTime,v_i,locationM_i,SAChdr_i,i);
 
-    % Calculates the window where to search for peak delay
-    cursorPeakDelay_i                   =...
+    % Peak-delay search window and value
+    cursorPeakDelay_i               =...
         Murat_peakDelayCheck(tempis,cursorPick_i,maxtpde,srate_i);
-
-    % Calculates peak delay time
-    peakDelay_i                         =...
+    
+    peakDelay_i                     =...
         Murat_peakDelay(sp_i,cursorPick_i,srate_i,cursorPeakDelay_i);
     
-    % Calculates rays for the right component    
-    calculateRays                       =   recognizeComponents(i,compon);
+    % Decide if ray-dependent computations are required for this component
+    doRays                      =   recognizeComponents(i, components);
     
-    if calculateRays
-        
+    if doRays
         % All the ray-dependent parameters   
-        [Apd_i, AQ_i, totalLengthRay_i, raysPlot_i, rayCrossing_i]...
-                                        =...
-            Murat_rays(modv,gridD,pvel,locationM_i);
-        
-        inversionMatrixPeakDelay(i,:)   =   Apd_i;
-        inversionMatrixQ(i,:)           =   AQ_i;
-        totalLengthRay(i,1)             =   totalLengthRay_i;
-        raysPlot(:,:,i)                 =   raysPlot_i;
-        rayCrossing(i,:)                =   rayCrossing_i;
-    end
-                
-    % Sets the lapse time
-    [tCoda_i, cursorCodaStart_i,...
-        cursorCodaEnd_i]                =...
-        Murat_codaCheck(originTime_i,pktime_i,srate_i,tCm,tWm,tempis,...
+        [Apd_i, AQ_i, totalLengthRay_i, raysPlot_i, rayCrossing_i]=...                                        
+            Murat_rays(modv,gridD,pvel,locationM_i);        
+        inversionMatrixPD(i,:)  =   Apd_i;
+        inversionMatrixQ(i,:)   =   AQ_i;
+        totalLengthRay(i,1)     =   totalLengthRay_i;
+        raysPlot(:,:,i)         =   raysPlot_i;
+        rayCrossing(i,:)        =   rayCrossing_i;
+    end     
+    % 
+    % % Diffusion equation
+    % [storeD,residualD,outputSolverD,exitFlagSolverD] =...
+    %         Murat_diffusion(cf,sp_i,startLapse,tCodaWindow,totalLengthRay_i);
+    
+    % Coda window, checks, and lapse time
+    [tCoda_i, cursorCodaStart_i,cursorCodaEnd_i] = Murat_codaCheck(...
+        originTime_i,pktime_i,srate_i,startLapse,tCodaWindow,tempis,...
         peakDelay_i,lapseTimeMethod);
     
-    if (cursorCodaEnd_i - cursorCodaStart_i) < (tWm*srate_i)-2 || ...
-            (pktime_i-originTime_i)>maxtravel || ...
-            (pktime_i-originTime_i)<mintravel
+    % Reject traces that don't meet coda/travel requirements
+    codaSamples                 =  cursorCodaEnd_i - cursorCodaStart_i;
+    if mean(codaSamples) < (tCodaWindow*srate_i) - 2 || ...
+            (pktime_i-originTime_i) > maxTravel || ...
+            (pktime_i-originTime_i) < minTravel
 
-        locationM(i,:)                  =   locationM_i;
-        theoreticalTime(i,1)            =   theoreticalTime_i;
-        peakDelay(i,:)                  =   NaN;
-        inverseQc(i,:)                  =   NaN;
-        uncertaintyQc(i,:)              =   NaN;
-        energyRatioBodyCoda(i,:)        =   NaN;
-        energyRatioCodaNoise(i,:)       =   NaN;
-        tCoda(i,:)                      =   tCoda_i;
-        
-        count_trash                     =   count_trash +1;
+        locationM(i,:)          =   locationM_i;
+        theoreticalTime(i,1)    =   theoreticalTime_i;
+        tCoda(i,:)              =   tCoda_i;
+        countTrash              =   countTrash +1;
         continue
     end
     
     % Measures Qc and its uncertainty
-    [inverseQc_i, uncertaintyQc_i]      =   Murat_Qc(cf,sped,...
-        sp_i,cursorCodaStart_i,cursorCodaEnd_i,tCoda_i,srate_i,QcM);
+    [inverseQc_i, uncertaintyQc_i]  =   Murat_Qc(cf,...
+        sp_i,cursorCodaStart_i,cursorCodaEnd_i,tCoda_i,srate_i,QcMeasure);
     
-    % Decide if you calculate kernels
-    calculateKernels                    =   recognizeComponents(i,compon);
+    % Decide if kernel/inversion matrix for Qc is needed
+    doKernels           =   doRays;
     
-    if calculateKernels
+    if doKernels
+        % Compute and plots kernels and coda matrix
+        TCodaStart      =   tCoda_i;
+        TCodaEnd        =   tCoda_i+tCodaWindow;
+        [KgridS, rgridS]    =...
+            Murat_kernels(TCodaStart,locationM_i(1:3),locationM_i(4:6),...
+            modvQc,vS,kernelThresh,B0,Le,lapseTimeMethod);
+        [KgridE, rgridE]    =...
+            Murat_kernels(TCodaEnd,locationM_i(1:3),locationM_i(4:6),...
+            modvQc,vS,kernelThresh,B0,Le,lapseTimeMethod);
         
-        % Calculates kernels
-        [K_grid, r_grid]                =...
-            Murat_kernels(tCoda_i+tWm/2,locationM_i(1:3),...
-            locationM_i(4:6),modvQc,vS,kT,B0,Le1,lapseTimeMethod);
+        for j = 1:nCF
+
+            cf_k    =   cf(j);
+            fcName  =   num2str(cf_k);
+            if find(fcName == '.')
+                fcName(fcName == '.') =   '_';
+            end
+            FName   =   ['Kernel_' fcName '_Hz'];
+            KS_i    =   KgridS(:,:,j);
+            KE_i    =   KgridE(:,:,j);
+            p       =   fullfile('./', FLabel, storeFolderK, FName);
         
-        % Calculates matrix
-        AQc_i                           =...
-            Murat_codaMatrix(modvQc,K_grid,r_grid,0,[],[]);
-            
-        inversionMatrixQc(i,:)          =   AQc_i;
+            AQc_i   =   Murat_codaMatrix(modvQc,KS_i,rgridS,KE_i,...
+                rgridE,i,origin,sections,FName,p);            
         
+            inversionMatrixQc(i,:,j)  =   AQc_i;
+
+        end
     end
                 
-    % Measures Q
+    % Measure body/coda energy ratios
     [energyRatioBodyCoda_i,energyRatioCodaNoise_i]=...
         Murat_body(bodyWindow,startNoise,srate_i,sp_i,cursorPick_i,...
         cursorCodaStart_i,cursorCodaEnd_i);
     
-    % Saving
-    locationM(i,:)                      =   locationM_i;
-    theoreticalTime(i,1)                =   theoreticalTime_i;
-    peakDelay(i,:)                      =   peakDelay_i;
-    inverseQc(i,:)                      =   inverseQc_i; 
-    uncertaintyQc(i,:)                  =   uncertaintyQc_i; 
-    energyRatioBodyCoda(i,:)            =   energyRatioBodyCoda_i; 
-    energyRatioCodaNoise(i,:)           =   energyRatioCodaNoise_i;
-    tCoda(i,:)                          =   tCoda_i;
+    % Save results for this trace
+    locationM(i,:)              =   locationM_i;
+    theoreticalTime(i,1)        =   theoreticalTime_i;
+    peakDelay(i,:)              =   peakDelay_i;
+    inverseQc(i,:)              =   inverseQc_i; 
+    uncertaintyQc(i,:)          =   uncertaintyQc_i; 
+    energyRatioBCo(i,:)         =   energyRatioBodyCoda_i; 
+    energyRatioCNo(i,:)         =   energyRatioCodaNoise_i;
+    tCoda(i,:)                  =   tCoda_i;
     
 end
 
-% Setting up the final data vectors and matrices with checks on values
-Murat.rays.locationsDeg                 =   locationDeg;
-Murat.rays.locationsM                   =   locationM;
-Murat.rays.theoreticalTime              =   theoreticalTime;
-Murat.PD.peakDelay                      =   peakDelay;
-Murat.PD.inversionMatrixPeakDelay       =   inversionMatrixPeakDelay;
-Murat.Q.inversionMatrixQ                =   inversionMatrixQ;
-Murat.rays.totalLengthRay               =   totalLengthRay;
-Murat.rays.raysPlot                     =   raysPlot;
-Murat.rays.rayCrossing                  =   sum(rayCrossing);
-Murat.Qc.inverseQc                      =   inverseQc; 
-Murat.Qc.uncertaintyQc                  =   uncertaintyQc; 
-Murat.Qc.inversionMatrixQc              =   inversionMatrixQc;
-Murat.Q.energyRatioBodyCoda             =   energyRatioBodyCoda; 
-Murat.Q.energyRatioCodaNoise            =   energyRatioCodaNoise;
-Murat.Qc.tCoda                          =   tCoda;
+% Assign to Murat structure
+Murat.rays.locationsDeg         =   locationDeg;
+Murat.rays.locationsM           =   locationM;
+Murat.rays.theoreticalTime      =   theoreticalTime;
+Murat.PD.peakDelay              =   peakDelay;
+Murat.PD.inversionMatrixPeakDelay   =   inversionMatrixPD;
+Murat.Q.inversionMatrixQ        =   inversionMatrixQ;
+Murat.rays.totalLengthRay       =   totalLengthRay;
+Murat.rays.raysPlot             =   raysPlot;
+Murat.rays.rayCrossing          =   sum(rayCrossing);
+Murat.Qc.inverseQc              =   inverseQc; 
+Murat.Qc.uncertaintyQc          =   uncertaintyQc; 
+Murat.Qc.inversionMatrixQc      =   inversionMatrixQc;
+Murat.Q.energyRatioBodyCoda     =   energyRatioBCo; 
+Murat.Q.energyRatioCodaNoise    =   energyRatioCNo;
+Murat.Qc.tCoda                  =   tCoda;
 
-Murat                                   =   Murat_selection(Murat);
+Murat                           =   Murat_selection(Murat);
+ratio                           =   countTrash/nData*(100);
+fprintf('Ratio of recordings removed due to Qc or PD inputs: %.2f%%\n',...
+    ratio)
 
-ratio                                   =   count_trash/lengthData*(100);
-disp(['Ratio of removed recordings: ', num2str(ratio)])
-
-if ~isempty(Murat.input.declustering)
-    Murat                               =...
-        Murat_declustering(Murat,Murat.input.declustering);
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function calculateValue                 =...
-    recognizeComponents(index,components)
+function doR                   =  recognizeComponents(index,components)
 % LOGICAL to decide if forward model is necessary depending in waveform
 %   number (index) and number of components.
 
-calculateValue                          =   isequal(components,1) ||...
-    (isequal(components,2) || isequal(components,3)) &&...
-    isequal(mod(index,components),1);
+if components == 1
+    doR = true;
+elseif components == 2 || components == 3
+    % Only process every components-th trace starting at 1
+    doR = mod(index, components) == 1;
+else
+    doR = false;
+end
+end

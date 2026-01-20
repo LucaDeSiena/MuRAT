@@ -16,30 +16,29 @@ function [image, SAChdr]    =   Murat_test(nameWaveform,...
 %
 
 % Imports SAC files
-[times,sisma,SAChdr]        =   fget_sac(nameWaveform);
-image                       =   [];
+[times,sisma,SAChdr]    =   fget_sac(nameWaveform);
+image                   =   [];
 %% Figure
 if figOutput == 1
     
-    srate_i                 =   1/SAChdr.times.delta;
+    srate_i     =   1/SAChdr.times.delta;
     
-    sisma                   =   detrend(sisma,1);
+    sisma       =   detrend(sisma,1);
     
-    lsis                    =   length(sisma);
+    lsis        =   length(sisma);
     
-    tu                      =   tukeywin(lsis,0.05);
-    tsisma                  =   tu.*sisma;
+    tu          =   tukeywin(lsis,0.05);
+    tsisma      =   tu.*sisma;
         
-    image                   =   figure('Name',['Test Seismograms: '...
-        nameWaveform],'NumberTitle','off','Position',[20,400,1200,1000],...
-        'visible','off');
+    image       =   myfig(['Test Seismograms: ' nameWaveform]);
+
     lengthFrequencies       =   length(centralFrequencies);
     plotFrequencies         =   1:2:2*lengthFrequencies;
     
     if isequal(centralFrequencies,[])
         plot(times,sisma,'k-','LineWidth',2);
         xlim([SAChdr.times.a - 5 SAChdr.times.a + 20])
-        SetFDefaults
+        SetFDefaults()
     else
         for i = 1:lengthFrequencies
             % Filter creation - in loop for each frequency
@@ -57,13 +56,13 @@ if figOutput == 1
             plot(times,fsisma,'k-','LineWidth',2);
             xlabel('Time (s)')
             ylabel('Amplitude')
-            SetFDefaults
+            SetFDefaults()
             
             subplot(lengthFrequencies,2,plotFrequencies(i)+1);
             plot(times,sp_i,'k-','LineWidth',2);
             xlabel('Time (s)')
             ylabel('Energy')
-            SetFDefaults
+            SetFDefaults()
         end
     end
 end
@@ -137,10 +136,10 @@ if verboseOutput == 1
 end
 function SetFDefaults()
 % DEFAULT settings for MuRAt figures
-ax = gca;
-ax.GridColor = [0 0 0];
-ax.GridLineStyle = '--';
-ax.GridAlpha = 0.3;
-ax.LineWidth = 1.5;
-ax.FontSize  = 12;
+ax              = gca;
+ax.GridColor    = [0 0 0];
+ax.GridLineStyle= '--';
+ax.GridAlpha    = 0.3;
+ax.LineWidth    = 1.5;
+ax.FontSize     = 12;
 grid on
