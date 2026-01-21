@@ -3,7 +3,7 @@ MuRAT - Multi-Resolution seismic Attenuation Tomography
 
 ![MuRAT is a code for attenuation, scattering and absorption tomography.](./img/muratlogo.jpg)
 
-[![test](https://github.com/deconvolution/MuRAT/actions/workflows/run_test.yml/badge.svg?branch=with_test)](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml)
+[![test](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml/badge.svg)](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml)
 
 MuRAT is a Matlab Package for seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves at multiple frequencies.
 
@@ -13,7 +13,7 @@ The group of active users (providing questions, feedback, and snippets of code) 
 
 The last release of the code is:
 
-Luca De Siena, mreissuf, Yi Zhang, Donato Talone, Aqeel Abbas, WMZ, Cheng Qingyang, Ferdinando Napolitano, & SimonaGabrielli. (2026). LucaDeSiena/MuRAT: Legacy MuRAT3.0 Code (v3.26.01.20). Zenodo. https://doi.org/10.5281/zenodo.18314469
+Luca De Siena, mreissuf, Yi Zhang, Donato Talone, Aqeel Abbas, WMZ, Cheng Qingyang, Ferdinando Napolitano, & SimonaGabrielli. (2026). LucaDeSiena/MuRAT: Legacy MuRAT3.0 Code (v3.26.01.20). Zenodo. <https://doi.org/10.5281/zenodo.18314469>
 
 *Documentation*
 -------------
@@ -120,7 +120,7 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
 ------------
 
-*Clustering.tif*: This figure shows all rays used on the map (black, discarded) with those after declustering (red). 
+*Clustering.tif*: This figure shows all rays used on the map (black, discarded) with those after declustering (red).
 
 *Rays__.tif*: These figures show how rays develop in 3D for the Peak Delay and Q measurements. It plots them on three slices (WE, SN, Z). The fourth panel shows the location of the area on the Earth.
 
@@ -223,4 +223,3 @@ MuRAT is released under EUPL v1.1
 
 Some developments of this software package were funded by the Deutsche Forshungsgemeinshaft under grant number SI
 1748/4-1.
-
