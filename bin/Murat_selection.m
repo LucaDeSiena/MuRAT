@@ -61,7 +61,7 @@ end
 % Warns about problematic data and saves their names and locations
 [problemPD,problemQc,problemRZZ,problemQ,~,compMissing,flagWarning]=...
             Murat_dataWarning(listaSac,tresholdnoise,...
-            maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,components,0,QcM);
+            maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,components,0);
 
 %%
 % Selects data in case of multiple components
@@ -81,7 +81,7 @@ if components >  1
         Qm,RZZ,rapsp,rapspcn,compMissing);
 end
 [~,~,~,~,yesPD,~,~] =    Murat_dataWarning(listaSac,tresholdnoise,maPD,...
-    miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,components,flagWarning,QcM);
+    miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,components,flagWarning);
 
 %%
 % Operations to decide weight of each data for the solution
@@ -127,7 +127,7 @@ for i = 1:dataFreq
 
     if ~isempty(Declust)
         
-        indKeepQc         =   Murat_declustering(origin,ending,x,y,z,...
+        indKeepQc       =   Murat_declustering(origin,ending,x,y,z,...
             QcM,RZZ_i,locationsDeg,Declust);
         retain_Qc_i     =   retain_Qc_i & indKeepQc;
 
@@ -141,7 +141,7 @@ for i = 1:dataFreq
 
     end
     Ac_retain_Qc_i      =   Ac_i(retain_Qc_i,:,i);
-    ray_crosses_Qc_i    =   sum(Ac_retain_Qc_i) > 0.01;
+    ray_crosses_Qc_i    =   sum(Ac_retain_Qc_i) > 1e-19;
     
     % Coda-normalization
     retainQCodaNoise    =   rapspcn(:,i) >= tresholdnoise;

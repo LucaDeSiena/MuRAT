@@ -28,7 +28,7 @@ MQc         =   size(Ac_k,2);
 %Covariance matrix for the data
 w           =   1 ./ RZZ_k;
 w           =   (w - min(w(:))) ./ (max(w(:)) - min(w(:))); 
-W           =   diag((w).^2);
+W           =   diag(w.^2);
 
 
 %Starting model from regionalization
@@ -68,11 +68,12 @@ maxIt       =   'MaxIterations';
 switch inversionMethod
 
     case 'Tikhonov'
-        [sol.Qc,fval,~]    =...
+        [sol.Qc,fval,~] =...
             Murat_tikhonovQc(PlotI,W*Ac_k,W*Qm_k,dampValue,x0.Qc);
-        eflag        =   'Tikhonov';
+        eflag           =   'Tikhonov';
         output          =   [];
-        saveFigureAsImage(pathFolder);       
+        saveFigureAsImage(pathFolder);        
+        fval            =   fval*obj0;
 
     case 'Particle'
         if PlotI == 1

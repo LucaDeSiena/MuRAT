@@ -98,9 +98,14 @@ for i = 1:lcf
             nonLinearFit    =   QValues(idx);
             uncertaintyFit  =   -log(Emin / mean(lapseT_blk)^1.5) /...
                 (2 * pi * cf_i * mean(lapseT_blk));
-
-            inverseQc_i(i)              =   nonLinearFit;
-            uncertaintyQc_i(i)          =   uncertaintyFit;
+            
+            if nonLinearFit == min(QValues)
+                inverseQc_i(i)      =  0;
+                uncertaintyQc_i(i)  =  0;
+            else
+                inverseQc_i(i)      =   nonLinearFit;
+                uncertaintyQc_i(i)  =   uncertaintyFit;
+            end
 
         otherwise
 

@@ -1,6 +1,6 @@
 function  [problempd,problemQc,problemRZZ,problemQ,yes_pd,compMissing,...
     flag]   =   Murat_dataWarning(listaSac,tresholdnoise,...
-    maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,comp,flag,QcM)
+    maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,comp,flag)
 % function  [problempd,problemQc,problemRZZ,problemQ,yes_pd,compMissing,...
 %     flag]   =   Murat_dataWarning(listaSac,tresholdnoise,...
 %     maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,comp,flag,QcM)
@@ -38,23 +38,13 @@ function  [problempd,problemQc,problemRZZ,problemQ,yes_pd,compMissing,...
 yes_pd              =   (peakd > miPD) & (peakd < maPD);
 no_pd               =   ~yes_pd;
 no_Qc               =   (Qm == 0);
+no_RZZ              =   (RZZ <= fT);
 no_Q                =   (rapspcn < tresholdnoise)|(rapsp < tresholdnoise);
 
 compMissing         =   false(nRows, nCols, 3);
 compMissing(:,:,1)  =   no_pd;
 compMissing(:,:,2)  =   no_Qc;
 compMissing(:,:,3)  =   no_Q;
-
-if isequal(QcM,'Linearized')
-    no_RZZ          =   (RZZ <= fT);
-
-elseif isequal(QcM,'NonLinear')
-    no_RZZ          =   no_Qc;
-
-else
-    error("Unrecognized method to estimate Qc")
-    
-end
 
 problempd           =   cell(1,nCols);
 problemQc           =   cell(1,nCols);
@@ -84,10 +74,10 @@ pctNoQ              =   sum(no_Q)   / nRows * 100;
 % Displays different messages in case of more than 1 component
 if comp == 1 && flag ~= 2
     % When single component processing and flag not equal 2, show overall percentages
-    fprintf('[%s] %% of Qc are = 0\n', num2str(pctNoQc));
-    fprintf('[%s] %% of correlation coefficients are below accuracy threshold\n', num2str(pctNoRZZ));
-    fprintf('[%s] %% of peak delays are outside peak delay limits\n', num2str(pctNoPD));
-    fprintf('[%s] %% of original ratios are below noise threshold\n', num2str(pctNoQ));
+    fprintf('[%s] %% of Qc are below threshold\n', num2str(pctNoQc));
+    fprintf('[%s] %% of Qc uncertainties are below threshold\n', num2str(pctNoRZZ));
+    fprintf('[%s] %% of peak delays are outside limits\n', num2str(pctNoPD));
+    fprintf('[%s] %% of ratios are below threshold\n', num2str(pctNoQ));
     flag = 2;
 
 else
@@ -99,10 +89,10 @@ else
 
     switch flag
         case 0
-            fprintf('[%g] %% original Qc are = 0\n', meanQc);
-            fprintf('[%g] %% original correlation coeff. are below threshold\n', meanRZZ);
-            fprintf('[%g] %% of peak delays are outside peak delay limits\n', meanPD);
-            fprintf('[%g] %% of original ratios are below threshold\n', meanQ);
+            fprintf('[%g] %% of Qc are below threshold\n', meanQc);
+            fprintf('[%g] %% of Qc uncertainties are below threshold\n', meanRZZ);
+            fprintf('[%g] %% of peak delays are outside limits\n', meanPD);
+            fprintf('[%g] %% of ratios are below threshold\n', meanQ);
 
             if isnumeric(comp)
                 ncompStr = num2str(comp);
@@ -113,9 +103,9 @@ else
             flag = 1;
 
         case 1
-            fprintf('[%g] %% of Qc are = 0\n', meanQc);
-            fprintf('[%g] %% of correlation coefficients are below threshold\n', meanRZZ);
-            fprintf('[%g] %% of peak delays are outside peak delay limits\n', meanPD);
-            fprintf('[%g] %% of ratios are below noise threshold\n', meanQ);
+            fprintf('[%g] %% of Qc are below threshold\n', meanQc);
+            fprintf('[%g] %% of Qc uncertainties are below threshold\n', meanRZZ);
+            fprintf('[%g] %% of peak delays are outside limits\n', meanPD);
+            fprintf('[%g] %% of ratios are below threshold\n', meanQ);
     end
 end

@@ -76,6 +76,7 @@ switch inversionMethod
         exitflag        =   'Tikhonov';
         output          =   [];
         saveFigureAsImage(pathFolder);
+        fval            =   fval*obj0;
     
     case 'Particle'
         if PlotI == 1
