@@ -1,5 +1,5 @@
 %[text:tableOfContents]{"heading":"Table of Contents"}
-%[text] %[text:anchor:T_C5277B6D] # INPUT MuRAT3D - MSH
+%[text] %[text:anchor:T_C5277B6D] # INPUT MuRAT - MSH
 %[text] This is an input file for the program Multi-Resolution Attenuation Tomography (MuRAT), version 3. It refers to the following area:
 %[text] ```
 %[text] MOUNT ST HELENS VOLCANO
@@ -105,7 +105,7 @@ Murat.input.MaximumStallIterations  =   100;
 %[text] Set this to ***1*** to plot:
 %[text] - the L curves between residual and norm length ([Aster et al. 2013](https://www.sciencedirect.com/book/9780123850485/parameter-estimation-and-inverse-problems) - case **'Tikhonov'**).
 %[text] - the decrease in misfit for the remaining cases. \
-Murat.input.PlotInversion           =   0;
+Murat.input.PlotInversion           =   1;
 %[text] The user can set damping and smoothing parameters for Qc. The first will increase the impact of the norm of the solution on the objective function. The damping is set to 0.1 of the average inverse coda quality factor if left empty, otherwise the user sets multiples of this value. The smoothing is set to three times the step of the grid in the vertical direction, otherwise the user sets multiples of this value.
 Murat.input.dampingValueQc          =   [0.001 0.001 0.001 0.001];
 Murat.input.smoothingValueQc        =   [0 0 0 0];

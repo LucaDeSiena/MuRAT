@@ -1,6 +1,6 @@
 %[text:tableOfContents]{"heading":"Table of Contents"}
-%[text] %[text:anchor:T_C5277B6D] # INPUT MuRAT3D - Romania
-%[text] This is an input file for the program Multi-Resolution Attenuation Tomography (MuRAT), version 3. It refers to the following area:
+%[text] %[text:anchor:T_C5277B6D] # INPUT MuRAT - Romania
+%[text] This is an input file for the program Multi-Resolution Attenuation Tomography (MuRAT), version 4. It refers to the following area:
 %[text] ```
 %[text] ROMANIA
 %[text] ```
@@ -73,12 +73,12 @@ Murat.input.kernelTreshold          =	2;
 %[text] The non linear approach models energy data measured on one-second windows across the envelope and minimizes the difference between data and model with a 1D grid search algorithm ([Napolitano et al. 2020](https://www.sciencedirect.com/science/article/pii/S1674987119301999)). Uncertainties are given by the experimental probability density function of the misfit. In both cases, uncertainties play as a weight in the final inversion. In the second case, leave the fitTresholdLinear = **\[\]**.
 %[text] The user needs to choose between the two options **'Linearized'** and **'NonLinear':**
 Murat.input.QcMeasurement           =   'NonLinear';
-Murat.input.fitTresholdLinear       =	0.1;
+Murat.input.fitTresholdLinear       =	0;
 %%
 %[text] %[text:anchor:H_33DD6EF5] ## GEOMETRY AND VELOCITY
 %[text] This section sets the details of the inversion grid and availability of velocity model. In MuRAT3D the coordinates of the model are in lat/lon, then they get converted in km. The vertical is in altitude above sea level. The velocity model can be 1D or 3D - if 3D all poins must be given in lat/long formats. You start by setting the origin and end points of your inversion grid.
 Murat.input.origin                  =   [43 20 1000];
-Murat.input.end                     =   [48 29 -50000];
+Murat.input.end                     =   [49 29 -50000];
 %[text] Then you need to set the number of nodes in the three directions. This is obviously dependent on the scale of your area. You will be playing a lot with this to test your effective resolution capabilities.
 Murat.input.gridLat                 =   5;
 Murat.input.gridLong                =   9;
@@ -107,10 +107,10 @@ Murat.input.MaximumStallIterations  =   100;
 %[text] - the decrease in misfit for the remaining cases. \
 Murat.input.PlotInversion           =   0;
 %[text] The user can set damping and smoothing parameters for Qc. The first will increase the impact of the norm of the solution on the objective function. The damping is set to 0.1 of the average inverse coda quality factor if left empty, otherwise the user sets multiples of this value. The smoothing is set to three times the step of the grid in the vertical direction, otherwise the user sets multiples of this value.
-Murat.input.dampingValueQc          =   [3.0e-03 3.0e-06 3.0e-07 3.0e-07];
+Murat.input.dampingValueQc          =   [1.0e-06 1.0e-06 3.0e-06 3.0e-06];
 Murat.input.smoothingValueQc        =   [];
 %[text] The user can set damping and smoothing parameters for Q. The first will increase the impact of the norm of the solution on the objective function. The damping is set to 0.1 of the average energy ratio if left empty, otherwise the user sets multiples of this value. The smoothing is set to three times the step of the grid in the vertical direction, otherwise the user sets multiples of this value.
-Murat.input.dampingValueQ           =   [0.1 0.01 0.01 0.01];
+Murat.input.dampingValueQ           =   [0.01 0.01 0.01 0.01];
 Murat.input.smoothingValueQ         =   [];
 %[text] ### Synthetic Testing
 %[text] A great reference for the best sort of testing is [Rawlinson & Spakman, 2016](https://academic.oup.com/gji/article/205/2/1221/692880?login=true). If you want to test you results you need to create a checkerboard. The size of the checks can be twice (*2*) or four times (*4*) the node spacing. Values are minimum and maximum of final measured parameters.
