@@ -45,7 +45,7 @@ modv_Q          =   Murat.Q.modvQ;
 energyRatio     =   Murat.Q.energyRatioBodyCoda;
 codaNoiseRatio  =   Murat.Q.energyRatioCodaNoise;
 
-sTitle       =   18;
+sTitle          =   18;
 
 lMF             =   size(rayChPD);
 sections(3)     =   sections(3)/1000;

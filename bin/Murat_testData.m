@@ -103,6 +103,8 @@ end
 muratHeader         =   table(Names,Origin,P,S,EvLat,EvLon,...
     EvDepth,StLat,StLon,StElev);
 
+writetable(muratHeader,fullfile(outDirTXT, 'DataHeaders.xlsx'));
+
 flag                =   origMissing + 2*sMissing;
 
 end

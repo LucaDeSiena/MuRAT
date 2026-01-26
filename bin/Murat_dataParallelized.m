@@ -86,7 +86,6 @@ for k = 1:nData
     SAChdrList{k} = sacHeader.(fdl);
 end
 
-
 parfor (i = 1:nData,workers)
     
     % Progress every 100 traces
@@ -147,7 +146,7 @@ parfor (i = 1:nData,workers)
     
     % Reject traces that don't meet coda/travel requirements
     codaSamples                 =  cursorCodaEnd_i - cursorCodaStart_i;
-    if codaSamples < (tCodaWindow*srate_i) - 2 || ...
+    if mean(codaSamples) < (tCodaWindow*srate_i) - 2 || ...
             (pktime_i-originTime_i) > maxTravel || ...
             (pktime_i-originTime_i) < minTravel
 
