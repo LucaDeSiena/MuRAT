@@ -65,7 +65,6 @@ nFreq               =   lMF(2);
 modvPD              =   zeros(nxyzc,5,nFreq);
 modvQc              =   zeros(nxyzc,10,nFreq);
 modvQ               =   zeros(nxyzc,10,nFreq);
-const_Qc            =   zeros(size(rapE));
 residualQ           =   zeros(1,nFreq);
 residualQc          =   zeros(1,nFreq);
 dValueQc            =   zeros(1,nFreq);
@@ -112,6 +111,7 @@ for k = 1:nFreq
     modvQ(:,1:3,k)  =   coords_block;
     cf_k            =   cf(k);
     fcName          =   fc_names{k};
+    fld = fld_names{k};
     outDirFigure = fullfile(outDirFigureBase,['L-curve_Qc_' fcName '_Hz']);
 
     % --- Peak delay standard regionalization ---
@@ -252,7 +252,6 @@ for k = 1:nFreq
     modv_Qc_dd(:,1:3)   =   DDcoordinates;
     modv_Q_dd           =   modvQ(:,:,k);
     modv_Q_dd(:,1:3)    =   DDcoordinates;
-    const_Qc(:,k)       =   const_Qc_k;
     dValueQc(k)         =   dValueQc_k;
     dValueQ(k)          =   dValueQ_k;
 
@@ -275,7 +274,6 @@ Murat.Qc.dampingValueQc     =   dValueQc;
 Murat.Qc.outputSolverQc     =   outputSolverQc;
 Murat.Qc.exitFlagSolverQc   =   exitFlagSolverQc;
 
-Murat.Q.const_Qc            =   const_Qc;
 Murat.Q.residualRedQ        =   residualQ;
 Murat.Q.dampingValueQ       =   dValueQ;
 Murat.Q.modvQ               =   modvQ;

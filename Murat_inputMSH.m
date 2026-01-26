@@ -73,7 +73,7 @@ Murat.input.kernelTreshold          =	2;
 %[text] The non linear approach models energy data measured on one-second windows across the envelope and minimizes the difference between data and model with a 1D grid search algorithm ([Napolitano et al. 2020](https://www.sciencedirect.com/science/article/pii/S1674987119301999)). Uncertainties are given by the experimental probability density function of the misfit. In both cases, uncertainties play as a weight in the final inversion. In the second case, leave the fitTresholdLinear = **\[\]**.
 %[text] The user needs to choose between the two options **'Linearized'** and **'NonLinear':**
 Murat.input.QcMeasurement           =   'NonLinear';
-Murat.input.fitTresholdLinear       =	0.1;
+Murat.input.fitTresholdLinear       =	0.0001;
 %%
 %[text] %[text:anchor:H_33DD6EF5] ## GEOMETRY AND VELOCITY
 %[text] This section sets the details of the inversion grid and availability of velocity model. In MuRAT3D the coordinates of the model are in lat/lon, then they get converted in km. The vertical is in altitude above sea level. The velocity model can be 1D or 3D - if 3D all points must be given in lat/long formats. You start by setting the origin and end points of your inversion grid.
@@ -102,10 +102,10 @@ Murat.input.averageVelocityS        =   2.5;
 Murat.input.inversionMethod         =   'Tikhonov';
 Murat.input.MaximumIterations       =   2e3;
 Murat.input.MaximumStallIterations  =   100;
-%[text] Set this to ***1*** to plot:
+%[text] Set this to ***1*** to plot during computation:
 %[text] - the L curves between residual and norm length ([Aster et al. 2013](https://www.sciencedirect.com/book/9780123850485/parameter-estimation-and-inverse-problems) - case **'Tikhonov'**).
 %[text] - the decrease in misfit for the remaining cases. \
-Murat.input.PlotInversion           =   1;
+Murat.input.PlotInversion           =   0;
 %[text] The user can set damping and smoothing parameters for Qc. The first will increase the impact of the norm of the solution on the objective function. The damping is set to 0.1 of the average inverse coda quality factor if left empty, otherwise the user sets multiples of this value. The smoothing is set to three times the step of the grid in the vertical direction, otherwise the user sets multiples of this value.
 Murat.input.dampingValueQc          =   [0.001 0.001 0.001 0.001];
 Murat.input.smoothingValueQc        =   [0 0 0 0];

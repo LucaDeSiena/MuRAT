@@ -125,8 +125,12 @@ end
 Murat.input.gridPropagation     =   gridPropagation;
 Murat.input.pvel                =   pvel;
 Murat.input.header              =   header;
-Murat.input.DDcoordinates       =   Murat_DDcoordinates(origin,ending,nLat,nLong,nzc);
+Murat.input.DDcoordinates       =   Murat_DDcoordinates(origin,ending,...
+    nLat,nLong,nzc);
 Murat.input.sacHeader           =   sacHeader;
+outDirTXT                       =...
+    fullfile(FLabel,'Tests','DataHeaders.xlsx');
+writetable(header,outDirTXT);
 end
 
 %% Local helper (optimized)
