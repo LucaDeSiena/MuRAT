@@ -12,6 +12,55 @@ arguments
     fig = gcf
 end
 
+% Force white figure background
+fig.Color = [1 1 1];
+
+% Find all axes (including tiled, polar, etc.)
+ax = findall(fig, 'Type', 'axes');
+for k = 1:numel(ax)
+    % Axes background white
+    ax(k).Color = [1 1 1];
+    % Axes lines, tick labels, and title/label text to black
+    ax(k).XColor = [0 0 0];
+    ax(k).YColor = [0 0 0];
+    if isprop(ax(k),'ZColor')       % cartesian 3D axes
+        ax(k).ZColor = [0 0 0];
+    end
+    % Set label and title colors (covers xlabel/ylabel/title objects)
+    try
+        ax(k).Title.Color = [0 0 0];
+    catch
+    end
+    try
+        ax(k).XLabel.Color = [0 0 0];
+        ax(k).YLabel.Color = [0 0 0];
+        if isprop(ax(k),'ZLabel')
+            ax(k).ZLabel.Color = [0 0 0];
+        end
+    catch
+    end
+    % Tick label interpreter may be preserved; ensure color for text objects
+    tickText = findall(ax(k), 'Type', 'text');
+    for t = 1:numel(tickText)
+        tickText(t).Color = [0 0 0];
+    end
+end
+
+% Configure legends
+lg = findall(fig, 'Type', 'legend');
+for L = 1:numel(lg)
+    lg(L).TextColor   = [0 0 0];   % legend text black
+    lg(L).Color       = [1 1 1];   % legend background white
+    lg(L).EdgeColor   = [0 0 0];   % legend border black
+    % If legend contains title
+    try
+        lg(L).Title.Color = [0 0 0];
+    catch
+    end
+end
+
+drawnow; % ensure updates take effect
+
 % Resolve figure handle
 if isempty(fig) || ~ishandle(fig)
     fig = gcf;

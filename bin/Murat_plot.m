@@ -68,6 +68,20 @@ for k = 1:lMF(2)
     rtQk        =   retainQ(:,k);
     rtQck       =   retainQc(:,k);
     rcQck       =   ray_crosses_Qc(:,k);
+    modv_pd_k   =   modv_pd(:,:,k);
+    modv_Qc_k   =   modv_Qc(:,:,k);
+    modv_Q_k    =   modv_Q(:,:,k);
+    [X,Y,Z1,mPD]=   Murat_fold(x,y,z,modv_pd_k(:,4));
+    [~,~,~,mQc] =   Murat_fold(x,y,z,modv_Qc_k(:,4));
+    [~,~,~,mQ]  =   Murat_fold(x,y,z,modv_Q_k(:,4));
+    Z           =   Z1/1000;
+    evst_Qc     =   evst(rtQck,:);
+    evst_pd     =   evst(rtpdk,:);
+    evst_Q      =   evst(rtQk,:);
+    Qm_k        =   Qm(rtQck,k);
+    RZZ_k       =   RZZ(rtQck,k);
+    avQcFreq(1,k)   =   sum(RZZ_k.*Qm_k)/sum(RZZ_k);
+    avQcFreq(2,k)   =   std(Qm_k);
     
     if PlotRays == 1
     % Murat_plot starts plotting the ray distribution if asked by the user.
@@ -77,7 +91,7 @@ for k = 1:lMF(2)
     % Peak Delay rays
     FName_peakDelay = ['Rays_PeakDelay_' fcName '_Hz'];
     rma_pd      = rma(:,2:4,rtpdk)/1000;
-    evst_pd     =   evst(rtpdk,:);
+    
     rays_peakDelay  =   Murat_imageRays(rma_pd,origin,ending,evst_pd,...
         x,y,z,FName_peakDelay);
     saveFigureAsImage(makePath(storeFolder, FName_peakDelay));   
@@ -87,7 +101,7 @@ for k = 1:lMF(2)
     % The next figure shows the rays for the total attenuation (Q)
     FName_Q     =   ['Rays_Q_' fcName '_Hz'];
     rma_Q       =   rma(:,2:4,rtQk)/1000;
-    evst_Q      =   evst(rtQk,:);
+    
     rays_Q      =   Murat_imageRays(rma_Q,origin,ending,evst_Q,x,y,z,...
         FName_Q);
     saveFigureAsImage(makePath(storeFolder, FName_Q));
@@ -107,14 +121,12 @@ for k = 1:lMF(2)
     
     % Qc test
     storeFolder =   fullfile('Tests','Qc');
-    Qm_k        =   Qm(rtQck,k);
-    RZZ_k       =   RZZ(rtQck,k);
+    
     residualQc_k=   residualQc(k);
     luntot_Qc   =   luntot(rtQck)/1000;
     Ac          =   Ac_i(rtQck,rcQck);
 
-    avQcFreq(1,k)   =   sum(RZZ_k.*Qm_k)/sum(RZZ_k);
-    avQcFreq(2,k)   =   std(Qm_k);
+    
 
     Qc_title    =   ['Qc check ' fcName ' Hz'];
     Qc_analysis =   Murat_imageCheckQc(Qm_k,RZZ_k,residualQc_k,...
@@ -168,14 +180,7 @@ for k = 1:lMF(2)
     % work with the function "slice". All stored in the sub-folder.
     storeFolder = fullfile('Results','PeakDelay');
 
-    modv_pd_k   =   modv_pd(:,:,k);
-    modv_Qc_k   =   modv_Qc(:,:,k);
-    modv_Q_k    =   modv_Q(:,:,k);
-    [X,Y,Z1,mPD]=   Murat_fold(x,y,z,modv_pd_k(:,4));
-    [~,~,~,mQc] =   Murat_fold(x,y,z,modv_Qc_k(:,4));
-    [~,~,~,mQ]  =   Murat_fold(x,y,z,modv_Q_k(:,4));
-    Z           =   Z1/1000;
-    evst_Qc     =   evst(rtQck,:);
+    
     
     % Peak delays results, using interpolation defined by 'divi'.
     divi            =   5;

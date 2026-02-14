@@ -76,6 +76,8 @@ switch inversionMethod
         exitflag        =   'Tikhonov';
         output          =   [];
         saveFigureAsImage(pathFolder);
+        savefig(gcf, [pathFolder '.fig']);
+        close(gcf);
         fval            =   fval*obj0;
     
     case 'Particle'
