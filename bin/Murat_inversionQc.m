@@ -72,7 +72,9 @@ switch inversionMethod
             Murat_tikhonovQc(PlotI,W*Ac_k,W*Qm_k,dampValue,x0.Qc);
         eflag           =   'Tikhonov';
         output          =   [];
-        saveFigureAsImage(pathFolder);        
+        saveFigureAsImage(pathFolder);   
+        savefig(gcf, [pathFolder '.fig']);
+        close(gcf);
         fval            =   fval*obj0;
 
     case 'Particle'

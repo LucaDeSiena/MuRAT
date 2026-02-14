@@ -90,8 +90,8 @@ Murat.input.gridStepY   =   yM(2) - yM(1);
 
 if availableVelocity ==  0
     
-    qLat                =   mean(origin(1),ending(1));
-    qLon                =   mean(origin(2),ending(2));
+    qLat                =   mean([origin(1),ending(1)]);
+    qLon                =   mean([origin(2),ending(2)]);
 
 
     gridPropagation.x   =   xM';

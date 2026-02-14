@@ -69,6 +69,21 @@ for k = 1:lMF(2)
     rtQck       =   retainQc(:,k);
     rcQck       =   ray_crosses_Qc(:,k);
     
+    evst_pd     =   evst(rtpdk,:);
+    evst_Q      =   evst(rtQk,:);
+    Qm_k        =   Qm(rtQck,k);
+    RZZ_k       =   RZZ(rtQck,k);
+    avQcFreq(1,k)   =   sum(RZZ_k.*Qm_k)/sum(RZZ_k);
+    avQcFreq(2,k)   =   std(Qm_k);
+    modv_pd_k   =   modv_pd(:,:,k);
+    modv_Qc_k   =   modv_Qc(:,:,k);
+    modv_Q_k    =   modv_Q(:,:,k);
+    [X,Y,Z1,mPD]=   Murat_fold(x,y,z,modv_pd_k(:,4));
+    [~,~,~,mQc] =   Murat_fold(x,y,z,modv_Qc_k(:,4));
+    [~,~,~,mQ]  =   Murat_fold(x,y,z,modv_Q_k(:,4));
+    Z           =   Z1/1000;
+    evst_Qc     =   evst(rtQck,:);
+    
     if PlotRays == 1
     % Murat_plot starts plotting the ray distribution if asked by the user.
     % It stores  the files in the corresponding folder.
@@ -77,21 +92,23 @@ for k = 1:lMF(2)
     % Peak Delay rays
     FName_peakDelay = ['Rays_PeakDelay_' fcName '_Hz'];
     rma_pd      = rma(:,2:4,rtpdk)/1000;
-    evst_pd     =   evst(rtpdk,:);
+    
     rays_peakDelay  =   Murat_imageRays(rma_pd,origin,ending,evst_pd,...
         x,y,z,FName_peakDelay);
     saveFigureAsImage(makePath(storeFolder, FName_peakDelay));   
     close(rays_peakDelay)
-    
+    drawnow limitrate
+
     %%
     % The next figure shows the rays for the total attenuation (Q)
     FName_Q     =   ['Rays_Q_' fcName '_Hz'];
     rma_Q       =   rma(:,2:4,rtQk)/1000;
-    evst_Q      =   evst(rtQk,:);
+    
     rays_Q      =   Murat_imageRays(rma_Q,origin,ending,evst_Q,x,y,z,...
         FName_Q);
     saveFigureAsImage(makePath(storeFolder, FName_Q));
     close(rays_Q)
+    drawnow limitrate
 
     end
     % Tests
@@ -107,14 +124,12 @@ for k = 1:lMF(2)
     
     % Qc test
     storeFolder =   fullfile('Tests','Qc');
-    Qm_k        =   Qm(rtQck,k);
-    RZZ_k       =   RZZ(rtQck,k);
+    
     residualQc_k=   residualQc(k);
     luntot_Qc   =   luntot(rtQck)/1000;
     Ac          =   Ac_i(rtQck,rcQck);
 
-    avQcFreq(1,k)   =   sum(RZZ_k.*Qm_k)/sum(RZZ_k);
-    avQcFreq(2,k)   =   std(Qm_k);
+    
 
     Qc_title    =   ['Qc check ' fcName ' Hz'];
     Qc_analysis =   Murat_imageCheckQc(Qm_k,RZZ_k,residualQc_k,...
@@ -123,6 +138,7 @@ for k = 1:lMF(2)
     saveFigureAsImage(p);
     savefig(Qc_analysis, [p '.fig']);
     close(Qc_analysis);
+    drawnow limitrate
     
     % Peak delay test
     storeFolder =   fullfile('Tests','PeakDelay');
@@ -137,6 +153,7 @@ for k = 1:lMF(2)
     saveFigureAsImage(p);
     savefig(pd_analysis, [p '.fig']);
     close(pd_analysis);
+    drawnow limitrate
 
     % Coda normalization test
     storeFolder =   fullfile('Tests','Q');
@@ -159,6 +176,7 @@ for k = 1:lMF(2)
     saveFigureAsImage(p);
     savefig(CN_analysis, [p '.fig']);
     close(CN_analysis);
+    drawnow limitrate
 
     end
 
@@ -168,14 +186,7 @@ for k = 1:lMF(2)
     % work with the function "slice". All stored in the sub-folder.
     storeFolder = fullfile('Results','PeakDelay');
 
-    modv_pd_k   =   modv_pd(:,:,k);
-    modv_Qc_k   =   modv_Qc(:,:,k);
-    modv_Q_k    =   modv_Q(:,:,k);
-    [X,Y,Z1,mPD]=   Murat_fold(x,y,z,modv_pd_k(:,4));
-    [~,~,~,mQc] =   Murat_fold(x,y,z,modv_Qc_k(:,4));
-    [~,~,~,mQ]  =   Murat_fold(x,y,z,modv_Q_k(:,4));
-    Z           =   Z1/1000;
-    evst_Qc     =   evst(rtQck,:);
+    
     
     % Peak delays results, using interpolation defined by 'divi'.
     divi            =   5;
@@ -350,6 +361,7 @@ for k = 1:lMF(2)
         modv_Qc_k,sTitle);
     savefig(param_plot,makePath(storeFolder,FName_Param));
     close(param_plot)
+    drawnow limitrate
 
     % Use interpolated peakdelay and Qc
     zi              =   (zi*1000)';
@@ -376,5 +388,6 @@ Qcf_title = 'Qc vs Frequency';
 Murat_imageQcFrequency(cf, avQcFreq, sTitle, Qcf_title);
 saveFigureAsImage(makePath('Results', 'Qc_vs_frequency'));
 close all;
+drawnow limitrate
 
 end
