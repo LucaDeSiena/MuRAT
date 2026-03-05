@@ -61,7 +61,7 @@ end
 % Warns about problematic data and saves their names and locations
 [problemPD,problemQc,problemRZZ,problemQ,~,compMissing,flagWarning]=...
             Murat_dataWarning(listaSac,tresholdnoise,...
-            maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,components,0);
+            maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,components,0,QcM);
 
 %%
 % Selects data in case of multiple components
@@ -81,7 +81,7 @@ if components >  1
         Qm,RZZ,rapsp,rapspcn,compMissing);
 end
 [~,~,~,~,yesPD,~,~] =    Murat_dataWarning(listaSac,tresholdnoise,maPD,...
-    miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,components,flagWarning);
+    miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,components,flagWarning,QcM);
 
 %%
 % Operations to decide weight of each data for the solution

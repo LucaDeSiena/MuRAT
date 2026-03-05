@@ -1,6 +1,6 @@
 function  [problempd,problemQc,problemRZZ,problemQ,yes_pd,compMissing,...
     flag]   =   Murat_dataWarning(listaSac,tresholdnoise,...
-    maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,comp,flag)
+    maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,comp,flag,QcM)
 % function  [problempd,problemQc,problemRZZ,problemQ,yes_pd,compMissing,...
 %     flag]   =   Murat_dataWarning(listaSac,tresholdnoise,...
 %     maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,comp,flag,QcM)
@@ -38,7 +38,17 @@ function  [problempd,problemQc,problemRZZ,problemQ,yes_pd,compMissing,...
 yes_pd              =   (peakd > miPD) & (peakd < maPD);
 no_pd               =   ~yes_pd;
 no_Qc               =   (Qm == 0);
-no_RZZ              =   (RZZ <= fT);
+
+if isequal(QcM,'Linearized')
+    no_RZZ              =   (RZZ <= fT);
+
+elseif isequal(QcM,'NonLinear')
+    no_RZZ              =   (RZZ >= fT);
+
+end
+
+
+
 no_Q                =   (rapspcn < tresholdnoise)|(rapsp < tresholdnoise);
 
 compMissing         =   false(nRows, nCols, 3);
