@@ -4,13 +4,9 @@ MuRAT - Multi-Resolution seismic Attenuation Tomography
 ![MuRAT is a code for attenuation, scattering and absorption tomography.](./img/muratlogo.jpg)
 
 [![test](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml/badge.svg)](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml)
-
 [![GitHub releases](https://img.shields.io/github/release/LucaDeSiena/MuRAT/all.svg)](https://github.com/LucaDeSiena/MuRAT/releases)
-
 [![DOI](https://zenodo.org/badge/64924529.svg)](https://doi.org/10.5281/zenodo.13996751)
-
 [![License](https://img.shields.io/badge/license-EUPL%201.1-blue.svg)](LICENSE)
-
 [![MATLAB](https://img.shields.io/badge/MATLAB-R2025b%2B-orange)](https://www.mathworks.com/products/matlab.html)
 
 MuRAT is a Matlab Package for seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves at multiple frequencies.
