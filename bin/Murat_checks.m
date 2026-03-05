@@ -98,7 +98,12 @@ if availableVelocity ==  0
     gridPropagation.y   =   yM';
     gridPropagation.z   =   zM';
     
-    modvOriginal        =   Murat_readLithos1(velocityModel,qLat,qLon);
+    if isequal(Murat.input.namev,"LITHO1.0.nc")
+        modvOriginal        =   Murat_readLithos1(velocityModel,qLat,qLon);
+    else
+        modvOriginal        =   load(velocityModel);
+    end
+
     [modv,pvel,modvPlot]=...
         Murat_modv1D(modvXYZ,modvOriginal,PorS,origin);
     

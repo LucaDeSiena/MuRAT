@@ -73,7 +73,7 @@ Murat.input.kernelTreshold          =	1;
 %[text] The non linear approach models energy data measured on one-second windows across the envelope and minimizes the difference between data and model with a 1D grid search algorithm ([Napolitano et al. 2020](https://www.sciencedirect.com/science/article/pii/S1674987119301999)). Uncertainties are given by the experimental probability density function of the misfit. In both cases, uncertainties play as a weight in the final inversion. In the second case, leave the fitTresholdLinear = **\[\]**.
 %[text] The user needs to choose between the two options **'Linearized'** and **'NonLinear':**
 Murat.input.QcMeasurement           =   'NonLinear';
-Murat.input.fitTresholdLinear       =	0;
+Murat.input.fitTresholdLinear       =	0.02;
 %%
 %[text] %[text:anchor:H_7FEF6216] ## GEOMETRY AND VELOCITY
 %[text] This section sets the details of the inversion grid and availability of velocity model. In MuRAT3D the coordinates of the model are in lat/lon, then they get converted in km. The vertical is in altitude above sea level. The velocity model can be 1D or 3D - if 3D all points must be given in lat/long formats. You start by setting the origin and end points of your inversion grid.
@@ -85,11 +85,11 @@ Murat.input.gridLong                =   17;
 Murat.input.gridZ                   =   11;
 %[text] You will see all of your figures on three sections cutting the models WE (degrees), SN (degrees), and horizontally (meters or km) at:
 Murat.input.sections                =	[2.5 99 -10000];
-%[text] With this version of the code you are always using an underlying velocity model: the 3D is either unavailable (***0***) or a vailable (***1***) velocity model.  For the 1D case MuRAT provides you *iasp91.txt*, the standard [IASPEI velocity model](https://academic.oup.com/gji/article/105/2/429/705789) and expands it to a false 3D. However, a standard crustal model is generally available everywhere on the Earth, so use that, but change it to the same format as the file provided: first column is depth, second is distance from the centre of the Earth, then third and fourth are P- and S-wave velocity. Store the file in the folder **velocity\_models**. Here, we use *iasp91*:
+%[text] With this version of the code you are always using an underlying velocity model: the 3D is either unavailable (***0***) or a vailable (***1***) velocity model.  For the 1D case MuRAT provides you *iasp91.txt*, the standard [IASPEI velocity model](https://academic.oup.com/gji/article/105/2/429/705789) and the more accurate [Lithos model](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/2013JB010626), and expands any of them to a false 3D. However, a standard crustal model is generally available everywhere on the Earth, so use that, but change it to the same format as the file provided: first column is depth, second is distance from the centre of the Earth, then third and fourth are P- and S-wave velocity. Store the file in the folder **velocity\_models**. Here, we use *iasp91*:
 %[text] ![Screenshot 2021-10-24 at 15.36.05.png](text:image:7a2b)
 %[text] %[text:anchor:H_43D6D438] whose coordinates are Lat/Long/Altitude/Velocity in meters. So we set:
 Murat.input.availableVelocity       =	0;
-Murat.input.namev                   =   'LITHO1.0.nc';
+Murat.input.namev                   =   'iasp91.txt';
 %[text] Even if we set the velocity model we still need the average crustal velocities if you have no info of origin time. It is highly recommended you have the origin in the haeder, at variables **'o'**!
 Murat.input.averageVelocityP        =   7;
 Murat.input.averageVelocityS        =   4;
