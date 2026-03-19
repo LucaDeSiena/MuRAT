@@ -49,7 +49,7 @@ for i = 1:lcf
                 inverseQc_i(i)      =   -p(1);
                 RZZ_k       =   abs(R(1,2));
                 w           =   1 ./ RZZ_k;
-                w           = (w - min(w(:))) ./ (max(w(:)) - min(w(:)));
+                %w           = (w - min(w(:))) ./ (max(w(:)) - min(w(:)));
                 uncertaintyQc_i(i)  =   w;
                 
             else
