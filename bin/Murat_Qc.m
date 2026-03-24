@@ -96,8 +96,8 @@ for i = 1:lcf
             % pick best fit and compute uncertainty
             [Emin, idx]     =   min(Evec);
             nonLinearFit    =   QValues(idx);
-            uncertaintyFit  =   -log(Emin / mean(lapseT_blk)^1.5) /...
-                (2 * pi * cf_i * mean(lapseT_blk));
+            uncertaintyFit  =   abs(log(Emin / mean(lapseT_blk)^1.5) /...
+                (2 * pi * cf_i * mean(lapseT_blk)));
             
             if nonLinearFit == min(QValues)
                 inverseQc_i(i)      =  0;

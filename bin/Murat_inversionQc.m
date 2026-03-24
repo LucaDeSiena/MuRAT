@@ -27,7 +27,7 @@ MQc         =   size(Ac_k,2);
 
 %Covariance matrix for the data
 w           =   1 ./ RZZ_k;
-w           =   (w - min(w(:))) ./ (max(w(:)) - min(w(:))); 
+%w           =   (w - min(w(:))) ./ (max(w(:)) - min(w(:))); 
 W           =   diag(w.^2);
 
 

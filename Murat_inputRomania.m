@@ -76,8 +76,8 @@ Murat.input.kernelTreshold          =	2;
 %[text] MuRAT3D implements either a linearised approach or a grid search approach to measure Qc. The linearised approach is the standard proposed first by Aki (e.g., [Havskov et al. 2016, BSSA](https://www.researchgate.net/publication/303510878_Coda_Q_in_Different_Tectonic_Areas_Influence_of_Processing_Parameters)) to best fit Qc after taking the logarithm of the energy. The uncertainties are derived from the simple minimum R-squared (fitTresholdLinear) and needs to be defined by a number between 0 and 1. It is advisable to set a minimum of 0.1.
 %[text] The non linear approach models energy data measured on one-second windows across the envelope and minimizes the difference between data and model with a 1D grid search algorithm ([Napolitano et al. 2020](https://www.sciencedirect.com/science/article/pii/S1674987119301999)). Uncertainties are given by the experimental probability density function of the misfit. In both cases, uncertainties play as a weight in the final inversion. In the second case, leave the fitTresholdLinear = **\[\]**.
 %[text] The user needs to choose between the two options **'Linearized'** and **'NonLinear':**
-Murat.input.QcMeasurement           =   'NonLinear';
-Murat.input.fitTresholdLinear       =	0;
+Murat.input.QcMeasurement           =   'Linearized';
+Murat.input.fitTresholdLinear       =	0.3;
 %%
 %[text] %[text:anchor:H_33DD6EF5] ## GEOMETRY AND VELOCITY
 %[text] This section sets the details of the inversion grid and availability of velocity model. In MuRAT3D the coordinates of the model are in lat/lon, then they get converted in km. The vertical is in altitude above sea level. The velocity model can be 1D or 3D - if 3D all poins must be given in lat/long formats. You start by setting the origin and end points of your inversion grid.
