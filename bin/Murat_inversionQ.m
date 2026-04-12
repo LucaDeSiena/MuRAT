@@ -71,7 +71,7 @@ maxIt   =   'MaxIterations';
 switch inversionMethod
 
     case 'Tikhonov'
-        [sol.Q,fval,~]  =   Murat_tikhonovQ(PlotI,A_k,d0,dampValue,m0Q);
+        [sol.Q,fval,~]  =   Murat_tikhonovQ(PlotI,A_k,d0,dampValue,m0Q,iter);
         sol.Q           =   sol.Q;
         exitflag        =   'Tikhonov';
         output          =   [];

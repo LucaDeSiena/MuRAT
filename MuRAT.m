@@ -14,39 +14,8 @@
 %[text] 2. Build your own input file (.m or .mlx) - each field is described in the attached Documentation.pdf and README.txt.
 %[text] 3. Create your *sac\_data* folder. The codes in the *Utilities\_Matlab* folder, especially those in the *PrePostProcessing* subfolder, can be useful to check data and outputs, especially the necessary parameters are in the headers of the SAC files.
 %[text] 4. Run this file and select the name of the input file you created beforhand. \
-%[text] Author: L. De Siena, January 2026
+%[text] Author: L. De Siena, April 2026
 %[text] ## INPUTS AND CHECKS
-addpath(fullfile(pwd,'bin'));
-
-r       =   fullfile(pwd,'Utilities_Matlab');
-
-% Split genpath into cell array of full folder paths
-parts   = strsplit(genpath(r), pathsep);
-parts   = parts(~cellfun(@isempty, parts));
-
-% Filters: exclude .git, hidden folders (start with .), and 'private'
-isBad = @(p) contains(p, [filesep '.git' filesep], 'IgnoreCase', true) ...
-           | contains(p, [filesep '.svn' filesep], 'IgnoreCase', true) ...
-           | contains(p, [filesep 'private' filesep], 'IgnoreCase', true) ...
-           | any( startsWith( split(p, filesep), '.' ) );
-
-% Keep folders that pass filter and contain at least one .m file
-keepMask = false(size(parts));
-for k = 1:numel(parts)
-    p = parts{k};
-    if ~isBad(p)
-        % fast check for .m files (not recursive)
-        if ~isempty(dir(fullfile(p,'*.m')))
-            keepMask(k) = true;
-        end
-    end
-end
-
-addList = parts(keepMask);
-if ~isempty(addList)
-    addpath(strjoin(addList, pathsep), '-end');
-end
-
 % Ask user for input file
 [file, path]= uigetfile({'*.m;*.mlx','MuRAT input files (*.m, *.mlx)'; '*.*','All Files'});
 if isequal(file,0)
@@ -65,6 +34,7 @@ switch lower(ext)
     otherwise
         error('Unsupported input file extension: %s', ext);
 end
+
 tStart      = tic;
 
 % --- Validation and ordering ---

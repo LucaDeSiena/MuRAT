@@ -1,5 +1,5 @@
 function [mtik0C,residualQc_k,LcQc]   =...
-    Murat_tikhonovQc(outputLCurve,Gc,bQm,dampValue,x0)
+    Murat_tikhonovQc(outputLCurve,Gc,bQm,dampValue,x0,maxIt)
 % function [mtik0C,residualQc_k,LcQc]   =...
 %   Murat_tikhonovQc(outputLCurve,Gc,bQm,dampValue)  
 %
@@ -33,12 +33,21 @@ ylabel('Residual Norm (eta)');
 grid on;
 
 obj0                =   norm((bQm-Gc*x0).^2);
-Gaug                =   [Gc; dampValue*eye(numel(x0))];
-baug                =   [bQm; dampValue*x0];
-mtik0C              =   lsqnonneg(Gaug, baug);
-obj                 =   norm((bQm-Gc*mtik0C).^2);
+% inputs you have: Gc (matrix), dampValue (scalar), bQm (vector)
+n = size(Gc,2);
+Afun = @(x) Gc * x;
+Atfun = @(y) Gc' * y;
+Lfun = @(x) x;        % identity regularizer
+Ltfun = @(y) y;
+lambda = dampValue;
+opts.maxit = maxIt;
+opts.tol = 1e-7;
+opts.verbose = true;
 
-%mtik0C             =   tikhonov(Uc,diag(Sc),Vc,bQm,dampValue);
+x = Murat_tikhonov_nonneg_fista(Afun, Atfun, Lfun, Ltfun, bQm, n, lambda, opts);
+
+obj                 =   norm((bQm-Gc*x).^2);
 residualQc_k        =   obj/obj0;
+mtik0C              =   x;
 
 end

@@ -26,12 +26,9 @@ Murat.input.STime                   =	[];
 %[text] ![](text:image:0b92)
 %[text] Then choose the coherent phase you are analyzing - P-(**2**) or S-(**3**). In our case it is P- as we have no S-wave picking:
 Murat.input.POrS                    =	2;
-%[text] You need to set the central frequencies (Hz) according to your spectrograms. General practice is to vary it across your spectra (see [De Siena et al. 2016, EPSL](https://www.sciencedirect.com/science/article/abs/pii/S0012821X16300437)) for absorption and scattering mapping or focus on a given frequency ([De Siena et al. 2014, JGR](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1002/2014JB011372)) for direct-wave attenuation imaging. Here, they cover the interval \[3-18\] Hz:
+%[text] You need to set the central frequencies (Hz) and envelope smoothing time (s) according to your spectrograms and waveform data. General practice is to vary it across your spectra (see [De Siena et al. 2016, EPSL](https://www.sciencedirect.com/science/article/abs/pii/S0012821X16300437)) for absorption and scattering mapping or focus on a given frequency ([De Siena et al. 2014, JGR](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1002/2014JB011372)) for direct-wave attenuation imaging. Here, they cover the interval \[3-18\] Hz. If not specified, a default value of 1.0 s is used for smoothing.
 Murat.input.centralFrequency        =	[3 6 12 18];
-
-% Envelope smoothing time (in seconds) used in Murat_envelope.m.
-% If not specified, a default value of 1.0 s is used.
-Murat.input.envelopeSmoothTime = 1;
+Murat.input.envelopeSmoothTime      =   1;
 %[text] You can work with 1 vertical or horizontal (*1*), 2 horizontal (*2*) or three components(*3*). If using more than one component, the order *MUST BE: WE, SN, Vertical or SN, WE,* Vertical. In this example we work with the vertical component only:
 Murat.input.components              =	1;
 %[text] Finally, you can opt to decluster your data events. The code will divide the inversion grid by the following factor and select the best earthquake located in the block among all others. Set it to empty if you want to opt out (**\[\]**).
@@ -112,10 +109,10 @@ Murat.input.MaximumStallIterations  =   100;
 %[text] - the decrease in misfit for the remaining cases. \
 Murat.input.PlotInversion           =   0;
 %[text] The user can set damping and smoothing parameters for Qc. The first will increase the impact of the norm of the solution on the objective function. The damping is set to 0.1 of the average inverse coda quality factor if left empty, otherwise the user sets multiples of this value. The smoothing is set to three times the step of the grid in the vertical direction, otherwise the user sets multiples of this value.
-Murat.input.dampingValueQc          =   [0.001 0.001 0.001 0.001];
+Murat.input.dampingValueQc          =   [5000 1 1 0.1];
 Murat.input.smoothingValueQc        =   [0 0 0 0];
 %[text] The user can set damping and smoothing parameters for Q. The first will increase the impact of the norm of the solution on the objective function. The damping is set to 0.1 of the average energy ratio if left empty, otherwise the user sets multiples of this value. The smoothing is set to three times the step of the grid in the vertical direction, otherwise the user sets multiples of this value.
-Murat.input.dampingValueQ           =   [0.01 0.01 0.01 0.01];
+Murat.input.dampingValueQ           =   [0.1 0.1 0.1 0.1];
 Murat.input.smoothingValueQ         =   [0 0 0 0];
 %[text] ### Synthetic Testing
 %[text] A great reference for the best sort of testing is [Rawlinson & Spakman, 2016](https://academic.oup.com/gji/article/205/2/1221/692880?login=true). If you want to test you results you need to create a checkerboard. The size of the checks can be twice (*2*) or four times (*4*) the node spacing. Values are minimum and maximum of final measured parameters.

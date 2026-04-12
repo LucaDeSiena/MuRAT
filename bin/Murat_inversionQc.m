@@ -69,7 +69,7 @@ switch inversionMethod
 
     case 'Tikhonov'
         [sol.Qc,fval,~] =...
-            Murat_tikhonovQc(PlotI,W*Ac_k,W*Qm_k,dampValue,x0.Qc);
+            Murat_tikhonovQc(PlotI,W*Ac_k,W*Qm_k,dampValue,x0.Qc,iter);
         eflag           =   'Tikhonov';
         output          =   [];
         saveFigureAsImage(pathFolder);
