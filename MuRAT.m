@@ -16,11 +16,42 @@
 %[text] 4. Run this file and select the name of the input file you created beforhand. \
 %[text] Author: L. De Siena, April 2026
 %[text] ## INPUTS AND CHECKS
+addpath(fullfile(pwd,'bin')); %[output:081c0381]
+
+r       =   fullfile(pwd,'Utilities_Matlab');
+
+% Split genpath into cell array of full folder paths
+parts   = strsplit(genpath(r), pathsep);
+parts   = parts(~cellfun(@isempty, parts));
+
+% Filters: exclude .git, hidden folders (start with .), and 'private'
+isBad = @(p) contains(p, [filesep '.git' filesep], 'IgnoreCase', true) ...
+           | contains(p, [filesep '.svn' filesep], 'IgnoreCase', true) ...
+           | contains(p, [filesep 'private' filesep], 'IgnoreCase', true) ...
+           | any( startsWith( split(p, filesep), '.' ) );
+
+% Keep folders that pass filter and contain at least one .m file
+keepMask = false(size(parts));
+for k = 1:numel(parts)
+    p = parts{k};
+    if ~isBad(p)
+        % fast check for .m files (not recursive)
+        if ~isempty(dir(fullfile(p,'*.m')))
+            keepMask(k) = true;
+        end
+    end
+end
+
+addList = parts(keepMask);
+if ~isempty(addList)
+    addpath(strjoin(addList, pathsep), '-end');
+end
+
 % Ask user for input file
 [file, path]= uigetfile({'*.m;*.mlx','MuRAT input files (*.m, *.mlx)'; '*.*','All Files'});
-if isequal(file,0)
-    error('No input file selected.');
-end
+if isequal(file,0) %[output:group:836201e7]
+    error('No input file selected.'); %[output:79d3e25b]
+end %[output:group:836201e7]
 inputFile   = fullfile(path, file);
 fprintf('Using input file %s\n', inputFile);
 
@@ -126,4 +157,10 @@ clearvars -except Murat tCheck tData tInv tPlot totalTime
 %---
 %[metadata:view]
 %   data: {"layout":"inline","rightPanelPercent":40}
+%---
+%[output:081c0381]
+%   data: {"dataType":"warning","outputData":{"text":"Warning: Name is nonexistent or not a directory: \/Users\/lucadesiena\/Documents\/Documents - Luca’s MacBook Pro (2)\/MATLAB\/MuRAT2026_03_24\/Toba\/Checkerboard\/Q\/bin"}}
+%---
+%[output:79d3e25b]
+%   data: {"dataType":"error","outputData":{"errorType":"runtime","text":"No input file selected."}}
 %---
