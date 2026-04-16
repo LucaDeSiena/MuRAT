@@ -1,6 +1,49 @@
-% ADDITIONAL input variables that are not set by the user.
+% ADDITIONAL checks and input variables that are not set by the user.
 function Murat      =   Murat_checks(Murat)
+%% Adding paths and inputs
+addpath(fullfile(pwd,'bin'));
+r       =   fullfile(pwd,'Utilities_Matlab');
 
+% Split genpath into cell array of full folder paths
+parts   = strsplit(genpath(r), pathsep);
+parts   = parts(~cellfun(@isempty, parts));
+
+% Filters: exclude .git, hidden folders (start with .), and 'private'
+isBad = @(p) contains(p, [filesep '.git' filesep], 'IgnoreCase', true) ...
+           | contains(p, [filesep '.svn' filesep], 'IgnoreCase', true) ...
+           | contains(p, [filesep 'private' filesep], 'IgnoreCase', true) ...
+           | any( startsWith( split(p, filesep), '.' ) );
+
+% Keep folders that pass filter and contain at least one .m file
+keepMask = false(size(parts));
+for k = 1:numel(parts)
+    p = parts{k};
+    if ~isBad(p)
+        % fast check for .m files (not recursive)
+        if ~isempty(dir(fullfile(p,'*.m')))
+            keepMask(k) = true;
+        end
+    end
+end
+
+addList = parts(keepMask);
+if ~isempty(addList)
+    addpath(strjoin(addList, pathsep), '-end');
+end
+
+if isfolder(Murat.input.label)
+    dirOld = Murat.input.label+"_old";
+    if isfolder(dirOld)
+        rmdir(dirOld,"s");
+    else
+        movefile(Murat.input.label, dirOld);
+    end
+    fprintf('Folder "%s" found in current folder. Renamed to folder "%s _old"\n', Murat.input.label,Murat.input.label);
+else
+    mkdir(Murat.input.label);
+end
+
+%% Checking inputs
 dataDirectory       =   Murat.input.dataDirectory;
 FLabel              =   Murat.input.label;
 FPath               =   './';

@@ -26,7 +26,7 @@ Murat.input.STime                   =	't0';
 %[text] ![](text:image:5755)
 %[text] Then choose the coherent phase you are analyzing - P-(**2**) or S-(**3**). In our case it is S-wave picking.
 Murat.input.POrS                    =	3;
-%[text] You need to set the central frequencies (Hz) according to your spectrograms. General practice is to vary it across your spectra (see [De Siena et al. 2016, EPSL](https://www.sciencedirect.com/science/article/abs/pii/S0012821X16300437)) for absorption and scattering mapping or focus on a given frequency ([De Siena et al. 2014, JGR](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1002/2014JB011372)) for direct-wave attenuation imaging. Here, they cover the interval \[1.5-3\] Hz.
+%[text] You need to set the central frequencies (Hz) and envelope smoothing time (s) according to your spectrograms and waveform data. General practice is to vary it across your spectra (see [De Siena et al. 2016, EPSL](https://www.sciencedirect.com/science/article/abs/pii/S0012821X16300437)) for absorption and scattering mapping or focus on a given frequency ([De Siena et al. 2014, JGR](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1002/2014JB011372)) for direct-wave attenuation imaging. Here, they cover the interval \[1.5-3\] Hz. If not specified, a default value of 1.0 s is used for smoothing.
 Murat.input.centralFrequency        =	[1.5 3];
 
 % Envelope smoothing time (in seconds) used in Murat_envelope.m.
@@ -65,8 +65,8 @@ Murat.input.startLapseTime          =   60;
 %[text] Finally set the length of the coda window in seconds. The true lapse time at which we calculate the kernels is half of the window. The window is also used (after normalizing for its length) in the coda normalization method.
 Murat.input.codaWindow              =   20;
 %[text] Set maximum travel time if you want to exclude traces beyond a certain value, else put \[Inf\].
-Murat.input.mintravel               =   0.2;
-Murat.input.maxtravel               =   Inf;
+Murat.input.mintravel               =   12;
+Murat.input.maxtravel               =   50;
 %[text] The **MLTWA** is the standard method to find the average parameters necessary to calculate the kernels. It provides albedo and extinction length:
 Murat.input.albedo                  =   [0.5 0.5];
 Murat.input.iExtinctionLength        =   [0.02 0.02];
@@ -103,7 +103,7 @@ Murat.input.averageVelocityS        =   4;
 %[text] - a standard Tikhonov inversion based on singular value decomposition (**'Tikhonov'**), where we on the [regtools Matlab suite](https://de.mathworks.com/matlabcentral/fileexchange/52-regtools) from Per Christian Hansen.
 %[text] - the particle swarm (**Particle**), simulated annealing (**Annealing**), or genetic algorithm (**Genetic**) solvers from the optimization toolbox. \
 %[text] In the last case, the user can choose the maximum number of iterations after which the optimization will stop. The user can also choose the maximum number of iterations where the misfit stalls after which the optimization will stop. Otherwise leave empty.
-Murat.input.inversionMethod         =   'Particle';
+Murat.input.inversionMethod         =   'Tikhonov';
 Murat.input.MaximumIterations       =   2e3;
 Murat.input.MaximumStallIterations  =   100;
 %[text] Set this to ***1*** to plot:
@@ -111,7 +111,7 @@ Murat.input.MaximumStallIterations  =   100;
 %[text] - the decrease in misfit for the remaining cases. \
 Murat.input.PlotInversion           =   0;
 %[text] The user can set damping and smoothing parameters for Qc. The first will increase the impact of the norm of the solution on the objective function. The damping is set to 0.1 of the average inverse coda quality factor if left empty, otherwise the user sets multiples of this value. The smoothing is set to three times the step of the grid in the vertical direction, otherwise the user sets multiples of this value.
-Murat.input.dampingValueQc          =   [];
+Murat.input.dampingValueQc          =   [10 10];
 Murat.input.smoothingValueQc        =   [];
 %[text] The user can set damping and smoothing parameters for Q. The first will increase the impact of the norm of the solution on the objective function. The damping is set to 0.1 of the average energy ratio if left empty, otherwise the user sets multiples of this value. The smoothing is set to three times the step of the grid in the vertical direction, otherwise the user sets multiples of this value.
 Murat.input.dampingValueQ           =   [];

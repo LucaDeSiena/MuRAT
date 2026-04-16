@@ -14,9 +14,9 @@
 %[text] 2. Build your own input file (.m or .mlx) - each field is described in the attached Documentation.pdf and README.txt.
 %[text] 3. Create your *sac\_data* folder. The codes in the *Utilities\_Matlab* folder, especially those in the *PrePostProcessing* subfolder, can be useful to check data and outputs, especially the necessary parameters are in the headers of the SAC files.
 %[text] 4. Run this file and select the name of the input file you created beforhand. \
-%[text] Author: L. De Siena, January 2026
+%[text] Author: L. De Siena, April 2026
 %[text] ## INPUTS AND CHECKS
-addpath(fullfile(pwd,'bin'));
+addpath(fullfile(pwd,'bin')); %[output:081c0381]
 
 r       =   fullfile(pwd,'Utilities_Matlab');
 
@@ -49,9 +49,9 @@ end
 
 % Ask user for input file
 [file, path]= uigetfile({'*.m;*.mlx','MuRAT input files (*.m, *.mlx)'; '*.*','All Files'});
-if isequal(file,0)
-    error('No input file selected.');
-end
+if isequal(file,0) %[output:group:836201e7]
+    error('No input file selected.'); %[output:79d3e25b]
+end %[output:group:836201e7]
 inputFile   = fullfile(path, file);
 fprintf('Using input file %s\n', inputFile);
 
@@ -65,6 +65,7 @@ switch lower(ext)
     otherwise
         error('Unsupported input file extension: %s', ext);
 end
+
 tStart      = tic;
 
 % --- Validation and ordering ---
@@ -156,4 +157,10 @@ clearvars -except Murat tCheck tData tInv tPlot totalTime
 %---
 %[metadata:view]
 %   data: {"layout":"inline","rightPanelPercent":40}
+%---
+%[output:081c0381]
+%   data: {"dataType":"warning","outputData":{"text":"Warning: Name is nonexistent or not a directory: \/Users\/lucadesiena\/Documents\/Documents - Luca’s MacBook Pro (2)\/MATLAB\/MuRAT2026_03_24\/Toba\/Checkerboard\/Q\/bin"}}
+%---
+%[output:79d3e25b]
+%   data: {"dataType":"error","outputData":{"errorType":"runtime","text":"No input file selected."}}
 %---

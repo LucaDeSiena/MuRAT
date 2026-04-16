@@ -179,19 +179,10 @@ for k = 1:lMF(2)
     % Set up matrices. The points are set to the upper SW vertices to
     % work with the function "slice". All stored in the sub-folder.
     storeFolder = fullfile('Results','PeakDelay');
-
     
-    
-    % Peak delays results, using interpolation defined by 'divi'.
-    divi            =   5;
-    FName_PDMap     =   ['Peak-Delay-3D_' fcName '_Hz'];
-    peakDelaymap    =   Murat_image3D(X,Y,Z,mPD,redblue,sections,...
-        evst_pd,x,y,z,divi,FName_PDMap);
-    title('Log. peak-delay variations','FontSize',sTitle,...
-        'FontWeight','bold','Color','k');
-    Murat_saveFigures(peakDelaymap, makePath(storeFolder, FName_PDMap));
-
     % Plots peak delays only keeping cells with more than 'factor'% of data
+    % using interpolation defined by 'divi'.
+    divi            =   5;
     factor          =   5;
     max_pos         =   max(mPD(mPD >= 0)); 
     max_neg         =   min(mPD(mPD < 0)); 
@@ -203,8 +194,7 @@ for k = 1:lMF(2)
     
     mPDRed          =   mPD.*keep_bins;
 
-    FName_PDMap     =...
-        ['Peak-Delay-3D_' fcName '_Hz_',num2str(factor),'_perc'];
+    FName_PDMap     =   ['Peak-Delay-3D_' fcName '_Hz_'];
     [peakDelaymapRed,pd_inter,~,~,~,Xi,Yi,Zi] =   Murat_image3D(X,Y,Z,...
         mPDRed,redblue,sections,evst_pd,x,y,z,divi,FName_PDMap);
     title('Peak-delay variations','FontSize',sTitle,...
