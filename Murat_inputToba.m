@@ -28,7 +28,10 @@ Murat.input.STime                   =	't0';
 Murat.input.POrS                    =	3;
 %[text] You need to set the central frequencies (Hz) and envelope smoothing time (s) according to your spectrograms and waveform data. General practice is to vary it across your spectra (see [De Siena et al. 2016, EPSL](https://www.sciencedirect.com/science/article/abs/pii/S0012821X16300437)) for absorption and scattering mapping or focus on a given frequency ([De Siena et al. 2014, JGR](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1002/2014JB011372)) for direct-wave attenuation imaging. Here, they cover the interval \[1.5-3\] Hz. If not specified, a default value of 1.0 s is used for smoothing.
 Murat.input.centralFrequency        =	[1.5 3];
-Murat.input.envelopeSmoothTime      =   1;
+
+% Envelope smoothing time (in seconds) used in Murat_envelope.m.
+% If not specified, a default value of 1.0 s is used.
+Murat.input.envelopeSmoothTime = 1;
 %[text] You can work with 1 vertical or horizontal (*1*), 2 horizontal (*2*) or three components(*3*). If using more than one component, the order *MUST BE: WE, SN, Vertical or SN, WE,* Vertical. Here we use three components:
 Murat.input.components              =	3;
 %[text] Finally, you can opt to decluster your data events. The code will divide the inversion grid by the following factor and select the best earthquake located in the block among all others. Set it to empty if you want to opt out (**\[\]**).
