@@ -31,16 +31,31 @@ if ~isempty(addList)
     addpath(strjoin(addList, pathsep), '-end');
 end
 
-if isfolder(Murat.input.label)
-    dirOld = Murat.input.label+"_old";
+targetFolder = Murat.input.label;
+
+if isfolder(targetFolder)
+    % Convert to string class for safe concatenation across MATLAB versions
+    targetStr = string(targetFolder);
+    dirOld = targetStr + "_old";
+    
+    % Remove old backup if it already exists
     if isfolder(dirOld)
-        rmdir(dirOld,"s");
-    else
-        movefile(Murat.input.label, dirOld);
+        rmdir(dirOld, 's');
     end
-    fprintf('Folder "%s" found in current folder. Renamed to folder "%s _old"\n', Murat.input.label,Murat.input.label);
+    
+    % Attempt rename with explicit error handling
+    try
+        movefile(targetFolder, dirOld);
+        fprintf('Folder "%s" found. Successfully renamed to "%s"\n', targetFolder, dirOld);
+    catch ME
+        warning('Failed to rename "%s". Reason: %s', targetFolder, ME.message);
+        fprintf('Troubleshooting tips:\n');
+        fprintf('  1. Close any programs/windows using files in "%s"\n', targetFolder);
+        fprintf('  2. Ensure your current folder (pwd) is not inside "%s"\n', targetFolder);
+        fprintf('  3. Verify you have write permissions in this directory.\n');
+    end
 else
-    mkdir(Murat.input.label);
+    mkdir(targetFolder);
 end
 
 %% Checking inputs
