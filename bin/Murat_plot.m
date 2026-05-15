@@ -162,12 +162,12 @@ for k = 1:lMF(2)
     rapsp_k     =   energyRatio(mask,k);
     tCm         =   tCoda(mask,k);
     l           =   luntot_k/1000;
+    te          =   tCm + tWm;
 
     CNTitle     =   ['Coda Normalization check ' fcName ' Hz'];
-    [d0, Q0, ~] =   Murat_lsqlinQmean(tCm,tWm,Qc_k,cf_k,D_k,l,time0_k,...
-        rapsp_k);
+    [d0, Q0]    =  Murat_lsqlinQmean(cf_k,l,time0_k,rapsp_k,Qc_k, tCm, te);
     CN_analysis =   Murat_imageCheckCN(time0_k,Q0,d0,Ed_k,CNTitle);
-    p           =  makePath(storeFolder,['CN_analysis_' fcName '_Hz']);
+    p           =   makePath(storeFolder,['CN_analysis_' fcName '_Hz']);
     saveFigureAsImage(p);
     savefig(CN_analysis, [p '.fig']);
     close(CN_analysis);

@@ -15,7 +15,7 @@ function CN_analysis    =   Murat_imageCheckCN(time0_k,Q0,d0,Ed_k,CN_title)
 
 CN_analysis             =   myfig(CN_title);
 
-equationQ               =   -time0_k*Q0(1);
+equationQ               =   -time0_k*Q0(2,1);
 %%
 %Plot of the left and right hand sides of the CN equation.
 subplot(2,1,1)
@@ -27,8 +27,8 @@ xlabel('Travel time (s)','FontSize',10,'FontWeight','bold','Color','k')
 ylabel('Corrected log-energy ratio','FontSize',10,...
     'FontWeight','bold','Color','k')
 title('Corrected log-energy ratio vs travel time');
-legend({'Q^{-1}',cat(2,'<Q> = ',num2str(Q0(1)),'+- ',num2str(Q0(2)))},...
-    'Location','northeast')
+legend({'Q^{-1}',cat(2,'<Q> = ',num2str(Q0(2,1)),'+- ',...
+    num2str(Q0(2,2)))},'Location','northeast')
 
 SetFDefaults()
 %%

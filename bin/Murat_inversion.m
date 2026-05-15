@@ -63,15 +63,16 @@ nFreq               =   lMF(2);
 
 % Preallocate
 modvPD              =   zeros(nxyzc,5,nFreq);
-modvQc              =   zeros(nxyzc,10,nFreq);
-modvQ               =   zeros(nxyzc,10,nFreq);
+modvQc              =   zeros(nxyzc,9,nFreq);
+modvQ               =   zeros(nxyzc,9,nFreq);
 residualQ           =   zeros(1,nFreq);
 residualQc          =   zeros(1,nFreq);
 dValueQc            =   zeros(1,nFreq);
 dValueQ             =   zeros(1,nFreq);
+cConstants          =   zeros(2,nFreq);
 
-% Diffusion constant - Wu 1985
-D                   =   vS./Le_1/3./(1-B0);
+% Diffusion constant - Wu 1985, Wu and Aki, 1988.
+D                   =   vS/3./Le_1./B0;
 
 fc_names    = cell(1,nFreq);
 fld_names   = cell(1,nFreq);
@@ -159,10 +160,33 @@ for k = 1:nFreq
     rapE_k              =   rapE(keepMask,k);
     tCm                 =   tCoda(keepMask,k);
     coordPriorQ         =   modvQ(rcQ_k,1:3,k);
+    te                  =   tCm+tWm;
+
+    cCoda               =   1.5/2/pi/cf_k*log(4*pi*D_k)-...
+                            1/2/pi/cf_k*...
+                            log((te).^(-1.5).*...
+                            exp(-l.^2/4/D_k./te...
+                            -2*pi*cf_k*Qc_k.*te)...
+                            -tCm.^(-1.5).*...
+                            exp(-l.^2/4/D_k./tCm...
+                            -2*pi*cf_k*Qc_k.*tCm));
+
+    [d0, Q0, mDest]     =   Murat_lsqlinQmean(cf_k,l,time0_k,rapE_k,...
+        Qc_k, tCm, te);
+
+    cEst                =   Q0(1,1);
+
+    cConstants(1,k)     =   mean(real(cCoda));
+    cConstants(2,k)     =   cEst;
     
-    [d0, Q0,const_Qc_k] =   Murat_lsqlinQmean(tCm,tWm,Qc_k,cf_k,D_k,l,...
-        time0_k,rapE_k);
+    fprintf('A priori and estimated coda constants are %.4g and %.4g at %g Hz\n',...
+        mean(real(cCoda)), cEst, cf_k);
     
+    fprintf('A priori and estimated diffusion constants are %.4g and %.4g at %g Hz\n',...
+        D_k, mDest, cf_k);
+
+    averageQcodaC       =   Q0;
+    averageD            =   mDest;
     outDirFigure = fullfile(outDirFigureBase, ['L-curve_Q_' fcName '_Hz']);
     
     [sol,fval,exitflag,output,dValueQ_k]  =   Murat_inversionQ(A_k,d0,...
@@ -180,7 +204,7 @@ for k = 1:nFreq
     % --- Qc ---
     if isempty(I)
         I = checkerBoard3D(siz, sizea);
-        [checkInput, spikeInput]    =   Murat_inputTesting(I, spike_o,...
+        [checkInput, spikeInput] =   Murat_inputTesting(I, spike_o,...
             spike_e, x, y, z);
     end
     
@@ -206,11 +230,11 @@ for k = 1:nFreq
     re_checkQ       =   A_k*Q_ch;
     
     % Synthetic energy ratios
-    synthEratio     =   exp(const_Qc_k + 2*pi*cf_k*re_checkQ)*2*pi*cf_k...
+    synthEratio     =   exp(cEst + 2*pi*cf_k*re_checkQ)*2*pi*cf_k...
         ./l.^2;
 
-    [d0c, Q0c, ~]   =   Murat_lsqlinQmean(tCm,tWm,Qc_k,cf_k,D_k,l,...
-        time0_k,synthEratio);
+    [d0c, Q0c, ~]   =   Murat_lsqlinQmean(cf_k,l,time0_k,synthEratio,...
+        Qc_k, tCm, te);
     
     [sol,~,~,~,~]   =   Murat_inversionQ(A_k,d0c,rapE_k,...
         inversionMethod,Q0c,iter,iterStall,coordPriorQ,dValueQ_k,...
@@ -231,11 +255,11 @@ for k = 1:nFreq
         re_spikeQ       =   A_k*Q_sp;
         
         %Synthetic energy ratios
-        synthEratio     =   exp(const_Qc_k + 2*pi*cf_k*re_spikeQ)*...
+        synthEratio     =   exp(cEst + 2*pi*cf_k*re_spikeQ)*...
             2*pi*cf_k./l.^2;
         
-        [d0s, Q0s, ~]   =   Murat_lsqlinQmean(tCm,tWm,Qc_k,cf_k,D_k,l,...
-            time0_k,synthEratio);
+        [d0s, Q0s, ~]   =  Murat_lsqlinQmean(cf_k,l,time0_k,synthEratio,...
+            Qc_k, tCm, te);
         
         [sol,~,~,~,~]   =   Murat_inversionQ(A_k,d0s,rapE_k,...
             inversionMethod,Q0s,iter,iterStall,coordPriorQ,dValueQ_k,...
@@ -255,12 +279,29 @@ for k = 1:nFreq
     dValueQc(k)         =   dValueQc_k;
     dValueQ(k)          =   dValueQ_k;
 
-    writematrix(modv_pd_dd,...
-        fullfile(outDirTXT, ['peakdelay_' fcName '_Degrees_Hz.txt']));
-    writematrix(modv_Qc_dd,...
-        fullfile(outDirTXT, ['Qc_' fcName '_Degrees_Hz.txt']));
-    writematrix(modv_Q_dd,...
-        fullfile(outDirTXT, ['Q_' fcName '_Degrees_Hz.txt']));
+    headerPD            =   {'Lat','Lon','Depth','ΔlogPD', 'HitC'};
+    C                   =   [headerPD; num2cell(modv_pd_dd)];
+    fname               =...
+        fullfile(outDirTXT, ['peakdelay_' fcName '_Hz.txt']);
+    writecell(C, fname, 'Delimiter', '\t', 'Encoding', 'UTF-8');
+    
+    headerQc            =...
+        {'Lat','Lon','Depth','Qc', 'HitC','Check In','Check Out',...
+        'Spike In','Spike Out'};
+  C                   =   [headerQc; num2cell(modv_Qc_dd)];
+    fname               =...
+        fullfile(outDirTXT, ['Qc_' fcName '_Hz.txt']);
+    writecell(C, fname, 'Delimiter', '\t', 'Encoding', 'UTF-8');
+   
+    
+    headerQ            =...
+        {'Lat','Lon','Depth','Q', 'HitC','Check In','Check Out',...
+        'Spike In','Spike Out'};
+    C                   =   [headerQ; num2cell(modv_Q_dd)];
+    fname               =...
+        fullfile(outDirTXT, ['Q_' fcName '_Hz.txt']);
+    writecell(C, fname, 'Delimiter', '\t', 'Encoding', 'UTF-8');
+    
 end
 
 % Save back to Murat
@@ -279,5 +320,7 @@ Murat.Q.dampingValueQ       =   dValueQ;
 Murat.Q.modvQ               =   modvQ;
 Murat.Q.outputSolverQ       =   outputSolverQ;
 Murat.Q.exitFlagSolverQ     =   exitFlagSolverQ;
-
+Murat.Q.codaConstants       =   cConstants;
+Murat.Q.averageQ            =   averageQcodaC;
+Murat.Q.estimatedDiffusion  =   averageD;
 end

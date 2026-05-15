@@ -26,12 +26,10 @@ Murat.input.STime                   =	[];
 %[text] ![](text:image:0b92)
 %[text] Then choose the coherent phase you are analyzing - P-(**2**) or S-(**3**). In our case it is P- as we have no S-wave picking:
 Murat.input.POrS                    =	2;
-%[text] You need to set the central frequencies (Hz) and envelope smoothing time (s) according to your spectrograms and waveform data. General practice is to vary it across your spectra (see [De Siena et al. 2016, EPSL](https://www.sciencedirect.com/science/article/abs/pii/S0012821X16300437)) for absorption and scattering mapping or focus on a given frequency ([De Siena et al. 2014, JGR](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1002/2014JB011372)) for direct-wave attenuation imaging. Here, they cover the interval \[3-18\] Hz. If not specified, a default value of 1.0 s is used for smoothing.
+%[text] You need to set the central frequencies (Hz) and envelope smoothing time (s) according to your spectrograms and waveform data. General practice is to vary it across your spectra (see [De Siena et al. 2016, EPSL](https://www.sciencedirect.com/science/article/abs/pii/S0012821X16300437)) for absorption and scattering mapping or focus on a given frequency ([De Siena et al. 2014, JGR](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1002/2014JB011372)) for direct-wave attenuation imaging. Here, they cover the interval \[3-18\] Hz.
 Murat.input.centralFrequency        =	[3 6 12 18];
-
-% Envelope smoothing time (in seconds) used in Murat_envelope.m.
-% If not specified, a default value of 1.0 s is used.
-Murat.input.envelopeSmoothTime = 1;
+%[text] Envelope smoothing time to improve fit with equation. If not specified, a default value of 1.0 s is used.
+Murat.input.envelopeSmoothTime      =   1;
 %[text] You can work with 1 vertical or horizontal (*1*), 2 horizontal (*2*) or three components(*3*). If using more than one component, the order *MUST BE: WE, SN, Vertical or SN, WE,* Vertical. In this example we work with the vertical component only:
 Murat.input.components              =	1;
 %[text] Finally, you can opt to decluster your data events. The code will divide the inversion grid by the following factor and select the best earthquake located in the block among all others. Set it to empty if you want to opt out (**\[\]**).
@@ -63,7 +61,7 @@ Murat.input.lapseTimeMethod         =   'Constant';
 %[text] If the chosen method is **Constant**, set the start of the window in seconds after the origin time. If it is **Peak**, set it to **\[\]**. If it is **Travel** select *Murat.input.startLapseTime* as the moltiplicative factor of the phase you are using (e.g., **2** or **3**). Avoid this method if you do not know the S-wave time.
 Murat.input.startLapseTime          =   15;
 %[text] Finally set the length of the coda window in seconds. The true lapse time at which we calculate the kernels is half of the window. The window is also used (after normalizing for its length) in the coda normalization method.
-Murat.input.codaWindow              =   15;
+Murat.input.codaWindow              =   10;
 %[text] Set maximum travel time if you want to exclude traces beyond a certain value, else put \[Inf\].
 Murat.input.mintravel               =   0.2;
 Murat.input.maxtravel               =   13;
