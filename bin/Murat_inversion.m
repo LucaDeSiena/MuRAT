@@ -271,22 +271,19 @@ for k = 1:nFreq
 
     % --- Save outputs for this frequency ---
     modv_pd_dd          =   modvPD(:,:,k);
-    modv_pd_dd(:,1:3)   =   DDcoordinates;
     modv_Qc_dd          =   modvQc(:,:,k);
-    modv_Qc_dd(:,1:3)   =   DDcoordinates;
     modv_Q_dd           =   modvQ(:,:,k);
-    modv_Q_dd(:,1:3)    =   DDcoordinates;
     dValueQc(k)         =   dValueQc_k;
     dValueQ(k)          =   dValueQ_k;
 
-    headerPD            =   {'Lat','Lon','Depth','ΔlogPD', 'HitC'};
+    headerPD            =   {'Lon','Lat','Depth','ΔlogPD', 'HitC'};
     C                   =   [headerPD; num2cell(modv_pd_dd)];
     fname               =...
         fullfile(outDirTXT, ['peakdelay_' fcName '_Hz.txt']);
     writecell(C, fname, 'Delimiter', '\t', 'Encoding', 'UTF-8');
     
     headerQc            =...
-        {'Lat','Lon','Depth','Qc', 'HitC','Check In','Check Out',...
+        {'Lon','Lat','Depth','Qc', 'HitC','Check In','Check Out',...
         'Spike In','Spike Out'};
     C                   =   [headerQc; num2cell(modv_Qc_dd)];
     fname               =...
@@ -295,7 +292,7 @@ for k = 1:nFreq
    
     
     headerQ             =...
-        {'Lat','Lon','Depth','Q', 'HitC','Check In','Check Out',...
+        {'Lon','Lat','Depth','Q', 'HitC','Check In','Check Out',...
         'Spike In','Spike Out'};
     C                   =   [headerQ; num2cell(modv_Q_dd)];
     fname               =...
