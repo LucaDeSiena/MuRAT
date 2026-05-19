@@ -41,10 +41,10 @@ end
 
 if smoothValue~=0
     %Variance for models to square of 1/10 of the mean inverse Qc value
-    sigmaM      =   Qmean;
-    CovM        =   Murat_smoothing(coordPrior,smoothValue,sigmaM);
+    sigmaM  =   Qmean;
+    CovM    =   Murat_smoothing(coordPrior,smoothValue,sigmaM);
 else
-    CovM        =   0;
+    CovM    =   0;
 end
 
 
@@ -82,41 +82,41 @@ switch inversionMethod
     
     case 'Particle'
         if PlotI == 1
-        options = optimoptions(@particleswarm,maxStall,...
+        options     =   optimoptions(@particleswarm,maxStall,...
             iterStall,maxIt,iter,'PlotFcn','pswplotbestf');
         else
-        options = optimoptions(@particleswarm,maxStall,...
+        options     =   optimoptions(@particleswarm,maxStall,...
             iterStall,maxIt,iter);
         
         end
-        [sol,fval,exitflag,output]  = solve(probQ,x0Q,'Solver',...
+        [sol,fval,exitflag,output]  =   solve(probQ,x0Q,'Solver',...
             'particleswarm','Options',options);
-        fval                            =   fval/obj0;
+        fval                        =   fval/obj0;
         
     case 'Annealing'
         if PlotI == 1
-        options = optimoptions(@simulannealbnd,maxStall,...
+        options     =   optimoptions(@simulannealbnd,maxStall,...
             iterStall,maxIt,iter,'PlotFcns',...
           {@saplotbestx,@saplotbestf,@saplotx,@saplotf});
         else
-        options = optimoptions(@simulannealbnd,maxStall,...
+        options     =   optimoptions(@simulannealbnd,maxStall,...
             iterStall,maxIt,iter);
         
         end
-        [sol,fval,exitflag,output] = solve(probQ,x0Q,"Solver",...
+        [sol,fval,exitflag,output]  =   solve(probQ,x0Q,"Solver",...
             "simulannealbnd",'Options',options);
-        fval                            =   fval/obj0;
+        fval                        =   fval/obj0;
 
     case 'Global'
         if PlotI == 1
         options = optimoptions(@ga,'PlotFcn','gaplotbestf');
-        [sol,fval,exitflag,output] = solve(probQ, "Solver",...
+        [sol,fval,exitflag,output]  =   solve(probQ, "Solver",...
             "ga",'Options',options);
         else
-        [sol,fval,exitflag,output] = solve(probQ, "Solver","ga");
+        [sol,fval,exitflag,output]  =   solve(probQ, "Solver","ga");
         
         end
-        fval                            =   fval/obj0;
+        fval                        =   fval/obj0;
 
     otherwise
         error('Unknown inversion method.')

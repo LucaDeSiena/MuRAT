@@ -74,19 +74,21 @@ cConstants          =   zeros(2,nFreq);
 % Diffusion constant - Wu 1985, Wu and Aki, 1988.
 D                   =   vS/3./Le_1./B0;
 
-fc_names    = cell(1,nFreq);
-fld_names   = cell(1,nFreq);
-outDirFigureBase    = fullfile(FPath,FLabel,'Tests','LCurve');
+fc_names            =   cell(1,nFreq);
+fld_names           =   cell(1,nFreq);
+outDirFigureBase    =   fullfile(FPath,FLabel,'Tests','LCurve');
 for k = 1:nFreq
-    cf_k    = cf(k);
-    fc_names{k}     = strrep(num2str(cf_k),'.','_');
-    tmp     = sprintf('Hz%g', cf_k);
-    fld_names{k}    = strrep(tmp,'.','_');
+    cf_k            =   cf(k);
+    fc_names{k}     =   strrep(num2str(cf_k),'.','_');
+    tmp             =   sprintf('Hz%g', cf_k);
+    fld_names{k}    =   strrep(tmp,'.','_');
 end
 
 % reuse buffers to avoid reallocations
-siz     = [nxc nyc nzc];
-I   =   []; checkInput    =     []; spikeInput    =     [];
+siz                 =   [nxc nyc nzc];
+I                   =   [];
+checkInput          =   [];
+spikeInput          =   [];
 
 % Precompute coordinate block once and reuse
 coords_block = modvP(:,1:3);
@@ -115,7 +117,7 @@ for k = 1:nFreq
     fld = fld_names{k};
     outDirFigure = fullfile(outDirFigureBase,['L-curve_Qc_' fcName '_Hz']);
 
-    % --- Peak delay standard regionalization ---
+    % --- Peak delay regionalization ---
     rcpd_k          =   rayCrossesPD(:,k);
     rtpd_k          =   retainPD(:,k);
     Apd_k           =	Apd_i(rtpd_k,rcpd_k);
@@ -214,7 +216,7 @@ for k = 1:nFreq
     modvQc(checkInput==0,6,k)  =   max(Qm_k_all);
     modvQc(:,8,k)              =   mean(Qm_k_all);
     if ~isempty(spikeInput)
-        modvQc(spikeInput,8,k) = spike_v;
+        modvQc(spikeInput,8,k) =   spike_v;
     end
     
     Qc_ch           =   modvQc(rcQc_k,6,k);
@@ -230,8 +232,7 @@ for k = 1:nFreq
     re_checkQ       =   A_k*Q_ch;
     
     % Synthetic energy ratios
-    synthEratio     =   exp(cEst + 2*pi*cf_k*re_checkQ)*2*pi*cf_k...
-        ./l.^2;
+    synthEratio     =   exp(2*pi*cf_k*(cEst + re_checkQ))./l.^2;
 
     [d0c, Q0c, ~]   =   Murat_lsqlinQmean(cf_k,l,time0_k,synthEratio,...
         Qc_k, tCm, te);
@@ -249,14 +250,13 @@ for k = 1:nFreq
         [sol,~,~,~,~]   =   Murat_inversionQc(Ac_k,re_spikeQc,...
             inversionMethod,iter,iterStall,RZZ_k,coordPriorQc,...
         dValueQc_k,sValueQc_k,plotI,outDirFigure);
-        modvQc(rcQc_k,9,k) =   sol.Qc;
+        modvQc(rcQc_k,9,k)  =   sol.Qc;
         
         Q_sp            =   modvQ(rcQ_k,8,k);
         re_spikeQ       =   A_k*Q_sp;
         
         %Synthetic energy ratios
-        synthEratio     =   exp(cEst + 2*pi*cf_k*re_spikeQ)*...
-            2*pi*cf_k./l.^2;
+        synthEratio     =   exp(2*pi*cf_k*(cEst + re_spikeQ))./l.^2;
         
         [d0s, Q0s, ~]   =  Murat_lsqlinQmean(cf_k,l,time0_k,synthEratio,...
             Qc_k, tCm, te);
@@ -288,13 +288,13 @@ for k = 1:nFreq
     headerQc            =...
         {'Lat','Lon','Depth','Qc', 'HitC','Check In','Check Out',...
         'Spike In','Spike Out'};
-  C                   =   [headerQc; num2cell(modv_Qc_dd)];
+    C                   =   [headerQc; num2cell(modv_Qc_dd)];
     fname               =...
         fullfile(outDirTXT, ['Qc_' fcName '_Hz.txt']);
     writecell(C, fname, 'Delimiter', '\t', 'Encoding', 'UTF-8');
    
     
-    headerQ            =...
+    headerQ             =...
         {'Lat','Lon','Depth','Q', 'HitC','Check In','Check Out',...
         'Spike In','Spike Out'};
     C                   =   [headerQ; num2cell(modv_Q_dd)];

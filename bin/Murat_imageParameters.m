@@ -19,9 +19,9 @@ function [image,parCond,para_map]    = ...
 
 para_map        =   Murat_unfoldXYZ(x,y,z);
 condition       =   abs(modv_pd_k(:,4))>10^(-10);
-parCond  =   para_map(condition,:);
-pdCond    =   modv_pd_k(condition,4);
-QcCond    =   modv_Qc_k(condition,4);
+parCond         =   para_map(condition,:);
+pdCond          =   modv_pd_k(condition,4);
+QcCond          =   modv_Qc_k(condition,4);
 
 pdd             =   fitdist(pdCond,'ExtremeValue');
 
@@ -31,13 +31,12 @@ mipdm           =   min(pdCond);
 mapdm           =   max(pdCond);
 
 Qcd             =   fitdist(QcCond,'GeneralizedExtremeValue');
-QcCond    =   QcCond - Qcd.mu;
+QcCond          =   QcCond - Qcd.mu;
 treQc           =   0.15*Qcd.sigma;
 miQcm           =   min(QcCond);
 maQcm           =   max(QcCond);
 
-image           =...
-    myfig('Parameter space separation');
+image           =   myfig('Parameter space separation');
 
 % Precompute masks (each logical vector computed once)
 m1      =   QcCond < -treQc & pdCond < -trepd;

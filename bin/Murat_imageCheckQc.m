@@ -1,7 +1,7 @@
 function Qc_analysis    =   Murat_imageCheckQc(Qm_k,RZZ_k,...
     residualQc_k,luntot_Qc,Ac,sizeTitle,Qc_title)
-% function Qc_analysis        =   Murat_imageCheckQc(Qm_k,RZZ_k,...
-%     residualQc_k,luntot_Qc,Ac,sizeTitle,Qc_title,QcM)
+% function Qc_analysis  =   Murat_imageCheckQc(Qm_k,RZZ_k,...
+%     residualQc_k,luntot_Qc,Ac,sizeTitle,Qc_title)
 %
 % PLOTS the Qc checks
 %

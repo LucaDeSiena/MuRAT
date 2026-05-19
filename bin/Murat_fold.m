@@ -1,5 +1,5 @@
-function [X,Y,Z,VMesh]          =   Murat_fold(x,y,z,v)
-% function [X,Y,Z,VMesh]          =   Murat_fold(x,y,z,v)
+function [X,Y,Z,VMesh]      =   Murat_fold(x,y,z,v)
+% function [X,Y,Z,VMesh]    =   Murat_fold(x,y,z,v)
 %
 % MESHGRID 3D for many fields used by MuRAT, including meshgrid switch
 %
@@ -15,21 +15,21 @@ function [X,Y,Z,VMesh]          =   Murat_fold(x,y,z,v)
 %    Z:         3D z matrix in meshgrid format
 %    VMesh:     3D field matrix in meshgrid format
 
-x = x(:).';
-y = y(:).';
-z = z(:).';
+x       =   x(:).';
+y       =   y(:).';
+z       =   z(:).';
 
-lx                          =   numel(x);
-ly                          =   numel(y);
-lz                          =   numel(z);
+lx      =   numel(x);
+ly      =   numel(y);
+lz      =   numel(z);
 
-[X,Y,Z]                     =   meshgrid(x,y,z);
+[X,Y,Z] =   meshgrid(x,y,z);
 
 % Ensure the field vector v is provided; if not, initialize VMesh to empty
 if nargin < 4
-    VMesh = [];
+    VMesh   =   [];
 else
-    VMesh = permute(reshape(v, [lz, ly, lx]), [2,3,1]);
+    VMesh   =   permute(reshape(v, [lz, ly, lx]), [2,3,1]);
 end
 end
 

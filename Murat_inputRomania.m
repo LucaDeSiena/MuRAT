@@ -24,7 +24,7 @@ Murat.input.STime                   =	't0';
 %[text] **SAChdr** is a structure that contains all the fields you saved in the SAC haeder. In this example the P-wave picking has been stored inside variable *a.* You always find these variables in the *times* subfield:
 %[text] ![](text:image:5d6d)
 %[text] ![](text:image:5657)
-%[text] Then choose the coherent phase you are analyzing - P-(**2**) or S-(**3**). In our case it is P- as we have no S-wave picking.
+%[text] Then choose the coherent phase you are analyzing - P-(**2**) or S-(**3**). In our case we have an  S-wave picking.
 Murat.input.POrS                    =	3;
 %[text] You need to set the central frequencies (Hz) and envelope smoothing time (s) according to your spectrograms and waveform data. General practice is to vary it across your spectra (see [De Siena et al. 2016, EPSL](https://www.sciencedirect.com/science/article/abs/pii/S0012821X16300437)) for absorption and scattering mapping or focus on a given frequency ([De Siena et al. 2014, JGR](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1002/2014JB011372)) for direct-wave attenuation imaging. Here, they cover the interval \[3-18\] Hz. If not specified, a default value of 1.0 s is used for smoothing.
 Murat.input.centralFrequency        =	[3 6 12 18];
@@ -89,7 +89,7 @@ Murat.input.gridLong                =   9;
 Murat.input.gridZ                   =   6;
 %[text] You will see all of your figures on three sections cutting the models WE (degrees), SN (degrees), and horizontally (meters or km) at:
 Murat.input.sections                =	[45.5 26.7 -7000];
-%[text] With this version of the code you are always using an underlying velocity model: the 3D is either unavailable (***0***) or a vailable (***1***) velocity model.  For the 1D case MuRAT provides you *iasp91.txt*, the standard [IASPEI velocity model](https://academic.oup.com/gji/article/105/2/429/705789) and the more accurate [Lithos model](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/2013JB010626), and expands any of them to a false 3D. However, a standard crustal model is generally available everywhere on the Earth, so use that, but change it to the same format as the file provided: first column is depth, second is distance from the centre of the Earth, then third and fourth are P- and S-wave velocity. Store the file in the folder **velocity\_models**. In Romania, we use *iasp91*:
+%[text] With this version of the code you are always using an underlying velocity model: the 3D is either unavailable (***0***) or a vailable (***1***) velocity model.  For the 1D case MuRAT provides you *iasp91.txt*, the standard [IASPEI velocity model](https://academic.oup.com/gji/article/105/2/429/705789) and the more accurate [Lithos model](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/2013JB010626), and expands any of them to a false 3D. However, a standard crustal model is generally available everywhere on the Earth, so use that, but change it to the same format as the file provided: first column is depth, second is distance from the centre of the Earth, then third and fourth are P- and S-wave velocity. Store the file in the folder **velocity\_models**. In Romania, we use *Lithos01*:
 %[text] ![Screenshot 2021-10-24 at 15.36.05.png](text:image:8f86)
 %[text] %[text:anchor:H_43D6D438] So we set:
 Murat.input.availableVelocity       =	0;

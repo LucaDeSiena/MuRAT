@@ -16,14 +16,14 @@ function rays   =   Murat_imageRays(rma,origin,ending,evestaz,x,y,z,name)
 % Output parameters:
 %    rays:              image produced
 
-rays        =   myfig(name);
+rays            =   myfig(name);
 
 load coastlines coastlat coastlon
-z1          =   sort(z)/1000;
-lrma        =   length(rma(1,1,:));
-evestaz_ray =   zeros(lrma,6);
+z1              =   sort(z)/1000;
+lrma            =   length(rma(1,1,:));
+evestaz_ray     =   zeros(lrma,6);
 
-wgs84       =   wgs84Ellipsoid("m");
+wgs84           =   wgs84Ellipsoid("m");
 
 subplot(2,2,1)
 
@@ -33,7 +33,7 @@ for i = 1:lrma
     
     d           =   sqrt(ray(:,1).^2 + ray(:,2).^2);
     az          =   atan(ray(:,1)./ray(:,2))*360/2/pi;
-    az(isnan(az))=   0;
+    az(isnan(az)) =   0;
     [lat2,lon2] =   reckon(origin(1),origin(2),d,az,wgs84);
 
     subplot(2,2,1)

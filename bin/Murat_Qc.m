@@ -18,16 +18,16 @@ function [inverseQc_i, uncertaintyQc_i] =   Murat_Qc(cf,...
 %    inverseQc_i:       inverse coda attenuation factor
 %    uncertaintyQc_i:   uncertainty on inverse coda attenuation factor
 
-lcf                     =   numel(cf);
-inverseQc_i             =   zeros(lcf,1);
-uncertaintyQc_i         =   zeros(lcf,1);
-srate_i                 =   round(srate_i);
-si                      =   1/srate_i;
+lcf                 =   numel(cf);
+inverseQc_i         =   zeros(lcf,1);
+uncertaintyQc_i     =   zeros(lcf,1);
+srate_i             =   round(srate_i);
+si                  =   1/srate_i;
 
 for i = 1:lcf
-    envelopeC           =   sp_i(cursorCodaStart_i:cursorCodaEnd_i,i);
-    lEnvelopeC          =   numel(envelopeC);
-    cf_i                =   cf(i);
+    envelopeC       =   sp_i(cursorCodaStart_i:cursorCodaEnd_i,i);
+    lEnvelopeC      =   numel(envelopeC);
+    cf_i            =   cf(i);
 
     switch QcMeasurement
 
@@ -46,10 +46,9 @@ for i = 1:lcf
             R               =   corrcoef([lapseTime,logWEnergy]);
 
             if p(1)<0
-                inverseQc_i(i)      =   -p(1);
+                inverseQc_i(i)  =   -p(1);
                 RZZ_k       =   abs(R(1,2));
                 w           =   1 ./ RZZ_k;
-                %w           = (w - min(w(:))) ./ (max(w(:)) - min(w(:)));
                 uncertaintyQc_i(i)  =   w;
                 
             else
@@ -115,8 +114,8 @@ for i = 1:lcf
 end
 
 % force zero uncertainty where inverseQc is zero
-uncertaintyQc_i(inverseQc_i <= 0)       =     0;
-inverseQc_i(uncertaintyQc_i<0)          =    0;
+uncertaintyQc_i(inverseQc_i <= 0)   =   0;
+inverseQc_i(uncertaintyQc_i<0)      =   0;
 
 end
 

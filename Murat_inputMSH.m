@@ -13,7 +13,7 @@ Murat.input.dataDirectory           =   'sac_MSH';
 Murat.input.label                   =   'MSH';
 %[text] ![](text:image:4e51)
 %[text] In MuRAT3D you can choose between a sequential or parallelized forward loop. In the parallelized case, just set a number of workers (cores). In this example, we are working with the parallelized code and a computer with 8 cores. For a sequential run, set *Murat.input.workers* as empty (**\[\]**).
-Murat.input.workers                 =   [];
+Murat.input.workers                 =   8;
 %%
 %[text] %[text:anchor:H_5E594BA2] ## WAVEFORM DATA
 %[text] Set all the variables required by data processing. This includes data choises, as setting the name of the variables in SAC and all the attributes that are needed for the three kinds of imaging. The routines for loading the files have been mostly created by [Zhigang Peng ](http://geophysics.eas.gatech.edu/people/zpeng/)and co-workers and downloaded from their [Introduction to SAC](http://geophysics.eas.gatech.edu/people/zpeng/Teaching/Sac_Tutorial_2006/) webpage.

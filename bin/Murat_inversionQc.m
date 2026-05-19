@@ -83,34 +83,34 @@ switch inversionMethod
                 iterStall,maxIt,iter,'PlotFcn','pswplotbestf');
 
         else
-            options = optimoptions(@particleswarm,maxStall,...
+            options     =   optimoptions(@particleswarm,maxStall,...
                 iterStall,maxIt,iter);
 
         end
-        [sol,fval,eflag,output]  = solve(prob,x0,'Solver',...
+        [sol,fval,eflag,output]  =  solve(prob,x0,'Solver',...
             'particleswarm','Options',options);
 
 
     case 'Annealing'
         if PlotI == 1
-            options = optimoptions(@simulannealbnd,maxStall,...
+            options     =   optimoptions(@simulannealbnd,maxStall,...
                 iterStall,maxIt,iter,'PlotFcns',...
                 {@saplotbestx,@saplotbestf,@saplotx,@saplotf});
         else
-            options = optimoptions(@simulannealbnd,maxStall,...
+            options     =   optimoptions(@simulannealbnd,maxStall,...
                 iterStall,maxIt,iter);
 
         end
-        [sol,fval,eflag,output] = solve(prob,x0,"Solver",...
+        [sol,fval,eflag,output] =   solve(prob,x0,"Solver",...
             "simulannealbnd",'Options',options);
 
     case 'Global'
         if PlotI == 1
-            options = optimoptions(@ga,'PlotFcn','gaplotbestf');
+            options     =   optimoptions(@ga,'PlotFcn','gaplotbestf');
             [sol,fval,eflag,output] = solve(prob, "Solver",...
                 "ga",'Options',options);
         else
-            [sol,fval,~,output] = solve(prob, "Solver","ga");
+            [sol,fval,~,output] =   solve(prob, "Solver","ga");
 
         end
 

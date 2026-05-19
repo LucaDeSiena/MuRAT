@@ -25,7 +25,7 @@ if ~isempty(spike_o)
                     r(:,2)>spike_o(1) & r(:,2)<spike_e(1) &...
                     r(:,3)<spike_o(3) & r(:,3)>spike_e(3);
 else
-    spikeInput = [];
+    spikeInput  =   [];
 end
 
 end

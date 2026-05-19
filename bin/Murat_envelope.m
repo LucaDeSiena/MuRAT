@@ -17,21 +17,21 @@ function [tempis, sp_i] = Murat_envelope(cf, listSac_i, envelopeSmoothTime)
 %%% to preserve the original behavior.
 
 if nargin < 3 || isempty(envelopeSmoothTime)
-    envelopeSmoothTime = 1.0;
+    envelopeSmoothTime  =   1.0;
 end
 
-lcf = length(cf);
+lcf     =   length(cf);
 
 [tempis, sisma, SAChdr_i] = fget_sac(listSac_i);
-srate_i = 1 / SAChdr_i.times.delta;
+srate_i =   1/SAChdr_i.times.delta;
 
-sisma = detrend(sisma,1);
-lsis  = length(sisma);
+sisma   =   detrend(sisma,1);
+lsis    =   length(sisma);
 
-tu     = tukeywin(lsis, 0.05);
-tsisma = tu .* sisma;
+tu      =   tukeywin(lsis, 0.05);
+tsisma  =   tu .* sisma;
 
-sp_i = zeros(lsis, lcf);
+sp_i    =   zeros(lsis, lcf);
 
 %%% MODIFICATION:
 %%% Improved validation of the sampling rate.
@@ -48,34 +48,35 @@ winSamples = max(1, round(envelopeSmoothTime * srate_i));
 for i = 1:lcf
 
     % Create the bandpass filter for the current frequency
-    Wn = [cf(i)-cf(i)/3, cf(i)+cf(i)/3] / srate_i * 2;
+    Wn  =   [cf(i)-cf(i)/3, cf(i)+cf(i)/3] / srate_i * 2;
 
     %%% MODIFICATION:
     %%% Ensure a valid frequency band to avoid butter filter errors.
     if Wn(1) <= 0
-        Wn(1) = 0.001;
+        Wn(1)   =   0.001;
     end
     if Wn(2) >= 1
-        Wn(2) = 0.999;
+        Wn(2)   =   0.999;
     end
     if Wn(2) <= Wn(1)
-        warning('Skipping frequency %.2f Hz for %s: invalid bandpass.', cf(i), listSac_i);
+        warning('Skipping frequency %.2f Hz for %s: invalid bandpass.',...
+            cf(i), listSac_i);
         continue
     end
 
-    [z,p,k] = butter(4, Wn, 'bandpass');
-    [sos,g] = zp2sos(z,p,k);
+    [z,p,k]     =   butter(4, Wn, 'bandpass');
+    [sos,g]     =   zp2sos(z,p,k);
 
-    fsisma = filtfilt(sos, g, tsisma);
+    fsisma      =   filtfilt(sos, g, tsisma);
 
     %%% MODIFICATION:
     %%% Previously, MuRAT used round(srate_i), corresponding
     %%% to an approximately 1-second smoothing window.
     %%% The window length is now controlled by the input parameter.
-    [sp, ~] = envelope(fsisma, winSamples, 'rms');
+    [sp, ~]     =   envelope(fsisma, winSamples, 'rms');
 
     % Compute energy as squared envelope
-    sp_i(:,i) = sp.^2;
+    sp_i(:,i)   =   sp.^2;
 end
 
 end

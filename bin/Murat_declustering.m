@@ -10,13 +10,13 @@ function indKeep =  Murat_declustering(origin,ending,x,y,z,QcM,uncertainty,locat
 %    factor:               input factor used to divide the original grid
 
 % create smaller grid to cluster events
-lat_step        =	length(y)*factor;
-lon_step        =   length(x)*factor;
-z_step          =   length(z)*factor;
+lat_step    =	length(y)*factor;
+lon_step    =   length(x)*factor;
+z_step      =   length(z)*factor;
 
-lat_grid        =   linspace(origin(2),ending(2),lat_step);
-lon_grid        =   linspace(origin(1),ending(1),lon_step);
-z_grid          =   -linspace(origin(3),ending(3),z_step);
+lat_grid    =   linspace(origin(2),ending(2),lat_step);
+lon_grid    =   linspace(origin(1),ending(1),lon_step);
+z_grid      =   -linspace(origin(3),ending(3),z_step);
 
 % decimate locationsDeg to one entry per event - station pair
 locationsDeg    =   unique(locationsDeg,'rows','stable');
@@ -30,7 +30,7 @@ for i = 1:lon_step-1
         
         for k = 1:z_step-1
             % find all events within one grid cell
-            find_evs        =   find(locationsDeg(:,1)>lon_grid(i) & ...
+            find_evs    =   find(locationsDeg(:,1)>lon_grid(i) & ...
                 locationsDeg(:,1)<lon_grid(i+1) & ...
                 locationsDeg(:,2)>lat_grid(j) &...
                 locationsDeg(:,2)<lat_grid(j+1) & ...
@@ -47,12 +47,12 @@ for i = 1:lon_step-1
                 else
                     events(:,7) =   1./uncertainty(find_evs);
                 end
-                events(:,8) =	find_evs;
+                events(:,8)     =	find_evs;
                 % check if stations are double, if so, only keep
                 % event/station pair with lowest uncertainty on Qc
-                d         =   sortrows(events, [4 7]);
-                [~, ia, ~]=   unique(d(:,4),'rows','last');
-                to_keep   =   d(ia,:);
+                d               =   sortrows(events, [4 7]);
+                [~, ia, ~]      =   unique(d(:,4),'rows','last');
+                to_keep         =   d(ia,:);
                 new_locationsDeg=   [new_locationsDeg;to_keep]; %#ok<AGROW>
             end
         end

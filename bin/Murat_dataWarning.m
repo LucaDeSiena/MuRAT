@@ -32,7 +32,7 @@ function  [problempd,problemQc,problemRZZ,problemQ,yes_pd,compMissing,...
 %    flag:              flag to discriminate one-component from three
 
 % sizes
-[nRows, nCols]      = size(Qm);
+[nRows, nCols]      =   size(Qm);
 
 % logical masks
 yes_pd              =   (peakd > miPD) & (peakd < maPD);
@@ -40,10 +40,10 @@ no_pd               =   ~yes_pd;
 no_Qc               =   (Qm == 0);
 
 if isequal(QcM,'Linearized')
-    no_RZZ              =   (RZZ <= fT);
+    no_RZZ          =   (RZZ <= fT);
 
 elseif isequal(QcM,'NonLinear')
-    no_RZZ              =   (RZZ >= fT);
+    no_RZZ          =   (RZZ >= fT);
 
 end
 
@@ -92,10 +92,10 @@ if comp == 1 && flag ~= 2
 
 else
     % compute means once
-    meanQc  = mean(pctNoQc);
-    meanRZZ = mean(pctNoRZZ);
-    meanPD  = mean(pctNoPD);
-    meanQ   = mean(pctNoQ);
+    meanQc          =   mean(pctNoQc);
+    meanRZZ         =   mean(pctNoRZZ);
+    meanPD          =   mean(pctNoPD);
+    meanQ           =   mean(pctNoQ);
 
     switch flag
         case 0
@@ -105,9 +105,9 @@ else
             fprintf('[%g] %% of ratios are below threshold\n', meanQ);
 
             if isnumeric(comp)
-                ncompStr = num2str(comp);
+                ncompStr    =   num2str(comp);
             else
-                ncompStr = comp;
+                ncompStr    =   comp;
             end
             fprintf('Processing to see how many data you have when considering %s components\n', ncompStr);
             flag = 1;
