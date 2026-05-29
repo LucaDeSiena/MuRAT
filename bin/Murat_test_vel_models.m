@@ -82,7 +82,7 @@ title('Equally-spaced velocity model')
 
 subplot(2,2,4)
 set(gca,'zdir','rev')
-slice(Xq,Yq,Zq,modvP,sliceY,sliceX,sliceZ)
+slice(Xq,Yq,Zq,modvP,sliceX,sliceY,sliceZ)
 colormap(color)
 view(0,90)
 hcb         =   colorbar;

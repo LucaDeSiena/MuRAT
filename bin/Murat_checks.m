@@ -160,7 +160,7 @@ elseif availableVelocity ==  1
     modvOriginal        =   load(velocityModel);
 
     [modvP,pvel,modvEqS,modvPlo]=   Murat_modv3D(FPath,FLabel,...
-        modvOriginal,origin,mLat,mLon,nLat,nLong,nzc);
+        modvOriginal,origin,ending,mLat,mLon,nLat,nLong,nzc);
     
     gridPropagation.x   =   unique(modvP(:,1));
     gridPropagation.y   =   unique(modvP(:,2));

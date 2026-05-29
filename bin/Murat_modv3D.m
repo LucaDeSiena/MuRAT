@@ -1,5 +1,5 @@
 function [modvProp,modvP,modvEqSpace,modvPlot] =...
-    Murat_modv3D(FPath,FLabel,modvOriginal,origin,mLat,mLon,nLat,nLon,nzc)
+    Murat_modv3D(FPath,FLabel,modvOriginal,origin,ending,mLat,mLon,nLat,nLon,nzc)
 % function [modvP,modvPropagation,modvEqS,modvPlot]	=...
 %     Murat_modv3D(FPath,FLabel,modvOriginal,origin,mLat,mLon,nLat,nLon)
 % CREATES the velocity models when using a 3D as input
@@ -8,6 +8,7 @@ function [modvProp,modvP,modvEqSpace,modvPlot] =...
 %    FPath,FLabel:          Paths to save test velocity figure
 %    modvOriginal:          original 3D velocity model
 %    origin:                origin of the spatial grid
+%    ending:                ending of the spatial grid
 %    mLat:                  min/max latitudes of earthquakes
 %    mLon:                  min/max longitudes of earthquakes
 %    nLat:                  number nodes latitude
@@ -30,6 +31,12 @@ wgs84           =   wgs84Ellipsoid("m");
 [d_ll,az_ll]    =   distance(origin(1),origin(2),mLat',mLon',wgs84);
 mLatLon         =   [d_ll.*sin(az_ll*2*pi/360) d_ll.*cos(az_ll*2*pi/360)];
 
+% Transform the user-defined inversion-grid ending point in meters.
+[d_end,az_end]  =   distance(origin(1),origin(2),...
+    ending(1),ending(2),wgs84);
+endingXY        =   [d_end.*sin(az_end*2*pi/360)...
+    d_end.*cos(az_end*2*pi/360)];
+
 %% Original velocity model in meters - uneven spacing
 modvOrC         =   sortrows([d_o.*sin(az_o*2*pi/360)...
     d_o.*cos(az_o*2*pi/360) modvOriginal(:,3:4)],[1,2,-3]);
@@ -40,15 +47,14 @@ vOrC            =   modvOrC(:,4);
 
 
 %% Velocity model for ray tracing - inversion
-% For ray-tracing, you need to space evenly with the same number of
-% x-y nodes as in input - here we extend to min and max quake locations
-lModvP          =   [min(mLatLon(1,1),min(xOrC))...
-    max(mLatLon(2,1),max(xOrC)); min(mLatLon(1,2),min(yOrC))...
-    max(mLatLon(2,2),max(yOrC))];
+% For ray-tracing, use the same user-defined horizontal and vertical
+% inversion domain as the 1D workflow.
+lModvP          =   [min(0,endingXY(1)) max(0,endingXY(1));...
+    min(0,endingXY(2)) max(0,endingXY(2))];
 
 xM1             =   linspace(lModvP(1,1),lModvP(1,2),nLon)';
 yM1             =   linspace(lModvP(2,1),lModvP(2,2),nLat)';
-zM1             =   sort(linspace(min(zOrC),max(zOrC),nzc),'descend');
+zM1             =   sort(linspace(origin(3),ending(3),nzc),'descend');
 
 
 [XEqS,YEqS,ZEqS,modvEqSpace,modvEqS] =...
@@ -59,7 +65,7 @@ d               =   sqrt(modvEqSpace(:,1).^2 + modvEqSpace(:,2).^2);
 az              =   atan(modvEqSpace(:,1)./modvEqSpace(:,2))*360/2/pi;
 
 % Condition to avoid NaN
-if ~isempty(isnan(az))
+if any(isnan(az))
     d(isnan(az)) = 1;
     az(isnan(az))= 45;
 end
