@@ -50,6 +50,10 @@ sTitle          =   18;
 lMF             =   size(rayChPD);
 sections(3)     =   sections(3)/1000;
 
+folderfiles = 'matfiles'; % Folder used to store interpolated and original models in .mat format
+folderfilespath =   fullfile(FLabel,folderfiles);
+mkdir(folderfilespath)
+
 %% PLOTS - coverage and sensitivity
 evst            =  [evstDegrees(:,1:2) -evstDegrees(:,3)/1000 ...
     evstDegrees(:,4:5) evstDegrees(:,6)/1000];
@@ -204,6 +208,11 @@ for k = 1:lMF(2)
     % interpolated for the parameter map
     interp_modv_pd_k=   Murat_unfold(Xi,Yi,Zi,pd_inter);
 
+    FName_int             =   ['/PD_inter_' fcName '_Hz.mat'];
+    FName_not_int      =    ['/PD_not_inter_' fcName '_Hz.mat'];
+    save(strcat(folderfilespath,FName_int),'Xi','Yi','Zi','pd_inter')
+    save(strcat(folderfilespath,FName_not_int),'X','Y','Z','mPDRed')
+
     % Qc results
     storeFolder     =   fullfile('Results','Qc');
     FName_QcMap     =   ['Qc-3D_' fcName '_Hz'];
@@ -217,6 +226,11 @@ for k = 1:lMF(2)
     % interpolated for the parameter map
     interp_modvQc_k =   Murat_unfold(Xi,Yi,Zi,qc_inter);
 
+    FName_int             =   ['/Qc_inter_' fcName '_Hz.mat'];
+    FName_not_int      =    ['/Qc_not_inter_' fcName '_Hz.mat'];
+    save(strcat(folderfilespath,FName_int),'Xi','Yi','Zi','qc_inter')
+    save(strcat(folderfilespath,FName_not_int),'X','Y','Z','mQc')
+
     %%
     % Q results
     storeFolder     =   fullfile('Results','Q');
@@ -226,7 +240,10 @@ for k = 1:lMF(2)
     title('Total attenuation variations','FontSize',sTitle,...
         'FontWeight','bold','Color','k');
     Murat_saveFigures(Qmap, makePath(storeFolder, FName_QMap));
-    
+
+    FName_Q             =   ['/Q_' fcName '_Hz.mat'];
+    save(strcat(folderfilespath,FName_Q),'X','Y','Z','mQ')
+
     end
 
     %CHECKERBOARDS and HIT MAPS
@@ -237,7 +254,7 @@ for k = 1:lMF(2)
     storeFolder =   fullfile('Checkerboard','PD');
     FName_PDC   =   ['PD-HitMap_' fcName '_Hz'];
     rPD         =   modv_pd_k(:,5);
-    Murat_hitmap(CoordGrid,rPD,makePath(storeFolder, FName_PDC));
+    Murat_hitmap(CoordGrid,rPD,sections, evst_pd, makePath(storeFolder, FName_PDC));
 
     storeFolder =   fullfile('Checkerboard','Qc');
         

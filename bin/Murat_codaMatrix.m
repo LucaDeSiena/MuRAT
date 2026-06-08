@@ -52,7 +52,8 @@ if any(isnan(mKE(:))) || all(mKE(:) == 0)
 end
 
 mK                  =   mKE-mKS;
-    
+mK                  =   fixKernel(mK,K_grid_end,r_grid_end,x,y,z);
+
 % Kernel in its grid space
 if flag == 1
     % The next figure checks the sensitivity of coda attenuation

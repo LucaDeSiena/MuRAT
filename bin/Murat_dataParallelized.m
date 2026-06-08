@@ -1,4 +1,4 @@
-function Murat      =   Murat_data(Murat)
+function Murat      =   Murat_dataParallelized(Murat)
 % MEASURES Qc, peak-delay and Q for each seismic trace located in a folder.
 
 % Refactored input unpacking and preallocation
