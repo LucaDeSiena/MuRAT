@@ -95,11 +95,11 @@ end
 
 %pre-define 3D matrix in space
 AQc_i               =   reshape(permute(mK, [3 1 2]), [], 1);
-posMask             =   AQc_i > 0;
-if any(posMask)
-    minPos          =   min(AQc_i(posMask));
-    AQc_i(AQc_i < 0)=   minPos;
-end
+% posMask             =   AQc_i > 0;
+% if any(posMask)
+%     minPos          =   min(AQc_i(posMask));
+%     AQc_i(AQc_i < 0)=   minPos;
+% end
 
 % Residual from cutting the grid (it is always < 1%).
 AQc_i               =   AQc_i/sum(AQc_i);
