@@ -18,7 +18,7 @@ xlabel('Longitude (°)');
 ylabel('Latitude (°)');
 zlabel('Altitude (km)');
 cH                      =   colorbar;
-ylabel(cH, 'Differential Sensitivity');
+ylabel(cH, 'Sensitivity');
 set(cH,'FontSize',18);
 grid on
 ax                      =   gca;

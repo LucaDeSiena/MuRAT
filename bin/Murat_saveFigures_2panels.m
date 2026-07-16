@@ -1,13 +1,13 @@
 function  Murat_saveFigures_2panels(figureName,Path)
-% function  Murat_plotSections(figure,Path)
-% PLOTS sections of the desired model
+% function  Murat_saveFigures_2panels(figureName,Path)
+% PLOTS sections of the desired model in two panels
 %
 %	Input Parameters:
 %       figureName:             Matlab 3D plot
 %       Path:                   name of sections (png) and figure (fig)
 %
 %   Output:
-%       Three sections and 1 3D figure with 2 panels
+%       3D figure with 2 panels
 %
 SetFDefaults
 fig = figureName;

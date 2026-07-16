@@ -87,10 +87,10 @@ if flag == 1
     
     subplot(1,2,1)
     Murat_imageKernels(Xk1,Yk1,ZkS/1000,KStart,inferno,sections1)
-    
+    title('Starting sensitivity kernel in full space')
     subplot(1,2,2)
     Murat_imageKernels(XEqS,YEqS,ZEqS,mEqSpace,inferno,sections1)
-
+    title('Differential sensitivity kernel in inversion space')
     Murat_saveFigures_2panels(kernels,pathFolder);
 end
 
