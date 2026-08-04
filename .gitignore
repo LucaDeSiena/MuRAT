@@ -1,130 +1,64 @@
+# macOS
 .DS_Store
-sac_MSH/.DS_Store
-Utilities_Matlab/.DS_Store
 
-# MATLAB / Simulink ---------------------------------------------------------
-# Temporary files and backups
-*~ 
+# MATLAB/Simulink temporary, backup, and user files
 *.asv
-*.bak
-*.tmp
 *.autosave
+*~
+*.bak
+*.mat
+*.fig
+*.mltbx
+*.mlsettings
+.matlab/
+.history
 
-# MATLAB specific
-*.mlappinstall
-*.mlappinstallinfo
-*.mltbx            # MATLAB toolbox archive (optionally track if you want)
-*.mltbxmanifest
-*.mldatx           # Simulink data dictionary (if you want to ignore local copies)
-*.mlpkginstall
-*.prj              # generic project files (ignore if you keep projects in repo)
-*.mlproj
-matlab.prf         # MATLAB preferences
-*.mlpkg
-*.mlapp            # App Designer saved files (keep or ignore depending on policy)
+# MATLAB build / generated code / caches
+slprj/
+codegen/
+rtw/
+build/
+*_ert_rtw/
+*/.slx-cache/
+*.slxc
+*.slxautosave
 
-# Compiled and binary artifacts
+# Compiled / binary / object files
 *.mex*
-*.mexa64
-*.mexmaci64
-*.mexw64
-*.mexw32
-*.p                # protected code
 *.dll
 *.so
 *.dylib
-*.exe
 *.o
 *.obj
+*.pdb
 
-# Simulink generated & build files
-slprj/
-*_grt_rtw/
-*_ert_rtw/
-*_slprj/
-*.slxc
-*.slxp
-build/
-CodeGenReport/
-rtwtypes.h
-rtw_*.c
-rtw_*.h
+# Large data directories (keep out of repo)
+sac_MSH/
+sac_Romania/
+sac_Toba/
 
-# Simulink coverage and test artifacts
-coverage/
-coverage_*.xml
-modelCoverageReport/
-slcovreport/
+# Binaries, archives, generated distributions
+bin/
+*.zip
+*.tar
+*.tar.gz
+*.tgz
 
-# Auto-generated files (Simulink Designer/Requirements)
-requirements/
-reqs/
-TraceabilityReports/
-*.reqs
-
-# Test results and logs
-TestResults/
-tests_results/
-*.tap
-*.trx
-*.junit.xml
+# Logs, test results, coverage
 *.log
-*.out
+TestResults/
+coverage/
 
-# Documentation build artifacts
-docs/_build/
-doc/build/
-html/
-*.pdf
-*.chm
-
-# MATLAB toolbox packaging / installation artifacts
-*.mltbx
-*.mlappinstall
-
-# Editor / IDE
+# IDE / editor
 .vscode/
-.idea/
 *.sublime-workspace
 *.sublime-project
+*.swp
 
-# OS files
-.DS_Store
-Thumbs.db
-desktop.ini
+# Git metadata / lock files
+.gitattributes.lock
 
-# Python interop (if used)
+# Python cache (if any)
 __pycache__/
 *.pyc
-*.pyo
-env/
-venv/
-.venv/
 
-# Node / web tooling (if used in docs)
-node_modules/
-dist/
-build/
-
-# Containers / CI
-*.tgz
-*.tar.gz
-
-# MATLAB Online specific
-.matlab_history
-.matlab_crash_dump_*
-
-# Optional: user-specific MATLAB files
-history.m
-preferences.mat
-
-# Optional: large data files (enable if you don't want data in repo)
-# data/
-# datasets/
-# *.mat
-
-# Keep Git from trying to track generated files from builds
-# (uncomment and adapt if you build artifacts locally)
-# /bin/
-# /lib/
-# /build/

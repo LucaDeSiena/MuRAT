@@ -3,22 +3,26 @@ MuRAT - Multi-Resolution seismic Attenuation Tomography
 
 ![MuRAT is a code for attenuation, scattering and absorption tomography.](./img/muratlogo.jpg)
 
-[![test](https://github.com/deconvolution/MuRAT/actions/workflows/run_test.yml/badge.svg?branch=with_test)](https://github.com/deconvolution/MuRAT/actions/workflows/run_test.yml)
+[![test](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml/badge.svg)](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml)
+[![GitHub releases](https://img.shields.io/github/release/LucaDeSiena/MuRAT/all.svg)](https://github.com/LucaDeSiena/MuRAT/releases)
+[![DOI](https://zenodo.org/badge/64924529.svg)](https://doi.org/10.5281/zenodo.13996751)
+[![License](https://img.shields.io/badge/license-EUPL%201.1-blue.svg)](LICENSE)
+[![MATLAB](https://img.shields.io/badge/MATLAB-R2025b%2B-orange)](https://www.mathworks.com/products/matlab.html)
 
-MuRAT is a Matlab Package for seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves at multiple frequencies.
+MuRAT4.0 is a Matlab Package for seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves at multiple frequencies.
 
 MuRAT measures seismic attenuation, scattering, and absorption from passive and active data and models 3D variations of these parameters in space.
 
 The group of active users (providing questions, feedback, and snippets of code) is the [Volcano Earth Imaging group](https://www.lucadesiena.com).
 
-The last release of the code is:
+If you are looking for MuRAT3.0, the last stable release can be found at:
 
-Luca De Siena, mreissuf, Yi Zhang, GeoSeisUtilities, Aqeel Abbas, WMZ, Cheng Qingyang, Ferdinando Napolitano, & SimonaGabrielli. (2024). LucaDeSiena/MuRAT: 3.24.10.26 (v3.24.10.26). Zenodo. https://doi.org/10.5281/zenodo.13996752
+Luca De Siena, mreissuf, Yi Zhang, Donato Talone, Aqeel Abbas, WMZ, Cheng Qingyang, Ferdinando Napolitano, & SimonaGabrielli. (2026). LucaDeSiena/MuRAT: Legacy MuRAT3.0 Code (v3.26.01.20). Zenodo. <https://doi.org/10.5281/zenodo.18314469>
 
 *Documentation*
 -------------
 
-The file Documentation.pdf in this folder serves as complete documentation for MuRAT3.0. This README file and the *Input_.mlx* files in this folder act as additional documentation.
+The file Documentation.pdf in this folder serves as complete documentation for MuRAT4.0. This README file and the *Input_.mlx* files in this folder act as additional documentation.
 
 The Wiki for MuRAT is under construction, but you can already check a bit of the history of the code.
 
@@ -27,7 +31,7 @@ We recorded a Video Tutorial! Just go to the [Volcano Earth Imaging group page](
 *System*
 ------------
 
-The program works on Mac, Linux and Windows systems with Matlab version R2017a or higher.
+The program works on Mac, Linux and Windows systems with Matlab version R2025b or higher.
 
 Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing and Mapping. The Parallel Computing Toolbox is recommended for speed.
 
@@ -35,10 +39,9 @@ Custom toolboxes not included in standard Matlab installations are also provided
 
 1. Routines to read SAC files created by Zhigang Peng and available from [his SAC tutorial page](http://geophysics.eas.gatech.edu/classes/SAC/).
 2. The [Regularization Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/52-regtools?s_tid=prof_contriblnk) was created by Per Christian Hansen and available from Matlab File Exchange.
-3. The [IRTools](https://github.com/jnagy1/IRtools/tree/ebd70d4036c3cd8c82fc1e17033351491fddf11f), included in MuRAT as a zipped folder.
-4. Functions from the [Geometry and Image-Based Bioengineering add-On for MATLAB](https://github.com/gibbonCode/GIBBON).
+3. Functions from the [Geometry and Image-Based Bioengineering add-On for MATLAB](https://github.com/gibbonCode/GIBBON).
 
-Three sample datasets (Mount St. Helens, Romania, and Toba) are included and allow the user to obtain sample models. The datasets work with the three corresponding *input.mlx* files that show examples of what the user can get with the code.
+Three sample datasets (Mount St. Helens, Romania, and Toba) are included and allow the user to obtain sample models. The datasets work with the three corresponding *input.m* files that show examples of what the user can get with the code.
 
 *Instructions in a nutshell*
 ------------
@@ -49,26 +52,24 @@ The current version works following these steps:
 
 2. Work in the downloaded folder after moving it to an appropriate location on your system.
 
-3. Check that the IRTools have been downloaded as a zipped folder in the corresponding folder in the working directory. Otherwise, download them from <https://github.com/jnagy1/IRtools/tree/ebd70d4036c3cd8c82fc1e17033351491fddf11f>.
+3. Open one of the three input .mlx files, providing a step-by-step explanation of all inputs (*Murat_inputMSH.m*, *Murat_inputRomania.m*, or *Murat_inputToba.m*) and create your own.
 
-4. Open one of the three input .mlx files, providing a step-by-step explanation of all inputs (*Murat_inputMSH.mlx*, *Murat_inputRomania.mlx*, or *Murat_inputToba.mlx*) and create your own.
+4. Use a velocity model, storing it in the corresponding folder. The format is [Latitude, Longitude, Altitude (meters)]. If haven't one, you can use either iasp91 or Lithos, included in the package.
 
-5. Use a velocity model, storing it in the corresponding folder. The format is [Latitude, Longitude, Altitude (meters)]
-
-6. MuRAT works with [SAC files](https://ds.iris.edu/files/sac-manual/) that must be stored in a single folder and corrected for the instrument function. The files must have populated headers. Your SAC headers get tested anyway; the result is shown in an Excel file. The code takes from the header the following fields:
+5. MuRAT works with [SAC files](https://ds.iris.edu/files/sac-manual/) that must be stored in a single folder and corrected for the instrument function. The files must have populated headers. Your SAC headers get tested anyway; the result is shown in an Excel file. The code takes from the header the following fields:
 ***a)*** The P-wave picking in the reference time of the waveform (in seconds);
 ***b)*** The coordinates of the event in degrees - beware, *the earthquake depth must be in kilometers*;
 ***c)*** The coordinates of the station - beware, *the station elevation must be in meters*;
 ***d)*** The origin time of the event (optional) in seconds.
 
-7. Run MuRAT3 and select the name of the input file desired.
+6. Run MuRAT4 and select the name of the input file desired.
 
 *Workflow*
 --------
 
 A. ***Start from the Murat_input..mlx files***
 
-The input files are self-explanatory and provide detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model, use *MuRAT_InputMSH.mlx* otherwise start from either *MuRAT_InputRomania.mlx* or *MuRAT_InputToba.mlx*, the examples for 3-component data.
+The input files are self-explanatory and provide detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model, use *MuRAT_InputMSH.m* otherwise start from either *MuRAT_InputRomania.m* or *MuRAT_InputToba.m*, the examples for 3-component data.
 
 B. ***Read the Documentation***
 
@@ -84,7 +85,7 @@ Beware, *.fig* figures are created with the invisible option in Matlab. There ar
 
 (1) Use the function *openfig(..,'visible')* to open them from the command window.
 
-(2) Click twice on the figure file and write *shg* in the command window.
+(2) Click twice on the figure file and type *shg* in the command window.
 
 All the figures are stored in subdirectories in the **Label** folder, created in the working directory:
 
@@ -119,11 +120,9 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
 ------------
 
-* ***RaysKernels directory***
+* ***Rays and Kernels directory***
 
 ------------
-
-*Clustering.tif*: This figure shows all rays used on the map (black, discarded) with those after declustering (red). 
 
 *Rays__.tif*: These figures show how rays develop in 3D for the Peak Delay and Q measurements. It plots them on three slices (WE, SN, Z). The fourth panel shows the location of the area on the Earth.
 
@@ -151,6 +150,8 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
 *Qc__.tif* and *Qc__.fig*: Coda attenuation maps in 3D (*.fig*) and across sections (*.tif*).
 
+*Qc_analysis__*: Relationship between coda attenuation and frequency.
+
   ------------
 
 * ***Spike directory***
@@ -170,13 +171,13 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
 ------------
 
+*Clustering.tif*: This figure shows all rays used on the map (black, discarded) against those after declustering (red).
+
 *Qc_Analysis__.tif*, *PD_Analysis__.tif*, and *CN_Analysis__.tif*
 
 Three figures to evaluate the appropriate peak-delay and coda inputs. Read the documentation for further clarifications.
 
-*L_curve__.fig*: L-curves and cost functions (depending on the inversion method) for the Qc and Q inversions necessary to set the damping parameters. The user can ask for a prompt or set the damping parameters.
-
-*Qc_analysis__*: Relationship between coda attenuation and frequency.
+*L_curve__.fig*: L-curves for the Qc and Q inversions necessary to set the damping parameters. The user can ask for a prompt or set the damping parameters. They only appear when using a Tikhonov inversion.
 
 *Velocity_model.fig*: The 3D velocity model is also available as a figure in Matlab format. They can be loaded in Matlab and show the vertical and horizontal slices defined in *Figures Sections*.
 
@@ -185,9 +186,9 @@ Three figures to evaluate the appropriate peak-delay and coda inputs. Read the d
 *Citing MuRAT*
 ------------
 
-The last release of the code is:
+Please cite the last stable release of the code in your data and software open-access statement:
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13996752.svg)](https://doi.org/10.5281/zenodo.13996752)
+[![GitHub releases](https://img.shields.io/github/release/LucaDeSiena/MuRAT/all.svg)](https://github.com/LucaDeSiena/MuRAT/releases)
 
 If you use MuRAT for your research and publications, please consider mentioning the GitHub internet site and citing the following papers, depending on the techniques you are going to use
 
@@ -197,7 +198,7 @@ If you use MuRAT for your research and publications, please consider mentioning 
 
 2. De Siena, L., G. Chiodini, G. Vilardo, E. Del Pezzo, M. Castellano, S. Colombelli, N. Tisato, and G. Ventura, 2017. Source and dynamics of a volcanic caldera unrest: Campi Flegrei, 1983–84. Scientific reports: Nature Journals 7, 8099. - *Recent implementation of the Coda Normalization method with correction for coda attenuation variations*
 
-3. Sketsiou P., L. De Siena, S. Gabrielli, F. Napolitano, 2021. 3-D attenuation image of fluid storage and tectonic interactions across the Pollino fault network. Geophysical Journal International, 226(1), 536-547. - *Most recent application of Q imaging with MuRAT*
+3. Feng, Y., Ai, Y., De Siena, L., He, Y., Jiang, M., Mon, C. T., et al. (2026). Seismic attenuation tomography in Central Myanmar and its implications on continental subduction and arc magmatism. Journal of Geophysical Research: Solid Earth, 131, e2025JB032147. - *Most recent application of Q imaging to lithospheric scale*
 
 **Qc and Peak Delay (Absorption and scattering)**:
 
@@ -211,19 +212,14 @@ unrest. Geophysical Research Letters, 44.4 pp. 1740-1748. - *First implementatio
 
 4. Sketsiou P., F. Napolitano, A. Zenonos, L. De Siena, (2020). New insights into seismic absorption imaging. Physics of the Earth and Planetary Interiors, 298, 106337. - *Comprehensive review of the method and future outlooks*
 
+5. Napolitano, F., De Siena, L., Amoroso, O., Ágústsdóttir, T., Benediktsdóttir, Á., Palo, M., et al. (2025). Scattering and absorption imaging of the Hengill high-temperature geothermal area, southwest Iceland. Journal of Geophysical Research: Solid Earth, 130, e2024JB030731. - *Most recent application*
+
 *Disclaimer*
 ------------
 
 Although we have cross-checked the whole code, we cannot warranty it is exempt from bugs. The package is provided as-is; we will neither be held responsible for any use you make of it nor for the results and conclusions you may derive using MuRAT.
 
-*Licence*
-------------
-
-MuRAT is released under EUPL v1.1
-
 *Funding*
 ------------
 
-Some developments of this software package were funded by the Deutsche Forshungsgemeinshaft under grant number SI
-1748/4-1.
-
+Some developments of this software package were funded by the Deutsche Forshungsgemeinshaft under grant number SI 1748/4-1.
