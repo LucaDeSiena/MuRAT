@@ -38,7 +38,7 @@ z                   =   sort(unique(modvQc(:,3)),'descend');
 mKS                 =   interp3(XkS,YkS,ZkS,KStart,X,Y,Z);
 mKE                 =   interp3(XkE,YkE,ZkE,KEnd,X,Y,Z);
 
-% Replace NaNs and zeros with a tiny positive floor; if entire grid empty,
+% Replace NaNs with a tiny positive floor; if entire grid empty,
 % create a single-point kernel at the nearest grid node to the max original
 tiny = realmin;            % machine smallest positive
 fixKernel           =   @(m, K_grid, r_grid, xg, yg, zg) ...
@@ -51,7 +51,7 @@ if any(isnan(mKE(:))) || all(mKE(:) == 0)
     mKE             =   fixKernel(mKE,K_grid_end,r_grid_end,x,y,z);
 end
 
-mK                  =   mKE-mKS;
+mK                  =   -(mKE-mKS);
 mK                  =   fixKernel(mK,K_grid_end,r_grid_end,x,y,z);
 
 % Kernel in its grid space
@@ -110,8 +110,8 @@ end
 function m = fixKernelLocal(m, K_grid, r_grid, xg, yg, zg, tiny)
     % set NaNs and zeros to tiny
     m(isnan(m))     =   tiny;
-    m(m == 0)       =   tiny;
-
+    m(m<0)          =   0;
+    
     % if still effectively empty (all tiny), place a single 1 at nearest node
     if ~any(m > tiny)
         modGrid     =   Murat_unfoldXYZ(xg, yg, zg);   % N x 3

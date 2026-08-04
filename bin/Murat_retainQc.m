@@ -14,8 +14,8 @@ function  retain_Qm_i    =  Murat_retainQc(fT,Qm_i,RZZ_i,QcM)
 %    retain_Qm_i:       keeps tab on which waveforms are kept for imaging
 
 if isequal(QcM,'Linearized')
-    retainQmTemp    =   Qm_i>0 & RZZ_i>fT;
-    retain_Qm_i     =   Qm_i>0 & RZZ_i>fT &...
+    retainQmTemp    =   Qm_i>0 & RZZ_i<1/fT;
+    retain_Qm_i     =   Qm_i>0 & RZZ_i<1/fT &...
         Qm_i < mean(Qm_i(retainQmTemp))+2*std(Qm_i(retainQmTemp));
 
 elseif isequal(QcM,'NonLinear')
