@@ -17,40 +17,15 @@ function DD_coord               =   Murat_DDcoordinates(origin,ending,nLat,nLong
 %    order
 
 %% 
-% Calculating increments
-lat_incr                        =   (ending(1)-origin(1))/(nLat-1);
-lon_incr                        =   (ending(2)-origin(2))/(nLong-1);
-dep_incr                        =   (ending(3)-origin(3))/(nzc-1);
-% Creating vectors for x,y,z
-xLong                           =   zeros(nLong,1);
-yLat                            =   zeros(nLat,1);
-zDep                            =   zeros(nzc,1);
-lon=origin(2);
-for i=1:nLong
-    xLong(i)                    =   lon;
-    lon                         =   lon+lon_incr;
-end
+% coordinate vectors
+yLat        = linspace(origin(1), ending(1), nLat);   % latitude (j)
+xLong       = linspace(origin(2), ending(2), nLong);  % longitude (i)
+zDep        = linspace(origin(3), ending(3), nzc);    % depth (k)
 
-lat                             =   origin(1);
-for i=1:nLat
-    yLat(i)                     =   lat;
-    lat                         =   lat+lat_incr;
-end
+% produce grids with same indexing as original nested loops:
+[X, Y, Z]   = ndgrid(xLong, yLat, zDep);
 
-dep                             =   origin(3);
-for i=1:nzc
-    zDep(i)                     =   dep;
-    dep                         =   dep+dep_incr;
-end
 % Generating matrix of coordinates
-DD_coord                        =   zeros(nLong*nLat*nzc,3);
-index                           =   0;
-for i=1:nLong
-    for j=1:nLat
-        for k=1:nzc
-            index               =   index+1;                
-            DD_coord(index,1:3) =   [xLong(i) yLat(j) zDep(k)];
-        end
-    end
-end
+DD_coord    = [X(:), Y(:), Z(:)];
+
 end

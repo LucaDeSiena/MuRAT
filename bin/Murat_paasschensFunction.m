@@ -26,7 +26,7 @@ function [t0,A0,N,coda,t]   =   Murat_paasschensFunction(r,v,B0,Le_1,dt,T)
 %    r:         distance to source
 %    v:         velocity
 %    B0:        albedo
-%    Le_1:      extinction length 
+%    Le_1:      inverse extinction length 
 %    dt:        time resolution
 %    T:         final time of interest
 %
@@ -40,28 +40,36 @@ function [t0,A0,N,coda,t]   =   Murat_paasschensFunction(r,v,B0,Le_1,dt,T)
 % Authors: De La Torre & Del Pezzo, used first in Del Pezzo et al. 2018,
 % Geosciences.
 
-t0                          =   r/v;
-t                           =   (t0:dt:(T+2*dt))';
-N                           =   length(t);
+t0          =   r/v;
+t           =   (t0:dt:(T+2*dt))';
+N           =   numel(t);
 
-A0                          =   exp(-Le_1*v*t0)./(4*pi*r.^2*v);
+A0          =   exp(-Le_1*v*t0)./(4*pi*r.^2*v);
 
-f1                          =   (1-t0.*t0./(t.*t)).^(1/8);
-f2                          =   (3*B0*Le_1./(4*pi*v*t)).^(3/2);
-f3                          =   exp(-Le_1*v*t);
-x                           =   v*t*B0*Le_1.*(1-t0.*t0./(t.*t)).^(3/4);
-f4                          =   F_function(x);
-coda                        =   f1.*f2.*f3.*f4;
-coda(1)                     =   coda(2)*2/3;
+% Precompute recurring terms
+t_inv       =   1 ./ t;
+t2          =   t .* t;
+t0_over_t   =   t0 .* t0 ./ t2;
+one_minus   =   1 - t0_over_t;
+one_minus(one_minus < 0) = 0;
 
-return;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+f1          =   one_minus .^ (1/8);
+const_f2    =   (3 * B0 .* Le_1) / (4 * pi * v);
 
-function F                  =   F_function(x)
-cond                        =   x>1e-30;
-F                           =   zeros(size(x));
-y                           =   x(cond);
-F(cond)                     =   exp(y).*sqrt(1+2.026./(y+1e-30));
+f2          =   (const_f2 .* t_inv) .^ (3/2);
 
-return;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+f3          =   exp(-Le_1*v.*t);
+
+f1_pow      =   one_minus .^ (3/4);
+x           =   v*t.*B0.*Le_1.*f1_pow;
+
+% Inline F_function: F = exp(x) .* sqrt(1 + 2.026 ./ x) for x > tiny
+F           =   zeros(size(x));
+cond        =   x > 1e-30;
+y           =   x(cond);
+F(cond)     =   exp(y) .* sqrt(1 + 2.026 ./ y);
+
+coda        =   f1.*f2.*f3.*F;
+coda(1)     =   coda(2)*2/3;
+
+end

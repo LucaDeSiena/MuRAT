@@ -1,6 +1,6 @@
-function peakDelay_i        =...
+function peakDelay_i    =...
     Murat_peakDelay(sp_i,cursorPick_i,srate_i,cursorPeakDelay_i)
-% function peakDelay_i            =...
+% function peakDelay_i  =...
 %     Murat_peakDelay(sp_i,cursorPick_i,srate_i,cursorPeakDelay_i)
 %
 % CALCULATES peak delay time
@@ -14,16 +14,14 @@ function peakDelay_i        =...
 % Output parameters:
 %    peakDelay_i:       peak delay on trace
 
-lsp                         =   size(sp_i,2);
-peakDelay_i                 =   zeros(lsp,1);
+% Extract the windowed matrix: rows from pick to peakDelay, all columns
+window      =   sp_i(cursorPick_i:cursorPeakDelay_i, :);
 
-for i = 1:lsp
-    pdsp                    =   sp_i(cursorPick_i:cursorPeakDelay_i,i);
+% Find index of max within each column (relative to window start)
+[~, idx]    =   max(window, [], 1);
 
-    [~,timeMaxAmplitude]    =	max(pdsp);
-
-    peakDelay_i(i)          =   timeMaxAmplitude/srate_i;
-end
+% Convert to seconds and return as column vector
+peakDelay_i =   (idx.' ) / srate_i;
 
 end
 

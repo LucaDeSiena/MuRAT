@@ -1,4 +1,4 @@
-function pd_analysis        =   Murat_imageCheckPeakDelay(time0PD,...
+function pd_analysis    =   Murat_imageCheckPeakDelay(time0PD,...
     fitrobust_k,peakData_k,sizeTitle,pd_title)
 % function pd_analysis        =   Murat_imageCheckPeakDelay(rtpdk,...
 %     time0,fitrobust,peakData_k,sizeTitle,pd_title)
@@ -15,24 +15,22 @@ function pd_analysis        =   Murat_imageCheckPeakDelay(time0PD,...
 % Output parameters:
 %    pd_analysis:    figure for peak delay check
 
-pd_analysis                 =   figure('Name',pd_title,...
-    'NumberTitle','off','Position',[20,400,1200,1000],'visible','off');
+pd_analysis     =   myfig(pd_title);
 
-log10Time                   =   log10(time0PD);
-fitrobust_i                 =...
-    fitrobust_k(1)*log10Time + fitrobust_k(2);
+log10Time       =   log10(time0PD);
+fitrobust_i     =   fitrobust_k(1)*log10Time + fitrobust_k(2);
 
 plot(log10Time,fitrobust_i,'r-',log10Time,log10(peakData_k),'ko')
 
-xti                         =   xticks;
-xt                          =   cell(length(xti),1);
+xti             =   xticks;
+xt              =   cell(length(xti),1);
 for i = 1:length(xti)
-    xt(i,1)                 =   {10^xti(i)};
+    xt(i,1)     =   {10^xti(i)};
 end
-yti                         =   yticks;
-yt                          =   cell(length(yti),1);
+yti             =   yticks;
+yt              =   cell(length(yti),1);
 for i = 1:length(yticks)
-    yt(i,1)                 =   {10^yti(i)};
+    yt(i,1)     =   {10^yti(i)};
 end
 %%
 % After removing outliers, it shows the best fit parameters for the

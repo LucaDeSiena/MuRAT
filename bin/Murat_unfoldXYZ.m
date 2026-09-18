@@ -1,5 +1,5 @@
-function r                  =   Murat_unfoldXYZ(x,y,z)
-% function r                  =   Murat_unfold(x,y,z)
+function r      =   Murat_unfoldXYZ(x,y,z)
+% function r    =   Murat_unfold(x,y,z)
 %
 % ACCEPTS vertical vectors and unfolds them in standard format
 %
@@ -11,31 +11,24 @@ function r                  =   Murat_unfoldXYZ(x,y,z)
 % Output parameters:
 %    r:         3D field in Murat format
 
-lx                          =   length(x);
-ly                          =   length(y);
-lz                          =   length(z);
-lxyz                        =   lx*ly*lz;
+x       =   x(:);
+y       =   y(:);
+z       =   z(:);
 
-r                           =   zeros(lxyz,3);
+lx      =   numel(x);
+ly      =   numel(y);
+lz      =   numel(z);
 
-index                       =   1;
-for i = 1:lx
-    index1                  =   index+ly*lz-1;
-    gx                      =   repmat(x(i),ly*lz,1);
-    r(index:index1,1)       =   gx;
-    index                   =   index1+1;
+% x: repeat each x for ly*lz entries
+xcol    =   repelem(x, ly * lz);
+
+% y: repeat each y for lz entries, then tile for lx blocks
+yblock  =   repelem(y, lz);
+ycol    =   repmat(yblock, lx, 1);
+
+% z: tile z for each x-y pair
+zcol    =   repmat(z, lx * ly, 1);
+
+r       =   [xcol, ycol, zcol];
+
 end
-
-index                       =   1;
-ry                          =   zeros(ly*lz,1);
-for i = 1:ly
-    index1                  =   index+lz-1;
-    gy                      =   repmat(y(i),lz,1);
-    ry(index:index1,1)      =   gy;
-    index                   =   index1+1;
-end
-
-r(:,2)                      =   repmat(ry,lx,1);
-r(:,3)                      =   repmat(z,lx*ly,1);
-end
-    

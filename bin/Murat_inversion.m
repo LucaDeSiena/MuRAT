@@ -1,258 +1,323 @@
 %% Peak-delay, Qc and Q TOMOGRAPHIC INVERSIONS
-function Murat                      =   Murat_inversion(Murat)
-%%
+function Murat                  =   Murat_inversion(Murat)
 % Importing all the necessary inputs and data for plotting
-FLabel                              =   Murat.input.label;
-outputLCurve                        =   Murat.input.lCurve;
-tWm                                 =   Murat.input.codaWindow;
-cf                                  =   Murat.input.centralFrequency;
-sped                                =   Murat.input.spectralDecay;
-sizea                               =   Murat.input.sizeCheck;
-latt                                =   Murat.input.lowCheck;
-hatt                                =   Murat.input.highCheck;
-modvP                               =   Murat.input.modvPlot;
-spike_o                             =   Murat.input.spikeLocationOrigin;
-spike_e                             =   Murat.input.spikeLocationEnd;
-spike_v                             =   Murat.input.spikeValue;
-x                                   =   Murat.input.x;
-y                                   =   Murat.input.y;
-z                                   =   Murat.input.z;
-nxc                                 =   length(x);
-nyc                                 =   length(y);
-nzc                                 =   length(z);
-nxyzc                               =   nxc*nyc*nzc;
-QcM                                 =   Murat.input.QcMeasurement;
-inversionMethod                     =   Murat.input.inversionMethod;
-lCurveQc                            =   Murat.input.lCurveQc;
-lCurveQ                             =   Murat.input.lCurveQ;
-muratHeader                         =   Murat.input.header;
 
-Apd_i                               =   Murat.PD.inversionMatrixPeakDelay;
-Ac_i                                =   Murat.Qc.inversionMatrixQc;
-A_i                                 =   Murat.Q.inversionMatrixQ;
-luntot                              =   Murat.rays.totalLengthRay;
-time0                               =   Murat.rays.travelTime;
-Qm                                  =   Murat.Qc.inverseQc;
-RZZ                                 =   Murat.Qc.uncertaintyQc;
-lpdelta                             =   Murat.PD.variationPeakDelay;
-rapsp                               =   Murat.Q.energyRatioBodyCoda;
-retain_pd                           =   Murat.PD.retainPeakDelay;
-retain_Qc                           =   Murat.Qc.retainQc;
-retain_Q                            =   Murat.Q.retainQ;
-ray_crosses_pd                      =   Murat.PD.raysPeakDelay;
-ray_crosses_Qc                      =   Murat.Qc.raysQc;
-ray_crosses_Q                       =   Murat.Q.raysQ;
-tCoda                               =   Murat.Qc.tCoda;
-FPath                               =   './';
+s                   =   Murat.input;  % local shorthand
 
-lMF                                 =   size(ray_crosses_pd);
-modv_pd                             =   zeros(nxyzc,5,lMF(2));
-modv_Qc                             =   zeros(nxyzc,10,lMF(2));
-modv_Q                              =   zeros(nxyzc,10,lMF(2));
-const_Qc                            =   zeros(size(rapsp));
-residualQ                           =   zeros(1,lMF(2));
-residualQc                          =   zeros(1,lMF(2));
-%%
-% Loops over all frequencies and parameter models
-for k = 1:lMF(2)
-    modv_pd(:,1:3,k)                =   modvP(:,1:3);
-    modv_Qc(:,1:3,k)                =   modvP(:,1:3);
-    modv_Q(:,1:3,k)                 =   modvP(:,1:3);
-    cf_k                            =   cf(k);
-    fcName                          =   num2str(cf_k);
-    if find(fcName == '.')
-        fcName(fcName == '.')       =   '_';
-    end
+% Inputs
+FLabel              =   s.label;
+tWm                 =   s.codaWindow;
+cf                  =   s.centralFrequency;
+sizea               =   s.sizeCheck;
+modvP               =   s.modvPlot;
+spike_o             =   s.spikeLocationOrigin;
+spike_e             =   s.spikeLocationEnd;
+spike_v             =   s.spikeValue;
+x                   =   s.x;
+y                   =   s.y;
+z                   =   s.z;
+nxc                 =   numel(x);
+nyc                 =   numel(y);
+nzc                 =   numel(z);
+nxyzc               =   nxc*nyc*nzc;
+inversionMethod     =   s.inversionMethod;
+DDcoordinates       =   s.DDcoordinates;
+B0                  =   s.albedo;
+Le_1                =   s.iExtinctionLength;
+vS                  =   s.averageVelocityS;
+iter                =   s.MaximumIterations;
+iterStall           =   s.MaximumStallIterations;
+dampValueQc         =   s.dampingValueQc;
+smoothValueQc       =   s.smoothingValueQc;
+dampValueQ          =   s.dampingValueQ;
+smoothValueQ        =   s.smoothingValueQ;
+plotI               =   s.PlotInversion;
 
-    %%
-    % Peak delay standard regionalization (for now)
-    rcpd_k                          =   ray_crosses_pd(:,k);
-    rtpd_k                          =   retain_pd(:,k);
-    Apd_k                           =	Apd_i(rtpd_k,rcpd_k);
-    lpdelta_k                       =   lpdelta(rtpd_k,k);
-    
-    A_boxes                         =   Apd_k>0;
-    cts_box                         =   sum(A_boxes,1);
-    mpd                             =...
-        sum(A_boxes.*lpdelta_k,1)'./sum(A_boxes,1)';
+% Matrices / data from Murat struct
+Apd_i               =   Murat.PD.inversionMatrixPeakDelay;
+Ac_i                =   Murat.Qc.inversionMatrixQc;
+A_i                 =   Murat.Q.inversionMatrixQ;
+luntot              =   Murat.rays.totalLengthRay;
+time0               =   Murat.rays.travelTime;
+Qm                  =   Murat.Qc.inverseQc;
+RZZ                 =   Murat.Qc.uncertaintyQc;
+lpdelta             =   Murat.PD.variationPeakDelay;
+rapE                =   Murat.Q.energyRatioBodyCoda;
+retainPD            =   Murat.PD.retainPeakDelay;
+retainQc            =   Murat.Qc.retainQc;
+retainQ             =   Murat.Q.retainQ;
+rayCrossesPD        =   Murat.PD.raysPeakDelay;
+rayCrossesQc        =   Murat.Qc.raysQc;
+rayCrossesQ         =   Murat.Q.raysQ;
+tCoda               =   Murat.Qc.tCoda;
+outputSolverQc      =   struct;
+outputSolverQ       =   struct;
+exitFlagSolverQc    =   struct;
+exitFlagSolverQ     =   struct;
 
-    mpd(isnan(mpd))                 =   mean(mpd,'omitnan');
-    modv_pd(rcpd_k,4,k)             =   mpd;
-    modv_pd(rcpd_k,5,k)             =   cts_box;
+% Paths and outputs
+FPath               =   './';
+outDirTXT           =   fullfile(FPath, FLabel, 'TXT');
+lMF                 =   size(rayCrossesPD);
+nFreq               =   lMF(2);
 
-    %%
-    % Qc inversion
-    rcQc_k                          =   ray_crosses_Qc(:,k);
-    rtQc_k                          =   retain_Qc(:,k);
-    Ac_k                            =   Ac_i(rtQc_k,rcQc_k);
-    Qm_k                            =   Qm(rtQc_k,k);
-    RZZ_k                           =   RZZ(rtQc_k,k);
-    Wc                              =   Murat_weighting(RZZ_k,QcM);
-    Gc                              =   Wc*Ac_k;
-    FName                           =   ['L-curve_Qc_' fcName '_Hz'];
+% Preallocate
+modvPD              =   zeros(nxyzc,5,nFreq);
+modvQc              =   zeros(nxyzc,9,nFreq);
+modvQ               =   zeros(nxyzc,9,nFreq);
+residualQ           =   zeros(1,nFreq);
+residualQc          =   zeros(1,nFreq);
+dValueQc            =   zeros(1,nFreq);
+dValueQ             =   zeros(1,nFreq);
+cConstants          =   zeros(2,nFreq);
 
-    bQm                             =   Wc*Qm_k;
-    lCurveQc_k                      =   lCurveQc(k);
+% Diffusion constant - Wu 1985, Wu and Aki, 1988.
+D                   =   vS/3./Le_1./B0;
 
-    if isequal(inversionMethod,'Tikhonov')
-        [mtik0C,residualQc_k,LcQc,tik0_regC]...
-                                    =...
-           Murat_tikhonovQc(outputLCurve,Gc,bQm,lCurveQc_k);
-
-        residualQc(1,k)             =   residualQc_k;
-        mQc                         =   mtik0C;
-
-    elseif isequal(inversionMethod,'Iterative')
-        disp(['Qc L-curve and cost functions at ', num2str(cf_k), ' Hz.'])
-
-        [LcQc, minimizeVectorQm,infoVectorQm,tik0_regC]...
-                                    =...
-           Murat_minimiseCGLS(outputLCurve,Gc,bQm,lCurveQc_k,FName);
-
-        residualQc(1,k)             =   min(infoVectorQm.Rnrm);
-        mQc                         =   minimizeVectorQm;
-
-    elseif isequal(inversionMethod,'Hybrid')
-        disp(['Qc cost function at ', num2str(cf_k), ' Hz.'])
-
-        [LcQc, minimizeVectorQm,infoVectorQm,tik0_regC]...
-                                    =...
-           Murat_minimiseHybrid(outputLCurve,Gc,bQm,lCurveQc_k,FName);
-
-        residualQc(1,k)             =   min(infoVectorQm.Rnrm);
-        mQc                         =   minimizeVectorQm;
-
-    else
-        error('Unknown inversion method.')
-
-    end
-    modv_Qc(rcQc_k,4,k)             =   mQc;
-       
-    saveas(LcQc,fullfile(FPath, FLabel,'Tests/LCurve',FName));
-    saveas(LcQc,fullfile(FPath, FLabel,'Tests/LCurve',FName),'png');
-    close(LcQc)
-
-    %%
-    % Q inversion
-    rcQ_k                           =   ray_crosses_Q(:,k);
-    rtQ_k                           =   retain_Q(:,k);
-    A_k                             =   A_i(rtQ_k & rtQc_k,rcQ_k);
-    Q_k                             =   Qm(rtQ_k & rtQc_k,k);
-    luntot_k                        =   luntot(rtQ_k & rtQc_k);
-    time0_k                         =   time0(rtQ_k & rtQc_k);
-    rapsp_k                         =   rapsp(rtQ_k & rtQc_k,k);
-    tCm                             =   tCoda(rtQ_k & rtQc_k,k);
-
-    [d1, const_Qc_k, ~, ~]          =   Murat_lsqlinQmean(tCm,tWm,Q_k,...
-                                    cf_k,sped,luntot_k,time0_k,rapsp_k);
-    const_Qc(rtQ_k & rtQc_k,k)      =   const_Qc_k;
-
-    lCurveQ_k                       =   lCurveQ(k);
-    FName                           =   ['L-curve_Q_' fcName '_Hz'];
-    if isequal(inversionMethod,'Tikhonov')
-        [mtik0,residualQ_k,LcCN,tik0_reg]...
-                                    =...
-           Murat_tikhonovQ(outputLCurve,A_k,d1,lCurveQ_k,1);
-
-        residualQ(:,k)              =   residualQ_k;
-        mQ                          =   mtik0;
-
-    elseif isequal(inversionMethod,'Iterative')
-        disp(['Q L-curve and cost functions at ', num2str(cf_k), ' Hz.'])
-        [LcCN, minimizeVectorQ,infoVectorQ,tik0_reg]...
-                                    =...
-           Murat_minimiseCGLS(outputLCurve,A_k,d1,lCurveQ_k,FName);
-
-        residualQ(1,k)              =   min(infoVectorQ.Rnrm);
-        mQ                          =   minimizeVectorQ;
-
-    elseif isequal(inversionMethod,'Hybrid')
-        disp(['Q cost function at ', num2str(cf_k), ' Hz.'])
-
-        [LcCN, minimizeVectorQ,infoVectorQ,tik0_reg]...
-                                    =...
-           Murat_minimiseHybrid(outputLCurve,A_k,d1,lCurveQ_k,FName);
-
-        residualQ(1,k)              =   min(infoVectorQ.Rnrm);
-        mQ                          =   minimizeVectorQ;
-
-    end
-    modv_Q(rcQ_k,4,k)             =   mQ;
-        
-    saveas(LcCN,fullfile(FPath, FLabel,'Tests/LCurve',FName));
-    saveas(LcCN,fullfile(FPath, FLabel,'Tests/LCurve',FName),'png');
-    close(LcCN)
-
-    %% Checkerboards and spike inputs and checkerboard inversion
-    % Qc
-    siz                             =   [nxc nyc nzc];
-    I                               =   checkerBoard3D(siz,sizea);
-    [checkInput,spikeInput]         =...
-                               Murat_inputTesting(I,spike_o,spike_e,x,y,z);
-
-    modv_Qc(checkInput==1,6,k)      =   latt;
-    modv_Qc(checkInput==0,6,k)      =   hatt;
-    modv_Qc(:,8,k)                  =   mean(Qm_k);
-    modv_Qc(spikeInput,8,k)         =   spike_v;
-    Qc_ch                           =   modv_Qc(rcQc_k,6,k);
-    re_checkQc                      =   Gc*Qc_ch;
-
-    modv_Qc(rcQc_k,7,k)             =...
-        Murat_outputTesting(Gc,re_checkQc,tik0_regC,inversionMethod);
-    
-    %%
-    % Q
-    modv_Q(:,6:8,k)                 =   modv_Qc(:,6:8,k);
-    Q_ch                            =   modv_Q(rcQ_k,6,k);
-    re_Q                            =   A_k*Q_ch;
-
-    modv_Q(rcQ_k,7,k)               =...
-        Murat_outputTesting(A_k,re_Q,tik0_reg,inversionMethod);
-
-    %%
-    % Inverting spike for Qc and Q at user discretion
-    if ~isempty(spike_o)
-        Qc_sp                       =   modv_Qc(rcQc_k,8,k);
-        re_spikeQc                  =   Gc*Qc_sp;
-
-        modv_Qc(rcQc_k,9,k)         =...
-            Murat_outputTesting(Gc,re_spikeQc,tik0_regC,inversionMethod);
-
-        Q_sp                        =   modv_Q(rcQ_k,8,k);
-        re_spikeQ                   =   A_k*Q_sp;
-
-        modv_Q(rcQ_k,9,k)           =...
-            Murat_outputTesting(A_k,re_spikeQ,tik0_reg,inversionMethod);
-
-    end
-
-    %%
-    % Save peak-delay, Qc, Q
-    DDcoordinates                       =   Murat.input.DDcoordinates;
-    modv_pd_dd                          =   modv_pd(:,:,k);
-    modv_pd_dd(:,1:3)                   =   DDcoordinates;
-    modv_Qc_dd                          =   modv_Qc(:,:,k);
-    modv_Qc_dd(:,1:3)                   =   DDcoordinates;
-    modv_Q_dd                           =   modv_Q(:,:,k);
-    modv_Q_dd(:,1:3)                    =   DDcoordinates;
-
-    FName                           =...
-        ['peakdelay_' fcName '_Degrees_Hz.txt'];
-    writematrix(modv_pd_dd,fullfile(FPath, FLabel, 'TXT', FName));
-
-    FName                           =   ['Qc_' fcName '_Degrees_Hz.txt'];
-    writematrix(modv_Qc_dd,fullfile(FPath, FLabel, 'TXT', FName));
-
-    FName                           =   ['Q_' fcName '_Degrees_Hz.txt'];
-    writematrix(modv_Q_dd,fullfile(FPath, FLabel, 'TXT', FName));
+fc_names            =   cell(1,nFreq);
+fld_names           =   cell(1,nFreq);
+outDirFigureBase    =   fullfile(FPath,FLabel,'Tests','LCurve');
+for k = 1:nFreq
+    cf_k            =   cf(k);
+    fc_names{k}     =   strrep(num2str(cf_k),'.','_');
+    tmp             =   sprintf('Hz%g', cf_k);
+    fld_names{k}    =   strrep(tmp,'.','_');
 end
 
-%%
-% Save in Murat
-Murat.Qc.residualQc                 =   residualQc;
-Murat.Q.const_Qc                    =   const_Qc;
-Murat.Q.residualQ                   =   residualQ;
-Murat.PD.modvPeakDelay              =   modv_pd;
-Murat.Qc.modvQc                     =   modv_Qc;
-Murat.Q.modvQ                       =   modv_Q;
-writetable(muratHeader,fullfile(FPath, FLabel, 'TXT', 'DataHeaders.xlsx'));
+% reuse buffers to avoid reallocations
+siz                 =   [nxc nyc nzc];
+I                   =   [];
+checkInput          =   [];
+spikeInput          =   [];
+
+% Precompute coordinate block once and reuse
+coords_block = modvP(:,1:3);
+
+% Loops over all frequencies and parameter models
+for k = 1:nFreq
+    
+    D_k             =   D(k);
+    if ~isempty(dampValueQc), dValueQc_k  =   dampValueQc(k);
+    else, dValueQc_k    =   [];   end
+    
+    if ~isempty(dampValueQ), dValueQ_k    =   dampValueQ(k);
+    else, dValueQ_k     =   [];   end
+    
+    if ~isempty(smoothValueQc), sValueQc_k=   smoothValueQc(k);
+    else, sValueQc_k    =   []; end
+    
+    if ~isempty(smoothValueQ), sValueQ_k  =   smoothValueQ(k);
+    else, sValueQ_k     =   []; end
+    
+    modvPD(:,1:3,k) =   coords_block;
+    modvQc(:,1:3,k) =   coords_block;
+    modvQ(:,1:3,k)  =   coords_block;
+    cf_k            =   cf(k);
+    fcName          =   fc_names{k};
+    fld = fld_names{k};
+    outDirFigure = fullfile(outDirFigureBase,['L-curve_Qc_' fcName '_Hz']);
+
+    % --- Peak delay regionalization ---
+    rcpd_k          =   rayCrossesPD(:,k);
+    rtpd_k          =   retainPD(:,k);
+    Apd_k           =	Apd_i(rtpd_k,rcpd_k);
+    lpdelta_k       =   lpdelta(rtpd_k,k);
+    
+    A_boxes         =   Apd_k>0;
+    counts_box      =   sum(A_boxes,1);
+    mpd             =   sum(A_boxes.*lpdelta_k,1)'./counts_box';
+
+    mpd(isnan(mpd))     =   mean(mpd,'omitnan');
+    modvPD(rcpd_k,4,k)  =   mpd;
+    modvPD(rcpd_k,5,k)  =   counts_box;
+
+    % --- Qc inversion ---
+    rcQc_k          =   rayCrossesQc(:,k);
+    rtQc_k          =   retainQc(:,k);
+    Ac_k            =   Ac_i(rtQc_k,rcQc_k,k);
+    RZZ_k           =   RZZ(rtQc_k,k);
+    Qm_k            =   Qm(rtQc_k,k);
+    coordPriorQc    =   modvQc(rcQc_k,1:3,k);
+    
+    [sol,fval,exitflag,output,dValueQc_k]= Murat_inversionQc(Ac_k,Qm_k,...
+        inversionMethod,iter,iterStall,RZZ_k,coordPriorQc,dValueQc_k,...
+        sValueQc_k,plotI,outDirFigure);
+    
+    modvQc(rcQc_k,4,k)      =   sol.Qc;
+    residualQc(k)           =   fval;
+    fprintf(['Qc relative misfit reduction at ' num2str(cf_k)...
+        'Hz is: %.4f\n'], fval);
+    exitFlagSolverQc.(fld)  =   exitflag;
+    outputSolverQc.(fld)    =   output;
+    
+    % --- Q inversion ---
+    rcQ_k               =   rayCrossesQ(:,k);
+    rtQ_k               =   retainQ(:,k);
+    keepMask            =   rtQ_k & rtQc_k;
+    A_k                 =   A_i(keepMask,rcQ_k);
+    Qc_k                =   Qm(keepMask,k);
+    luntot_k            =   luntot(keepMask);
+    l                   =   luntot_k/1000;
+    time0_k             =   time0(keepMask);
+    rapE_k              =   rapE(keepMask,k);
+    tCm                 =   tCoda(keepMask,k);
+    coordPriorQ         =   modvQ(rcQ_k,1:3,k);
+    te                  =   tCm+tWm;
+
+    cCoda               =   1.5/2/pi/cf_k*log(4*pi*D_k)-...
+                            1/2/pi/cf_k*...
+                            log((te).^(-1.5).*...
+                            exp(-l.^2/4/D_k./te...
+                            -2*pi*cf_k*Qc_k.*te)...
+                            -tCm.^(-1.5).*...
+                            exp(-l.^2/4/D_k./tCm...
+                            -2*pi*cf_k*Qc_k.*tCm));
+
+    [d0, Q0, mDest]     =   Murat_lsqlinQmean(cf_k,l,time0_k,rapE_k,...
+        Qc_k, tCm, te);
+
+    cEst                =   Q0(1,1);
+
+    cConstants(1,k)     =   mean(real(cCoda));
+    cConstants(2,k)     =   cEst;
+    
+    fprintf('A priori and estimated coda constants are %.4g and %.4g at %g Hz\n',...
+        mean(real(cCoda)), cEst, cf_k);
+    
+    fprintf('A priori and estimated diffusion constants are %.4g and %.4g at %g Hz\n',...
+        D_k, mDest, cf_k);
+
+    averageQcodaC       =   Q0;
+    averageD            =   mDest;
+    outDirFigure = fullfile(outDirFigureBase, ['L-curve_Q_' fcName '_Hz']);
+    
+    [sol,fval,exitflag,output,dValueQ_k]  =   Murat_inversionQ(A_k,d0,...
+        rapE_k,inversionMethod,Q0,iter,iterStall,coordPriorQ,dValueQ_k,...
+        sValueQ_k,plotI,outDirFigure);
+
+    modvQ(rcQ_k,4,k)        =   sol.Q;
+    residualQ(k)            =   fval;
+    fprintf(['Q relative misfit reduction at ' num2str(cf_k)...
+        'Hz is: %.4f\n'], fval);
+    exitFlagSolverQ.(fld)   =   exitflag;   
+    outputSolverQ.(fld)     =   output;
+
+    % --- Checkerboards and spike inputs and checkerboard inversion ---
+    % --- Qc ---
+    if isempty(I)
+        I = checkerBoard3D(siz, sizea);
+        [checkInput, spikeInput] =   Murat_inputTesting(I, spike_o,...
+            spike_e, x, y, z);
+    end
+    
+    Qm_k_all = Qm(rtQc_k,k);  % local
+    
+    modvQc(checkInput==1,6,k)  =   min(Qm_k_all);
+    modvQc(checkInput==0,6,k)  =   max(Qm_k_all);
+    modvQc(:,8,k)              =   mean(Qm_k_all);
+    if ~isempty(spikeInput)
+        modvQc(spikeInput,8,k) =   spike_v;
+    end
+    
+    Qc_ch           =   modvQc(rcQc_k,6,k);
+    re_checkQc      =   Ac_k*Qc_ch;
+    [sol,~,~,~,~]   =   Murat_inversionQc(Ac_k,re_checkQc,...
+        inversionMethod,iter,iterStall,RZZ_k,coordPriorQc,...
+        dValueQc_k,sValueQc_k,plotI,outDirFigure);
+    modvQc(rcQc_k,7,k)  =   sol.Qc;
+    
+    % --- Q: reuse Qc checkerboard parameters ---
+    modvQ(:,6:8,k)  =   modvQc(:,6:8,k);
+    Q_ch            =   modvQ(rcQ_k,6,k);
+    re_checkQ       =   A_k*Q_ch;
+    
+    % Synthetic energy ratios
+    synthEratio     =   exp(2*pi*cf_k*(cEst + re_checkQ))./l.^2;
+
+    [d0c, Q0c, ~]   =   Murat_lsqlinQmean(cf_k,l,time0_k,synthEratio,...
+        Qc_k, tCm, te);
+    
+    [sol,~,~,~,~]   =   Murat_inversionQ(A_k,d0c,rapE_k,...
+        inversionMethod,Q0c,iter,iterStall,coordPriorQ,dValueQ_k,...
+        sValueQ_k,plotI,outDirFigure);
+        
+    modvQ(rcQ_k,7,k)=   sol.Q;
+
+    % --- Spike inversion if requested ---
+    if ~isempty(spike_o)
+        Qc_sp           =   modvQc(rcQc_k,8,k);
+        re_spikeQc      =   Ac_k*Qc_sp;
+        [sol,~,~,~,~]   =   Murat_inversionQc(Ac_k,re_spikeQc,...
+            inversionMethod,iter,iterStall,RZZ_k,coordPriorQc,...
+        dValueQc_k,sValueQc_k,plotI,outDirFigure);
+        modvQc(rcQc_k,9,k)  =   sol.Qc;
+        
+        Q_sp            =   modvQ(rcQ_k,8,k);
+        re_spikeQ       =   A_k*Q_sp;
+        
+        %Synthetic energy ratios
+        synthEratio     =   exp(2*pi*cf_k*(cEst + re_spikeQ))./l.^2;
+        
+        [d0s, Q0s, ~]   =  Murat_lsqlinQmean(cf_k,l,time0_k,synthEratio,...
+            Qc_k, tCm, te);
+        
+        [sol,~,~,~,~]   =   Murat_inversionQ(A_k,d0s,rapE_k,...
+            inversionMethod,Q0s,iter,iterStall,coordPriorQ,dValueQ_k,...
+            sValueQ_k,plotI,outDirFigure);
+
+        modvQ(rcQ_k,9,k)=   sol.Q;
+
+    end
+
+    % --- Save outputs for this frequency ---
+    modv_pd_dd          =   modvPD(:,:,k);
+    modv_Qc_dd          =   modvQc(:,:,k);
+    modv_Q_dd           =   modvQ(:,:,k);
+    dValueQc(k)         =   dValueQc_k;
+    dValueQ(k)          =   dValueQ_k;
+
+    headerPD            =   {'Lon','Lat','Depth','ΔlogPD', 'HitC'};
+    C                   =   [headerPD; num2cell(modv_pd_dd)];
+    fname               =...
+        fullfile(outDirTXT, ['peakdelay_' fcName '_Hz.txt']);
+    writecell(C, fname, 'Delimiter', '\t', 'Encoding', 'UTF-8');
+    
+    headerQc            =...
+        {'Lon','Lat','Depth','Qc', 'HitC','Check In','Check Out',...
+        'Spike In','Spike Out'};
+    C                   =   [headerQc; num2cell(modv_Qc_dd)];
+    fname               =...
+        fullfile(outDirTXT, ['Qc_' fcName '_Hz.txt']);
+    writecell(C, fname, 'Delimiter', '\t', 'Encoding', 'UTF-8');
+   
+    
+    headerQ             =...
+        {'Lon','Lat','Depth','Q', 'HitC','Check In','Check Out',...
+        'Spike In','Spike Out'};
+    C                   =   [headerQ; num2cell(modv_Q_dd)];
+    fname               =...
+        fullfile(outDirTXT, ['Q_' fcName '_Hz.txt']);
+    writecell(C, fname, 'Delimiter', '\t', 'Encoding', 'UTF-8');
+    
+end
+
+% Save back to Murat
+Murat.input.DiffConstant    =   D;
+
+Murat.PD.modvPeakDelay      =   modvPD;
+
+Murat.Qc.modvQc             =   modvQc;
+Murat.Qc.residualRedQc      =   residualQc;
+Murat.Qc.dampingValueQc     =   dValueQc;
+Murat.Qc.outputSolverQc     =   outputSolverQc;
+Murat.Qc.exitFlagSolverQc   =   exitFlagSolverQc;
+
+Murat.Q.residualRedQ        =   residualQ;
+Murat.Q.dampingValueQ       =   dValueQ;
+Murat.Q.modvQ               =   modvQ;
+Murat.Q.outputSolverQ       =   outputSolverQ;
+Murat.Q.exitFlagSolverQ     =   exitFlagSolverQ;
+Murat.Q.codaConstants       =   cConstants;
+Murat.Q.averageQ            =   averageQcodaC;
+Murat.Q.estimatedDiffusion  =   averageD;
+end

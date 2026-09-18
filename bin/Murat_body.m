@@ -1,8 +1,9 @@
-function [energyRatioBodyCoda_i,energyRatioCodaNoise_i]...
-                        =   Murat_body(bodyWindow,startNoise,srate_i,...
-                    sp_i,cursorPick_i,cursorCodaStart_i,cursorCodaEnd_i)
+function [energyRatioBodyCoda_i,energyRatioCodaNoise_i]   =...
+   Murat_body(bodyWindow,startNoise,srate_i,sp_i,...
+   cursorPick_i,cursorCodaStart_i,cursorCodaEnd_i)
 % function [energyRatioBodyCoda_i,energyRatioCodaNoise_i] =...
-% Murat_body(Murat,srate_i,sp_i,cursorPick_i,cursorCodaStart_i,cursorCodaEnd_i)
+% Murat_body(bodyWindow,startNoise,srate_i,cursorPick_i,...
+% cursorCodaStart_i,cursorCodaEnd_i)
 %
 % CREATES the body-to-coda energy ratios and uncertainties necessary for
 %   the CN method.
@@ -21,25 +22,29 @@ function [energyRatioBodyCoda_i,energyRatioCodaNoise_i]...
 %    energyRatioCodaNoise_i:    energy ratio between coda waves and noise
 
 % Redefine windows with sampling for noise and direct waves
-int                     =   bodyWindow*srate_i;
-lc                      =   length(cursorCodaStart_i:cursorCodaEnd_i);
-cursor0                 =	floor(startNoise*srate_i);
-cursor0_1               =   floor(cursor0 + int);
-cursor2                 =   floor(cursorPick_i + int-1);
+intSamples              =   floor(bodyWindow*srate_i);
+cursorNoise0            =	floor(startNoise*srate_i);
+cursor0Noise1           =   cursorNoise0 + intSamples;
+cursorPS1               =   floor(cursorPick_i + intSamples-1);
+lengthSamples           =   length(cursorCodaStart_i:cursorCodaEnd_i);
 
-% Direct wave normalised by window length
-spamp                   =...
-    trapz(sp_i(cursorPick_i:cursor2,:))/int;
+% Extract windows (vectorized)
+spPS                    =   sp_i(cursorPick_i:cursorPS1,:);
+spNoise                 =   sp_i(cursorNoise0:cursor0Noise1,:);
+spCoda                  =   sp_i(cursorCodaStart_i:cursorCodaEnd_i,:);
 
-% Noise pre-pick normalised by window length
-spampn                  =...
-    trapz(sp_i(cursor0:cursor0_1,:))/int;
+% Integrate using trapz with correct spacing
+dt                      =   1 / srate_i;
+spampPS                 =   trapz((0:dt:dt*(size(spPS,1)-1)), spPS); 
+spampNoise              =   trapz((0:dt:dt*(size(spNoise,1)-1)), spNoise);
 
-% Coda normalised by window length
-spampc                  =...
-    trapz(sp_i(cursorCodaStart_i:cursorCodaEnd_i,:))/lc;
 
-energyRatioBodyCoda_i   =   spamp./spampc;
-energyRatioCodaNoise_i  =   spampc./spampn;
+% Normalize coda by relative window length
+differentWindows        =   lengthSamples/intSamples;
+spampCoda               =   ...
+    trapz((0:dt:dt*(size(spCoda,1)-1)), spCoda)./ differentWindows;
+
+energyRatioBodyCoda_i   =   spampPS ./  spampCoda;
+energyRatioCodaNoise_i  =   spampCoda ./ spampNoise;
     
 end

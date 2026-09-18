@@ -1,5 +1,4 @@
-function [locationsDeg_i,locationsM_i]...
-                    =   Murat_location(origin,SAChdr_i)
+function [locationsDeg_i,locationsM_i]  = Murat_location(origin,SAChdr_i)
 % function [locationsDeg_i, locationsM_i]  =   Murat_location(origin,SAChdr_i)
 %
 % CREATES the variable with event and station coordinates
@@ -15,10 +14,10 @@ function [locationsDeg_i,locationsM_i]...
 %    locationsM_i:      locations in meters
 
 
-even                =   [SAChdr_i.event.evla   SAChdr_i.event.evlo...
+even    =   [SAChdr_i.event.evla   SAChdr_i.event.evlo...
     SAChdr_i.event.evdp*1000];
 
-stati               =   [SAChdr_i.station.stla SAChdr_i.station.stlo...
+stati   =   [SAChdr_i.station.stla SAChdr_i.station.stlo...
     SAChdr_i.station.stel];
 
 if find(even == -12345)

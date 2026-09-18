@@ -1,9 +1,9 @@
 function  [problempd,problemQc,problemRZZ,problemQ,yes_pd,compMissing,...
     flag]   =   Murat_dataWarning(listaSac,tresholdnoise,...
-    maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,comp,flag,QcM)
+    maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,comp,flag,QcM)
 % function  [problempd,problemQc,problemRZZ,problemQ,yes_pd,compMissing,...
 %     flag]   =   Murat_dataWarning(listaSac,tresholdnoise,...
-%     maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,comp,flag,QcM)
+%     maPD,miPD,fT,peakd,Qm,RZZ,rapspcn,rapsp,comp,flag,QcM)
 %
 % WARNS about problems with the data and locates indices where this happens
 %
@@ -17,6 +17,7 @@ function  [problempd,problemQc,problemRZZ,problemQ,yes_pd,compMissing,...
 %    Qm:                coda attenuation values
 %    RZZ:               uncertainty on Qc
 %    rapspcn:           coda to noise ratio
+%    rapsp:             P/S to coda ratio
 %    comp:           	components
 %    flag:           	flag to change between one or more components
 %    QcM:           	chosen method to measure Qc between Lin e NonLin
@@ -30,98 +31,91 @@ function  [problempd,problemQc,problemRZZ,problemQ,yes_pd,compMissing,...
 %    compMissing:       missing components after processing
 %    flag:              flag to discriminate one-component from three
 
-lcf                                     =   size(Qm);
-problempd                               =   cell(1,lcf(2));
-problemQc                               =   cell(1,lcf(2));
-problemRZZ                              =   cell(1,lcf(2));
-problemQ                                =   cell(1,lcf(2));
+% sizes
+[nRows, nCols]      =   size(Qm);
 
-yes_pd                                  =   peakd > miPD & peakd < maPD;
-no_pd                                   =   peakd > maPD | peakd < miPD;
-no_Qc                                   =   Qm == 0;
-no_Q                                    =   rapspcn < tresholdnoise;
-
-compMissing(:,:,1)                      =   no_pd;
-compMissing(:,:,2)                      =   no_Qc;
-compMissing(:,:,3)                      =   no_Q;
+% logical masks
+yes_pd              =   (peakd > miPD) & (peakd < maPD);
+no_pd               =   ~yes_pd;
+no_Qc               =   (Qm == 0);
 
 if isequal(QcM,'Linearized')
-    no_RZZ                              =   RZZ <= fT;
+    no_RZZ          =   (RZZ <= fT);
 
 elseif isequal(QcM,'NonLinear')
-    no_RZZ                              =   no_Qc;
+    no_RZZ          =   (RZZ >= fT);
+
+end
+
+
+
+no_Q                =   (rapspcn < tresholdnoise)|(rapsp < tresholdnoise);
+
+compMissing         =   false(nRows, nCols, 3);
+compMissing(:,:,1)  =   no_pd;
+compMissing(:,:,2)  =   no_Qc;
+compMissing(:,:,3)  =   no_Q;
+
+problempd           =   cell(1,nCols);
+problemQc           =   cell(1,nCols);
+problemRZZ          =   cell(1,nCols);
+problemQ            =   cell(1,nCols);
+
+for c = 1:nCols
+    idx_pd          =   no_pd(:,c);
+    idx_Qc          =   no_Qc(:,c);
+    idx_RZZ         =   no_RZZ(:,c);
+    idx_Q           =   no_Q(:,c);
+
+    problempd{c}    =   listaSac(idx_pd);
+    problemQc{c}    =   listaSac(idx_Qc);
+    problemRZZ{c}   =   listaSac(idx_RZZ);
+    problemQ{c}     =   listaSac(idx_Q);
     
 end
 
-for i = 1:lcf(2)
-    
-        problempd{i}                    =   listaSac(no_pd(:,i));
-        problemQc{i}                    =   listaSac(no_Qc(:,i));        
-        problemRZZ{i}                   =   listaSac(no_RZZ(:,i));
-        problemQ{i}                     =   listaSac(no_Q(:,i));
-    
-end
+% Percentages (per frequency / column)
+pctNoQc             =   sum(no_Qc)  / nRows * 100;
+pctNoRZZ            =   sum(no_RZZ) / nRows * 100;
+pctNoPD             =   sum(no_pd)  / nRows * 100;
+pctNoQ              =   sum(no_Q)   / nRows * 100;
+
 
 % Displays different messages in case of more than 1 component
-if comp == 1 && ~isequal(flag,2)
-    displayNoQc                             =   sum(no_Qc)/lcf(1)*100;
-    disp(['In your frequency range, [',num2str(displayNoQc),...
-        '] % of your Qc are = 0']);
-    
-    displayNoRZZ                            =   sum(no_RZZ)/lcf(1)*100;
-    disp(['In your frequency range, [',num2str(displayNoRZZ),...
-        ']% of your correlation coefficients are below accuracy treshold']);
-    
-    displayNoPD                             =   sum(no_pd)/lcf(1)*100;
-    disp(['In your frequency range, [',num2str(displayNoPD),...
-        '] % of your peak delays are outside peak delay limits']);
-    
-    displayNoQ                              =   sum(no_Q)/lcf(1)*100;
-    disp(['In your frequency range, [',num2str(displayNoQ),...
-        ']% of your coda-to-noise ratios are below noise treshold']);
-    
-    flag                                    =   2;
-    
+if comp == 1 && flag ~= 2
+    % When single component processing and flag not equal 2, show overall percentages
+    fprintf('[%s] %% of Qc are below threshold\n', num2str(pctNoQc));
+    fprintf('[%s] %% of Qc uncertainties are below threshold\n', num2str(pctNoRZZ));
+    fprintf('[%s] %% of peak delays are outside limits\n', num2str(pctNoPD));
+    fprintf('[%s] %% of ratios are below threshold\n', num2str(pctNoQ));
+    flag = 2;
+
 else
+    % compute means once
+    meanQc          =   mean(pctNoQc);
+    meanRZZ         =   mean(pctNoRZZ);
+    meanPD          =   mean(pctNoPD);
+    meanQ           =   mean(pctNoQ);
+
     switch flag
         case 0
-            
-            displayNoQc                     =   sum(no_Qc)/lcf(1)*100;
-            disp(['In your frequency range, [',num2str(displayNoQc),...
-                '] % of your original Qc are = 0']);
-            
-            displayNoRZZ                    =   sum(no_RZZ)/lcf(1)*100;
-            disp(['In your frequency range, [',num2str(displayNoRZZ),...
-                ']% of your original correlation coefficients are below treshold']);
-            
-            displayNoPD                     =   sum(no_pd)/lcf(1)*100;
-            disp(['In your frequency range, [',num2str(displayNoPD),...
-                '] % of your original peak delays are outside peak delay limits']);
-            
-            displayNoQ                      =   sum(no_Q)/lcf(1)*100;
-            disp(['In your frequency range, [',num2str(displayNoQ),...
-                ']% of your original coda-to-noise ratios are below treshold']);
-            
-            disp(['Processing to see how many data you have when considering '...
-                str2double(comp) ' components'])
-            
-            flag                            =   1;
+            fprintf('[%g] %% of Qc are below threshold\n', meanQc);
+            fprintf('[%g] %% of Qc uncertainties are below threshold\n', meanRZZ);
+            fprintf('[%g] %% of peak delays are outside limits\n', meanPD);
+            fprintf('[%g] %% of ratios are below threshold\n', meanQ);
+
+            if isnumeric(comp)
+                ncompStr    =   num2str(comp);
+            else
+                ncompStr    =   comp;
+            end
+            fprintf('Processing to see how many data you have when considering %s components\n', ncompStr);
+            flag = 1;
+
         case 1
-            
-            displayNoQc                     =   sum(no_Qc)/lcf(1)*100;
-            disp(['In your frequency range, [',num2str(displayNoQc),...
-                '] % of your Qc are = 0']);
-            
-            displayNoRZZ                    =   sum(no_RZZ)/lcf(1)*100;
-            disp(['In your frequency range, [',num2str(displayNoRZZ),...
-                ']% of your correlation coefficients are below accuracy treshold']);
-            
-            displayNoPD                     =   sum(no_pd)/lcf(1)*100;
-            disp(['In your frequency range, [',num2str(displayNoPD),...
-                '] % of your peak delays are outside peak delay limits']);
-            
-            displayNoQ                      =   sum(no_Q)/lcf(1)*100;
-            disp(['In your frequency range, [',num2str(displayNoQ),...
-                ']% of your coda-to-noise ratios are below noise treshold']);
+            fprintf('[%g] %% of Qc are below threshold\n', meanQc);
+            fprintf('[%g] %% of Qc uncertainties are below threshold\n', meanRZZ);
+            fprintf('[%g] %% of peak delays are outside limits\n', meanPD);
+            fprintf('[%g] %% of ratios are below threshold\n', meanQ);
     end
 end
