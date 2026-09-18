@@ -33,7 +33,16 @@ We recorded a Video Tutorial! Just go to the [Volcano Earth Imaging group page](
 
 The program works on Mac, Linux and Windows systems with Matlab version R2025b or higher.
 
-Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing and Mapping. The Parallel Computing Toolbox is recommended for speed.
+Necessary Toolboxes:
+
+1. Curve Fitting Toolbox,
+2. Global Optimization Toolbox,
+3. Image Processing Toolbox,
+4. Mapping Toolbox,
+5. Optimization Toolbox,
+6. Signal Processing Toolbox.
+
+The Parallel Computing Toolbox is optional but recommended for speed.
 
 Custom toolboxes not included in standard Matlab installations are also provided with the package. These are:
 
@@ -200,7 +209,7 @@ If you use MuRAT for your research and publications, please consider mentioning 
 
 3. Feng, Y., Ai, Y., De Siena, L., He, Y., Jiang, M., Mon, C. T., et al. (2026). Seismic attenuation tomography in Central Myanmar and its implications on continental subduction and arc magmatism. Journal of Geophysical Research: Solid Earth, 131, e2025JB032147. - *Most recent application of Q imaging to lithospheric scale*
 
-**Qc and Peak Delay (Absorption and scattering)**:
+**Qc and Peak Delay (Absorption and Scattering)**:
 
 1. De Siena L., Calvet, M., Watson, K.J., Jonkers, A.R.T. and Thomas, C., 2016. Seismic scattering and absorption mapping of debris flows, feeding paths, and tectonic units at Mount St. Helens volcano. Earth and Planetary Science Letters, 442, pp.21-31. - *Implementation of the older peak delay and Qc technique, both with regionalisation*
 

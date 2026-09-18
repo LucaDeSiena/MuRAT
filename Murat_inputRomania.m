@@ -136,8 +136,6 @@ Murat.input.PlotResults             =   1;
 Murat.input.PlotCheckers            =   1;
 %[text] *Spikes*
 Murat.input.PlotSpikes              =   1;
-%[text] *Parameters*
-Murat.input.PlotParameters          =   1;
 
 %[appendix]{"version":"1.0"}
 %---

@@ -345,41 +345,6 @@ for k = 1:lMF(2)
 
     Murat_saveFigures_2panels(Q_spike,makePath(storeFolder,FNameQSpike));
     end
-    
-    %% PARAMETER PLOT
-    if PlotParameters == 0 %%KILLING THIS FOR NOW
-    % The final figure is the parameter plot separation.
-    % First Qc and Peak delay are separated in 4 quadrants.
-    % The second part produces the spatial plot, setting each node to the
-    %   corresponding color. The four options are: (1) high for both (red);
-    %   (2) low for both (green); (3) high for peak delays only (cyan);
-    %   (4) high for inverse Qc only (orange).
-    storeFolder     =   fullfile('Results','Parameter');
-    
-    % Define all the parameters for imaging
-    FName_Param     =   ['Parameter_space_variations_' fcName '_Hz'];
-    [param_plot,~,~]=   Murat_imageParameters(x,y,z,modv_pd_k,...
-        modv_Qc_k,sTitle);
-    savefig(param_plot,makePath(storeFolder,FName_Param));
-    close(param_plot)
-
-    % Use interpolated peakdelay and Qc
-    zi              =   (zi*1000)';
-    [~,par_inter,para_map_inter]    =   Murat_imageParameters(xi',yi',...
-        zi,interp_modv_pd_k,interp_modvQc_k,sTitle);
-
-    %%
-    % Imaging the parameters in 3D
-    FName_PMap      =   ['Parameter-Map_' fcName '_Hz'];
-    [ParaMap,para_map]              =...
-        Murat_imageParametersMaps(par_inter,para_map_inter,xi',yi',zi,...
-        Xi,Yi,Zi,evst_Qc,sections,sTitle,FName_PMap);
-    Murat_saveFigures(ParaMap,makePath(storeFolder, FName_PMap));
-    
-    FName           =   ['parameterMap_' fcName '_Degrees_Hz.txt'];
-    writematrix(para_map,makePath('TXT',FName));
-
-    end
 end
 
 % Final figure is the Qc vs frequency relation
