@@ -32,6 +32,9 @@ Murat.input.centralFrequency        =	[3 6 12 18];
 Murat.input.envelopeSmoothTime      =   1;
 %[text] You can work with 1 vertical or horizontal (*1*), 2 horizontal (*2*) or three components(*3*). If using more than one component, the order *MUST BE: WE, SN, Vertical or SN, WE,* Vertical. In this example we work with the vertical component only:
 Murat.input.components              =	1;
+%[text] Sometimes you want to exclude waveforms depending on minimum and maximum travel times, as these data do not fullfill the theory (you generally see this after running the tests). In this case you can set minimum and maximum travel times, so that you exclude traces outside of these intervals. Otherwise, you can set the minimum to **0** and the maximum to **Inf**.
+Murat.input.mintravel               =   0.2;
+Murat.input.maxtravel               =   13;
 %[text] Finally, you can opt to decluster your data events. The code will divide the inversion grid by the following factor and select the best earthquake located in the block among all others. Set it to empty if you want to opt out (**\[\]**).
 Murat.input.declustering            =	5;
 %%
@@ -62,9 +65,6 @@ Murat.input.lapseTimeMethod         =   'Constant';
 Murat.input.startLapseTime          =   15;
 %[text] Finally set the length of the coda window in seconds. The true lapse time at which we calculate the kernels is half of the window. The window is also used (after normalizing for its length) in the coda normalization method.
 Murat.input.codaWindow              =   10;
-%[text] Set maximum travel time if you want to exclude traces beyond a certain value, else put \[Inf\].
-Murat.input.mintravel               =   0.2;
-Murat.input.maxtravel               =   13;
 %[text] The **MLTWA** is the standard method to find the average parameters necessary to calculate the kernels. It provides albedo and inverse extinction length:
 Murat.input.albedo                  =   [0.8 0.6 0.4 0.2];
 Murat.input.iExtinctionLength       =   [0.12 0.12 0.1 0.1]; % D  =   vS./Le_1/3./(1-B0)
@@ -102,7 +102,7 @@ Murat.input.averageVelocityS        =   2.5;
 %[text] - a standard Tikhonov inversion based on singular value decomposition (**'Tikhonov'**), where we on the [regtools Matlab suite](https://de.mathworks.com/matlabcentral/fileexchange/52-regtools) from Per Christian Hansen.
 %[text] - the particle swarm (**Particle**), simulated annealing (**Annealing**), or genetic algorithm (**Genetic**) solvers from the optimization toolbox. \
 %[text] In the last case, the user can choose the maximum number of iterations after which the optimization will stop. The user can also choose the maximum number of iterations where the misfit stalls after which the optimization will stop. Otherwise leave empty.
-Murat.input.inversionMethod         =   'Tikhonov';
+Murat.input.inversionMethod         =   'Particle';
 Murat.input.MaximumIterations       =   2e3;
 Murat.input.MaximumStallIterations  =   100;
 %[text] Set this to ***1*** to plot during computation:

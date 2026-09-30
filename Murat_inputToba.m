@@ -25,15 +25,15 @@ Murat.input.STime                   =	't0';
 %[text] ![](text:image:2abb)
 %[text] ![](text:image:5755)
 %[text] Then choose the coherent phase you are analyzing - P-(**2**) or S-(**3**). In our case it is S-wave picking.
-Murat.input.POrS                    =	3;
+Murat.input.POrS                =	3;
 %[text] You need to set the central frequencies (Hz) and envelope smoothing time (s) according to your spectrograms and waveform data. General practice is to vary it across your spectra (see [De Siena et al. 2016, EPSL](https://www.sciencedirect.com/science/article/abs/pii/S0012821X16300437)) for absorption and scattering mapping or focus on a given frequency ([De Siena et al. 2014, JGR](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1002/2014JB011372)) for direct-wave attenuation imaging. Here, they cover the interval \[1.5-3\] Hz. If not specified, a default value of 1.0 s is used for smoothing.
-Murat.input.centralFrequency        =	[1.5 3];
-
-% Envelope smoothing time (in seconds) used in Murat_envelope.m.
-% If not specified, a default value of 1.0 s is used.
-Murat.input.envelopeSmoothTime = 1;
+Murat.input.centralFrequency    =   [1.5 3];
+Murat.input.envelopeSmoothTime  =   1;
 %[text] You can work with 1 vertical or horizontal (*1*), 2 horizontal (*2*) or three components(*3*). If using more than one component, the order *MUST BE: WE, SN, Vertical or SN, WE,* Vertical. Here we use three components:
 Murat.input.components              =	3;
+%[text] Sometimes you want to exclude waveforms depending on minimum and maximum travel times, as these data do not fullfill the theory (you generally see this after running the tests). In this case you can set minimum and maximum travel times, so that you exclude traces outside of these intervals. Otherwise, you can set the minimum to **0** and the maximum to **Inf**.
+Murat.input.mintravel               =   12;
+Murat.input.maxtravel               =   50;
 %[text] Finally, you can opt to decluster your data events. The code will divide the inversion grid by the following factor and select the best earthquake located in the block among all others. Set it to empty if you want to opt out (**\[\]**).
 Murat.input.declustering            =	5;
 %%
@@ -64,9 +64,6 @@ Murat.input.lapseTimeMethod         =   'Constant';
 Murat.input.startLapseTime          =   60;
 %[text] Finally set the length of the coda window in seconds. The true lapse time at which we calculate the kernels is half of the window. The window is also used (after normalizing for its length) in the coda normalization method.
 Murat.input.codaWindow              =   20;
-%[text] Set maximum travel time if you want to exclude traces beyond a certain value, else put \[Inf\].
-Murat.input.mintravel               =   12;
-Murat.input.maxtravel               =   50;
 %[text] The **MLTWA** is the standard method to find the average parameters necessary to calculate the kernels. It provides albedo and extinction length:
 Murat.input.albedo                  =   [0.5 0.5];
 Murat.input.iExtinctionLength        =   [0.02 0.02];
@@ -77,7 +74,7 @@ Murat.input.kernelTreshold          =	1;
 %[text] The non linear approach models energy data measured on one-second windows across the envelope and minimizes the difference between data and model with a 1D grid search algorithm ([Napolitano et al. 2020](https://www.sciencedirect.com/science/article/pii/S1674987119301999)). Uncertainties are given by the experimental probability density function of the misfit. In both cases, uncertainties play as a weight in the final inversion. In the second case, leave the fitTresholdLinear = **\[\]**.
 %[text] The user needs to choose between the two options **'Linearized'** and **'NonLinear':**
 Murat.input.QcMeasurement           =   'NonLinear';
-Murat.input.fitTresholdLinear       =	0.02;
+Murat.input.fitTresholdLinear       =	[];
 %%
 %[text] %[text:anchor:H_7FEF6216] ## GEOMETRY AND VELOCITY
 %[text] This section sets the details of the inversion grid and availability of velocity model. In MuRAT3D the coordinates of the model are in lat/lon, then they get converted in km. The vertical is in altitude above sea level. The velocity model can be 1D or 3D - if 3D all points must be given in lat/long formats. You start by setting the origin and end points of your inversion grid.

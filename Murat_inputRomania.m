@@ -34,6 +34,9 @@ Murat.input.centralFrequency        =	[3 6 12 18];
 Murat.input.envelopeSmoothTime = 1;
 %[text] You can work with 1 vertical or horizontal (*1*), 2 horizontal (*2*) or three components(*3*). If using more than one component, the order *MUST BE: WE, SN, Vertical or SN, WE, Vertica*l. In this example we work with the horizontal component only.
 Murat.input.components              =	1;
+%[text] Sometimes you want to exclude waveforms depending on minimum and maximum travel times, as these data do not fullfill the theory (you generally see this after running the tests). In this case you can set minimum and maximum travel times, so that you exclude traces outside of these intervals. Otherwise, you can set the minimum to **0** and the maximum to **Inf**.
+Murat.input.mintravel               =   0.2;
+Murat.input.maxtravel               =   Inf;
 %[text] Finally, you can opt to decluster your data events. The code will divide the inversion grid by the following factor and select the best earthquake located in the block among all others. Set it to empty if you want to opt out (**\[\]**).
 Murat.input.declustering            =	5;
 %%
@@ -64,9 +67,6 @@ Murat.input.lapseTimeMethod         =   'Constant';
 Murat.input.startLapseTime          =   30;
 %[text] Finally set the length of the coda window in seconds. The true lapse time at which we calculate the kernels is half of the window. The window is also used (after normalizing for its length) in the coda normalization method.
 Murat.input.codaWindow              =   30;
-%[text] Set maximum travel time if you want to exclude traces beyond a certain value, else put \[Inf\].
-Murat.input.mintravel               =   0.2;
-Murat.input.maxtravel               =   Inf;
 %[text] The **MLTWA** is the standard method to find the average parameters necessary to calculate the kernels. It provides albedo and extinction length:
 Murat.input.albedo                  =   [0.5 0.5 0.5 0.5];
 Murat.input.iExtinctionLength       =   [0.02 0.02 0.02 0.02]; % D  =   vS./Le_1/3./(1-B0)

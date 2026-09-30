@@ -14,13 +14,11 @@ z               =   s.z;
 sections        =   s.sections;
 cf              =   s.centralFrequency;
 tWm             =   s.codaWindow;
-D               =   s.DiffConstant;
 PlotRays        =   s.PlotRays;
 PlotTests       =   s.PlotTests;
 PlotResults     =   s.PlotResults;
 PlotCheckers    =   s.PlotCheckers;
 PlotSpikes      =   s.PlotSpikes;
-PlotParameters  =   s.PlotParameters;
 CoordGrid       =   s.DDcoordinates;
 
 luntot          =   Murat.rays.totalLengthRay;
@@ -65,7 +63,6 @@ makePath = @(varargin) fullfile('./', FLabel, varargin{:});
 
 for k = 1:lMF(2)
     %%
-    D_k         =   D(k);
     cf_k        =   cf(k);
     fcName      = strrep(num2str(cf_k),'.','_');
     rtpdk       =   retainPeakDelay(:,k);
@@ -205,27 +202,23 @@ for k = 1:lMF(2)
         'FontWeight','bold','Color','k');
     Murat_saveFigures(peakDelaymapRed, makePath(storeFolder, FName_PDMap));
 
-    % interpolated for the parameter map
-    interp_modv_pd_k=   Murat_unfold(Xi,Yi,Zi,pd_inter);
-
-    FName_int             =   ['/PD_inter_' fcName '_Hz.mat'];
-    FName_not_int      =    ['/PD_not_inter_' fcName '_Hz.mat'];
+    % interpolated mat output
+    FName_int       =   ['/PD_inter_' fcName '_Hz.mat'];
+    FName_not_int   =    ['/PD_not_inter_' fcName '_Hz.mat'];
     save(strcat(folderfilespath,FName_int),'Xi','Yi','Zi','pd_inter')
     save(strcat(folderfilespath,FName_not_int),'X','Y','Z','mPDRed')
 
     % Qc results
     storeFolder     =   fullfile('Results','Qc');
     FName_QcMap     =   ['Qc-3D_' fcName '_Hz'];
-    [Qcmap,qc_inter,xi,yi,zi,Xi,Yi,Zi] =   Murat_image3D(X,Y,Z,mQc,...
+    [Qcmap,qc_inter,~,~,~,Xi,Yi,Zi] =   Murat_image3D(X,Y,Z,mQc,...
         turbo,sections,evst_Qc,x,y,z,divi,FName_QcMap);
     title('Coda attenuation','FontSize',sTitle,'FontWeight','bold',...
         'Color','k');
     
     Murat_saveFigures(Qcmap, makePath(storeFolder, FName_QcMap));
         
-    % interpolated for the parameter map
-    interp_modvQc_k =   Murat_unfold(Xi,Yi,Zi,qc_inter);
-
+    % interpolated mat output
     FName_int             =   ['/Qc_inter_' fcName '_Hz.mat'];
     FName_not_int      =    ['/Qc_not_inter_' fcName '_Hz.mat'];
     save(strcat(folderfilespath,FName_int),'Xi','Yi','Zi','qc_inter')
