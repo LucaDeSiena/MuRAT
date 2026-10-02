@@ -19,7 +19,12 @@ if isequal(QcM,'Linearized')
         Qm_i < mean(Qm_i(retainQmTemp))+2*std(Qm_i(retainQmTemp));
 
 elseif isequal(QcM,'NonLinear')
-    retain_Qm_i     =   Qm_i>0 & RZZ_i<fT;
+    switch fT
+        case 0
+            retain_Qm_i = Qm_i > 0 & RZZ_i < max(RZZ_i);
+        otherwise
+            retain_Qm_i = Qm_i > 0 & RZZ_i < fT;
+    end
         
 end
 

@@ -1,6 +1,6 @@
 %[text:tableOfContents]{"heading":"Table of Contents"}
 %[text] %[text:anchor:T_C5277B6D] # INPUT MuRAT - MSH
-%[text] This is an input file for the program Multi-Resolution Attenuation Tomography (MuRAT), version 3. It refers to the following area:
+%[text] This is an input file for the program Multi-Resolution Attenuation Tomography (MuRAT), version 4.0. It refers to the following area:
 %[text] ```
 %[text] MOUNT ST HELENS VOLCANO
 %[text] ```
@@ -72,7 +72,7 @@ Murat.input.iExtinctionLength       =   [0.12 0.12 0.1 0.1]; % D  =   vS./Le_1/3
 Murat.input.kernelTreshold          =	2;
 %[text] %[text:anchor:H_38D18D3D] ### Measurement of Qc
 %[text] MuRAT3D implements either a linearised approach or a grid search approach to measure Qc. The linearised approach is the standard proposed first by Aki (e.g., [Havskov et al. 2016, BSSA](https://www.researchgate.net/publication/303510878_Coda_Q_in_Different_Tectonic_Areas_Influence_of_Processing_Parameters)) to best fit Qc after taking the logarithm of the energy. The uncertainties are derived from the simple minimum R-squared (fitTresholdLinear) and needs to be defined by a number between 0 and 1. It is advisable to set a minimum of 0.1.
-%[text] The non linear approach models energy data measured on one-second windows across the envelope and minimizes the difference between data and model with a 1D grid search algorithm ([Napolitano et al. 2020](https://www.sciencedirect.com/science/article/pii/S1674987119301999)). Uncertainties are given by the experimental probability density function of the misfit. In both cases, uncertainties play as a weight in the final inversion. In the second case, leave the fitTresholdLinear = **\[\]**.
+%[text] The non linear approach models energy data measured on one-second windows across the envelope and minimizes the difference between data and model with a 1D grid search algorithm ([Napolitano et al. 2020](https://www.sciencedirect.com/science/article/pii/S1674987119301999)). Uncertainties are given by the experimental probability density function of the misfit. In both cases, uncertainties play as a weight in the final inversion. In the second case, leave the fitTresholdLinear = **0** or set it appropriately after studying the measured inverse Qc distribution.
 %[text] The user needs to choose between the two options **'Linearized'** and **'NonLinear':**
 Murat.input.QcMeasurement           =   'NonLinear';
 Murat.input.fitTresholdLinear       =	0.006;

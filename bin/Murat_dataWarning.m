@@ -43,11 +43,9 @@ if isequal(QcM,'Linearized')
     no_RZZ          =   (RZZ <= fT);
 
 elseif isequal(QcM,'NonLinear')
-    no_RZZ          =   (RZZ >= fT);
+    no_RZZ          =   (RZZ < fT);
 
 end
-
-
 
 no_Q                =   (rapspcn < tresholdnoise)|(rapsp < tresholdnoise);
 

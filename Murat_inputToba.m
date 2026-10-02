@@ -1,6 +1,6 @@
 %[text:tableOfContents]{"heading":"Table of Contents"}
 %[text] %[text:anchor:T_C5277B6D] # INPUT MuRAT - Toba
-%[text] This is an input file for the program Multi-Resolution Attenuation Tomography (MuRAT), version 3. It refers to the following area:
+%[text] This is an input file for the program Multi-Resolution Attenuation Tomography (MuRAT), version 4.0. It refers to the following area:
 %[text] ```
 %[text] TOBA CALDERA
 %[text] ```
@@ -66,15 +66,15 @@ Murat.input.startLapseTime          =   60;
 Murat.input.codaWindow              =   20;
 %[text] The **MLTWA** is the standard method to find the average parameters necessary to calculate the kernels. It provides albedo and extinction length:
 Murat.input.albedo                  =   [0.5 0.5];
-Murat.input.iExtinctionLength        =   [0.02 0.02];
+Murat.input.iExtinctionLength       =   [0.02 0.02];
 %[text] As the kernels are computational intensive and require a full matrix of nodes to avoid singularities, we also use a computational factor to reduce the computational time. This number divides the input grid, meaning that higher numbers give more precise results at the expene of computational time. Minimum is **1**. A figure will output the kernel in this grid.
 Murat.input.kernelTreshold          =	1;
 %[text] %[text:anchor:H_865BAF76] ### Measurement of Qc
 %[text] MuRAT3D implements either a linearised approach or a grid search approach to measure Qc. The linearised approach is the standard proposed first by Aki (e.g., [Havskov et al. 2016, BSSA](https://www.researchgate.net/publication/303510878_Coda_Q_in_Different_Tectonic_Areas_Influence_of_Processing_Parameters)) to best fit Qc after taking the logarithm of the energy. The uncertainties are derived from the simple minimum R-squared (fitTresholdLinear) and needs to be defined by a number between 0 and 1. It is advisable to set a minimum of 0.1.
-%[text] The non linear approach models energy data measured on one-second windows across the envelope and minimizes the difference between data and model with a 1D grid search algorithm ([Napolitano et al. 2020](https://www.sciencedirect.com/science/article/pii/S1674987119301999)). Uncertainties are given by the experimental probability density function of the misfit. In both cases, uncertainties play as a weight in the final inversion. In the second case, leave the fitTresholdLinear = **\[\]**.
+%[text] The non linear approach models energy data measured on one-second windows across the envelope and minimizes the difference between data and model with a 1D grid search algorithm ([Napolitano et al. 2020](https://www.sciencedirect.com/science/article/pii/S1674987119301999)). Uncertainties are given by the experimental probability density function of the misfit. In both cases, uncertainties play as a weight in the final inversion. In the second case, leave the fitTresholdLinear = **0** or set it appropriately after studying the measured inverse Qc distribution.
 %[text] The user needs to choose between the two options **'Linearized'** and **'NonLinear':**
 Murat.input.QcMeasurement           =   'NonLinear';
-Murat.input.fitTresholdLinear       =	[];
+Murat.input.fitTresholdLinear       =	0;
 %%
 %[text] %[text:anchor:H_7FEF6216] ## GEOMETRY AND VELOCITY
 %[text] This section sets the details of the inversion grid and availability of velocity model. In MuRAT3D the coordinates of the model are in lat/lon, then they get converted in km. The vertical is in altitude above sea level. The velocity model can be 1D or 3D - if 3D all points must be given in lat/long formats. You start by setting the origin and end points of your inversion grid.

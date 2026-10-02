@@ -1,0 +1,125 @@
+European Union Public Licence
+V.1.1
+
+EUPL © the European Community 2007
+
+This European Union Public Licence (the "EUPL") applies to the Work or Software (as defined below) which is provided under the terms of this Licence. Any use of the Work, other than as authorized under this Licence is prohibited (to the extent such use is covered by a right of the copyright holder).
+
+The Original Work is provided under the terms of this Licence when the Licensor (as defined below) has placed the following notice immediately following the copyright notice for the Original Work:
+
+    Licensed under the EUPL V.1.1
+
+or has expressed by any other mean his willingness to license under the EUPL.
+
+1. Definitions
+
+In this Licence, the following expressions have the following meanings:
+
+- "The Licence": this licence.
+- "The Original Work or the Software": the software distributed and/or communicated by the Licensor under this Licence, available as Source Code and also as Executable Code as the case may be.
+- "Derivative Works": the works or software that could be created by the Licensee, based upon the Original Work or modifications thereof. This Licence does not define the extent of modification or dependence on the Original Work required in order to classify a work as a Derivative Work; this extent is determined by copyright law applicable in the country mentioned in Article 15.
+- "The Work": the Original Work or its Derivative Works.
+- "The Source Code": the human-readable form of the Work which is the most convenient for people to study and modify.
+- "The Executable Code": any code which has generally been compiled and which is meant to be interpreted by a computer as a program.
+- "The Licensor": the natural or legal person that distributes and/or communicates the Work under the Licence.
+- "Contributor": the natural or legal person who modifies the Work under the Licence, or otherwise contributes to the creation of a Derivative Work.
+- "The Licensee or "You"": any natural or legal person who makes any usage of the Software under the terms of the Licence.
+- "Distribution and/or Communication": any act of selling, giving, lending, renting, distributing, communicating, transmitting, or otherwise making available, online or offline, copies of the Work or providing access to its essential functionalities at the disposal of third parties.
+
+2. Scope of the rights granted
+
+The Licensor hereby grants You a world-wide, royalty-free, non-exclusive, sublicensable licence to do the following, for the duration of copyright vested in the Original Work:
+
+- use the Work in any circumstance and for all usage,
+- reproduce the Work,
+- modify the Original Work, and to Derivative Works,
+- distribute the Work or copies thereof,
+- communicate the Work to the public,
+- perform the Work,
+- display the Work,
+- make available the Work in source or object code form,
+- integrate the Work into one or more collections of Works,
+- sublicense the Work or copies thereof under the terms of this Licence,
+- and, as far as the Licensor's rights may be exercised, use the Work, reproduce the Work, display the Work, communicate the Work to the public and distribute the Work or copies thereof to any person who is not a Contributor.
+
+The rights granted in this Article are subject to any production or related rights, notably in the field of industrial property, and to the extent the Licensee may lawfully exercise them.
+
+The Licensee may make use of the Work under the conditions of this Licence, provided that the following conditions are met:
+
+a) The Licensee must preserve the copyright notice and include a copy of the Licence.
+b) The Licensee must provide a notice that the Work is licensed under the Licence, including the licence text or a URI to the licence.
+c) The Licensee must state that any modifications to the Work have been made; and the name of the original author and any contributors must be acknowledged in a reasonable manner.
+
+d) Any use of the Work, whether in source or executable code, must include the Source Code of the Work or a notice that the Source Code is available, in a form consistent with the rights granted under this Licence.
+
+The rights granted in this Licence are personal to the Licensee and may not be assigned. However, the Licensee may sublicense the Work under the terms of this Licence to third parties, and such sublicensing shall not affect the Licensee's rights as granted by this Licence.
+
+3. Distribution and communication of the Work
+
+The Licensee may distribute and/or communicate copies of the Work, either in its original form or as modified, in any medium, provided that all of the following are met:
+
+- the Work is accompanied by a copy of this Licence,
+- the Work is marked as being subject to this Licence,
+- any copyright notices are kept intact,
+- any notices indicating that this Licence applies to the Work are kept intact,
+- the Licensee shall not alter or remove the notices referring to the exclusion of warranties or liability,
+- the Work is distributed on the basis of Source Code and/or Executable Code, as the case may be,
+- the source code of any Derivative Work must be made available under the same Licence.
+
+If the Licensee distributes or communicates the Work in the form of source code, they must provide it in a manner that makes the Source Code available to anyone who receives the Work and who is entitled to it.
+
+4. Intellectual property rights
+
+The Work is protected by copyright and other applicable intellectual property rights, and the Licensor holds such rights in the Work.
+
+The Licensee acknowledges that the Work may contain third party material and that the Licensor is not responsible for such material unless otherwise stated.
+
+5. Warranties and liability
+
+THE WORK IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+EXCEPT AS EXPRESSLY PROVIDED BY APPLICABLE LAW, THE LICENSOR SHALL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE WORK, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+6. Term and termination
+
+This Licence is granted for the term of copyright in the Work and shall continue until terminated.
+
+The Licensor may terminate this Licence at any time if the Licensee fails to comply with the terms of the Licence.
+
+Upon termination, the Licensee must cease all use, reproduction, modification, distribution, and communication of the Work and any Derivative Works, and must destroy all copies in their possession or control, except to the extent required by law.
+
+7. Miscellaneous
+
+This Licence constitutes the entire agreement between the parties regarding the Work.
+
+The Licence may be translated, adapted, or modified only by the European Union in accordance with the procedure set out in the treaty establishing the European Community.
+
+If any provision of this Licence is invalid or unenforceable under applicable law, the remaining provisions shall remain valid and enforceable.
+
+The courts of the country where the relevant party is domiciled shall have jurisdiction over disputes relating to this Licence, subject to any rights of the European Union under relevant law.
+
+8. Relation to other licences
+
+The Work may be licensed under another licence simultaneously, provided that the terms of that other licence are compatible with this Licence and the Licensee complies with both.
+
+9. Final provisions
+
+This Licence is made available in the official languages of the European Union, and the authentic version is the one in the official language of the Member State in which the Work is first made available, subject to any different choice made by the Licensor.
+
+This Licence shall be interpreted in accordance with the law of the European Union and, where appropriate, the law of the Member State where the Licensee is established or domiciled.
+
+The official version of this Licence is the one published by the European Union, and any translations or adaptations are for information purposes only.
+
+Annex
+
+The "European Union Public Licence" is the licence known as EUPL v1.1, published by the European Commission. It is an open source licence approved by the Open Source Initiative (OSI).
+
+This License must be accompanied by the following notice:
+
+    Licensed under the EUPL V.1.1
+
+For more information about the EUPL, see:
+
+    https://eupl.eu/1.1/en/
+
+This file is provided with the license text above, intended to be used as the repository's LICENSE file.
