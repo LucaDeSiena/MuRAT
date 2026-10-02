@@ -9,15 +9,16 @@ function  Murat_saveFigures(figureName,Path)
 %   Output:
 %       Three sections and 1 3D figure
 %
-SetFDefaults
-saveas(figureName,Path);    
+SetFDefaults()
+savefig(figureName,Path);    
 view(90,0)
 ytickangle(45)
-saveas(figureName,[Path '_SN'], 'png');
+saveFigureAsImage([Path '_SN']);
 view(0,0)
 xtickangle(45)
-saveas(figureName,[Path '_WE'], 'png');
+saveFigureAsImage([Path '_WE']);
 view(0,90)
-saveas(figureName,[Path '_H'], 'png');
+saveFigureAsImage([Path '_H']);
+
 close(figureName)
 end

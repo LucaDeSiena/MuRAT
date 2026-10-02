@@ -1,4 +1,4 @@
-function QcFrequency        =   Murat_imageQcFrequency(cf,...
+function QcFrequency    =   Murat_imageQcFrequency(cf,...
     averageQcFrequency,sizeTitle,Qcf_title)
 % function QcFrequency        =   Murat_imageQcFrequency(cf,...
 %     averageQcFrequency,sizeTitle,Qcf_title)
@@ -14,41 +14,37 @@ function QcFrequency        =   Murat_imageQcFrequency(cf,...
 % Output parameters:
 %    QcFrequency:           figure for Qc vs frequency
 
-QcFrequency                 =   figure('Name',Qcf_title,...
-    'NumberTitle','off','Position',[20,400,1200,1000],'visible','off');
+QcFrequency =   myfig(Qcf_title);
 
-Qc_1                        =   averageQcFrequency(1,:);
-uncQc_1                     =   averageQcFrequency(2,:);
+Qc_1        =   averageQcFrequency(1,:);
+uncQc_1     =   averageQcFrequency(2,:);
 
-Qc                          =   averageQcFrequency(1,:).^(-1);
-perQc                       =   uncQc_1./Qc_1;
-uncQc                       =   perQc.*Qc;
+d           =   log(Qc_1);
+G           =   ones(length(cf),2);
+G(:,2)      =   log(cf);
 
-d                           =   log(Qc);
-G                           =   ones(length(cf),2);
-G(:,2)                      =   log(cf);
+varQc       =   diag(uncQc_1.^(-2));
 
-varQc                       =   mean(perQc)^2;
+m           =   lsqlin(G,d);
+covG        =   (G'*varQc*G)^(-1);
+deltam      =   1.96*sqrt(diag(covG));
 
-m                           =   lsqlin(G,d);
-covG                        =   varQc*(G'*G)^(-1);
-deltam                      =   1.96*sqrt(diag(covG));
+dpre        =   exp(G*m);
+errorbar(cf,Qc_1,uncQc_1,'ko','LineWidth',2,'MarkerSize',12)
 
-dpre                        =   exp(G*m);
-errorbar(cf,Qc,uncQc,'ko','LineWidth',2,'MarkerSize',12)
-
-Q0                          =   exp(m(1));
-unQ0                        =   exp(deltam(1));
+sQ0_1       =   exp(m(1));
+unQ0_1      =   exp(deltam(1))*deltam(1);
+unf0_1      =   deltam(2);
 
 hold on
 plot(cf,dpre,'k','LineWidth',2);
 hold off
-title(['Dependence on frequency: Qc = '...
-    num2str(Q0) '*f^{' num2str(unQ0) '}'],'FontSize',sizeTitle);
+title(['Qc^{-1} = (' num2str(sQ0_1) '+/- ' num2str(unQ0_1) ') * f^{('...
+    num2str(m(2)) ' +/- ' num2str(unf0_1) ')}'],'FontSize',sizeTitle);
 
 xlabel('Frequency (Hz)','FontSize',sizeTitle,'FontWeight','bold',...
     'Color','k')
-ylabel('Coda quality factor','FontSize',sizeTitle,...
-    'FontWeight','bold','Color','k')
+ylabel('Qc^{-1}','FontSize',sizeTitle,'FontWeight','bold','Color','k')
+set(gca,'XScale','log','YScale','log')
 
 SetFDefaults()

@@ -1,7 +1,0 @@
-
-[submodule "IRtools"]
-	path = IRtools
-	url = https://github.com/jnagy1/IRtools
-[submodule "IRTools"]
-	path = IRTools
-	url = https://github.com/jnagy1/IRtools.git

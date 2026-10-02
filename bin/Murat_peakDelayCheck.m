@@ -1,4 +1,4 @@
-function cursorPeakDelay_i      =...
+function cursorPeakDelay_i  =...
     Murat_peakDelayCheck(tempis,cursorPick_i,maxtpde,srate_i)
 % function cursorPeakDelay_i      =...
 %     Murat_peakDelayCheck(tempis,cursorPick_i,maxtpde,srate_i)
@@ -14,22 +14,14 @@ function cursorPeakDelay_i      =...
 % Output parameters:
 %    cursorPeakDelay_i: location of peak delay window
 
-cursorPeakDelayMax              =   floor(cursorPick_i+maxtpde*srate_i);
-lengthTempis                    =   length(tempis);
+cursorPeakDelayMax      =   floor(cursorPick_i+maxtpde*srate_i);
+lengthTempis            =   numel(tempis);
 
 %Measures for peak delay - compute shorter window if waveform is cut
-if cursorPeakDelayMax > lengthTempis
-    
-    cursorPeakDelay_i           =   lengthTempis; 
-    msg                         =...
-        'Length of seismogram shorter than peak-delay window!';
-    warning(msg);
-    
-else
-    
-    cursorPeakDelay_i           =   cursorPeakDelayMax;
-    
-end          
+cursorPeakDelay_i       =   min(cursorPeakDelayMax, lengthTempis);
 
+if cursorPeakDelay_i < cursorPeakDelayMax
+    warning('Length of seismogram shorter than peak-delay window!');
+end         
 
 end
