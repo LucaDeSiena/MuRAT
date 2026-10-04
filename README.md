@@ -6,7 +6,7 @@ MuRAT - Multi-Resolution seismic Attenuation Tomography
 [![test](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml/badge.svg)](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml)
 [![GitHub releases](https://img.shields.io/github/release/LucaDeSiena/MuRAT/all.svg)](https://github.com/LucaDeSiena/MuRAT/releases)
 [![DOI](https://zenodo.org/badge/64924529.svg)](https://doi.org/10.5281/zenodo.13996751)
-[![License](https://img.shields.io/badge/license-EUPL%201.1-blue.svg)](LICENSE)
+[![MIT License](https://img.shields.io/github/license/LucaDeSiena/MuRAT)](LICENSE)
 [![MATLAB](https://img.shields.io/badge/MATLAB-R2025b%2B-orange)](https://www.mathworks.com/products/matlab.html)
 
 MuRAT4.0 is a Matlab Package for seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves at multiple frequencies.
@@ -33,24 +33,15 @@ We recorded a Video Tutorial! Just go to the [Volcano Earth Imaging group page](
 
 The program works on Mac, Linux and Windows systems with Matlab version R2025b or higher.
 
-Necessary Toolboxes:
-
-1. Curve Fitting Toolbox,
-2. Global Optimization Toolbox,
-3. Image Processing Toolbox,
-4. Mapping Toolbox,
-5. Optimization Toolbox,
-6. Signal Processing Toolbox.
-
-The Parallel Computing Toolbox is optional but recommended for speed.
+Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing and Mapping. The Parallel Computing Toolbox is recommended for speed.
 
 Custom toolboxes not included in standard Matlab installations are also provided with the package. These are:
 
-1. Routines to read SAC files from the [MatSAC tools](http://geophysics.eas.gatech.edu/classes/SAC/) created by Prof. Zhigang Peng.
-2. The [Regularization Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/52-regtools?s_tid=prof_contriblnk), created by Per Christian Hansen and available from Matlab File Exchange.
+1. Routines to read SAC files created by Zhigang Peng and available from [his SAC tutorial page](http://geophysics.eas.gatech.edu/classes/SAC/).
+2. The [Regularization Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/52-regtools?s_tid=prof_contriblnk) was created by Per Christian Hansen and available from Matlab File Exchange.
 3. Functions from the [Geometry and Image-Based Bioengineering add-On for MATLAB](https://github.com/gibbonCode/GIBBON).
 
-Three sample datasets (Mount St. Helens, Romania, and Toba) are included and allow the user to obtain sample models. The datasets work with the three corresponding *input* files that show examples of what the user can get with the code.
+Three sample datasets (Mount St. Helens, Romania, and Toba) are included and allow the user to obtain sample models. The datasets work with the three corresponding *input.m* files that show examples of what the user can get with the code.
 
 *Instructions in a nutshell*
 ------------
@@ -209,7 +200,7 @@ If you use MuRAT for your research and publications, please consider mentioning 
 
 3. Feng, Y., Ai, Y., De Siena, L., He, Y., Jiang, M., Mon, C. T., et al. (2026). Seismic attenuation tomography in Central Myanmar and its implications on continental subduction and arc magmatism. Journal of Geophysical Research: Solid Earth, 131, e2025JB032147. - *Most recent application of Q imaging to lithospheric scale*
 
-**Qc and Peak Delay (Absorption and Scattering)**:
+**Qc and Peak Delay (Absorption and scattering)**:
 
 1. De Siena L., Calvet, M., Watson, K.J., Jonkers, A.R.T. and Thomas, C., 2016. Seismic scattering and absorption mapping of debris flows, feeding paths, and tectonic units at Mount St. Helens volcano. Earth and Planetary Science Letters, 442, pp.21-31. - *Implementation of the older peak delay and Qc technique, both with regionalisation*
 
