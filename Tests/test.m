@@ -1,4 +1,4 @@
-function smoke_test()
+function test()
 % MuRAT smoke test
 % This test checks that the repository contains the expected files and that the
 % core MuRAT functions are declared with valid signatures.
@@ -51,4 +51,8 @@ function smoke_test()
     assert(hasFlagInit, 'Murat_testData.m must initialize the flag variable.');
 
     fprintf('MuRAT smoke test passed. Core repository files and entry points are present.\n');
+end
+
+function smoke_test()
+    test();
 end
