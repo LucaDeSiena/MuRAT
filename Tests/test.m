@@ -1,47 +1,52 @@
 function test()
-% MuRAT smoke test for CI.
-% This test checks that the repository contains the expected MuRAT files and
-% that the key function entry points are discoverable on the MATLAB path.
+    % MuRAT smoke test for CI.
+    % This test checks the repository structure and core MuRAT entries
+    % without needing the Parallel Computing Toolbox or a MATLAB license.
 
-    repoRoot = fileparts(fileparts(mfilename('fullpath')));
-    if isempty(repoRoot)
-        repoRoot = pwd;
+    root = fileparts(fileparts(mfilename('fullpath')));
+    if isempty(root)
+        root = pwd;
     end
 
-    addpath(repoRoot);
-    addpath(fullfile(repoRoot, 'bin'));
-    addpath(fullfile(repoRoot, 'Utilities_Matlab'));
-    addpath(fullfile(repoRoot, 'Utilities_Matlab', 'MatSAC'));
-    addpath(fullfile(repoRoot, 'Utilities_Matlab', 'MyUtilities'));
+    addpath(root);
+    addpath(fullfile(root, 'bin'));
+    addpath(fullfile(root, 'Utilities_Matlab'));
+    addpath(fullfile(root, 'Utilities_Matlab', 'MatSAC'));
+    addpath(fullfile(root, 'Utilities_Matlab', 'MyUtilities'));
 
     requiredFiles = {
-        fullfile(repoRoot, 'Utilities_Matlab', 'MyUtilities', 'Murat_test.m'), ...
-        fullfile(repoRoot, 'Utilities_Matlab', 'MyUtilities', 'Murat_testAll.m'), ...
-        fullfile(repoRoot, 'bin', 'Murat_testData.m'), ...
-        fullfile(repoRoot, 'bin', 'Murat_checks.m'), ...
-        fullfile(repoRoot, 'Utilities_Matlab', 'MatSAC', 'sac.m'), ...
-        fullfile(repoRoot, 'Utilities_Matlab', 'MatSAC', 'sachdr.m')
+        fullfile(root, 'Utilities_Matlab', 'MyUtilities', 'Murat_test.m');
+        fullfile(root, 'Utilities_Matlab', 'MyUtilities', 'Murat_testAll.m');
+        fullfile(root, 'bin', 'Murat_testData.m');
+        fullfile(root, 'bin', 'Murat_checks.m');
+        fullfile(root, 'Utilities_Matlab', 'MatSAC', 'sac.m');
+        fullfile(root, 'Utilities_Matlab', 'MatSAC', 'sachdr.m')
     };
 
-    missing = {};
+    missingFiles = {};
     for i = 1:numel(requiredFiles)
-        if exist(requiredFiles{i}, 'file') ~= 2
-            missing{end+1} = requiredFiles{i};
+        fname = requiredFiles{i};
+        if exist(fname, 'file') ~= 2
+            missingFiles{end+1} = fname;
+            fprintf('  X MISSING: %s\n', fname);
+        else
+            fprintf('  + Found: %s\n', fname);
         end
     end
 
-    if ~isempty(missing)
-        error('Missing required MuRAT files: %s', strjoin(missing, ', '));
+    if ~isempty(missingFiles)
+        error('Missing required files');
     end
 
     requiredFunctions = {'Murat_test', 'Murat_testAll', 'Murat_testData'};
     for i = 1:numel(requiredFunctions)
-        if exist(requiredFunctions{i}, 'file') ~= 2
-            error('Required function %s was not found on the MATLAB path.', requiredFunctions{i});
+        fname = requiredFunctions{i};
+        if exist(fname, 'file') ~= 2
+            error('Required function not found: %s', fname);
         end
     end
 
-    fid = fopen(fullfile(repoRoot, 'bin', 'Murat_testData.m'), 'r');
+    fid = fopen(fullfile(root, 'bin', 'Murat_testData.m'), 'r');
     if fid == -1
         error('Unable to open bin/Murat_testData.m');
     end
@@ -49,9 +54,18 @@ function test()
     fclose(fid);
     content = char(content.');
 
-    hasFlagInit = contains(content, 'flag = []') || contains(content, 'flag=[]') || ...
-                  contains(content, 'flag = 0') || contains(content, 'flag=0');
-    assert(hasFlagInit, 'Murat_testData.m must initialize the flag variable.');
+    hasFlagReturn = ~isempty(strfind(content, 'function [muratHeader,flag]'));
+    hasFlagInit = ~isempty(strfind(content, 'flag = []')) || ...
+                 ~isempty(strfind(content, 'flag=[]')) || ...
+                 ~isempty(strfind(content, 'flag = 0')) || ...
+                 ~isempty(strfind(content, 'flag=0'));
 
-    fprintf('MuRAT smoke test passed. Core repository files and entry points are present.\n');
+    if ~hasFlagReturn
+        error('Murat_testData.m must return [muratHeader, flag]');
+    end
+    if ~hasFlagInit
+        error('Murat_testData.m must initialize flag variable');
+    end
+
+    fprintf('MuRAT smoke test passed.\n');
 end
