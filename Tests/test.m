@@ -1,21 +1,26 @@
 function test()
-% MuRAT smoke test
-% This test checks that the repository contains the expected files and that the
-% core MuRAT functions are declared with valid signatures.
-% It avoids requiring the MATLAB Parallel Computing Toolbox or a MATLAB license.
+% MuRAT smoke test for CI.
+% This test checks that the repository contains the expected MuRAT files and
+% that the key function entry points are discoverable on the MATLAB path.
 
-    root = fileparts(fileparts(mfilename('fullpath')));
-    if ~isempty(root)
-        addpath(genpath(root));
+    repoRoot = fileparts(fileparts(mfilename('fullpath')));
+    if isempty(repoRoot)
+        repoRoot = pwd;
     end
 
+    addpath(repoRoot);
+    addpath(fullfile(repoRoot, 'bin'));
+    addpath(fullfile(repoRoot, 'Utilities_Matlab'));
+    addpath(fullfile(repoRoot, 'Utilities_Matlab', 'MatSAC'));
+    addpath(fullfile(repoRoot, 'Utilities_Matlab', 'MyUtilities'));
+
     requiredFiles = {
-        'Utilities_Matlab/MyUtilities/Murat_test.m', ...
-        'Utilities_Matlab/MyUtilities/Murat_testAll.m', ...
-        'bin/Murat_testData.m', ...
-        'bin/Murat_checks.m', ...
-        'Utilities_Matlab/MatSAC/sac.m', ...
-        'Utilities_Matlab/MatSAC/sachdr.m'
+        fullfile(repoRoot, 'Utilities_Matlab', 'MyUtilities', 'Murat_test.m'), ...
+        fullfile(repoRoot, 'Utilities_Matlab', 'MyUtilities', 'Murat_testAll.m'), ...
+        fullfile(repoRoot, 'bin', 'Murat_testData.m'), ...
+        fullfile(repoRoot, 'bin', 'Murat_checks.m'), ...
+        fullfile(repoRoot, 'Utilities_Matlab', 'MatSAC', 'sac.m'), ...
+        fullfile(repoRoot, 'Utilities_Matlab', 'MatSAC', 'sachdr.m')
     };
 
     missing = {};
@@ -29,7 +34,6 @@ function test()
         error('Missing required MuRAT files: %s', strjoin(missing, ', '));
     end
 
-    % Validate the key MuRAT function definitions exist.
     requiredFunctions = {'Murat_test', 'Murat_testAll', 'Murat_testData'};
     for i = 1:numel(requiredFunctions)
         if exist(requiredFunctions{i}, 'file') ~= 2
@@ -37,12 +41,11 @@ function test()
         end
     end
 
-    % Check the test-data helper initializes its flag variable before use.
-    fid = fopen('bin/Murat_testData.m', 'r');
+    fid = fopen(fullfile(repoRoot, 'bin', 'Murat_testData.m'), 'r');
     if fid == -1
         error('Unable to open bin/Murat_testData.m');
     end
-    content = fread(fid, '*char')';
+    content = fread(fid, '*char');
     fclose(fid);
     content = char(content.');
 
@@ -51,8 +54,4 @@ function test()
     assert(hasFlagInit, 'Murat_testData.m must initialize the flag variable.');
 
     fprintf('MuRAT smoke test passed. Core repository files and entry points are present.\n');
-end
-
-function smoke_test()
-    test();
 end
