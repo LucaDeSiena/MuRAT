@@ -21,6 +21,8 @@ StLat                       =   cell(lengthData,1);
 StLon                       =   cell(lengthData,1);
 StElev                      =   cell(lengthData,1);
 
+flag = [];
+
 for i=1:lengthData
     listSac_i               =   Names{i};    
     [~,SAChdr]              =   Murat_test(listSac_i,[],8,0,0);
