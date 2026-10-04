@@ -68,5 +68,5 @@ jobs:
               error('Murat_testData.m must initialize flag variable');
             end
 
-            fprintf('MuRAT smoke test passed.\\n');
+            fprintf('MuRAT smoke test passed.\n');
           "
