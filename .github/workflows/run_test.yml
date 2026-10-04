@@ -1,23 +1,26 @@
 name: test
 on: [push]
+
 jobs:
   test_on_ubuntu:
     name: test_on_ubuntu
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v2
-        
+        uses: actions/checkout@v4
+
       - name: Set up MATLAB
-        uses: matlab-actions/setup-matlab@v1
-        
+        uses: matlab-actions/setup-matlab@v2
+        with:
+          products: MATLAB
+
       - name: Run tests and generate artifacts
-        uses: matlab-actions/run-tests@v1
+        uses: matlab-actions/run-tests@v2
         with:
           test-results-junit: test-results/results.xml
           code-coverage-cobertura: code-coverage/coverage.xml
 
       - name: Run script
-        uses: matlab-actions/run-command@v1
+        uses: matlab-actions/run-command@v2
         with:
           command: addpath('Tests'),test
