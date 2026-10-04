@@ -69,4 +69,4 @@ jobs:
             end
 
             fprintf('MuRAT smoke test passed.\n');
-          "
+          " 
