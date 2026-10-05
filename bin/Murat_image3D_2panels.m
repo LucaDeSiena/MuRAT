@@ -20,29 +20,26 @@ function image          = ...
 % Output parameters:
 %    image:     image produced in one panel
 
-stepgXYZ                =   [x(2)-x(1) y(2)-y(1) z(2)-z(1)];
-divi                    =   5;
-divix                   =   stepgXYZ(1)/divi;
-diviy                   =   stepgXYZ(2)/divi;
-diviz                   =   stepgXYZ(3)/divi;
+divi        =   5;
+dx          =   (x(2)-x(1))/divi;
+dy          =   (y(2)-y(1))/divi;
+dz          =   (z(2)-z(1))/divi;
 
-xp                      =   x(1)-divix:divix:x(end)+divix;
-yp                      =   y(1)-diviy:diviy:y(end)+diviy;
-zp                      =   z(1)-diviz:diviz:z(end)+diviz;
-zp                      =   zp/1000;
+xp          =   x(1)-dx:dx:x(end)+dx;
+yp          =   y(1)-dy:dy:y(end)+dy;
+zp          =   (z(1)-dz:dz:z(end)+dz)/1000;
 
-[Xp,Yp,Zp]              =   meshgrid(xp,yp,zp);
-mVp                     =   interp3(X,Y,Z,V,Xp,Yp,Zp);
-z                       =   sort(z)/1000;
+[Xp,Yp,Zp]  =   meshgrid(xp,yp,zp);
+mVp         =   interp3(X,Y,Z,V,Xp,Yp,Zp);
+z           =   sort(z)/1000;
 
-image                   =...
-    slice(Xp, Yp, Zp, mVp, sections(2), sections(1), sections(3));
+image       =slice(Xp, Yp, Zp, mVp, sections(2), sections(1), sections(3));
 
 colormap(color);
 colorbar
 shading flat
-hcb                     =   colorbar;
-hcb.FontSize            =   18;
+hcb         =   colorbar;
+hcb.FontSize=   18;
 
 hold on
 scatter3(evestaz(:,2),evestaz(:,1),evestaz(:,3),60,'c',...

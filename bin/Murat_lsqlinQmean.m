@@ -1,54 +1,86 @@
-function [d1, const_Qc_k, constQmean_k, equationQ]   =...
-    Murat_lsqlinQmean(tCm,tWm,Q_k,cf_k,sped,luntot_k,time0_k,rapsp_k)
-% function [d1, const_Qc_k, constQmean_k, equationQ]   =...
-%     Murat_lsqlinQmean(tCm,tWm,Q_k,cf_k,sped,luntot_k,time0_k,rapsp_k)
+function [d0, Q0, mDest]   =   Murat_lsqlinQmean(cf_k,l,time0_k,rapsp_k,...
+    Qc_k, tCm, te)
+% [d0, Q0, mDest]   =   Murat_lsqlinQmean(cf_k,l,time0_k,rapsp_k)
 %
 % INVERTS with minimum least squares to obtain average Q
 %
 % Input parameters:
-%    tCm:           starting coda time
-%    tWm:           coda window length
-%    Q_k:           average coda attenuation
-%    cf_k:          central frequency
-%    sped:          spectral decay
-%    luntot_k:      total length per frequency
+%    cf_f:          central frequency
+%    l:             total ray length in km
 %    time0_k:       travel time per frequency
 %    rapsp_k:       energy ratio per frequency
 %
 % Output parameters:
-%    d1:            data for the inversion - variations from average
-%    const_Qc_k:    constant obtained using the average source-station Qc
-%    constQmean_k:  contains geometrical spreading, Q, uncertainties
-%    equationQ:     equation to be compared with data in test
-
+%    d0:            data for the average inversion
+%    Q0:            average Q, uncertainties
+%    mDest:         mean estimated diffusion constant
 %%
-% Data creation for the true inversion, removing the pre-calculated
-% parameters.
+% Data creation for the true inversion, removing the parameters
+% pre-calculated using the diffusion model
 
-% Include info on Qc
-const_Qc_k                      =   (tCm+tWm/2).^-sped...
-                                    .*exp(-2*pi*Q_k*cf_k.*(tCm+tWm/2));
-% Data vector for inversion of average Q
-d0                              =...
-                    log(rapsp_k)/2/pi/cf_k + log(const_Qc_k)/2/pi/cf_k;
+data    =   log(rapsp_k.*l.^2)/2/pi/cf_k ;
 
-G                               =   -log(luntot_k)/2/pi/cf_k;
-G(:,2)                          =   -time0_k;
-
-cova                            =   (G'*G)^(-1)*G'*cov(d0)*G*(G'*G)^(-1);
+G       =   ones(length(time0_k),1);
+G(:,2)  =   -time0_k;
 
 % Storing inverted parameters
-constQmean_k(:,1)               =   lsqlin(G,d0(:,1));
-constQmean_k(:,2)               =   sqrt(diag(cova));
+Q0      =   lsqlin(G,data);
 
-% Calculate data vector for average Q and geometrical spreading
-d1                              =	d0  + ...
-                            constQmean_k(1,1)*log(luntot_k)/2/pi/cf_k...
-                            + time0_k*constQmean_k(2,1);
+x       =   Q0; 
+res     =   G*x - data;
+m       =   size(G,1); 
+n       =   size(G,2);
+dof     =   max(m - n, 1);      % degrees of freedom (avoid div by zero)
+sigma2  =   (res'*res) / dof;   % estimated residual variance
 
-% Equation for average Q to fit data
-equationQ                       =   -log(const_Qc_k)...
-                                    -constQmean_k(1,1)*log(luntot_k)...
-                                    -2*pi*cf_k*time0_k*constQmean_k(2,1);
+% If unconstrained or you treat all params as free:
+cov_x   =   sigma2 * pinv(G'*G);  % use pinv(G'*G) if ill-conditioned
+
+Q0(:,2) =   diag(cov_x);
+
+d0      =   data-Q0(1);
+
+cEst    =   Q0(1,1);
+
+% Linear grid
+Dmin    =   1e-3;
+Dmax    =   1e3;
+Ngrid   =   2000;
+Ds      =   linspace(Dmin, Dmax, Ngrid);   % [1 x Ngrid]
+Ds_col  =   Ds(:);                     % [Ngrid x 1]
+
+% Ensure row vectors for broadcasting
+Qc_row  =   reshape(Qc_k, 1, []);
+l_row   =   reshape(l, 1, []);
+tCm_row =   reshape(tCm, 1, []);
+te_row  =   reshape(te, 1, []);
+
+
+% Precompute log(4*pi*D) for Ds_col
+log4piD =   log(4*pi*Ds_col);           % OK because Dmin > 0
+
+% Compute A(D) -> [Ngrid x N]
+A       =   (tCm_row + te_row).^(-1.5) .* ...
+                exp( -l_row.^2 ./ (4 .* Ds_col .* te_row)...
+                - 2*pi .* cf_k .* Qc_row .* te_row ) ...
+                - tCm_row.^(-1.5) .* ...
+                exp( -l_row.^2 ./ (4 .* Ds_col .* tCm_row)...
+                - 2*pi .* cf_k .* Qc_row .* tCm_row );
+
+% Valid mask and full RHS computation (cf_k scalar)
+valid   =   A > 0;                % [Ngrid x N]
+RHS_full=   (1.5 / (2*pi*cf_k)) .* log4piD ...
+            - (1   / (2*pi*cf_k)) .* log(A); 
+RHS_full(~valid) = NaN;       % avoid invalid log entries
+
+% Residual r = cEst - RHS over grid
+R       =   cEst - RHS_full;          % [Ngrid x N]
+R_abs   =   abs(R);
+R_abs(~isfinite(R_abs)) =   Inf;
+
+% Pick Ds that minimize |residual| for each parameter column
+[~, idxMin] = min(R_abs, [], 1);
+Dest    =   Ds(idxMin);       % no transpose
+mDest   =   mean(Dest);      % scalar mean
 
 end

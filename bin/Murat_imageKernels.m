@@ -16,9 +16,9 @@ slice(X, Y, Z, V, sections(1), sections(2), sections(3))
 shading flat; colormap(color);
 xlabel('Longitude (°)');
 ylabel('Latitude (°)');
-zlabel('Altitude (m)');
+zlabel('Altitude (km)');
 cH                      =   colorbar;
-ylabel(cH, 'Log-sensitivity');
+ylabel(cH, 'Sensitivity');
 set(cH,'FontSize',18);
 grid on
 ax                      =   gca;

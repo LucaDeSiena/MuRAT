@@ -1,7 +1,5 @@
-function rays           =...
-    Murat_imageRays(rma,origin,ending,evestaz,x,y,z,name)
-% function rays           =...
-%     Murat_imageRays(rma,origin,ending,evestaz,x,y,z,name)
+function rays   =   Murat_imageRays(rma,origin,ending,evestaz,x,y,z,name)
+% function rays =   Murat_imageRays(rma,origin,ending,evestaz,x,y,z,name)
 %
 % PLOTS 3D rays
 %
@@ -18,26 +16,25 @@ function rays           =...
 % Output parameters:
 %    rays:              image produced
 
-rays                    =   figure('Name',name,...
-    'NumberTitle','off','Position',[20,400,1200,1000],'visible','off');
+rays            =   myfig(name);
 
 load coastlines coastlat coastlon
-z1                      =   sort(z)/1000;
-lrma                    =   length(rma(1,1,:));
-evestaz_ray             =   zeros(lrma,6);
+z1              =   sort(z)/1000;
+lrma            =   length(rma(1,1,:));
+evestaz_ray     =   zeros(lrma,6);
 
-wgs84                               =   wgs84Ellipsoid("m");
+wgs84           =   wgs84Ellipsoid("m");
 
 subplot(2,2,1)
 
 for i = 1:lrma
-    ray                     =   rma(:,:,i)*1000;
-    ray(:,3)                =   rma(:,3,i);
+    ray         =   rma(:,:,i)*1000;
+    ray(:,3)    =   rma(:,3,i);
     
-    d                       =   sqrt(ray(:,1).^2 + ray(:,2).^2);
-    az                      =   atan(ray(:,1)./ray(:,2))*360/2/pi;
-    az(isnan(az))           =   0;
-    [lat2,lon2]             =   reckon(origin(1),origin(2),d,az,wgs84);
+    d           =   sqrt(ray(:,1).^2 + ray(:,2).^2);
+    az          =   atan(ray(:,1)./ray(:,2))*360/2/pi;
+    az(isnan(az)) =   0;
+    [lat2,lon2] =   reckon(origin(1),origin(2),d,az,wgs84);
 
     subplot(2,2,1)
     hold on
@@ -52,7 +49,7 @@ for i = 1:lrma
     plot(lon2,ray(:,3),'k');
     
     % save start and end point of ray
-    evestaz_ray(i,:)        =   [lat2(1),lon2(1),ray(1,3),...
+    evestaz_ray(i,:)    =   [lat2(1),lon2(1),ray(1,3),...
         lat2(end),lon2(end),ray(end,3)];
 end
 
@@ -77,6 +74,7 @@ set(gca,'yticklabel',num2str(get(gca,'ytick')','%.2f'))
 xtickangle(45)
 ytickangle(45)
 SetFDefaults();
+geoshow(coastlat,coastlon,'Color','k','LineWidth', 2);
 hold off
 
 
@@ -136,7 +134,3 @@ SetFDefaults();
 
 hold off
 end
-
-
-
-

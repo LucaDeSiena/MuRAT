@@ -23,200 +23,59 @@ function [peakd,Qm,RZZ,rapsp,rapspcn]	=...
 %    rapsp:         energy ratio after averaging
 %    rapspcn:       coda to noise ratio after averaging
 
-[dataL,lcf]                                     =   size(peakd1);
-index                                           =   0;
+[dataL,lcf]             =   size(peakd1);
+nGroups                 =   dataL / comp;
+idxOut                  =   0;
+
+% Preallocate outputs
+peakd                   =   nan(nGroups, lcf);
+Qm                      =   nan(nGroups, lcf);
+RZZ                     =   nan(nGroups, lcf);
+rapsp                   =   nan(nGroups, lcf);
+rapspcn                 =   nan(nGroups, lcf);
 
 for i = 1:comp:dataL
-    index                                       =   index+1;
+    idxOut              =   idxOut+1;
+    rows                =   i:(i+comp-1);
     
-    for j = 1:lcf
-        if comp ==  2
-            
-            noPD                                =   compMissing(i,j,1);
-            noPD1                               =   compMissing(i+1,j,1);
-            noQc                                =   compMissing(i,j,2);
-            noQc1                               =   compMissing(i+1,j,2);
-            noQ                                 =   compMissing(i,j,3);
-            noQ1                                =   compMissing(i+1,j,3);
-            
-            if noPD && noPD1
-                peakd(index,j)                  =   NaN; %#ok<*AGROW>
-                
-            elseif noPD && ~noPD1
-                peakd(index,j)                  =   peakd1(i+1,j);
-                
-            elseif ~noPD && noPD1
-                peakd(index,j)                  =   peakd1(i,j);
-                
-            else
-                peakd(index,j)                  =...
-                    (peakd1(i,j) + peakd1(i+1,j))/2;
-                
-            end
-            
-            if noQc && noQc1
-                Qm(index,j)                     =   NaN;
-                RZZ(index,j)                    =   NaN;
-                
-            elseif noQc && ~noQc1
-                Qm(index,j)                     =   Qm1(i+1,j);
-                RZZ(index,j)                    =   RZZ1(i+1,j);
-                
-            elseif ~noQc && noQc1
-                Qm(index,j)                     =   Qm1(i,j);
-                RZZ(index,j)                    =   RZZ1(i,j);
-                
-            else
-                Qm(index,j)                     =...
-                    (Qm1(i,j) + Qm1(i+1,j))/2;
-                RZZ(index,j)                    =...
-                    (RZZ1(i,j) + RZZ1(i+1,j))/2;
-                
-            end
-            
-            if noQ && noQ1
-                rapsp(index,j)                  =   NaN;
-                rapspcn(index,j)                =   NaN;
-                
-            elseif noQc && ~noQc1
-                rapsp(index,j)                  =   rapsp1(i+1,j);
-                rapspcn(index,j)                =   rapspcn1(i+1,j);
-                
-            elseif ~noQc && noQc1
-                rapsp(index,j)                  =   rapsp1(i,j);
-                rapspcn(index,j)                =   rapspcn1(i,j);
-                
-            else
-                rapsp(index,j)                  =...
-                    (rapsp1(i,j) + rapsp1(i+1,j))/2;
-                rapspcn(index,j)                =...
-                    (rapspcn1(i,j) + rapspcn1(i+1,j))/2;
-                
-            end
-            
-            
-        elseif comp == 3
-            
-            noPD                                =   compMissing(i,j,1);
-            noPD1                               =   compMissing(i+1,j,1);
-            noPD2                               =   compMissing(i+2,j,1);
-            noQc                                =   compMissing(i,j,2);
-            noQc1                               =   compMissing(i+1,j,2);
-            noQc2                               =   compMissing(i+2,j,2);
-            noQ                                 =   compMissing(i,j,3);
-            noQ1                                =   compMissing(i+1,j,3);
-            noQ2                                =   compMissing(i+2,j,3);
-            
-            if noPD && noPD1 && noPD2
-                peakd(index,j)                  =   NaN;
-                
-            elseif noPD && noPD1 && ~noPD2
-                peakd(index,j)                  =   peakd1(i+2,j);
-                
-            elseif noPD && ~noPD1 && noPD2
-                peakd(index,j)                  =   peakd1(i+1,j);
-                
-            elseif ~noPD && noPD1 && noPD2
-                peakd(index,j)                  =   peakd1(i,j);
-                
-            elseif ~noPD && ~noPD1 && noPD2
-                peakd(index,j)                  =...
-                    (peakd1(i,j) + peakd1(i+1,j))/2;
-            elseif ~noPD && noPD1 && ~noPD2
-                peakd(index,j)                  =...
-                    (peakd1(i,j) + peakd1(i+2,j))/2;
-            elseif noPD && ~noPD1 && ~noPD2
-                peakd(index,j)                  =...
-                    (peakd1(i+1,j) + peakd1(i+2,j))/2;
-            else
-                peakd(index,j)                  =...
-                    (peakd1(i,j) + peakd1(i+1,j) + peakd1(i+2,j))/3;
-                
-            end
-            
-            if noQc && noQc1 && noQc2
-                Qm(index,j)                     =   NaN;
-                RZZ(index,j)                    =   NaN;
-                
-            elseif noQc && noQc1 && ~noQc2
-                Qm(index,j)                     =   Qm1(i+2,j);
-                RZZ(index,j)                    =   RZZ1(i+2,j);
-                
-            elseif noQc && ~noQc1 && noQc2
-                Qm(index,j)                     =   Qm1(i+1,j);
-                RZZ(index,j)                    =   RZZ1(i+1,j);
-                
-            elseif ~noQc && noQc1 && noQc2
-                Qm(index,j)                     =   Qm1(i,j);
-                RZZ(index,j)                    =   RZZ1(i,j);
-                
-            elseif ~noQc && ~noQc1 && noQc2
-                Qm(index,j)                     =...
-                    (Qm1(i,j) + Qm1(i+1,j))/2;
-                RZZ(index,j)                    =...
-                    (RZZ1(i,j) + RZZ1(i+1,j))/2;
-            elseif ~noQc && noQc1 && ~noQc2
-                Qm(index,j)                     =...
-                    (Qm1(i,j) + Qm1(i+2,j))/2;
-                RZZ(index,j)                    =...
-                    (RZZ1(i,j) + RZZ1(i+2,j))/2;
-            elseif noQc && ~noQc1 && ~noQc2
-                Qm(index,j)                     =...
-                    (Qm1(i+1,j) + Qm1(i+2,j))/2;
-                RZZ(index,j)                    =...
-                    (RZZ1(i+1,j) + RZZ1(i+2,j))/2;
-            else
-                Qm(index,j)                     =...
-                    (Qm1(i,j) + Qm1(i+1,j) + Qm1(i+2,j))/3;
-                RZZ(index,j)                    =...
-                    (RZZ1(i,j) + RZZ1(i+1,j) + RZZ1(i+2,j))/3;
-                
-            end
-            
-            if noQ && noQ1 && noQ2
-                rapsp(index,j)                  =   NaN;
-                rapspcn(index,j)                =   NaN;
-                
-            elseif noQ && noQ1 && ~noQ2
-                rapsp(index,j)                  =   rapsp1(i+2,j);
-                rapspcn(index,j)                =   rapspcn1(i+2,j);
-                
-            elseif noQ && ~noQ1 && noQ2
-                rapsp(index,j)                  =   rapsp1(i+1,j);
-                RZZ(index,j)                    =   rapspcn1(i+1,j);
-                
-            elseif ~noQ && noQ1 && noQ2
-                rapsp(index,j)                  =   rapsp1(i,j);
-                rapspcn(index,j)                =   rapspcn1(i,j);
-                
-            elseif ~noQ && ~noQ1 && noQ2
-                rapsp(index,j)                  =...
-                    (rapsp1(i,j) + rapsp1(i+1,j))/2;
-                rapspcn(index,j)                =...
-                    (rapspcn1(i,j) + rapspcn1(i+1,j))/2;
-            elseif ~noQ && noQ1 && ~noQ2
-                rapsp(index,j)                  =...
-                    (rapsp1(i,j) + rapsp1(i+2,j))/2;
-                rapspcn(index,j)                =...
-                    (rapspcn1(i,j) + rapspcn1(i+2,j))/2;
-            elseif noQ && ~noQ1 && ~noQ2
-                rapsp(index,j)                  =...
-                    (rapsp1(i+1,j) + rapsp1(i+2,j))/2;
-                rapspcn(index,j)                =...
-                    (rapspcn1(i+1,j) + rapspcn1(i+2,j))/2;
-            else
-                rapsp(index,j)                  =...
-                    (rapsp1(i,j) + rapsp1(i+1,j) + rapsp1(i+2,j))/3;
-                rapspcn(index,j)                =...
-                    (rapspcn1(i,j) + rapspcn1(i+1,j) +...
-                    rapspcn1(i+2,j))/3;
-                
-            end
-            
-        end
-        
-    end
+    % masks: valid (not missing) for each metric, size comp x lcf
+    validPD             =   ~squeeze(compMissing(rows,:,1)); % comp x lcf
+    validQc             =   ~squeeze(compMissing(rows,:,2));
+    validRap            =   ~squeeze(compMissing(rows,:,3));
     
-end
+    % Extract data blocks comp x lcf
+    blockPD             =   peakd1(rows, :);
+    blockQm             =   Qm1(rows, :);
+    blockRZZ            =   RZZ1(rows, :);
+    blockRap            =   rapsp1(rows, :);
+    blockRapC           =   rapspcn1(rows, :);
+    
+    % For each column, average available values; if none available -> NaN
+    % peakd
+    sumPD               =   sum(blockPD .* validPD, 1);
+    nPD                 =   sum(validPD, 1);
+    peakd(idxOut, :)    =   sumPD ./ nPD;
+    peakd(idxOut, nPD == 0) =   NaN;
+
+    % Qm and RZZ (independent averaging)
+    sumQ                =   sum(blockQm .* validQc, 1);
+    nQ                  =   sum(validQc, 1);
+    Qm(idxOut, :)       =   sumQ ./ nQ;
+    Qm(idxOut, nQ == 0) =   NaN;
+    
+    sumR                =   sum(blockRZZ .* validQc, 1); 
+    RZZ(idxOut, :)      =   sumR ./ nQ;
+    RZZ(idxOut, nQ == 0)=   NaN;
+
+    % rapsp and rapspcn
+    sumRp               =   sum(blockRap .* validRap, 1);
+    nRp                 =   sum(validRap, 1);
+    rapsp(idxOut, :)    =   sumRp ./ nRp;
+    rapsp(idxOut, nRp == 0) =   NaN;
+    
+    sumRpc              =   sum(blockRapC .* validRap, 1);
+    rapspcn(idxOut, :)  =   sumRpc ./ nRp;
+    rapspcn(idxOut, nRp == 0) = NaN;
+
 end
 

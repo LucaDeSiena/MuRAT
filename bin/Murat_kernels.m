@@ -49,45 +49,45 @@ function [K_grid,r_grid1]	=...
 % Original creators: Angel De La Torre & Edoardo Del Pezzo
 % Adapted for coda attenuation tomography by De Siena.
 
-DT                          =   0.5;
+DT      =   0.5;
+lR      =   numel(B0);
 %%
-% Initial computations to understand were to compute in space
-x1                          =   unique(modv(:,1));
-y1                          =   unique(modv(:,2));
-z1                          =   sort(unique(modv(:,3)),'descend');
-stepgx                      =   x1(2)-x1(1);
-stepgy                      =   y1(2)-y1(1);
-stepgz                      =   z1(2)-z1(1);
+% Initial computations to understand where to compute in space
+x1      =   unique(modv(:,1));
+y1      =   unique(modv(:,2));
+z1      =   sort(unique(modv(:,3)),'descend');
+stepgx  =   x1(2)-x1(1);
+stepgy  =   y1(2)-y1(1);
+stepgz  =   z1(2)-z1(1);
 
-DRx                         =   stepgx/kT;
-DRy                         =   stepgy/kT;
-DRz                         =   stepgz/kT;
-DR                          =   min([DRx DRy abs(DRz)])/1000;
+DRx     =   stepgx/kT;
+DRy     =   stepgy/kT;
+DRz     =   stepgz/kT;
+DR      =   min([DRx DRy abs(DRz)])/1000;
 
 % Origin of the grid: middle point between source and receiver
-origin                      =   (event(1:3)+station(1:3))/2;
+origin  =   (event(1:3)+station(1:3))/2;
 
 % Add a cushion of 5 seconds
-S                           =   (v*T+5)*1000;
+S       =   (v*T+5)*1000;
 
 % New reference system
-xyzs                        =   event(1:3)-origin(1:3);
-xyzr                        =   station(1:3)-origin(1:3);
+xyzs    =   event(1:3)-origin(1:3);
+xyzr    =   station(1:3)-origin(1:3);
 
 % Distance between source and receiver
-dxyz                        =   xyzr(1:3)-xyzs(1:3);
-D0                          =...
-    sqrt(dxyz(1)^2 + dxyz(2)^2 + dxyz(3)^2)/1000;
+dxyz    =   xyzr(1:3)-xyzs(1:3);
+D0      =   sqrt(dxyz(1)^2 + dxyz(2)^2 + dxyz(3)^2)/1000;
 
 % Grid definition
-x_grid                      =   -S+DRx:DRx:S;
-y_grid                      =   -S+DRy:DRy:S;
-z_grid                      =   max(z1)-origin(3):DRz:-S;
+x_grid  =   -S+DRx:DRx:S;
+y_grid  =   -S+DRy:DRy:S;
+z_grid  =   max(z1)-origin(3):DRz:-S;
 
-Nx                          =   length(x_grid); 
-Ny                          =   length(y_grid); 
-Nz                          =   length(z_grid);
-Nxyz                        =   Nx*Ny*Nz;
+Nx      =   numel(x_grid); 
+Ny      =   numel(y_grid); 
+Nz      =   numel(z_grid);
+Nxyz    =   Nx*Ny*Nz;
 
 if Nxyz>50e6
     fprintf('Warning: a lot of points are going to be included in the grid (%d points)\n',Nx*Ny*Nz)
@@ -96,114 +96,121 @@ if Nxyz>50e6
 end
 
 % Sets the 3D matrix
-r_grid                      =   Murat_unfoldXYZ(x_grid',y_grid',z_grid');
+r_grid  =   Murat_unfoldXYZ(x_grid',y_grid',z_grid');
 
 
 % Distances r1 and r2, from each point of the grid to source or to receptor
-xyz                         =   r_grid(:,1:3);
-d1xyz                       =   xyz-xyzs;
-d2xyz                       =   xyz-xyzr;
-r1_grid                     =...
-    sqrt(d1xyz(:,1).^2 + d1xyz(:,2).^2 + d1xyz(:,3).^2)/1000;
-r2_grid                     =...
-    sqrt(d2xyz(:,1).^2 + d2xyz(:,2).^2 + d2xyz(:,3).^2)/1000;
+xyz     =   r_grid(:,1:3);
+d1xyz   =   xyz-xyzs;
+d2xyz   =   xyz-xyzr;
+r1_grid =   sqrt(d1xyz(:,1).^2 + d1xyz(:,2).^2 + d1xyz(:,3).^2)/1000;
+r2_grid =   sqrt(d2xyz(:,1).^2 + d2xyz(:,2).^2 + d2xyz(:,3).^2)/1000;
 
 % Elements of the grid inside the ellipsoid
 
 if isequal(lapseTimeMethod,'Peak')
-    T                       =   mean(T);
+    T   =   mean(T);
 end
 
-cond_interior               =   r1_grid + r2_grid < T*v;
+cond_interior   =   r1_grid + r2_grid < T*v;
 
 %%
 % Catalog of Paasschens Functions
 
 % Vector of distances
-R                           =   DR:DR:T*v;
+R       =   DR:DR:T*v;
 
 % Max number points coda
-NT                          =   ceil((T+DT)/DT); 
+NT      =   ceil((T+DT)/DT); 
 
 % Number of distances
-NR                          =   length(R);
+NR      =   length(R);
 
 % To store t0 for each r
-t0_R                        =   zeros(NR,1);
+t0_R    =   zeros(NR,1);
 
 % To store A for each r
-A_R                         =   zeros(NR,1);
+A_R     =   zeros(NR,lR);
 
 % Store the number of points in coda for each r
-N_R                         =   zeros(NR,1); 
+N_R     =   zeros(NR,1); 
 
 % Store the coda for each r
-coda_R                      =   zeros(NR,NT);
+coda_R  =   zeros(NT,lR,NR);
 
-for idx_r=1:NR
-    r                       =   R(idx_r);
-    [t0,A,N,coda]           =...
-        Murat_paasschensFunction(r,v,B0,Le_1,DT,T);
-    t0_R(idx_r)             =   t0;
-    A_R(idx_r)              =   A;
-    N_R(idx_r)              =   N;
-    coda_R(idx_r,1:N)       =   coda(1:N);
+for idx_r = 1:NR
+    r                   =   R(idx_r);
+    [t0,A,N,coda]       =   Murat_paasschensFunction(r,v,B0,Le_1,DT,T);
+    t0_R(idx_r)         =   t0;
+    A_R(idx_r,:)        =   A;
+    N_R(idx_r)          =   N;
+    coda_R(1:N,:,idx_r) =   coda(1:N,:);
 end
 
 %%
 % Catalog of r1 - r2 convolutions evaluated at T
-R1                          =   R;
-R2                          =   R;
-coda_coda                   =   zeros(NR,NR);
-coda_delta                  =   zeros(NR,NR);
+coda_coda       =   zeros(NR,NR,lR);
+coda_delta      =   zeros(NR,NR,lR);
 
-for idx_r1=1:NR
-    for idx_r2              =   1:idx_r1
-        r1                  =   R1(idx_r1);
-        r2                  =   R2(idx_r2);
+% Precompute some vectors for speed
+t0_vec          =   t0_R;
+A_vec           =   A_R;
+codaM           =   coda_R;
+
+for idx_r1 = 1:NR
+    r1          =   R(idx_r1);
+    t0_1        =   t0_vec(idx_r1);
+    A1          =   A_vec(idx_r1,:);
+    coda1_row   =   codaM(:,:,idx_r1);
+    for idx_r2  =   1:idx_r1
+        r2      =   R(idx_r2);
+        t0_2    =   t0_vec(idx_r2);
         
         % delta_T is the overlapping interval between E(r1,t) and E(r2,T-r)
-        delta_T             =   T-t0_R(idx_r1) - t0_R(idx_r2);
+        delta_T =   T - t0_1 - t0_2;
         
         % Number of samples involved in the overlapping interval
-        N_mues              =   round(delta_T/DT);
+        N_mues  =   round(delta_T/DT);
         
-        if r1+r2>=(D0-2*DR) && r1+r2<(T+DT)*v && N_mues>=1
+        if r1 + r2 >= (D0-2*DR) && r1 + r2 < (T+DT)*v && N_mues >= 1
             
             % Computing (coda1 x delta2) and (delta1 x coda 2)
-            coda1           =   A_R(idx_r1)*coda_R(idx_r2,N_mues+1); 
-            coda2           =   A_R(idx_r2)*coda_R(idx_r1,N_mues+1);
-            coda_delta...
-                (idx_r1,...
-                idx_r2)     =  coda1+coda2;
+            coda1           =   A1.*codaM(N_mues+1,:,idx_r2); 
+            coda2           =   A_vec(idx_r2,:) .* coda1_row(N_mues+1,:);
+            csum            =   coda1 + coda2;
+            coda_delta(idx_r1,idx_r2,1:lR)   =  csum;
             
             % Computing the contribution of (coda1 x coda2)
             % integral coda1(u) coda(T-u) du
-            x1              =   coda_R(idx_r1,1:N_mues+1);
-            x2              =   coda_R(idx_r2,N_mues+1:-1:1);
-            coda_coda...
-                (idx_r1,...
-                idx_r2)     =   sum(x1.*x2)*DT;
+            x1              =   coda1_row(1:N_mues+1,:);
+            x2              =   codaM(N_mues+1:-1:1,:,idx_r2);
+            coda_coda(idx_r1,idx_r2,1:lR)=   sum(x1.*x2)*DT;
             
             % simmetrical calculations
-            coda_delta...
-                (idx_r2,...
-                idx_r1)     =   coda_delta(idx_r1,idx_r2);
-            coda_coda...
-                (idx_r2,...
-                idx_r1)     =   coda_coda(idx_r1,idx_r2);
+            coda_delta(idx_r2,idx_r1,1:lR)=   csum;
+            coda_coda(idx_r2,idx_r1,1:lR)=   coda_coda(idx_r1,idx_r2,1:lR);
         end
     end
     
 end
 
-K_integral                  =   coda_coda+coda_delta;
+K_integral  =   coda_coda+coda_delta;
 
-% Computing K(x,y,z) by linear interpolation inside the ellipsoid
-c2                          =   cond_interior;
-K_grid                      =   zeros(Nx*Ny*Nz,1);
-K_grid(c2)                  =...
-    interp2(R1,R2,K_integral,r1_grid(c2),r2_grid(c2));
-K_grid(isnan(K_grid))       =   max(K_grid);
-r_grid1                     =...
-    [r_grid(:,1)+origin(1) r_grid(:,2)+origin(2) r_grid(:,3)+origin(3)];
+for i = 1:lR
+    K_i         =   K_integral(:,:,i);
+    % Computing K(x,y,z) by linear interpolation inside the ellipsoid
+    K_grid_i      =   zeros(Nxyz,1);
+
+    if any(cond_interior)
+        F       =   griddedInterpolant({R, R}, K_i, 'linear', 'nearest');
+        vals    =   F(r1_grid(cond_interior), r2_grid(cond_interior));
+        K_grid_i(cond_interior)   =   vals;
+        % replace any remaining NaN
+        K_grid_i(isnan(K_grid_i))   =   max(K_grid_i);
+    end
+    K_grid(:,:,i)  =   K_grid_i;
+
+end
+r_grid1 =...
+       [r_grid(:,1)+origin(1) r_grid(:,2)+origin(2) r_grid(:,3)+origin(3)];
+
