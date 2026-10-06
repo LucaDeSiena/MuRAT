@@ -3,11 +3,12 @@ MuRAT - Multi-Resolution seismic Attenuation Tomography
 
 ![MuRAT is a code for attenuation, scattering and absorption tomography.](./img/muratlogo.jpg)
 
-[![test](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml/badge.svg)](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml)
-[![GitHub releases](https://img.shields.io/github/release/LucaDeSiena/MuRAT/all.svg)](https://github.com/LucaDeSiena/MuRAT/releases)
+[![test](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml/badge.svg?branch=master)](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml)
+[![GitHub release](https://img.shields.io/github/v/release/LucaDeSiena/MuRAT?include_prereleases)](https://github.com/LucaDeSiena/MuRAT/releases)
 [![DOI](https://zenodo.org/badge/64924529.svg)](https://doi.org/10.5281/zenodo.13996751)
-[![MIT License](https://img.shields.io/github/license/LucaDeSiena/MuRAT)](LICENSE)
+[![MIT License](https://img.shields.io/github/license/LucaDeSiena/MuRAT)](LICENSE.md)
 [![MATLAB](https://img.shields.io/badge/MATLAB-R2025b%2B-orange)](https://www.mathworks.com/products/matlab.html)
+[![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=LucaDeSiena/MuRAT)
 
 MuRAT4.0 is a Matlab Package for seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves at multiple frequencies.
 
@@ -17,14 +18,12 @@ The group of active users (providing questions, feedback, and snippets of code) 
 
 If you are looking for MuRAT3.0, the last stable release can be found at:
 
-Luca De Siena, mreissuf, Yi Zhang, Donato Talone, Aqeel Abbas, WMZ, Cheng Qingyang, Ferdinando Napolitano, & SimonaGabrielli. (2026). LucaDeSiena/MuRAT: Legacy MuRAT3.0 Code (v3.26.01.20). Zenodo. <https://doi.org/10.5281/zenodo.18314469>
+Luca De Siena et al. (2026). LucaDeSiena/MuRAT: Legacy MuRAT3.0 Code (v3.26.01.20). Zenodo. <https://doi.org/10.5281/zenodo.18314469>
 
 *Documentation*
 -------------
 
-The file Documentation.pdf in this folder serves as complete documentation for MuRAT4.0. This README file and the *Input_.mlx* files in this folder act as additional documentation.
-
-The Wiki for MuRAT is under construction, but you can already check a bit of the history of the code.
+The file Documentation_MuRAT.pdf in this folder serves as complete documentation for MuRAT4.0. This README file and the *Murat_input_.m* files in this folder act as additional documentation.
 
 We recorded a Video Tutorial! Just go to the [Volcano Earth Imaging group page](https://www.lucadesiena.com), scroll down click on the video under the Murat Suite link.
 
@@ -33,7 +32,7 @@ We recorded a Video Tutorial! Just go to the [Volcano Earth Imaging group page](
 
 The program works on Mac, Linux and Windows systems with Matlab version R2025b or higher.
 
-Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing and Mapping. The Parallel Computing Toolbox is recommended for speed.
+Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing, Mapping, Optimization and Global Optimization. The Parallel Computing Toolbox is recommended for speed.
 
 Custom toolboxes not included in standard Matlab installations are also provided with the package. These are:
 
@@ -41,7 +40,7 @@ Custom toolboxes not included in standard Matlab installations are also provided
 2. The [Regularization Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/52-regtools?s_tid=prof_contriblnk) was created by Per Christian Hansen and available from Matlab File Exchange.
 3. Functions from the [Geometry and Image-Based Bioengineering add-On for MATLAB](https://github.com/gibbonCode/GIBBON).
 
-Three sample datasets (Mount St. Helens, Romania, and Toba) are included and allow the user to obtain sample models. The datasets work with the three corresponding *input.m* files that show examples of what the user can get with the code.
+Three sample datasets (Mount St. Helens, Romania, and Toba) are included and allow the user to obtain sample models. The datasets work with the three corresponding *Murat_input_m* files that show examples of what the user can get with the code.
 
 *Instructions in a nutshell*
 ------------
@@ -52,7 +51,7 @@ The current version works following these steps:
 
 2. Work in the downloaded folder after moving it to an appropriate location on your system.
 
-3. Open one of the three input .mlx files, providing a step-by-step explanation of all inputs (*Murat_inputMSH.m*, *Murat_inputRomania.m*, or *Murat_inputToba.m*) and create your own.
+3. Open one of the three input .m files, providing a step-by-step explanation of all inputs (*Murat_inputMSH.m*, *Murat_inputRomania.m*, or *Murat_inputToba.m*) and create your own.
 
 4. Use a velocity model, storing it in the corresponding folder. The format is [Latitude, Longitude, Altitude (meters)]. If haven't one, you can use either iasp91 or Lithos, included in the package.
 
@@ -62,14 +61,14 @@ The current version works following these steps:
 ***c)*** The coordinates of the station - beware, *the station elevation must be in meters*;
 ***d)*** The origin time of the event (optional) in seconds.
 
-6. Run MuRAT4 and select the name of the input file desired.
+6. Run MuRAT and select the name of *Murat_input_* file desired.
 
 *Workflow*
 --------
 
-A. ***Start from the Murat_input..mlx files***
+A. ***Start from the Murat_input..m files***
 
-The input files are self-explanatory and provide detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model, use *MuRAT_InputMSH.m* otherwise start from either *MuRAT_InputRomania.m* or *MuRAT_InputToba.m*, the examples for 3-component data.
+The input files are self-explanatory and provide detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model, use *MuRAT_inputMSH.m* otherwise start from either *MuRAT_inputRomania.m* or *MuRAT_inputToba.m*, the examples for 3-component data.
 
 B. ***Read the Documentation***
 
@@ -186,9 +185,7 @@ Three figures to evaluate the appropriate peak-delay and coda inputs. Read the d
 *Citing MuRAT*
 ------------
 
-Please cite the last stable release of the code in your data and software open-access statement:
-
-[![GitHub releases](https://img.shields.io/github/release/LucaDeSiena/MuRAT/all.svg)](https://github.com/LucaDeSiena/MuRAT/releases)
+Use GitHub's *Cite this repository* button (from CITATION.cff) or the Zenodo DOI:
 
 If you use MuRAT for your research and publications, please consider mentioning the GitHub internet site and citing the following papers, depending on the techniques you are going to use
 
@@ -214,6 +211,27 @@ unrest. Geophysical Research Letters, 44.4 pp. 1740-1748. - *First implementatio
 
 5. Napolitano, F., De Siena, L., Amoroso, O., Ágústsdóttir, T., Benediktsdóttir, Á., Palo, M., et al. (2025). Scattering and absorption imaging of the Hengill high-temperature geothermal area, southwest Iceland. Journal of Geophysical Research: Solid Earth, 130, e2024JB030731. - *Most recent application*
 
+*Contributing and support*
+------------
+
+Contributions are welcome: bug reports, fixes, documentation, examples and new features. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for the full guidelines. In short:
+
+* **Report a bug or request a feature:** open an issue at <https://github.com/LucaDeSiena/MuRAT/issues>, including your MATLAB release, operating system, the input file you used and the complete error message.
+* **Ask a question:** check this README, *Documentation_MuRAT.pdf* and the [Wiki](https://github.com/LucaDeSiena/MuRAT/wiki) first, then open an issue with the label *question*.
+* **Contribute code or documentation:** fork the repository, create a branch from `master`, add or update tests in the *Tests* folder, and open a pull request.
+* **Run the tests locally** from the repository root:
+
+```matlab
+  results = runtests('Tests');
+  assertSuccess(results);
+```
+
+  The same tests run automatically on GitHub Actions (see the *test* badge above).
+
+The people who have contributed substantially to MuRAT are listed in [AUTHORS.md](AUTHORS.md).
+
+Please also read our Code of Conduct.
+
 *Disclaimer*
 ------------
 
@@ -222,4 +240,4 @@ Although we have cross-checked the whole code, we cannot warranty it is exempt f
 *Funding*
 ------------
 
-Some developments of this software package were funded by the Deutsche Forshungsgemeinshaft under grant number SI 1748/4-1.
+Some developments of this software package were funded by the Deutsche Forschungsgemeinschaft under grant number 449466527.
