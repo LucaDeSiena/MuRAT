@@ -96,14 +96,24 @@ classdef TestRepositoryStructure < matlab.unittest.TestCase
         end
 
         function missingValueMarkersAreChecked(tc)
-            % MuRAT uses -12345 as the missing-value marker in SAC headers.
+            % MuRAT uses -12345 as the SAC missing-value sentinel.
+            % Fields are read safely via getFieldValue (no eval).
+            % Verify that each pick variable is read through getFieldValue
+            % and then compared to -12345.
             src = tc.readStripped('bin/Murat_testData.m');
-            required = {'isequal(eval(originTime),-12345)', ...
-                        'isequal(eval(PTime),-12345)', ...
-                        'isequal(eval(STime),-12345)'};
-            for k = 1:numel(required)
-                tc.verifyTrue(contains(src, required{k}), ...
-                    ['Murat_testData no longer contains the check ' required{k}]);
+            reads = {'originVal=getFieldValue(SAChdr,originTime)', ...
+                     'pVal=getFieldValue(SAChdr,PTime)', ...
+                     'sVal=getFieldValue(SAChdr,STime)'};
+            for k = 1:numel(reads)
+                tc.verifyTrue(contains(src, reads{k}), ...
+                    ['Murat_testData no longer reads via getFieldValue: ' reads{k}]);
+            end
+            checks = {'isequal(originVal,-12345)', ...
+                      'isequal(pVal,-12345)', ...
+                      'isequal(sVal,-12345)'};
+            for k = 1:numel(checks)
+                tc.verifyTrue(contains(src, checks{k}), ...
+                    ['Murat_testData no longer checks -12345 for: ' checks{k}]);
             end
         end
     end
