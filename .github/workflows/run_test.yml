@@ -1,5 +1,10 @@
 name: test
-on: [push]
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
 jobs:
   test_on_ubuntu:
     name: test_on_ubuntu
@@ -8,19 +13,36 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-        
+
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v2
         with:
+          release: R2025b
+          # The current tests need base MATLAB only. When end-to-end tests are added,
+          # list the toolboxes they use here, e.g.:
+          #   products: |
+          #     Signal_Processing_Toolbox
+          #     Curve_Fitting_Toolbox
+          #     Image_Processing_Toolbox
+          #     Mapping_Toolbox
+          #     Statistics_and_Machine_Learning_Toolbox
+          #     Optimization_Toolbox
+          #     Parallel_Computing_Toolbox
           products: MATLAB
-        
+
       - name: Run tests and generate artifacts
         uses: matlab-actions/run-tests@v2
         with:
+          select-by-folder: Tests
+          source-folder: bin
           test-results-junit: test-results/results.xml
           code-coverage-cobertura: code-coverage/coverage.xml
 
-      - name: Run script
-        uses: matlab-actions/run-command@v2
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          command: addpath('Tests'),test
+          name: test-results
+          path: |
+            test-results/
+            code-coverage/
