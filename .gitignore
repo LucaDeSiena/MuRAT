@@ -38,7 +38,6 @@ sac_Romania/
 sac_Toba/
 
 # Binaries, archives, generated distributions
-bin/
 *.zip
 *.tar
 *.tar.gz
