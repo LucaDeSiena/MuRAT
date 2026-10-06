@@ -98,15 +98,24 @@ for i = 1:numel(subdirs)
 end
 
 %% Checking data
-[Murat.input.listSac,~]     =   createsList([dataDirectory '/*.sac']);
+Murat.input.listSac         =   createsList([dataDirectory '/*.sac']);
 [header,flag,sacHeader]     =...
     Murat_testData(dataDirectory,originTime,PTime,STime);
 
 mLat    =   [min(cell2mat(header{:,5})) max(cell2mat(header{:,5}))];
 mLon    =   [min(cell2mat(header{:,6})) max(cell2mat(header{:,6}))];
 
-if flag == 1, warning('Missing origin times.'); end
-if flag == 2, warning('Missing S-wave times.'); end
+% flag encodes missing optional fields (see Murat_testData):
+%   0 = all present, 1 = origin times missing,
+%   2 = S times missing,  3 = both missing
+if flag == 1 || flag == 3
+    warning('MuRAT:missingOrigin', ...
+        'One or more files have no origin time (SAC field o = -12345).');
+end
+if flag == 2 || flag == 3
+    warning('MuRAT:missingStimes', ...
+        'One or more files have no S-wave pick (SAC field t0 = -12345).');
+end
 
 %% VELOCITY MODELS: ORIGINAL, INVERSION, and PROPAGATION
 % Save x,y,z in degrees switching as longitude comes second

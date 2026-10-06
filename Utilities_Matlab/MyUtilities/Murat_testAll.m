@@ -9,7 +9,7 @@ function [muratHeader,flag] =   Murat_testAll(folderPath)
 %       muratHeader:	Murat table showing the necessary parameter
 %
 
-[Names,~]                   =	createsList(folderPath);
+Names                       =  createsList(folderPath);
 lengthData                  =   length(Names);
 Origin                      =   cell(lengthData,1);
 P                           =   cell(lengthData,1);
