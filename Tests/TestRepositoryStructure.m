@@ -79,10 +79,14 @@ classdef TestRepositoryStructure < matlab.unittest.TestCase
 
         function testDataDeclaresAndInitialisesFlag(tc)
             src = tc.readStripped('bin/Murat_testData.m');
-            tc.verifyTrue(contains(src, 'function[muratHeader,flag]'), ...
-                'Murat_testData must declare the output [muratHeader, flag].');
-            tc.verifyTrue(contains(src, 'flag=[]'), ...
-                'Murat_testData must initialise flag.');
+            % Signature now returns three outputs: muratHeader, flag, sacHeader.
+            tc.verifyTrue(contains(src, 'function[muratHeader,flag,sacHeader]'), ...
+                'Murat_testData must declare the output [muratHeader, flag, sacHeader].');
+            % flag is computed at the end from two boolean sentinels:
+            %   flag = origMissing + 2*sMissing
+            % There is no standalone flag=[] or flag=0 initialisation.
+            tc.verifyTrue(contains(src, 'flag=origMissing+2*sMissing'), ...
+                'Murat_testData must compute flag as origMissing + 2*sMissing.');
         end
 
         function testAllInitialisesFlag(tc)
