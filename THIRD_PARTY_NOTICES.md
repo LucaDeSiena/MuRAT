@@ -14,24 +14,21 @@ them.
 | `F_SAC/` | `fread_sac.m`, `fwrite_sac.m` | Whyjay Zheng, Copyright (c) 2015 | BSD 2-Clause (`F_SAC/license.txt`) |
 | `regtu/` | `corner.m`, `fil_fac.m`, `l_corner.m`, `l_curve.m`, `l_curve_tikh_svd.m`, `lcfun.m`, `picard.m`, `plot_lc.m`, `tikhonov.m` — a subset of Regularization Tools 4.1 | Per Christian Hansen, DTU Compute, Copyright (c) 2015. Source: <https://www.mathworks.com/matlabcentral/fileexchange/52-regtools> | BSD 3-Clause (`regtu/license.txt`) |
 | `COLORMAP/` | `colMapGen.m`, `inferno.m`, `redblue.m` | `colMapGen.m`: Timothy Olsen, Copyright (c) 2019 (UCSF). `inferno.m`: colormap data from the matplotlib/viscm project — Nathaniel J. Smith, Stefan van der Walt, Eric Firing (CC0/public domain); MATLAB wrapper author not recorded. `redblue.m`: Adam Auton, 9 October 2009. | `colMapGen.m`: BSD 3-Clause (`COLORMAP/LICENSE`). `inferno.m`: colormap data is CC0; wrapper carries no licence — `COLORMAP/LICENSE_inferno.txt` added as a clarifying notice. `redblue.m`: originally posted to MATLAB File Exchange under the BSD licence; `COLORMAP/LICENSE_redblue.txt` added. |
-| `GIBBON/` | *(empty — all files removed)* | All three GIBBON-derived files have been replaced by MIT-licensed equivalents: `checkerBoard3D.m` and `iseven.m` by `Murat_checkerboard3D.m` in `bin/`; `inpaintn.m` by a `fillNaN3` local function inside `Murat_rescale.m`. The `GIBBON/` folder and its licence files may be deleted. | N/A |
-| `MyUtilities/` | `Murat_changeHdr.m`, `Murat_plotMore.m`, `Murat_test.m`, `Murat_testAll.m`, `freq_analysis.m`, `hitmap.m` | MuRAT authors (see [AUTHORS.md](AUTHORS.md)) | MIT, as MuRAT |
+| `MyUtilities/` | `Murat_changeHdr.m`, `Murat_plotMore.m`, `Murat_testAll.m`, `freq_analysis.m`, `hitmap.m` | MuRAT authors (see [AUTHORS.md](AUTHORS.md)) | MIT, as MuRAT |
 
 ## Notes
 
 ### Regularization Tools (`regtu/`)
+
 If you use any of these routines, please cite:
-- P. C. Hansen, *Regularization Tools: A Matlab package for analysis and
-  solution of discrete ill-posed problems*, Numerical Algorithms **6** (1994),
-  pp. 1–35.
+
+- P. C. Hansen, *Regularization Tools: A Matlab package for analysis and solution of discrete ill-posed problems*, Numerical Algorithms **6** (1994),  pp. 1–35.
+
 - P. C. Hansen, *Regularization Tools Version 4.0 for Matlab 7.3*, Numerical
   Algorithms **46** (2007).
 
-The file `regtu/licenseInverse.txt` contains a copy of the GNU GPL v3 text. No
-file in `regtu/` refers to it and none of those files is GPL-licensed; the file
-is a stale artefact and should be removed in the next clean-up commit.
-
 ### GIBBON (resolved)
+
 All three files previously taken from GIBBON have been replaced:
 
 - `checkerBoard3D.m` and `iseven.m` → replaced by `bin/Murat_checkerboard3D.m`
@@ -45,6 +42,7 @@ All three files previously taken from GIBBON have been replaced:
 The GPL v3 compatibility issue is therefore fully resolved.
 
 ### `MatSAC/`
+
 The original eight `.m` files from Zhigang Peng's SAC tutorial (five of which
 had unknown provenance) have been replaced by a single MIT-licensed
 reimplementation: `fget_sac.m` (MuRAT Authors, 2026). The new file reads the
@@ -53,12 +51,14 @@ code is unchanged. The sample SAC files (`MYJH.*`, `N.MYJH.Z.sac`) are kept
 for testing and are not executable code.
 
 ### `inferno.m`
+
 The 256-entry RGB table is the matplotlib `inferno` colormap, released under
 CC0 (public domain) by Nathaniel J. Smith, Stefan van der Walt, and Eric
 Firing. The MATLAB wrapper function has no stated author or licence; a
 clarifying notice is provided in `COLORMAP/LICENSE_inferno.txt`.
 
 ### `redblue.m`
+
 Written by Adam Auton (2009) and originally posted to MATLAB File Exchange.
 At the time of submission MATLAB File Exchange applied a BSD licence to all
 submissions by default. A clarifying notice is provided in
