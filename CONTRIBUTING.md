@@ -5,6 +5,9 @@ bug reports, fixes, documentation, new examples, and new features. The people
 who have given substantial contributions so far are listed in
 [AUTHORS.md](AUTHORS.md).
 
+Please note that this project is governed by a [Code of Conduct](CODE_OF_CONDUCT.md).
+All contributors are expected to adhere to it.
+
 ## Getting help
 
 - **Questions about using MuRAT:** first check the [README](README.md),
