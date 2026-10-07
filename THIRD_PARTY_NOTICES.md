@@ -10,7 +10,7 @@ them.
 
 | Folder | Contents | Authors / copyright | Licence |
 |---|---|---|---|
-| `MatSAC/` | `fget_sac.m`, `sachdr.m`, `sac.m`, `rdSac.m`, `rdSacHead.m`, `wtSac.m`, `newSacHeader.m`, `sacfft.m`, sample files `MYJH.*` and `N.MYJH.Z.sac` | `fget_sac.m` and `sachdr.m`: Zhigang Peng (Georgia Tech). `sac.m`: Xianglei Huang, University of Michigan (03/2000). The authors of `rdSac.m`, `rdSacHead.m`, `wtSac.m`, `newSacHeader.m`, and `sacfft.m` are not recorded; the folder's `readme.txt` suggests they may originate from Jeff McGuire (WHOI). Source: <http://geophysics.eas.gatech.edu/classes/SAC/> | **No licence stated.** Permission to redistribute has been sought from Zhigang Peng; see note below. |
+| `MatSAC/` | `fget_sac.m` (replaces all previous MatSAC `.m` files), sample files `MYJH.*` and `N.MYJH.Z.sac` | MuRAT Authors, Copyright (c) 2026. The function replicates the SAC binary reader originally written by Zhigang Peng and Xianglei Huang; the reimplementation is independent and carries no code from those authors. | MIT (`LICENSE.md`) |
 | `F_SAC/` | `fread_sac.m`, `fwrite_sac.m` | Whyjay Zheng, Copyright (c) 2015 | BSD 2-Clause (`F_SAC/license.txt`) |
 | `regtu/` | `corner.m`, `fil_fac.m`, `l_corner.m`, `l_curve.m`, `l_curve_tikh_svd.m`, `lcfun.m`, `picard.m`, `plot_lc.m`, `tikhonov.m` — a subset of Regularization Tools 4.1 | Per Christian Hansen, DTU Compute, Copyright (c) 2015. Source: <https://www.mathworks.com/matlabcentral/fileexchange/52-regtools> | BSD 3-Clause (`regtu/license.txt`) |
 | `COLORMAP/` | `colMapGen.m`, `inferno.m`, `redblue.m` | `colMapGen.m`: Timothy Olsen, Copyright (c) 2019 (UCSF). `inferno.m`: colormap data from the matplotlib/viscm project — Nathaniel J. Smith, Stefan van der Walt, Eric Firing (CC0/public domain); MATLAB wrapper author not recorded. `redblue.m`: Adam Auton, 9 October 2009. | `colMapGen.m`: BSD 3-Clause (`COLORMAP/LICENSE`). `inferno.m`: colormap data is CC0; wrapper carries no licence — `COLORMAP/LICENSE_inferno.txt` added as a clarifying notice. `redblue.m`: originally posted to MATLAB File Exchange under the BSD licence; `COLORMAP/LICENSE_redblue.txt` added. |
@@ -45,13 +45,12 @@ All three files previously taken from GIBBON have been replaced:
 The GPL v3 compatibility issue is therefore fully resolved.
 
 ### `MatSAC/`
-No licence is stated for any file in this folder. Zhigang Peng's `readme.txt`
-(2006) acknowledges that the provenance of five of the eight routines is
-uncertain. Permission to redistribute has been sought from Zhigang Peng
-(zpeng@gatech.edu); confirmation is pending. If redistribution permission
-cannot be obtained, these files should be replaced by the `F_SAC/` routines
-(`fread_sac.m`, `fwrite_sac.m` — BSD 2-Clause), which are already included
-and cover the same functionality.
+The original eight `.m` files from Zhigang Peng's SAC tutorial (five of which
+had unknown provenance) have been replaced by a single MIT-licensed
+reimplementation: `fget_sac.m` (MuRAT Authors, 2026). The new file reads the
+same SAC binary format and returns an identical `SAChdr` struct, so all calling
+code is unchanged. The sample SAC files (`MYJH.*`, `N.MYJH.Z.sac`) are kept
+for testing and are not executable code.
 
 ### `inferno.m`
 The 256-entry RGB table is the matplotlib `inferno` colormap, released under
