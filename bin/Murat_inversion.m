@@ -205,7 +205,7 @@ for k = 1:nFreq
     % --- Checkerboards and spike inputs and checkerboard inversion ---
     % --- Qc ---
     if isempty(I)
-        I = checkerBoard3D(siz, sizea);
+        I = Murat_checkerboard3D(siz, sizea);
         [checkInput, spikeInput] =   Murat_inputTesting(I, spike_o,...
             spike_e, x, y, z);
     end
