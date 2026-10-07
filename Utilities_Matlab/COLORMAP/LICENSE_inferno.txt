@@ -1,0 +1,18 @@
+Clarifying Licence Notice — inferno.m
+======================================
+
+The 256-entry RGB colormap data in inferno.m is the matplotlib "inferno"
+colormap, created by Nathaniel J. Smith, Stefan van der Walt, and Eric Firing
+and released under CC0 (Creative Commons Zero, public domain dedication):
+
+    https://github.com/BIDS/colormap
+
+The MATLAB wrapper function (inferno.m) that interpolates this table was
+obtained from an unidentified uploader; no copyright statement or licence is
+present in the file. To the best of the MuRAT authors' knowledge, redistri-
+bution of the colormap data is unrestricted. If you are the author of the
+MATLAB wrapper and object to its inclusion, please open an issue at
+https://github.com/LucaDeSiena/MuRAT/issues.
+
+This notice is provided for transparency and does not constitute a formal
+licence grant on behalf of the wrapper's author.
