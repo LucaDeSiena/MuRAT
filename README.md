@@ -38,9 +38,8 @@ Custom toolboxes not included in standard Matlab installations are also provided
 
 1. Routines to read SAC files created by Zhigang Peng and available from [his SAC tutorial page](http://geophysics.eas.gatech.edu/classes/SAC/).
 2. The [Regularization Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/52-regtools?s_tid=prof_contriblnk) was created by Per Christian Hansen and available from Matlab File Exchange.
-3. Functions from the [Geometry and Image-Based Bioengineering add-On for MATLAB](https://github.com/gibbonCode/GIBBON).
 
-Three sample datasets (Mount St. Helens, Romania, and Toba) are included and allow the user to obtain sample models. The datasets work with the three corresponding *Murat_input_m* files that show examples of what the user can get with the code.
+Three sample datasets (Mount St. Helens, Romania, and Toba) are included and allow the user to obtain sample models. The datasets work with the three corresponding *Murat_input_.m* files that show examples of what the user can get with the code.
 
 *Instructions in a nutshell*
 ------------
@@ -68,7 +67,7 @@ The current version works following these steps:
 
 A. ***Start from the Murat_input..m files***
 
-The input files are self-explanatory and provide detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model, use *MuRAT_inputMSH.m* otherwise start from either *MuRAT_inputRomania.m* or *MuRAT_inputToba.m*, the examples for 3-component data.
+The input files are self-explanatory and provide detailed descriptions of every input and references to papers you can use to set them. If you have a 3D velocity model, use *Murat_inputMSH.m* otherwise start from either *Murat_inputRomania.m* or *Murat_inputToba.m*, the examples for 3-component data.
 
 B. ***Read the Documentation***
 
@@ -101,7 +100,7 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
 *Murat.mat*: A Matlab structure containing all inputs and data the code produces.
 
-*DataHeaders.xls*: A file containing all header variables of the SAC files used for the mapping, useful for data selection.
+*DataHeaders.xlsx*: A file containing all header variables of the SAC files used for the mapping, useful for data selection.
 
 ------------
 
@@ -149,7 +148,7 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
 *Qc__.tif* and *Qc__.fig*: Coda attenuation maps in 3D (*.fig*) and across sections (*.tif*).
 
-*Qc_analysis__*: Relationship between coda attenuation and frequency.
+
 
   ------------
 
@@ -172,9 +171,13 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
 *Clustering.tif*: This figure shows all rays used on the map (black, discarded) against those after declustering (red).
 
-*Qc_Analysis__.tif*, *PD_Analysis__.tif*, and *CN_Analysis__.tif*
+*Qc_Analysis__.tif* and *Qc_Analysis__.fig*: Analysis figure showing coda attenuation quality and residuals per frequency.
 
-Three figures to evaluate the appropriate peak-delay and coda inputs. Read the documentation for further clarifications.
+*PD_Analysis__.tif* and *PD_Analysis__.fig*: Peak-delay vs travel-time figure for assessing data quality.
+
+*CN_Analysis__.tif* and *CN_Analysis__.fig*: Coda-normalisation figure comparing data to the analytical forward model.
+
+*Qc_analysis__*: Relationship between average coda attenuation and frequency across the dataset.
 
 *L_curve__.fig*: L-curves for the Qc and Q inversions necessary to set the damping parameters. The user can ask for a prompt or set the damping parameters. They only appear when using a Tikhonov inversion.
 
@@ -185,9 +188,13 @@ Three figures to evaluate the appropriate peak-delay and coda inputs. Read the d
 *Citing MuRAT*
 ------------
 
-Use GitHub's *Cite this repository* button (from CITATION.cff) or the Zenodo DOI:
+To cite MuRAT, please use the Zenodo DOI:
 
-If you use MuRAT for your research and publications, please consider mentioning the GitHub internet site and citing the following papers, depending on the techniques you are going to use
+> Luca De Siena et al. (2026). *MuRAT: a multi-resolution seismic attenuation tomography code* (v4.0.0). Zenodo. <https://doi.org/10.5281/zenodo.23170041>
+
+A machine-readable citation is available in [CITATION.cff](CITATION.cff). On GitHub, the **Cite this repository** button (top-right of the repository page, under *About*) generates formatted citations automatically from that file.
+
+If you use MuRAT for your research and publications, please also cite the following method papers, depending on the techniques you use:
 
 **Q (Total attenuation)**:
 
@@ -230,7 +237,7 @@ Contributions are welcome: bug reports, fixes, documentation, examples and new f
 
 The people who have contributed substantially to MuRAT are listed in [AUTHORS.md](AUTHORS.md).
 
-Please also read our Code of Conduct.
+
 
 *Disclaimer*
 ------------
