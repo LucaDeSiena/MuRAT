@@ -1,3 +1,5 @@
 theme: jekyll-theme-dinky
 title: Multi-Resolution Attenuation Tomography
-description: The open-access solution to seismic attenuation imaging!
+description: >-
+  MuRAT is an open-source MATLAB package for 3D seismic attenuation, scattering
+  and absorption tomography using body and coda waves at multiple frequencies.
