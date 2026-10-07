@@ -16,7 +16,7 @@
 %[text] 4. Run this file and select the name of the input file you created beforhand. \
 %[text] Author: L. De Siena, April 2026
 %[text] ## INPUTS AND CHECKS
-addpath(fullfile(pwd,'bin')); %[output:081c0381]
+addpath(fullfile(pwd,'bin'));
 
 r       =   fullfile(pwd,'Utilities_Matlab');
 
@@ -49,9 +49,9 @@ end
 
 % Ask user for input file
 [file, path]= uigetfile({'*.m;*.mlx','MuRAT input files (*.m, *.mlx)'; '*.*','All Files'});
-if isequal(file,0) %[output:group:836201e7]
-    error('No input file selected.'); %[output:79d3e25b]
-end %[output:group:836201e7]
+if isequal(file,0)
+    error('No input file selected.');
+end
 inputFile   = fullfile(path, file);
 fprintf('Using input file %s\n', inputFile);
 
@@ -98,9 +98,9 @@ if ~isempty(useParallel)
         pool        =   gcp('nocreate');
         if isempty(pool)
             try
-                pool= useParallel; % optionally specify NumWorkers
+                pool = parpool(useParallel); % optionally specify NumWorkers
             catch ME
-                warning('Failed to start parpool: %s. Falling back to sequential.');
+                warning(ME.identifier, '%s. Falling back to sequential.', ME.message);
                 useParallel = false;
             end
         end
@@ -157,10 +157,4 @@ clearvars -except Murat tCheck tData tInv tPlot totalTime
 %---
 %[metadata:view]
 %   data: {"layout":"inline","rightPanelPercent":40}
-%---
-%[output:081c0381]
-%   data: {"dataType":"warning","outputData":{"text":"Warning: Name is nonexistent or not a directory: \/Users\/lucadesiena\/Documents\/Documents - Luca’s MacBook Pro (2)\/MATLAB\/MuRAT2026_03_24\/Toba\/Checkerboard\/Q\/bin"}}
-%---
-%[output:79d3e25b]
-%   data: {"dataType":"error","outputData":{"errorType":"runtime","text":"No input file selected."}}
 %---
