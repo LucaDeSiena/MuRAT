@@ -31,6 +31,7 @@ The following people contributed major additions or modifications to `MuRAT4` an
 * Chiara Nardoni
 * Janire Prudencio
 * Miriam Reiss
+* Chiara Saturnino
 * Panayiota Sketsiou
 * Donato Talone
 * Wei-Mou Zhu
