@@ -6,43 +6,48 @@ on:
   workflow_dispatch:
 
 jobs:
-  test_on_ubuntu:
-    name: test_on_ubuntu
+  test:
+    name: MATLAB ${{ matrix.release }} on Ubuntu
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        release: [R2020a, R2021b, R2023b, R2025b]
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up MATLAB
+      - name: Set up MATLAB ${{ matrix.release }}
         uses: matlab-actions/setup-matlab@v2
         with:
-          release: R2025b
-          # The current tests need base MATLAB only. When end-to-end tests are added,
-          # list the toolboxes they use here, e.g.:
+          release: ${{ matrix.release }}
+          # Current tests need base MATLAB only.
+          # When end-to-end functional tests are added, list toolboxes here:
           #   products: |
           #     Signal_Processing_Toolbox
           #     Curve_Fitting_Toolbox
           #     Image_Processing_Toolbox
           #     Mapping_Toolbox
-          #     Statistics_and_Machine_Learning_Toolbox
           #     Optimization_Toolbox
+          #     Global_Optimization_Toolbox
           #     Parallel_Computing_Toolbox
           products: MATLAB
 
-      - name: Run tests and generate artifacts
+      - name: Run tests
         uses: matlab-actions/run-tests@v2
         with:
           select-by-folder: Tests
           source-folder: bin
-          test-results-junit: test-results/results.xml
-          code-coverage-cobertura: code-coverage/coverage.xml
+          test-results-junit: test-results/results-${{ matrix.release }}.xml
+          code-coverage-cobertura: code-coverage/coverage-${{ matrix.release }}.xml
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
+          name: test-results-${{ matrix.release }}
           path: |
             test-results/
             code-coverage/

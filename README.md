@@ -7,7 +7,7 @@ MuRAT - Multi-Resolution seismic Attenuation Tomography
 [![GitHub release](https://img.shields.io/github/v/release/LucaDeSiena/MuRAT?include_prereleases)](https://github.com/LucaDeSiena/MuRAT/releases)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23170041.svg)](https://doi.org/10.5281/zenodo.23170041)
 [![MIT License](https://img.shields.io/github/license/LucaDeSiena/MuRAT)](LICENSE.md)
-[![MATLAB](https://img.shields.io/badge/MATLAB-R2025b%2B-orange)](https://www.mathworks.com/products/matlab.html)
+[![MATLAB](https://img.shields.io/badge/MATLAB-R2020a_to_R2025b-orange)](https://www.mathworks.com/products/matlab.html)
 [![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=LucaDeSiena/MuRAT)
 
 MuRAT4.0 is a Matlab Package for seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves at multiple frequencies.
@@ -30,7 +30,7 @@ We recorded a Video Tutorial! Just go to the [Volcano Earth Imaging group page](
 *System*
 ------------
 
-The program works on Mac, Linux and Windows systems with Matlab version R2025b or higher.
+The program works on Mac, Linux and Windows systems with MATLAB R2020a or higher (back-tested on R2020a, R2021b, R2023b, and R2025b).
 
 Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing, Mapping, Optimization and Global Optimization. The Parallel Computing Toolbox is recommended for speed.
 
