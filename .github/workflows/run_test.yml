@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        release: [R2020a, R2021b, R2023b, R2025b]
+        release: [R2020b, R2021b, R2023b, R2025b]
 
     steps:
       - name: Check out repository

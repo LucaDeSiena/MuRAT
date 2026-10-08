@@ -1,7 +1,7 @@
 %[text] # MuRAT Multi-Resolution (seismic) Attenuation Tomography
 %[text] **SCOPE**: **A code for 3D attenuation-scattering-absorption tomography**
 %[text] SYSTEM: The program works on all Mac, Windows and Linux computers where it has been tried.
-%[text] MATLAB Version: R2020a or higher (back-tested on R2020a, R2021b, R2023b, R2025b)
+%[text] MATLAB Version: R2020b or higher (back-tested on R2020b, R2021b, R2023b, R2025b)
 %[text] TOOLBOXES:
 %[text] - Curve Fitting Toolbox
 %[text] - Mapping Toolbox
