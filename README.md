@@ -6,6 +6,7 @@ MuRAT - Multi-Resolution seismic Attenuation Tomography
 [![test](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml/badge.svg?branch=master)](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml)
 [![GitHub release](https://img.shields.io/github/v/release/LucaDeSiena/MuRAT?include_prereleases)](https://github.com/LucaDeSiena/MuRAT/releases)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23170041.svg)](https://doi.org/10.5281/zenodo.23170041)
+[![Citing Papers](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.openalex.org%2Fworks%3Ffilter%3Dreferenced_works%3AW2059002776%7CW2345084914%26per_page%3D1%26select%3Did&query=%24.meta.count&label=citing%20papers&color=brightgreen)](https://openalex.org/works?filter=referenced_works:W2059002776|W2345084914&sort=publication_year:desc)
 [![MIT License](https://img.shields.io/github/license/LucaDeSiena/MuRAT)](LICENSE.md)
 [![MATLAB](https://img.shields.io/badge/MATLAB-R2021b_to_R2025b-orange)](https://www.mathworks.com/products/matlab.html)
 [![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=LucaDeSiena/MuRAT)

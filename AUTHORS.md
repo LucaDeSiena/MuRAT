@@ -3,8 +3,10 @@
 `MuRAT4`'s development is coordinated by a *principal developer*,
 who is also its main contributor and who can be contacted in case of
 questions about MuRAT4. In addition, there are *contributors* who have
-provided substantial theoretical work as well as computational additions
-or modifications. Together, these two groups form
+provided substantial theoretical contributions as well as computational additions
+or modifications to `MuRAT4` and its previous unpublished versions,
+`MuRAT2` and `MuRAT3`.
+Together, these two groups form
 "The MuRAT4 Authors".
 
 ## Principal Developer
@@ -19,6 +21,8 @@ The following people contributed major additions or modifications to `MuRAT4` an
 * Aqeel Abbas
 * Martina Avella
 * Francesca Bianco
+* Felix Borleanu
+* Liam Bramwell
 * Gaia Caporale
 * Edoardo Del Pezzo
 * Maria Del Pilar Di Martino
