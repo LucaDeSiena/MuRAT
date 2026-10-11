@@ -33,7 +33,7 @@ Murat.input.envelopeSmoothTime  =   1;
 Murat.input.components              =	3;
 %[text] Sometimes you want to exclude waveforms depending on minimum and maximum travel times, as these data do not fullfill the theory (you generally see this after running the tests). In this case you can set minimum and maximum travel times, so that you exclude traces outside of these intervals. Otherwise, you can set the minimum to **0** and the maximum to **Inf**.
 Murat.input.mintravel               =   12;
-Murat.input.maxtravel               =   50;
+Murat.input.maxtravel               =   35;
 %[text] Finally, you can opt to decluster your data events. The code will divide the inversion grid by the following factor and select the best earthquake located in the block among all others. Set it to empty if you want to opt out (**\[\]**).
 Murat.input.declustering            =	5;
 %%
