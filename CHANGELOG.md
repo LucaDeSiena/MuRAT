@@ -59,6 +59,9 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 - The grid search for D used `(tCm + te)` instead of `te` in the coda model.
 - Comments in the MSH and Romania input files gave D = vS/(3·Le⁻¹·(1−B0));
   corrected to B0.
+- `bin/Murat_data.m`, `bin/Murat_dataParallelized.m` — `envelopeSmoothTime`
+  from the input file is now passed to `Murat_envelope`; previously the 1 s
+  default was always used. Inputs without the field keep the 1 s default.
 
 ## [4.0.0] – 2026-10-06
 

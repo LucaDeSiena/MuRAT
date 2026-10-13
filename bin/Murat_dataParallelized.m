@@ -54,6 +54,10 @@ Le                  =   s.iExtinctionLength;
 bodyWindow          =   s.bodyWindow;
 startNoise          =   s.startNoise;
 QcMeasure           =   s.QcMeasurement;
+envSmoothTime       =   [];
+if isfield(s,'envelopeSmoothTime')
+    envSmoothTime   =   s.envelopeSmoothTime;
+end
 
 
 % Preallocate outputs
@@ -100,7 +104,7 @@ parfor (i = 1:nData,workers)
     srate_i         =   1/SAChdr_i.times.delta;
     
     % Envelope and spectral preprocessing
-    [tempis,sp_i]   =   Murat_envelope(cf,listSac_i);
+    [tempis,sp_i]   =   Murat_envelope(cf,listSac_i,envSmoothTime);
     
     % Locations (deg and meters)
     [locationDeg_i, locationM_i]    =   Murat_location(origin,SAChdr_i);
