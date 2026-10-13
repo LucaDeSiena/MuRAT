@@ -1,9 +1,9 @@
 function [sol,fval,exitflag,output,dampValue]=  Murat_inversionQ(A_k,d0,...
     rapsp_k,inversionMethod,Q0,iter,iterStall,coordPrior,dampValue,...
-    smoothValue,PlotI,pathFolder)
+    smoothValue,PlotI,pathFolder,D)
 % function [sol,fval,exitflag,output,dampValue]=Murat_inversionQ(A_k,d0,...
-%   inversionMethod,Q0,iter,iterStall,coordPrior,dampValue,...
-%   smoothValue,PlotI,pathFolder)
+%   rapsp_k,inversionMethod,Q0,iter,iterStall,coordPrior,dampValue,...
+%   smoothValue,PlotI,pathFolder,D)
 %
 % INVERTS spatial values of Q using ray approximation
 %
@@ -16,14 +16,24 @@ function [sol,fval,exitflag,output,dampValue]=  Murat_inversionQ(A_k,d0,...
 %    iterStall:         max iterations for the non-linear optimization
 %    coordPrior:        coords for the starting solution
 %    dampValue:         damping value
-%    smoothValue:       smoothing value
+%    smoothValue:       smoothing value. For 'Tikhonov' it is the weight
+%                       of the first-difference regulariser D (empty or 0:
+%                       no smoothing); for the other methods it is the
+%                       correlation length used by Murat_smoothing
 %    PlotI:             plotting iterations during inversion
 %    pathFolder:        folder to save inversion figure for Tikhonov
+%    D:                 (optional) first-difference operator for the
+%                       columns of A_k (see Murat_gradientOperator)
 %
 % Output parameters:
 %    [sol,fval,exitflag,output]: standard optimization outputs
 
 %%
+if nargin < 13, D = []; end
+useTikhonov =   strcmp(inversionMethod,'Tikhonov');
+smoothTikh  =   useTikhonov && ~isempty(smoothValue) && smoothValue ~= 0 ...
+                && ~isempty(D);
+
 %Parameter model number
 MQ          =   size(A_k,2);
 
@@ -39,7 +49,7 @@ for i = 1:MQ
     m0Q(i)  =   sum(m.*d1);
 end
 
-if smoothValue~=0
+if ~useTikhonov && ~isempty(smoothValue) && smoothValue~=0
     %Variance for models to square of 1/10 of the mean inverse Qc value
     sigmaM  =   Qmean;
     CovM    =   Murat_smoothing(coordPrior,smoothValue,sigmaM);
@@ -50,6 +60,9 @@ end
 
 if ~isempty(dampValue)
     dampValue   =   abs(dampValue);
+elseif smoothTikh
+    %Smoothing alone regularises the problem
+    dampValue   =   0;
 else
     %Damping is the mean energy ratio
     dampValue   =   0.1*mean(rapsp_k);
@@ -72,7 +85,8 @@ maxIt   =   'MaxIterations';
 switch inversionMethod
 
     case 'Tikhonov'
-        [sol.Q,fval,~]  =   Murat_tikhonovQ(PlotI,A_k,d0,dampValue,m0Q,iter);
+        [sol.Q,fval,~]  =   Murat_tikhonovQ(PlotI,A_k,d0,dampValue,m0Q,iter,...
+            smoothValue,D);
         sol.Q           =   sol.Q;
         exitflag        =   'Tikhonov';
         output          =   [];
