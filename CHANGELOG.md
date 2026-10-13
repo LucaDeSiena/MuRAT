@@ -59,6 +59,9 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 - The grid search for D used `(tCm + te)` instead of `te` in the coda model.
 - Comments in the MSH and Romania input files gave D = vS/(3·Le⁻¹·(1−B0));
   corrected to B0.
+- `Murat_inputToba.m`, `Murat_inputMSH.m`, `Murat_inputRomania.m` — the
+  inversion section named the genetic-algorithm option `Genetic`; the code
+  expects `'Global'`. Added `Tests/TestInputMethods.m`.
 
 ## [4.0.0] – 2026-10-06
 
