@@ -140,6 +140,24 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 - `MuRAT.m` parallel pool — `pool = useParallel` (no-op) replaced by
   `parpool(useParallel)`; `warning` format string corrected.
 
+### Migrating a 3.0 input file
+3.0 inputs (`Murat_input*.mlx`) do not run unchanged in 4.0. Start from a 4.0
+example input and copy values across:
+
+| 3.0 field | 4.0 field | Note |
+|---|---|---|
+| `extinctionLength` (scalar) | `iExtinctionLength` | One value per central frequency. |
+| `albedo` (scalar) | `albedo` | One value per central frequency. |
+| `lCurve` | `PlotInversion` | `1` shows L-curves and solver progress. |
+| `lCurveQc`, `lCurveQ` | `dampingValueQc`, `dampingValueQ` | One value per frequency; `[]` selects a default. Values are not interchangeable with 3.0 because the solvers changed. |
+| — | `smoothingValueQc`, `smoothingValueQ` | New; `[]` or `0` disables smoothing. |
+| `highCheck`, `lowCheck` | removed | Checkerboard values are now the min and max of the measured inverse Qc (reused for Q). |
+| `spectralDecay` | removed | `bin/Murat_Qc.m` uses a fixed geometrical-spreading exponent of 1.5. |
+| `inversionMethod = 'Iterative'` or `'Hybrid'` | `'Tikhonov'`, `'Particle'`, `'Annealing'` or `'Global'` | IRtools-based solvers removed. |
+| — | `MaximumIterations`, `MaximumStallIterations` | Solver limits. |
+| — | `envelopeSmoothTime` | Envelope smoothing window (s); 1 s matches 3.0. |
+| — | `PlotRays`, `PlotTests`, `PlotResults`, `PlotCheckers`, `PlotSpikes` | Per-figure plot switches. |
+
 ---
 
 ## [3.0.0] – 2026-01-20
