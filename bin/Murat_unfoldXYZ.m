@@ -19,11 +19,11 @@ lx      =   numel(x);
 ly      =   numel(y);
 lz      =   numel(z);
 
-% x: repeat each x for ly*lz entries
-xcol    =   repelem(x, ly * lz);
+% x: repeat each x for ly*lz entries (row factor 1 keeps a column for scalars)
+xcol    =   repelem(x, ly * lz, 1);
 
 % y: repeat each y for lz entries, then tile for lx blocks
-yblock  =   repelem(y, lz);
+yblock  =   repelem(y, lz, 1);
 ycol    =   repmat(yblock, lx, 1);
 
 % z: tile z for each x-y pair
