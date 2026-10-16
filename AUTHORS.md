@@ -3,22 +3,18 @@
 `MuRAT4`'s development is coordinated by a *principal developer*,
 who is also its main contributor and who can be contacted in case of
 questions about MuRAT4. In addition, there are *contributors* who have
-provided substantial theoretical contributions as well as computational additions
-or modifications to `MuRAT4` and its previous unpublished versions,
-`MuRAT2` and `MuRAT3`.
-Together, these two groups form
+provided substantial theoretical work as well as computational additions
+or modifications. Together, these two groups form
 "The MuRAT4 Authors".
 
-## Principal Developer
-
+## Principal Developers
 * [Luca De Siena](https://www.unibo.it/sitoweb/luca.desiena2),
   Alma Mater Studiorum Bologna, Italy
 
 ## Contributors
-
 The following people contributed major additions or modifications to `MuRAT4` and are listed in alphabetical order:
 
-* Aqeel Abbas
+* Aqeel Abbas, Department of Earth and Space Sciences, Southern University of Science and Technology, Shenzhen, China
 * Martina Avella
 * Francesca Bianco
 * Felix Borleanu
@@ -36,7 +32,7 @@ The following people contributed major additions or modifications to `MuRAT4` an
 * Janire Prudencio
 * Miriam Reiss
 * Chiara Saturnino
-* Panayiota Sketsiou
+* Panayiota Sketsiou, École des Ponts Business School (EPBS), Paris, France
 * Donato Talone
 * Wei-Mou Zhu
 * Yi Zhang
