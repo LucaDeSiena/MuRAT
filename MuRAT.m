@@ -69,8 +69,11 @@ switch lower(ext)
         error('Unsupported input file extension: %s', ext);
 end
 
-% Prepare damping output folders before checks and forward processing.
-Murat = Murat_dampingRuns(Murat, [], 'prepare');
+% Prepare output folders only when a damping sweep is requested.
+if isfield(Murat.input,'dampingSweepValues') && ...
+        ~isempty(Murat.input.dampingSweepValues)
+    Murat = Murat_dampingRuns(Murat, [], 'prepare');
+end
 
 tStart      = tic;
 
@@ -124,13 +127,49 @@ save(fullfile(tempFolder,'Murat_forward.mat'), 'Murat','-v7');
 tData = toc(tDataStart);
 fprintf('Time spent on data processing: %.2f s\n', tData);
 %%
-%[text] ## TOMOGRAPHIC INVERSIONS AND PLOTTING
+% Use the batch helper for sweeps; retain the original single-run code below.
+if isfield(Murat.input,'dampingSweepValues') && ...
+        ~isempty(Murat.input.dampingSweepValues)
+    load(fullfile(tempFolder,'Murat_forward.mat'),'Murat');
+    [Murat, dampingRuns, tInv, tPlot] = Murat_dampingRuns(Murat, tempFolder);
+else
+
+%[text] ## TOMOGRAPHIC INVERSIONS
+tInvStart   =   tic;
 load(fullfile(tempFolder,'Murat_forward.mat'),'Murat');
-[Murat, dampingRuns, tInv, tPlot] = Murat_dampingRuns(Murat, tempFolder);
+Murat       =   Murat_inversion(Murat);
+% Save with -v7.3 if large
+info        =   whos('Murat');
+if info.bytes > 2e9
+    save(fullfile(tempFolder,'Murat_inverse.mat'),'Murat','-v7.3');
+else
+    save(fullfile(tempFolder,'Murat_inverse.mat'),'Murat','-v7');
+end
+tInv        =   toc(tInvStart);
+fprintf('Inversion completed (%.2f s)\n', tInv);
+%%
+%[text] ## PLOTTING and CLEANING UP
+tPlotStart  =   tic;
+Murat       =   Murat_plot(Murat);
+
+outFolder   =   Murat.input.label;
+
+info        =   whos('Murat'); % re-check size
+if info.bytes > 2e9
+    save(fullfile(outFolder,'Murat.mat'),'Murat','-v7.3');
+else
+    save(fullfile(outFolder,'Murat.mat'),'Murat','-v7');
+end
+
+tPlot       =   toc(tPlotStart);
+fprintf('Plotting completed (%.2f s)\n', tPlot);
+
+end % Damping sweep or original single-run workflow
 
 totalTime   =   toc(tStart);
 fprintf('Total run time: %.2f s\n', totalTime);
-clearvars -except Murat dampingRuns tCheck tData tInv tPlot totalTime
+
+clearvars -except Murat tCheck tData tInv tPlot totalTime
 
 %[appendix]{"version":"1.0"}
 %---
