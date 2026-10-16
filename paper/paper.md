@@ -69,13 +69,13 @@ authors:
     affiliation: "1, 3"
   - name: Felix Borleanu
     orcid: 0000-0001-8502-1422
-    affiliation: 18 
+    affiliation: 17
   - name: Liam Bramwell
     orcid: 0009-0005-5475-8882
-    affiliation: 19
+    affiliation: 18
   - name: Miriam C. Reiss
     orcid: 0000-0002-0250-4988
-    affiliation: 19
+    affiliation: 18
 affiliations:
   - name: Dipartimento di Fisica e Astronomia "Augusto Righi", Alma Mater Studiorum, University of Bologna, Bologna, Italy 
     index: 1
@@ -89,7 +89,7 @@ affiliations:
     index: 5
   - name: Università degli Studi di Salerno, Salerno, Italy 
     index: 6
-  - name: École des Ponts Business School (EPBS), Paris, France
+  - name: École des Ponts Business School (EPBS), Cyprus
     index: 7
   - name: SLB Milan, Milan, Italy 
     index: 8
@@ -110,9 +110,9 @@ affiliations:
   - name: Institute of Geophysics, China Earthquake Administration, Beijing, China
     index: 16
   - name: National Institute for Earth Physics, Ilfov, Romania
-    index: 18
+    index: 17
   - name: Johannes Gutenberg-Universität, Mainz, Germany
-    index: 19
+    index: 18
 date: 4 October 2026
 bibliography: paper.bib
 ---

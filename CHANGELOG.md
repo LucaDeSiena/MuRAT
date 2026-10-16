@@ -41,6 +41,10 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
   files.
 - Automatic save format selection in `MuRAT.m` — uses `-v7.3` only when the
   `Murat` struct exceeds 2 GB; otherwise uses the faster `-v7` format.
+- `Tests/TestFunctional.m` — toolbox-free functional smoke test verifying
+  the data-reading pipeline (fget_sac → Murat_test → Murat_testData) on
+  the MSH sample dataset; skips gracefully when data is absent
+- `paper/` — JOSS submission files (paper.md, paper.bib, Fig1–3.png)
 
 ### Changed
 - `MuRAT.m` — parallel pool now started correctly with `parpool(useParallel)`;
