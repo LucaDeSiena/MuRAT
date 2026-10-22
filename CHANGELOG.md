@@ -13,12 +13,12 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 - `THIRD_PARTY_NOTICES.md` — consolidated licence table for all third-party
   components in `Utilities_Matlab/`, clarifying notices for `inferno.m`,
   `redblue.m`, and `inpaintn.m`, and documenting the GPL v3 resolution.
-- `CITATION.cff` — machine-readable citation metadata with 19 named authors
+- `CITATION.cff` — machine-readable citation metadata with 23 named authors
   and ORCIDs, linked to the MuRAT 4.0 Zenodo DOI.
 - `AUTHORS.md` — lists principal developer and all contributors.
 - GitHub Actions CI (`run_test.yml`) — runs `matlab-actions/run-tests@v2` on
   every push and pull request; produces JUnit XML and Cobertura coverage
-  artefacts; pinned to MATLAB R2025b.
+  artefacts; back-tested on MATLAB R2021b.
 - `Tests/TestRepositoryStructure.m` — class-based tests verifying critical
   files exist, all `.m` sources parse without errors, no editor backup files
   are committed, no duplicate `Murat_*` function names exist, and key
@@ -41,6 +41,10 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
   files.
 - Automatic save format selection in `MuRAT.m` — uses `-v7.3` only when the
   `Murat` struct exceeds 2 GB; otherwise uses the faster `-v7` format.
+- `Tests/TestFunctional.m` — toolbox-free functional smoke test verifying
+  the data-reading pipeline (fget_sac → Murat_test → Murat_testData) on
+  the MSH sample dataset; skips gracefully when data is absent
+- `paper/` — JOSS submission files (paper.md, paper.bib, Fig1–3.png)
 
 ### Changed
 - `MuRAT.m` — parallel pool now started correctly with `parpool(useParallel)`;

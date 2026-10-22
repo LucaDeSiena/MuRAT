@@ -32,7 +32,7 @@ The following people contributed major additions or modifications to `MuRAT4` an
 * Janire Prudencio
 * Miriam Reiss
 * Chiara Saturnino
-* Panayiota Sketsiou, École des Ponts Business School (EPBS), Paris, France
+* Panayiota Sketsiou
 * Donato Talone
 * Wei-Mou Zhu
 * Yi Zhang
