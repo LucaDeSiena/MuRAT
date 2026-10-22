@@ -35,9 +35,8 @@ All three files previously taken from GIBBON have been replaced:
   (MIT-licensed, drop-in compatible, ~30 lines).
 - `inpaintn.m` → replaced by a `fillNaN3` local function inside
   `bin/Murat_rescale.m` using MATLAB's built-in `fillmissing` (R2016b+,
-  no toolbox required). The `GIBBON/` folder and its licence files
-  (`LICENSE`, `licenseBoilerPlate.txt`, `LICENSE_inpaintn.txt`) should now
-  be deleted from the repository.
+  no toolbox required). The `GIBBON/` folder and all its licence files
+  have been removed from the repository.
 
 The GPL v3 compatibility issue is therefore fully resolved.
 

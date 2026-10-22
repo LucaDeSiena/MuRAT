@@ -138,7 +138,7 @@ These packages demonstrate the growing availability of open computational tools 
 
 ## Related software packages
 
-`MuRAT4` is implemented in MATLAB and uses the Curve Fitting, Signal Processing, Optimization, Global Optimization, Image Processing, and Mapping Toolboxes. Parallel Computing Toolbox is optional. The framework also incorporates open-source routines for SAC file handling, regularization, and geometry and image processing. MATLAB Online access (via the badge above) requires an active institution or individual licence including the listed toolboxes; a full conversion to Julia is in development, with current interoperability already available for the GeophysicalModelGenerator.jl visualization step.
+`MuRAT4` is implemented in MATLAB and uses the Curve Fitting, Signal Processing, Optimization, Global Optimization, Image Processing, and Mapping Toolboxes. Parallel Computing Toolbox is optional. The framework also incorporates open-source routines for SAC file handling, regularization, and geometry and image processing. MATLAB Online access (via the badge above) requires an active institution or individual licence including the listed toolboxes; the full conversion to Julia ([MuRAT.jl](https://github.com/CNardoni/MuRAT.jl.git)) is in development, with current interoperability already available for the GeophysicalModelGenerator.jl visualization step.
 
 # Software Design
 
@@ -165,7 +165,7 @@ The MuRAT software lineage has been applied across a range of geological environ
 
 # AI Usage Disclosure
 
-Claude.ai was used during the development of MuRAT4 within MATLAB R2025b to assist with software development. No generative AI tools were used to prepare the documentation or write this manuscript. AI-assisted code was reviewed and validated by the lead author.
+Claude.ai and MATLAB Copilot were used within MATLAB R2025b to assist with the software development of MuRAT4 . No generative AI tools were used to prepare the documentation or write this manuscript. AI-assisted code was reviewed and validated by the lead author.
 
 # Acknowledgements
 
