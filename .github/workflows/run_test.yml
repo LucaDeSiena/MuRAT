@@ -23,8 +23,9 @@ jobs:
         uses: matlab-actions/setup-matlab@v2
         with:
           release: ${{ matrix.release }}
-          # Current tests need base MATLAB only.
-          # When end-to-end functional tests are added, list toolboxes here:
+          # Base MATLAB only: TestFunctional uses fget_sac and Murat_testData
+          # with no toolbox calls (centralFrequencies=[], figOutput=0).
+          # To add toolbox-dependent tests in future, uncomment products below:
           #   products: |
           #     Signal_Processing_Toolbox
           #     Curve_Fitting_Toolbox

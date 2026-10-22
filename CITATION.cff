@@ -1,19 +1,20 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
-title: "MuRAT: a multi-resolution seismic attenuation tomography code"
+title: "MuRAT4: A MATLAB Framework for Multi-Resolution Seismic Attenuation Tomography"
 version: 4.0.0
 date-released: 2026-10-06
 doi: 10.5281/zenodo.23170041
 license: MIT
 repository-code: "https://github.com/LucaDeSiena/MuRAT"
 keywords:
-  - seismology
-  - attenuation
-  - tomography
-  - coda waves
   - MATLAB
+  - seismology
+  - attenuation tomography
+  - scattering tomography
+  - absorption tomography
+  - coda waves
 abstract: >-
-  MuRAT is a MATLAB code for multi-resolution seismic attenuation tomography, including Qc imaging, peak delay and Q inversion.
+  MuRAT4 (Multi-Resolution Seismic Attenuation Tomography, version 4.0) is an open-access, MATLAB-based framework for measuring and imaging three-dimensional spatial variations of seismic attenuation. It provides tools to separate and image three attenuation mechanisms from proxies measured on seismograms: direct-wave attenuation via the coda-normalization method, scattering attenuation via the peak-delay method, and absorption via late-time coda attenuation. Version 4.0 systematizes these capabilities into a reproducible workflow that measures and inverts the three attributes within tomographic frameworks.
 authors:
   - family-names: "De Siena"
     given-names: "Luca"
@@ -46,7 +47,7 @@ authors:
   - family-names: "Sketsiou"
     given-names: "Panayiota"
     orcid: "https://orcid.org/0000-0002-6575-4538"
-    affiliation: "Kyndryl, Nicosia, Cyprus"
+    affiliation: "École des Ponts Business School (EPBS), Cyprus"
   - family-names: "Di Martino"
     given-names: "Maria Del Pilar"
     orcid: "https://orcid.org/0000-0002-3600-077X"
@@ -58,7 +59,7 @@ authors:
   - family-names: "Guardo"
     given-names: "Roberto"
     orcid: "https://orcid.org/0000-0002-2808-9583"
-    affiliation: "Istituto Nazionale di Geofisica e Vulcanologia, Sez. di Catania- Osservatorio Etneo, Catania, Italy; Geosciences Barcelona (GEO3BCN), Spanish National Research Council (CSIC)"
+    affiliation: "Istituto Nazionale di Geofisica e Vulcanologia, Sez. di Catania - Osservatorio Etneo, Catania, Italy; Geosciences Barcelona (GEO3BCN), Spanish National Research Council (CSIC), Barcelona, Spain"
   - family-names: "Del Pezzo"
     given-names: "Edoardo"
     orcid: "https://orcid.org/0000-0002-6981-5967"
@@ -67,13 +68,13 @@ authors:
     given-names: "Francesca"
     orcid: "https://orcid.org/0000-0001-5400-7724"
     affiliation: "Istituto Nazionale di Geofisica e Vulcanologia, Sez. di Napoli - Osservatorio Vesuviano, Napoli, Italy"
-  - family-names: "Ibáñez"
-    given-names: "Jesús M."
-    orcid: "https://orcid.org/0000-0002-9846-8781"
-    affiliation: "Andalusian Institute of Geophysics, University of Granada, Granada, Spain"
   - family-names: "Prudencio"
     given-names: "Janire"
     orcid: "https://orcid.org/0000-0003-1755-3771"
+    affiliation: "Andalusian Institute of Geophysics, University of Granada, Granada, Spain"
+  - family-names: "Ibáñez"
+    given-names: "Jesús M."
+    orcid: "https://orcid.org/0000-0002-9846-8781"
     affiliation: "Andalusian Institute of Geophysics, University of Granada, Granada, Spain"
   - family-names: "Zhang"
     given-names: "Yi"
@@ -86,7 +87,7 @@ authors:
   - family-names: "Abbas"
     given-names: "Aqeel"
     orcid: "https://orcid.org/0000-0002-6133-6857"
-    affiliation: "Shenzhen Research Institute, CUHK, Shenzhen, China"
+    affiliation: "Department of Earth and Space Sciences, Southern University of Science and Technology, Shenzhen, China"
   - family-names: "Hu"
     given-names: "Yansong"
     orcid: "https://orcid.org/0000-0002-7512-0678"
