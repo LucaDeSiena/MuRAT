@@ -10,10 +10,10 @@
 Murat.input.dataDirectory           =   'sac_MSH';
 %[text] ![](text:image:1652)
 %[text] Best practice is to create a new folder to store your results. The code will create this folder inside the working directory. Specify the name of the folder that will store text files and figures, and will appear in your working directory:
-Murat.input.label                   =   'MSH';
+Murat.input.label                   =   'MSH_Theo';
 %[text] ![](text:image:4e51)
 %[text] In MuRAT3D you can choose between a sequential or parallelized forward loop. In the parallelized case, just set a number of workers (cores). In this example, we are working with the parallelized code and a computer with 8 cores. For a sequential run, set *Murat.input.workers* as empty (**\[\]**).
-Murat.input.workers                 =  8;
+Murat.input.workers                 =  [];
 %%
 %[text] %[text:anchor:H_5E594BA2] ## WAVEFORM DATA
 %[text] Set all the variables required by data processing. This includes data choises, as setting the name of the variables in SAC and all the attributes that are needed for the three kinds of imaging. The routines for loading the files have been mostly created by [Zhigang Peng ](http://geophysics.eas.gatech.edu/people/zpeng/)and co-workers and downloaded from their [Introduction to SAC](http://geophysics.eas.gatech.edu/people/zpeng/Teaching/Sac_Tutorial_2006/) webpage.
@@ -67,7 +67,9 @@ Murat.input.startLapseTime          =   15;
 Murat.input.codaWindow              =   10;
 %[text] The **MLTWA** is the standard method to find the average parameters necessary to calculate the kernels. It provides albedo and inverse extinction length:
 Murat.input.albedo                  =   [0.8 0.6 0.4 0.2];
-Murat.input.iExtinctionLength       =   [0.12 0.12 0.1 0.1]; % D  =   vS./Le_1/3./(1-B0)
+Murat.input.iExtinctionLength       =   [0.12 0.12 0.1 0.1]; % D  =   vS./Le_1/3./B0
+%[text] The diffusion constant used to model the coda in the Q inversion can be estimated by the inversion (**'Inverted'**) or fixed to the theoretical value D = vS/(3 B0 Le\_1) given by the albedo and inverse extinction length above (**'Theoretical'**). In the first case, the code compares the estimated and theoretical constants; in the second, only the average inverse Q is inverted.
+Murat.input.diffusionConstant       =   'Theoretical';
 %[text] As the kernels are computational intensive and require a full matrix of nodes to avoid singularities, we also use a computational factor to reduce the computational time. This number divides the input grid, meaning that higher numbers give more precise results at the expene of computational time. Minimum is **1**. A figure will output the kernel in this grid.
 Murat.input.kernelTreshold          =	2;
 %[text] %[text:anchor:H_38D18D3D] ### Measurement of Qc

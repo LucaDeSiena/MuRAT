@@ -14,6 +14,8 @@ z               =   s.z;
 sections        =   s.sections;
 cf              =   s.centralFrequency;
 tWm             =   s.codaWindow;
+vS              =   s.averageVelocityS;
+tl              =   s.bodyWindow;
 PlotRays        =   s.PlotRays;
 PlotTests       =   s.PlotTests;
 PlotResults     =   s.PlotResults;
@@ -42,6 +44,7 @@ retainQ         =   Murat.Q.retainQ;
 modv_Q          =   Murat.Q.modvQ;
 energyRatio     =   Murat.Q.energyRatioBodyCoda;
 codaNoiseRatio  =   Murat.Q.energyRatioCodaNoise;
+Dinv            =   Murat.Q.estimatedDiffusion;
 
 sTitle          =   18;
 
@@ -166,7 +169,9 @@ for k = 1:lMF(2)
     te          =   tCm + tWm;
 
     CNTitle     =   ['Coda Normalization check ' fcName ' Hz'];
-    [d0, Q0]    =  Murat_lsqlinQmean(cf_k,l,time0_k,rapsp_k,Qc_k, tCm, te);
+    % Diffusion constant used in the inversion (theoretical or estimated)
+    [d0, Q0]    =  Murat_lsqlinQmean(cf_k,l,time0_k,rapsp_k,Qc_k, tCm, te,...
+        vS, tl, Dinv(k));
     CN_analysis =   Murat_imageCheckCN(time0_k,Q0,d0,Ed_k,CNTitle);
     p           =   makePath(storeFolder,['CN_analysis_' fcName '_Hz']);
     saveFigureAsImage(p);
