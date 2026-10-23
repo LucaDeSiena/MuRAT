@@ -24,7 +24,13 @@ inversionMethod     =   s.inversionMethod;
 DDcoordinates       =   s.DDcoordinates;
 B0                  =   s.albedo;
 Le_1                =   s.iExtinctionLength;
+if isfield(s,'diffusionConstant') && ~isempty(s.diffusionConstant)
+    diffMethod      =   s.diffusionConstant;
+else
+    diffMethod      =   'Inverted';
+end
 vS                  =   s.averageVelocityS;
+tl                  =   s.bodyWindow;
 iter                =   s.MaximumIterations;
 iterStall           =   s.MaximumStallIterations;
 dampValueQc         =   s.dampingValueQc;
@@ -70,9 +76,20 @@ residualQc          =   zeros(1,nFreq);
 dValueQc            =   zeros(1,nFreq);
 dValueQ             =   zeros(1,nFreq);
 cConstants          =   zeros(2,nFreq);
+averageQcodaC       =   zeros(2,2,nFreq);
+averageD            =   zeros(1,nFreq);
 
 % Diffusion constant - Wu 1985, Wu and Aki, 1988.
 D                   =   vS/3./Le_1./B0;
+switch lower(diffMethod)
+    case 'inverted'
+        fixD        =   false;
+    case 'theoretical'
+        fixD        =   true;
+    otherwise
+        error(['Murat.input.diffusionConstant must be ''Inverted'' '...
+            'or ''Theoretical''.'])
+end
 
 fc_names            =   cell(1,nFreq);
 fld_names           =   cell(1,nFreq);
@@ -97,6 +114,8 @@ coords_block = modvP(:,1:3);
 for k = 1:nFreq
     
     D_k             =   D(k);
+    if fixD, Dfix_k =   D_k;
+    else, Dfix_k    =   []; end
     if ~isempty(dampValueQc), dValueQc_k  =   dampValueQc(k);
     else, dValueQc_k    =   [];   end
     
@@ -164,31 +183,29 @@ for k = 1:nFreq
     coordPriorQ         =   modvQ(rcQ_k,1:3,k);
     te                  =   tCm+tWm;
 
-    cCoda               =   1.5/2/pi/cf_k*log(4*pi*D_k)-...
-                            1/2/pi/cf_k*...
-                            log((te).^(-1.5).*...
-                            exp(-l.^2/4/D_k./te...
-                            -2*pi*cf_k*Qc_k.*te)...
-                            -tCm.^(-1.5).*...
-                            exp(-l.^2/4/D_k./tCm...
-                            -2*pi*cf_k*Qc_k.*tCm));
+    cCoda               =   Murat_codaConstant(cf_k,l,Qc_k,tCm,te,D_k,vS,tl);
 
-    [d0, Q0, mDest]     =   Murat_lsqlinQmean(cf_k,l,time0_k,rapE_k,...
-        Qc_k, tCm, te);
+    [d0, Q0, mDest, cSynth] =   Murat_lsqlinQmean(cf_k,l,time0_k,rapE_k,...
+        Qc_k, tCm, te, vS, tl, Dfix_k);
 
     cEst                =   Q0(1,1);
 
-    cConstants(1,k)     =   mean(real(cCoda));
+    cConstants(1,k)     =   mean(cCoda,'omitnan');
     cConstants(2,k)     =   cEst;
     
     fprintf('A priori and estimated coda constants are %.4g and %.4g at %g Hz\n',...
-        mean(real(cCoda)), cEst, cf_k);
+        mean(cCoda,'omitnan'), cEst, cf_k);
     
-    fprintf('A priori and estimated diffusion constants are %.4g and %.4g at %g Hz\n',...
-        D_k, mDest, cf_k);
+    if fixD
+        fprintf('Theoretical diffusion constant %.4g fixed in the inversion at %g Hz\n',...
+            D_k, cf_k);
+    else
+        fprintf('A priori and estimated diffusion constants are %.4g and %.4g at %g Hz\n',...
+            D_k, mDest, cf_k);
+    end
 
-    averageQcodaC       =   Q0;
-    averageD            =   mDest;
+    averageQcodaC(:,:,k)=   Q0;
+    averageD(k)         =   mDest;
     outDirFigure = fullfile(outDirFigureBase, ['L-curve_Q_' fcName '_Hz']);
     
     [sol,fval,exitflag,output,dValueQ_k]  =   Murat_inversionQ(A_k,d0,...
@@ -232,10 +249,10 @@ for k = 1:nFreq
     re_checkQ       =   A_k*Q_ch;
     
     % Synthetic energy ratios
-    synthEratio     =   exp(2*pi*cf_k*(cEst + re_checkQ))./l.^2;
+    synthEratio     =   exp(2*pi*cf_k*(cSynth + re_checkQ))./l.^2;
 
     [d0c, Q0c, ~]   =   Murat_lsqlinQmean(cf_k,l,time0_k,synthEratio,...
-        Qc_k, tCm, te);
+        Qc_k, tCm, te, vS, tl, Dfix_k);
     
     [sol,~,~,~,~]   =   Murat_inversionQ(A_k,d0c,rapE_k,...
         inversionMethod,Q0c,iter,iterStall,coordPriorQ,dValueQ_k,...
@@ -256,10 +273,10 @@ for k = 1:nFreq
         re_spikeQ       =   A_k*Q_sp;
         
         %Synthetic energy ratios
-        synthEratio     =   exp(2*pi*cf_k*(cEst + re_spikeQ))./l.^2;
+        synthEratio     =   exp(2*pi*cf_k*(cSynth + re_spikeQ))./l.^2;
         
         [d0s, Q0s, ~]   =  Murat_lsqlinQmean(cf_k,l,time0_k,synthEratio,...
-            Qc_k, tCm, te);
+            Qc_k, tCm, te, vS, tl, Dfix_k);
         
         [sol,~,~,~,~]   =   Murat_inversionQ(A_k,d0s,rapE_k,...
             inversionMethod,Q0s,iter,iterStall,coordPriorQ,dValueQ_k,...
