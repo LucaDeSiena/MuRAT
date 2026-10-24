@@ -105,7 +105,7 @@ Murat.input.averageVelocityS        =   3;
 %[text] - a standard Tikhonov inversion based on singular value decomposition (**'Tikhonov'**), where we on the [regtools Matlab suite](https://de.mathworks.com/matlabcentral/fileexchange/52-regtools) from Per Christian Hansen.
 %[text] - the particle swarm (**Particle**), simulated annealing (**Annealing**), or genetic algorithm (**Genetic**) solvers from the optimization toolbox. \
 %[text] In the last case, the user can choose the maximum number of iterations after which the optimization will stop. The user can also choose the maximum number of iterations where the misfit stalls after which the optimization will stop. Otherwise leave empty.
-Murat.input.inversionMethod         =   'Tikhonov';
+Murat.input.inversionMethod         =   'Particle';
 Murat.input.MaximumIterations       =   2e3;
 Murat.input.MaximumStallIterations  =   100;
 %[text] Set this to ***1*** to plot:
@@ -118,6 +118,8 @@ Murat.input.smoothingValueQc        =   [];
 %[text] The user can set damping and smoothing parameters for Q. The first will increase the impact of the norm of the solution on the objective function. The damping is set to 0.1 of the average energy ratio if left empty, otherwise the user sets multiples of this value. The smoothing is set to three times the step of the grid in the vertical direction, otherwise the user sets multiples of this value.
 Murat.input.dampingValueQ           =   [0.01 0.01 0.01 0.01];
 Murat.input.smoothingValueQ         =   [];
+%[text] % Separate damping runs; each value applies to Qc and Q at all frequencies. Enter any number of damping values; each applies to Qc and Q at all frequencies and saves results in a separate folder. Leave [] for a normal single run with dampingValueQc and dampingValueQ.
+Murat.input.dampingSweepValues = [];
 %[text] ### Synthetic Testing
 %[text] A great reference for the best sort of testing is [Rawlinson & Spakman, 2016](https://academic.oup.com/gji/article/205/2/1221/692880?login=true). If you want to test you results you need to create a checkerboard. The size of the checks can be twice (*2*) or four times (*4*) the node spacing. Values are minimum and maximum of final measured parameters.
 Murat.input.sizeCheck               =   2;

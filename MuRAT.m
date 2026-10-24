@@ -55,6 +55,9 @@ end
 inputFile   = fullfile(path, file);
 fprintf('Using input file %s\n', inputFile);
 
+% Start each selected input with a fresh configuration.
+clear Murat
+
 % Run or load input file safely
 [~,~,ext]   = fileparts(file);
 switch lower(ext)
@@ -64,6 +67,12 @@ switch lower(ext)
         run(inputFile);
     otherwise
         error('Unsupported input file extension: %s', ext);
+end
+
+% Prepare output folders only when a damping sweep is requested.
+if isfield(Murat.input,'dampingSweepValues') && ...
+        ~isempty(Murat.input.dampingSweepValues)
+    Murat = Murat_dampingRuns(Murat, [], 'prepare');
 end
 
 tStart      = tic;
@@ -118,6 +127,13 @@ save(fullfile(tempFolder,'Murat_forward.mat'), 'Murat','-v7');
 tData = toc(tDataStart);
 fprintf('Time spent on data processing: %.2f s\n', tData);
 %%
+% Use the batch helper for sweeps; retain the original single-run code below.
+if isfield(Murat.input,'dampingSweepValues') && ...
+        ~isempty(Murat.input.dampingSweepValues)
+    load(fullfile(tempFolder,'Murat_forward.mat'),'Murat');
+    [Murat, dampingRuns, tInv, tPlot] = Murat_dampingRuns(Murat, tempFolder);
+else
+
 %[text] ## TOMOGRAPHIC INVERSIONS
 tInvStart   =   tic;
 load(fullfile(tempFolder,'Murat_forward.mat'),'Murat');
@@ -147,6 +163,8 @@ end
 
 tPlot       =   toc(tPlotStart);
 fprintf('Plotting completed (%.2f s)\n', tPlot);
+
+end % Damping sweep or original single-run workflow
 
 totalTime   =   toc(tStart);
 fprintf('Total run time: %.2f s\n', totalTime);
