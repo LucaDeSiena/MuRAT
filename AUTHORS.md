@@ -21,6 +21,7 @@ The following people contributed major additions or modifications to `MuRAT4` an
 * Liam Bramwell
 * Gaia Caporale
 * Edoardo Del Pezzo
+* Rachit Gautam
 * Maria Del Pilar Di Martino
 * Simona Gabrielli
 * Roberto Guardo

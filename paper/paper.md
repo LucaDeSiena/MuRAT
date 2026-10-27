@@ -9,110 +9,117 @@ tags:
 authors:
   - name: Luca De Siena
     orcid: 0000-0002-3615-5923
-    affiliation: "1, 2"
+    affiliation: "1, 2, 3"
   - name: Chiara Nardoni
     orcid: 0000-0003-1195-3547
     affiliation: "1, 2"
   - name: Martina Avella
     orcid: 0009-0004-2841-5846
-    affiliation: "1, 3"
+    affiliation: "1, 4"
   - name: Gaia Caporale
     orcid: 0009-0006-0261-6839
-    affiliation: "3, 4"
+    affiliation: "4, 5"
   - name: Simona Gabrielli
     orcid: 0000-0002-5829-5900
-    affiliation: 5
+    affiliation: 6
   - name: Ferdinando Napolitano
     orcid: 0000-0002-2230-078X
-    affiliation: 6
+    affiliation: 7
   - name: Donato Talone
     orcid: 0009-0004-3472-1022
-    affiliation: 4
+    affiliation: 5
   - name: Panayiota Sketsiou
     orcid: 0000-0002-6575-4538
-    affiliation: 7
+    affiliation: 8
   - name: Maria Del Pilar Di Martino
     orcid: 0000-0002-3600-077X
-    affiliation: 8
+    affiliation: 9
   - name: Thomas King
     orcid: 0000-0002-4536-4073
-    affiliation: 9
+    affiliation: 10
   - name: Roberto Guardo
     orcid: 0000-0002-2808-9583
-    affiliation: "10, 11"
+    affiliation: "11, 12"
   - name: Edoardo Del Pezzo
     orcid: 0000-0002-6981-5967
-    affiliation: "2,12"
+    affiliation: "2, 13"
   - name: Francesca Bianco
     orcid: 0000-0001-5400-7724
     affiliation: 2
   - name: Janire Prudencio
     orcid: 0000-0003-1755-3771
-    affiliation: 12
+    affiliation: 13
   - name: Jesús M. Ibáñez
     orcid: 0000-0002-9846-8781
-    affiliation: 12
+    affiliation: 13
   - name: Yi Zhang
     orcid: 0000-0002-5421-7737
-    affiliation: 13
+    affiliation: 14
   - name: Wei-Mou Zhu
     orcid: 0000-0003-4955-543X
-    affiliation: 14
+    affiliation: 15
   - name: Aqeel Abbas
     orcid: 0000-0002-6133-6857
-    affiliation: 15
+    affiliation: 16
   - name: Yansong Hu
     orcid: 0000-0002-7512-0678
-    affiliation: "1, 16"
+    affiliation: "1, 17"
   - name: Chiara Saturnino
     orcid: 0009-0009-1124-0556
-    affiliation: "1, 3"
+    affiliation: "1, 4"
   - name: Felix Borleanu
     orcid: 0000-0001-8502-1422
-    affiliation: 17
+    affiliation: 18
   - name: Liam Bramwell
     orcid: 0009-0005-5475-8882
-    affiliation: 18
+    affiliation: 3
+  - name: Rachit Gautam
+    orcid: 0009-0002-9160-6624
+    affiliation: "3, 19, 20"
   - name: Miriam C. Reiss
     orcid: 0000-0002-0250-4988
-    affiliation: 18
+    affiliation: 3
 affiliations:
-  - name: Dipartimento di Fisica e Astronomia "Augusto Righi", Alma Mater Studiorum, University of Bologna, Bologna, Italy 
+  - name: Dipartimento di Fisica e Astronomia "Augusto Righi", Alma Mater Studiorum, University of Bologna, Bologna, Italy
     index: 1
-  - name: Istituto Nazionale di Geofisica e Vulcanologia, Sez. di Napoli - Osservatorio Vesuviano, Napoli, Italy 
+  - name: Istituto Nazionale di Geofisica e Vulcanologia, Sez. di Napoli - Osservatorio Vesuviano, Napoli, Italy
     index: 2
-  - name: Istituto Nazionale di Geofisica e Vulcanologia, Sez. di Bologna, Bologna, Italy 
+  - name: Institute of Geosciences, Johannes Gutenberg University Mainz, Mainz, Germany
     index: 3
-  - name: Dipartimento di Scienze, Università degli studi "G. d'Annunzio", Chieti, Italy 
+  - name: Istituto Nazionale di Geofisica e Vulcanologia, Sez. di Bologna, Bologna, Italy
     index: 4
-  - name: Istituto Nazionale di Geofisica e Vulcanologia, Sez. di Roma, Roma, Italy 
+  - name: Dipartimento di Scienze, Università degli studi "G. d'Annunzio", Chieti, Italy
     index: 5
-  - name: Università degli Studi di Salerno, Salerno, Italy 
+  - name: Istituto Nazionale di Geofisica e Vulcanologia, Sez. di Roma, Roma, Italy
     index: 6
-  - name: École des Ponts Business School (EPBS), Cyprus
+  - name: Università degli Studi di Salerno, Salerno, Italy
     index: 7
-  - name: SLB Milan, Milan, Italy 
+  - name: École des Ponts Business School (EPBS), Cyprus
     index: 8
-  - name: Birmingham Institute for Sustainability and Climate Action, University of Birmingham, Birmingham, United Kingdom
+  - name: SLB Milan, Milan, Italy
     index: 9
-  - name: Istituto Nazionale di Geofisica e Vulcanologia, Sez. di Catania - Osservatorio Etneo, Catania, Italy
+  - name: Birmingham Institute for Sustainability and Climate Action, University of Birmingham, Birmingham, United Kingdom
     index: 10
-  - name: Geosciences Barcelona (GEO3BCN), Spanish National Research Council (CSIC), Barcelona, Spain
+  - name: Istituto Nazionale di Geofisica e Vulcanologia, Sez. di Catania - Osservatorio Etneo, Catania, Italy
     index: 11
-  - name: Andalusian Institute of Geophysics, University of Granada, Granada, Spain
+  - name: Geosciences Barcelona (GEO3BCN), Spanish National Research Council (CSIC), Barcelona, Spain
     index: 12
-  - name: Viridien Singapore, Singapore
+  - name: Andalusian Institute of Geophysics, University of Granada, Granada, Spain
     index: 13
-  - name: Institute of Geology and Geophysics, Chinese Academy of Sciences, Beijing, China
+  - name: Viridien Singapore, Singapore
     index: 14
-  - name: Department of Earth and Space Sciences, Southern University of Science and Technology, Shenzhen, China
+  - name: Institute of Geology and Geophysics, Chinese Academy of Sciences, Beijing, China
     index: 15
-  - name: Institute of Geophysics, China Earthquake Administration, Beijing, China
+  - name: Department of Earth and Space Sciences, Southern University of Science and Technology, Shenzhen, China
     index: 16
-  - name: National Institute for Earth Physics, Ilfov, Romania
+  - name: Institute of Geophysics, China Earthquake Administration, Beijing, China
     index: 17
-  - name: Johannes Gutenberg-Universität, Mainz, Germany
+  - name: National Institute for Earth Physics, Ilfov, Romania
     index: 18
+  - name: Ineris ‐ L’Institut national de l’environnement industriel et des risques Campus ARTEM, Nancy Cedex, France
+    index: 19
+  - name: VITO – Vlaamse Instelling voor Technologisch Onderzoek, Mol, Belgium
+    index: 20
 date: 4 October 2026
 bibliography: paper.bib
 ---
