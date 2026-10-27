@@ -57,6 +57,21 @@ slice(Xp, Yp, Zp, mVp, sections(2), sections(1), sections(3)); % Z in km for plo
 
 % Colormap and colorbar (single)
 colormap(color);
+
+% Centre peak-delay anomalies on zero using the full volume at this frequency.
+% Equal positive/negative anomalies have equal colour intensity; model values
+% are unchanged. caxis also supports the master branch's MATLAB R2021b minimum.
+if contains(name, 'Peak-Delay', 'IgnoreCase', true)
+    validPD = V(isfinite(V));
+    if ~isempty(validPD)
+        pdLimit = max(abs(validPD));
+        if pdLimit == 0
+            pdLimit = 1; % An all-zero volume remains at the neutral colour.
+        end
+        caxis([-pdLimit pdLimit]);
+    end
+end
+
 hcb = colorbar;
 hcb.FontSize = 18;
 
