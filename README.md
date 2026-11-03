@@ -6,9 +6,9 @@ MuRAT - Multi-Resolution seismic Attenuation Tomography
 [![test](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml/badge.svg?branch=master)](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml)
 [![GitHub release](https://img.shields.io/github/v/release/LucaDeSiena/MuRAT?include_prereleases)](https://github.com/LucaDeSiena/MuRAT/releases)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23170041.svg)](https://doi.org/10.5281/zenodo.23170041)
-[![Citing Papers](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.openalex.org%2Fworks%3Ffilter%3Dreferenced_works%3AW2059002776%7CW2345084914%26per_page%3D1%26select%3Did&query=%24.meta.count&label=citing%20papers&color=brightgreen)](https://openalex.org/works?filter=referenced_works:W2059002776|W2345084914&sort=publication_year:desc)
+[![Citing Papers](https://img.shields.io/badge/citing_papers-OpenAlex-brightgreen)](https://openalex.org/works?filter=referenced_works:W2059002776|W2345084914&sort=publication_year:desc)
 [![MIT License](https://img.shields.io/github/license/LucaDeSiena/MuRAT)](LICENSE.md)
-[![MATLAB](https://img.shields.io/badge/MATLAB-R2021b_to_R2025b-orange)](https://www.mathworks.com/products/matlab.html)
+[![MATLAB](https://img.shields.io/badge/MATLAB-R2021b%2B-orange)](https://www.mathworks.com/products/matlab.html)
 [![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=LucaDeSiena/MuRAT)
 
 MuRAT4.0 is a Matlab Package for seismic Attenuation, Scattering and Absorption Tomography using Body and Coda Waves at multiple frequencies.
@@ -37,7 +37,7 @@ Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing, Mapping
 
 Custom toolboxes not included in standard Matlab installations are also provided with the package. These are:
 
-1. Routines to read SAC files created by Zhigang Peng and available from [his SAC tutorial page](http://geophysics.eas.gatech.edu/classes/SAC/).
+1. A SAC file reader (`fget_sac.m`) written from scratch by the MuRAT authors (MIT licence), producing an identical header struct to the routines originally published by Zhigang Peng at [his SAC tutorial page](http://geophysics.eas.gatech.edu/classes/SAC/). Sample SAC files from that tutorial are retained for testing.
 2. The [Regularization Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/52-regtools?s_tid=prof_contriblnk) was created by Per Christian Hansen and available from Matlab File Exchange.
 
 Three sample datasets (Mount St. Helens, Romania, and Toba) are included and allow the user to obtain sample models. The datasets work with the three corresponding *Murat_input_.m* files that show examples of what the user can get with the code.

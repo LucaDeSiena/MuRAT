@@ -5,6 +5,39 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 
 ---
 
+## [Unreleased]
+
+### Added
+- `Murat.input.diffusionConstant` in the input files: `'Theoretical'` fixes
+  the diffusion constant D = v/(3·B0·Le⁻¹) in the coda-normalisation
+  inversion; `'Inverted'` (default) estimates D from the data and prints it
+  next to the theoretical value.
+- `bin/Murat_codaConstant.m` — coda constant per ray from the diffusion
+  model, shared by `Murat_inversion`, `Murat_lsqlinQmean` and `Murat_plot`.
+
+### Changed
+- `Murat_lsqlinQmean` removes the coda constant ray by ray and solves for the
+  average Q⁻¹ by least squares. In `'Inverted'` mode, D is the value
+  minimising the misfit (log grid over 1e-3–1e3 km²/s, refined locally).
+  New signature: `[d0, Q0, mDest, cRay] = Murat_lsqlinQmean(cf_k, l,
+  time0_k, rapsp_k, Qc_k, tCm, te, v, tl, Dfix)`.
+- Checkerboard and spike tests for Q use the same per-ray coda constants as
+  the data inversion.
+- `Murat.Q.averageQ` (2×2×nFreq) and `Murat.Q.estimatedDiffusion` (1×nFreq)
+  now store every frequency.
+- Documentation (section 2.4.1) and wiki updated with the corrected CN
+  equations.
+
+### Fixed
+- Coda energy modelled as the window integral measured by `Murat_body`
+  instead of the difference of diffusive energies at the window ends, which
+  is negative once the coda decays and made the coda constant undefined.
+- The coda constant now includes the direct-wave normalisation term
+  −ln(4π·v·t_l)/(2πf).
+- The grid search for D used `(tCm + te)` instead of `te` in the coda model.
+- Comments in the MSH and Romania input files gave D = vS/(3·Le⁻¹·(1−B0));
+  corrected to B0.
+
 ## [4.0.0] – 2026-10-06
 
 ### Added
@@ -13,12 +46,12 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 - `THIRD_PARTY_NOTICES.md` — consolidated licence table for all third-party
   components in `Utilities_Matlab/`, clarifying notices for `inferno.m`,
   `redblue.m`, and `inpaintn.m`, and documenting the GPL v3 resolution.
-- `CITATION.cff` — machine-readable citation metadata with 19 named authors
+- `CITATION.cff` — machine-readable citation metadata with 23 named authors
   and ORCIDs, linked to the MuRAT 4.0 Zenodo DOI.
 - `AUTHORS.md` — lists principal developer and all contributors.
 - GitHub Actions CI (`run_test.yml`) — runs `matlab-actions/run-tests@v2` on
   every push and pull request; produces JUnit XML and Cobertura coverage
-  artefacts; pinned to MATLAB R2025b.
+  artefacts; back-tested on MATLAB R2021b.
 - `Tests/TestRepositoryStructure.m` — class-based tests verifying critical
   files exist, all `.m` sources parse without errors, no editor backup files
   are committed, no duplicate `Murat_*` function names exist, and key
@@ -41,6 +74,10 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
   files.
 - Automatic save format selection in `MuRAT.m` — uses `-v7.3` only when the
   `Murat` struct exceeds 2 GB; otherwise uses the faster `-v7` format.
+- `Tests/TestFunctional.m` — toolbox-free functional smoke test verifying
+  the data-reading pipeline (fget_sac → Murat_test → Murat_testData) on
+  the MSH sample dataset; skips gracefully when data is absent
+- `paper/` — JOSS submission files (paper.md, paper.bib, Fig1–3.png)
 
 ### Changed
 - `MuRAT.m` — parallel pool now started correctly with `parpool(useParallel)`;

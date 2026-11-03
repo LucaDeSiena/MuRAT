@@ -67,6 +67,8 @@ Murat.input.codaWindow              =   20;
 %[text] The **MLTWA** is the standard method to find the average parameters necessary to calculate the kernels. It provides albedo and extinction length:
 Murat.input.albedo                  =   [0.5 0.5];
 Murat.input.iExtinctionLength       =   [0.02 0.02];
+%[text] The diffusion constant used to model the coda in the Q inversion can be estimated by the inversion (**'Inverted'**) or fixed to the theoretical value D = vS/(3 B0 Le\_1) given by the albedo and inverse extinction length above (**'Theoretical'**). In the first case, the code compares the estimated and theoretical constants; in the second, only the average inverse Q is inverted.
+Murat.input.diffusionConstant       =   'Inverted';
 %[text] As the kernels are computational intensive and require a full matrix of nodes to avoid singularities, we also use a computational factor to reduce the computational time. This number divides the input grid, meaning that higher numbers give more precise results at the expene of computational time. Minimum is **1**. A figure will output the kernel in this grid.
 Murat.input.kernelTreshold          =	1;
 %[text] %[text:anchor:H_865BAF76] ### Measurement of Qc
