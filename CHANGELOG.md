@@ -8,6 +8,16 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 ## [Unreleased]
 
 ### Added
+- Optional `Murat.input.dampingSweepValues` and
+  `bin/Murat_dampingRuns.m` for damping sweeps using Tikhonov, Particle,
+  Annealing or Global inversion. Each value applies to Qc and Q at all
+  configured frequencies, preserving frequency and smoothing settings.
+  Waveform processing and forward modelling are shared between runs.
+- Separate output folders and full model caches for each damping value.
+  Before a new sweep, matching existing folders are archived as `_old`,
+  `_old_2`, etc., preserving earlier results.
+- Damping-sweep settings and usage guidance in the MSH, Romania and Toba
+  input files, disabled by default with `dampingSweepValues = []`.
 - `Murat.input.diffusionConstant` in the input files: `'Theoretical'` fixes
   the diffusion constant D = v/(3·B0·Le⁻¹) in the coda-normalisation
   inversion; `'Inverted'` (default) estimates D from the data and prints it
@@ -16,6 +26,11 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
   model, shared by `Murat_inversion`, `Murat_lsqlinQmean` and `Murat_plot`.
 
 ### Changed
+- `MuRAT.m` delegates nonempty damping sweeps to the new helper while
+  preserving the original inversion, plotting and saving blocks for
+  normal runs. An empty or absent sweep uses the existing per-frequency
+  damping settings, including automatic selection when those are empty.
+- MSH, Romania and Toba examples use the Tikhonov inversion method.
 - `Murat_lsqlinQmean` removes the coda constant ray by ray and solves for the
   average Q⁻¹ by least squares. In `'Inverted'` mode, D is the value
   minimising the misfit (log grid over 1e-3–1e3 km²/s, refined locally).
@@ -29,6 +44,13 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
   equations.
 
 ### Fixed
+- Clear the previous `Murat` configuration before loading a selected
+  input file, preventing settings from a previous dataset or damping
+  sweep from carrying over into the next run.
+- Peak-delay colour limits in `Murat_image3D` are symmetric around zero,
+  using the maximum absolute finite value in the volume at each frequency.
+- `Murat_inversionQc` returns the exit flag in the Global solver branch
+  when inversion plotting is disabled.
 - Coda energy modelled as the window integral measured by `Murat_body`
   instead of the difference of diffusive energies at the window ends, which
   is negative once the coda decays and made the coda constant undefined.
