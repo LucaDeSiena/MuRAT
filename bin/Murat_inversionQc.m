@@ -110,7 +110,7 @@ switch inversionMethod
             [sol,fval,eflag,output] = solve(prob, "Solver",...
                 "ga",'Options',options);
         else
-            [sol,fval,~,output] =   solve(prob, "Solver","ga");
+            [sol,fval,eflag,output] =   solve(prob, "Solver","ga");
 
         end
 
