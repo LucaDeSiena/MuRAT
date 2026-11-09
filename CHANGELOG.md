@@ -3,6 +3,21 @@
 All notable changes to MuRAT are documented here.
 Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https://semver.org).
 
+## [Unreleased]
+
+### Added
+- First-difference (gradient) smoothing for the `'Tikhonov'` inversions of
+  Qc and Q. `smoothingValueQc` and `smoothingValueQ` were not used by the
+  Tikhonov branch; they now set the weight `s` of a first-difference
+  regulariser on the model grid, so the objective is
+  `norm(A*m-d)^2 + dampingValue^2*norm(m)^2 + s^2*norm(D*m)^2` (m >= 0).
+  A uniform model is not penalised by `D`, so the solution is no longer
+  pulled towards zero. Empty or 0 keeps the previous behaviour; if smoothing
+  is set and `dampingValue*` is empty, damping defaults to 0. Other
+  inversion methods keep using `smoothingValue*` as the correlation length
+  of `Murat_smoothing`. New `bin/Murat_gradientOperator.m` and
+  `bin/Murat_regulariser.m`; added `Tests/TestTikhonovSmoothing.m`.
+
 ---
 
 ## [Unreleased]

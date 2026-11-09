@@ -110,6 +110,18 @@ spikeInput          =   [];
 % Precompute coordinate block once and reuse
 coords_block = modvP(:,1:3);
 
+% First-difference operator on the regular (metric) grid, for smoothing
+if size(s.modv,1) == nxyzc
+    Dgrid           =   Murat_gradientOperator(s.modv(:,1:3));
+else
+    Dgrid           =   [];
+    if any([smoothValueQc(:); smoothValueQ(:)] ~= 0) && ...
+            strcmp(inversionMethod,'Tikhonov')
+        warning(['Grid of Murat.input.modv does not match the model ' ...
+            'grid: Tikhonov smoothing is not applied.']);
+    end
+end
+
 % Loops over all frequencies and parameter models
 for k = 1:nFreq
     
@@ -157,10 +169,11 @@ for k = 1:nFreq
     RZZ_k           =   RZZ(rtQc_k,k);
     Qm_k            =   Qm(rtQc_k,k);
     coordPriorQc    =   modvQc(rcQc_k,1:3,k);
+    DQc_k           =   restrictOperator(Dgrid,rcQc_k);
     
     [sol,fval,exitflag,output,dValueQc_k]= Murat_inversionQc(Ac_k,Qm_k,...
         inversionMethod,iter,iterStall,RZZ_k,coordPriorQc,dValueQc_k,...
-        sValueQc_k,plotI,outDirFigure);
+        sValueQc_k,plotI,outDirFigure,DQc_k);
     
     modvQc(rcQc_k,4,k)      =   sol.Qc;
     residualQc(k)           =   fval;
@@ -181,6 +194,7 @@ for k = 1:nFreq
     rapE_k              =   rapE(keepMask,k);
     tCm                 =   tCoda(keepMask,k);
     coordPriorQ         =   modvQ(rcQ_k,1:3,k);
+    DQ_k                =   restrictOperator(Dgrid,rcQ_k);
     te                  =   tCm+tWm;
 
     cCoda               =   Murat_codaConstant(cf_k,l,Qc_k,tCm,te,D_k,vS,tl);
@@ -210,7 +224,7 @@ for k = 1:nFreq
     
     [sol,fval,exitflag,output,dValueQ_k]  =   Murat_inversionQ(A_k,d0,...
         rapE_k,inversionMethod,Q0,iter,iterStall,coordPriorQ,dValueQ_k,...
-        sValueQ_k,plotI,outDirFigure);
+        sValueQ_k,plotI,outDirFigure,DQ_k);
 
     modvQ(rcQ_k,4,k)        =   sol.Q;
     residualQ(k)            =   fval;
@@ -240,7 +254,7 @@ for k = 1:nFreq
     re_checkQc      =   Ac_k*Qc_ch;
     [sol,~,~,~,~]   =   Murat_inversionQc(Ac_k,re_checkQc,...
         inversionMethod,iter,iterStall,RZZ_k,coordPriorQc,...
-        dValueQc_k,sValueQc_k,plotI,outDirFigure);
+        dValueQc_k,sValueQc_k,plotI,outDirFigure,DQc_k);
     modvQc(rcQc_k,7,k)  =   sol.Qc;
     
     % --- Q: reuse Qc checkerboard parameters ---
@@ -256,7 +270,7 @@ for k = 1:nFreq
     
     [sol,~,~,~,~]   =   Murat_inversionQ(A_k,d0c,rapE_k,...
         inversionMethod,Q0c,iter,iterStall,coordPriorQ,dValueQ_k,...
-        sValueQ_k,plotI,outDirFigure);
+        sValueQ_k,plotI,outDirFigure,DQ_k);
         
     modvQ(rcQ_k,7,k)=   sol.Q;
 
@@ -266,7 +280,7 @@ for k = 1:nFreq
         re_spikeQc      =   Ac_k*Qc_sp;
         [sol,~,~,~,~]   =   Murat_inversionQc(Ac_k,re_spikeQc,...
             inversionMethod,iter,iterStall,RZZ_k,coordPriorQc,...
-        dValueQc_k,sValueQc_k,plotI,outDirFigure);
+        dValueQc_k,sValueQc_k,plotI,outDirFigure,DQc_k);
         modvQc(rcQc_k,9,k)  =   sol.Qc;
         
         Q_sp            =   modvQ(rcQ_k,8,k);
@@ -280,7 +294,7 @@ for k = 1:nFreq
         
         [sol,~,~,~,~]   =   Murat_inversionQ(A_k,d0s,rapE_k,...
             inversionMethod,Q0s,iter,iterStall,coordPriorQ,dValueQ_k,...
-            sValueQ_k,plotI,outDirFigure);
+            sValueQ_k,plotI,outDirFigure,DQ_k);
 
         modvQ(rcQ_k,9,k)=   sol.Q;
 
@@ -337,4 +351,12 @@ Murat.Q.exitFlagSolverQ     =   exitFlagSolverQ;
 Murat.Q.codaConstants       =   cConstants;
 Murat.Q.averageQ            =   averageQcodaC;
 Murat.Q.estimatedDiffusion  =   averageD;
+end
+
+function Dk = restrictOperator(D,nodes)
+% Keeps the columns of the selected nodes and the rows (adjacent pairs)
+% with both nodes inside the selection.
+if isempty(D), Dk = []; return; end
+Dk  =   D(:,nodes);
+Dk  =   Dk(sum(abs(Dk),2) == 2,:);
 end
