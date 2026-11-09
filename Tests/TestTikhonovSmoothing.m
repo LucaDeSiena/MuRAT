@@ -126,6 +126,10 @@ classdef TestTikhonovSmoothing < matlab.unittest.TestCase
         end
 
         function inversionQUsesZeroDampingWithSmoothing(tc)
+            % Murat_inversionQ uses optimvar; CI installs base MATLAB only.
+            tc.assumeTrue(~isempty(ver('optim')) && ...
+                license('test', 'Optimization_Toolbox'), ...
+                'Optimization Toolbox is required for Murat_inversionQ.');
             [A, mTrue] = TestTikhonovSmoothing.smoothProblem(5);
             D = Murat_gradientOperator(TestTikhonovSmoothing.grid(12, 12, 1));
             d0 = -A*mTrue;
