@@ -64,7 +64,11 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
   the coda window (used for Qc and the coda-normalization energy ratios)
   started `o` seconds too late. `tCoda` is now the lapse time from the
   origin for all methods. Added `Tests/TestCodaCheck.m`.
-
+- `bin/Murat_unfoldXYZ.m` — failed with "Dimensions of arrays being
+  concatenated are not consistent" when an axis had a single node, because
+  `repelem` of a scalar returns a row. This happens in `Murat_kernels` for
+  short lapse times relative to the model grid step. Added
+  `Tests/TestUnfoldXYZ.m`.
 
 ## [4.0.0] – 2026-10-06
 
