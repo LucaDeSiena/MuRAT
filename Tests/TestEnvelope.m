@@ -23,6 +23,10 @@ classdef TestEnvelope < matlab.unittest.TestCase
 
     methods (Test)
         function smoothTimeChangesEnvelope(tc)
+            % Murat_envelope uses tukeywin; CI installs base MATLAB only.
+            tc.assumeTrue(~isempty(ver('signal')) && ...
+                license('test', 'Signal_Toolbox'), ...
+                'Signal Processing Toolbox is required for Murat_envelope.');
             listing = dir(fullfile(tc.Root, 'sac_Toba', '*.sac'));
             tc.assumeNotEmpty(listing, 'sac_Toba sample data not found.');
             sacFile = fullfile(listing(1).folder, listing(1).name);
