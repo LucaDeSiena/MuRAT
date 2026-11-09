@@ -72,6 +72,9 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 - `bin/Murat_data.m`, `bin/Murat_dataParallelized.m` — `envelopeSmoothTime`
   from the input file is now passed to `Murat_envelope`; previously the 1 s
   default was always used. Inputs without the field keep the 1 s default.
+- `Murat_inputToba.m`, `Murat_inputMSH.m`, `Murat_inputRomania.m` — the
+  inversion section named the genetic-algorithm option `Genetic`; the code
+  expects `'Global'`. Added `Tests/TestInputMethods.m`.
 
 ## [4.0.0] – 2026-10-06
 

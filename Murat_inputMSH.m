@@ -102,7 +102,7 @@ Murat.input.averageVelocityS        =   2.5;
 %[text] %[text:anchor:H_68B4738F] ## INVERSION
 %[text] The code implements:
 %[text] - a standard Tikhonov inversion based on singular value decomposition (**'Tikhonov'**), where we on the [regtools Matlab suite](https://de.mathworks.com/matlabcentral/fileexchange/52-regtools) from Per Christian Hansen.
-%[text] - the particle swarm (**Particle**), simulated annealing (**Annealing**), or genetic algorithm (**Genetic**) solvers from the optimization toolbox. \
+%[text] - the particle swarm (**'Particle'**), simulated annealing (**'Annealing'**), or genetic algorithm (**'Global'**) solvers from the optimization toolbox. \
 %[text] In the last case, the user can choose the maximum number of iterations after which the optimization will stop. The user can also choose the maximum number of iterations where the misfit stalls after which the optimization will stop. Otherwise leave empty.
 Murat.input.inversionMethod         =   'Tikhonov';
 Murat.input.MaximumIterations       =   2e3;
