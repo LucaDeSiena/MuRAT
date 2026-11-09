@@ -69,6 +69,9 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
   `repelem` of a scalar returns a row. This happens in `Murat_kernels` for
   short lapse times relative to the model grid step. Added
   `Tests/TestUnfoldXYZ.m`.
+- `bin/Murat_data.m`, `bin/Murat_dataParallelized.m` — `envelopeSmoothTime`
+  from the input file is now passed to `Murat_envelope`; previously the 1 s
+  default was always used. Inputs without the field keep the 1 s default.
 
 ## [4.0.0] – 2026-10-06
 
