@@ -3,6 +3,8 @@
 All notable changes to MuRAT are documented here.
 Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https://semver.org).
 
+---
+
 ## [Unreleased]
 
 ### Added
@@ -17,12 +19,6 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
   inversion methods keep using `smoothingValue*` as the correlation length
   of `Murat_smoothing`. New `bin/Murat_gradientOperator.m` and
   `bin/Murat_regulariser.m`; added `Tests/TestTikhonovSmoothing.m`.
-
----
-
-## [Unreleased]
-
-### Added
 - Optional `Murat.input.dampingSweepValues` and
   `bin/Murat_dampingRuns.m` for damping sweeps using Tikhonov, Particle,
   Annealing or Global inversion. Each value applies to Qc and Q at all
