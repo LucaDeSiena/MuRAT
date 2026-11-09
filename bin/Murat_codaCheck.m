@@ -21,7 +21,7 @@ function [tCoda_i, cursorCodaStart_i, cursorCodaEnd_i]   =...
 %    peakDelayMethod:       choise between constant, peak, or ravel time    
 %
 % Output parameters:
-%    tCoda_i:               coda starting time after check in seconds
+%    tCoda_i:               coda starting lapse time (s from origin time)
 %    cursorCodaStart_i:     coda starting time after check on trace
 %    cursorCodaEnd_i:       coda end time after check on trace
 
@@ -39,7 +39,7 @@ switch peakDelayMethod
     case 'Constant'
         tCoda_i     =   tCm;
     case 'Travel'
-        tCoda_i     =   originTime_i + tCm * pk_rel;
+        tCoda_i     =   tCm * pk_rel;
     otherwise
         error("Unknown peak-delay method")
 end

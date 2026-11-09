@@ -59,6 +59,12 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 - The grid search for D used `(tCm + te)` instead of `te` in the coda model.
 - Comments in the MSH and Romania input files gave D = vS/(3·Le⁻¹·(1−B0));
   corrected to B0.
+- `bin/Murat_codaCheck.m` — with `lapseTimeMethod = 'Travel'` the origin
+  time was added twice, so for SAC files with a non-zero origin time (`o`)
+  the coda window (used for Qc and the coda-normalization energy ratios)
+  started `o` seconds too late. `tCoda` is now the lapse time from the
+  origin for all methods. Added `Tests/TestCodaCheck.m`.
+
 
 ## [4.0.0] – 2026-10-06
 
