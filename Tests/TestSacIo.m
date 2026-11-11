@@ -3,8 +3,8 @@ classdef TestSacIo < matlab.unittest.TestCase
     %
     %   Replaces the script-based test_sac_io.m. Paths are anchored to the
     %   repository root, so the tests do not depend on the current folder.
-    %   The header test uses the small SAC file shipped with MatSAC
-    %   (Utilities_Matlab/MatSAC/N.MYJH.Z.sac), so it needs no extra data.
+    %   The header test reads one vertical-component waveform from the Toba
+    %   example dataset (sac_Toba), which is tracked in the repository.
     %   Dataset tests are skipped (not failed) when a sample dataset folder
     %   is not present.
 
@@ -34,8 +34,9 @@ classdef TestSacIo < matlab.unittest.TestCase
         function sacHeaderHasExpectedStructure(tc)
             % fget_sac returns [time, data, header]; check the header fields MuRAT relies on.
             tc.assumeNotEmpty(which('fget_sac'), 'fget_sac not on path.');
-            sacFile = fullfile(tc.Root, 'Utilities_Matlab', 'MatSAC', 'N.MYJH.Z.sac');
-            tc.assumeTrue(isfile(sacFile), 'MatSAC sample file N.MYJH.Z.sac not found.');
+            sacFile = fullfile(tc.Root, 'sac_Toba', ...
+                '20080508T171355520000Z__20080508T172324320000Z.7A.LT02..EHZ.sac');
+            tc.assumeTrue(isfile(sacFile), 'Toba sample file LT02..EHZ.sac not found.');
 
             [t, data, hdr] = fget_sac(sacFile);
 
