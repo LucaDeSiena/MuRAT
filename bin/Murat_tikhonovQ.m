@@ -14,7 +14,8 @@ function [mtik0,residualQ_k,LcCN] =...
 %    A:             CN inversion matrix
 %    d1:            weighted data
 %    dampValue:     damping parameter
-%    x0:            starting model (used to normalise the residual)
+%    x0:            starting model (FISTA starts from it, negative
+%                   values set to 0; also normalises the residual)
 %    maxIt:         maximum FISTA iterations
 %    smoothValue:   (optional) weight of the first-difference regulariser
 %    D:             (optional) first-difference operator for the nodes in
@@ -53,6 +54,7 @@ Atfun   = @(y) A' * y;    % adjoint:  x = A'*y
 opts.maxit      = maxIt;
 opts.tol        = 1e-7;
 opts.verbose    = true;
+opts.x0         = x0;
 
 x   =   Murat_tikhonov_nonneg_fista(Afun, Atfun, Lfun, Ltfun, d1, n,...
     lambda, opts);

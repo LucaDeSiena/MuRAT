@@ -34,13 +34,15 @@ if ~isempty(addList)
 end
 
 if isfolder(s.label)
-    dirOld  =   s.label+"_old";
-    if isfolder(dirOld)
-        rmdir(dirOld,"s");
-    else
-        movefile(s.label, dirOld);
+    % Find next available backup number
+    k = 1;
+    dirOld = s.label + "_old" + string(k);
+    while isfolder(dirOld)
+        k = k + 1;
+        dirOld = s.label + "_old" + string(k);
     end
-    fprintf('Folder "%s" found in current folder. Renamed to folder "%s _old"\n', s.label,s.label);
+    movefile(s.label, dirOld);
+    fprintf('Folder "%s" found in current folder. Renamed to folder "%s"\n', s.label, dirOld);
 else
     mkdir(s.label);
 end

@@ -1,5 +1,5 @@
-function [locationsDeg_i,locationsM_i]  = Murat_location(origin,SAChdr_i)
-% function [locationsDeg_i, locationsM_i]  =   Murat_location(origin,SAChdr_i)
+function [locationsDeg_i,locationsM_i]  = Murat_location(origin,SAChdr_i,waveformName)
+% function [locationsDeg_i, locationsM_i]  =   Murat_location(origin,SAChdr_i,waveformName)
 %
 % CREATES the variable with event and station coordinates
 % CALCULATES the coordinates of event and station in meters.
@@ -8,25 +8,27 @@ function [locationsDeg_i,locationsM_i]  = Murat_location(origin,SAChdr_i)
 % Input parameters:
 %    origin:            origin of the inversion grid
 %    SAChdr_i:          SAC header
-%    
+%    waveformName:      name of the waveform file (optional, for error messages)
+%
 % Output parameters:
 %    locationsDeg_i:    locations in degrees
 %    locationsM_i:      locations in meters
 
-
-even    =   [SAChdr_i.event.evla   SAChdr_i.event.evlo...
-    SAChdr_i.event.evdp*1000];
-
-stati   =   [SAChdr_i.station.stla SAChdr_i.station.stlo...
-    SAChdr_i.station.stel];
-
-if find(even == -12345)
-    error(['Waveform ' listaSac_i 'has missing event location field!'])
+if nargin < 3
+    waveformName = 'unknown';
 end
 
-if find(stati == -12345)
-    error(['Waveform ' listaSac_i 'has missing station location field!'])
+even_raw = [SAChdr_i.event.evla   SAChdr_i.event.evlo   SAChdr_i.event.evdp];
+if any(even_raw == -12345)
+    error(['Waveform ' waveformName ' has missing event location field!'])
 end
+even    =   [even_raw(1) even_raw(2) even_raw(3)*1000];
+
+stati_raw = [SAChdr_i.station.stla SAChdr_i.station.stlo   SAChdr_i.station.stel];
+if any(stati_raw == -12345)
+    error(['Waveform ' waveformName ' has missing station location field!'])
+end
+stati   =   stati_raw;
 
 % For plotting
 locationsDeg_i      =   [even stati];

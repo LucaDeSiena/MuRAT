@@ -12,7 +12,8 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
   Qc and Q. `smoothingValueQc` and `smoothingValueQ` were not used by the
   Tikhonov branch; they now set the weight `s` of a first-difference
   regulariser on the model grid, so the objective is
-  `norm(A*m-d)^2 + dampingValue^2*norm(m)^2 + s^2*norm(D*m)^2` (m >= 0).
+  `norm(A*m-d)^2 + (dampingValue*norm(A))^2*norm(m)^2 +
+  (s*norm(A))^2*norm(D*m)^2` (m >= 0).
   A uniform model is not penalised by `D`, so the solution is no longer
   pulled towards zero. Empty or 0 keeps the previous behaviour; if smoothing
   is set and `dampingValue*` is empty, damping defaults to 0. Other
@@ -37,6 +38,22 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
   model, shared by `Murat_inversion`, `Murat_lsqlinQmean` and `Murat_plot`.
 
 ### Changed
+- **Damping is now relative to the inversion matrix** (Qc and Q, all
+  inversion methods). The penalty is `(dampingValue·‖A‖)²·‖m‖²`, with ‖A‖
+  the largest singular value of the (weighted) matrix, so a value of 1
+  weighs model norm and data misfit equally and the same value acts alike
+  for Qc and Q. Before, the value was absolute: the Qc matrix has
+  ‖A‖² ≈ 10⁹–10¹¹ for Toba, so damping values up to about 100 had no effect
+  on Qc and damping sweeps returned identical models. Empty damping now
+  defaults to 0.1 for both Qc and Q. The Tikhonov smoothing weight is
+  relative to ‖A‖ in the same way. **Values from earlier input files are
+  not interchangeable**; the MSH, Romania and Toba examples now use the
+  default (`[]`). Added `Tests/TestRelativeDamping.m`.
+- `Murat_tikhonov_nonneg_fista` starts from the regionalised starting
+  model (`opts.x0`) instead of zero, stops on a relative step size, and
+  warns (`MuRAT:fistaMaxIterations`) when it reaches `MaximumIterations`
+  without converging. Relative damping below about 0.1 may need more
+  iterations.
 - `MuRAT.m` delegates nonempty damping sweeps to the new helper while
   preserving the original inversion, plotting and saving blocks for
   normal runs. An empty or absent sweep uses the existing per-frequency
@@ -86,6 +103,43 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 - `Murat_inputToba.m`, `Murat_inputMSH.m`, `Murat_inputRomania.m` — the
   inversion section named the genetic-algorithm option `Genetic`; the code
   expects `'Global'`. Added `Tests/TestInputMethods.m`.
+- `bin/Murat_smoothing.m` — coordinate columns were swapped; the function
+  expected [lat lon z] but received [lon lat z], affecting non-Tikhonov
+  smoothing. Fixed column assignment and updated documentation.
+- `bin/Murat_checks.m` — third consecutive run deleted earlier results by
+  unconditionally removing the `_old` backup folder. Now uses numbered
+  backups (`_old1`, `_old2`, etc.) to preserve run history.
+- `bin/Murat_inversion.m` — checkerboard and spike test inversions overwrote
+  L-curve figures from main inversions. Each test type now saves to separate
+  output directories (e.g., `L-curve_Qc_Checkerboard_*`, `L-curve_Q_Spike_*`).
+- `bin/Murat_location.m` — undefined variable `listaSac_i` in error messages;
+  now accepts `waveformName` parameter from callers. Also fixed error checking:
+  replaced `find()` with `any()` for detecting missing -12345 sentinel values,
+  and moved ×1000 depth conversion after validation.
+- `bin/Murat_inversionQc.m` — Qc weight matrix applied incorrect double
+  inversion and squaring. Correlation coefficients are now stored directly in
+  `uncertaintyQc`, and weights are computed as correlation² for proper
+  weighting in `Murat_plot.m` line 87.
+- `bin/Murat_plot.m` — crash when peak-delay model contains no negative values
+  (e.g., all positive anomalies). Added empty-array handling for threshold
+  calculations.
+- `bin/Murat_kernels.m` — Peak lapse-time method incorrectly averaged lapse
+  times across frequencies; each frequency now retains its own lapse time for
+  kernel computation.
+- `bin/Murat_declustering.m` — index mismatch after `unique()` operation.
+  Indices from the decimated array were used to index into the original
+  uncertainty array, causing out-of-bounds errors. Fixed by tracking original
+  indices.
+- `bin/Murat_modv1D.m`, `bin/Murat_modv3D.m`, `bin/Murat_imageRays.m` —
+  azimuth computation used `atan()` instead of `atan2()`, giving incorrect
+  results in quadrants 2 and 3. Replaced with proper two-argument arctangent.
+- `MuRAT.m` — `uigetfile` dialog blocked headless/batch operation. Now checks
+  if `inputFile` is pre-defined; interactive mode uses the dialog only if no
+  file is provided.
+- Example input files (`Murat_inputToba.m`, `Murat_inputMSH.m`,
+  `Murat_inputRomania.m`) — added commented example for `dampingSweepValues`
+  to help users understand how to use damping sweeps with the default 0.1
+  damping.
 
 ## [4.0.0] – 2026-10-06
 

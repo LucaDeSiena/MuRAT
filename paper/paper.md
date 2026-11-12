@@ -174,7 +174,7 @@ The MuRAT software lineage has been applied across a range of geological environ
 
 # AI Usage Disclosure
 
-Claude.ai and MATLAB Copilot were used within MATLAB R2025b to assist with the software development of MuRAT4 . No generative AI tools were used to prepare the documentation or write this manuscript. AI-assisted code was reviewed and validated by the lead author.
+Claude Code (Claude Haiku 4.5) was used to assist with code review, bug fixing, and inversion matrix improvements in version 4.0 development. Claude.ai and MATLAB Copilot were also used within MATLAB R2025b to assist with the software development of MuRAT4. No generative AI tools were used to prepare the documentation or write this manuscript. All AI-assisted code was reviewed and validated by the lead author.
 
 # Acknowledgements
 
