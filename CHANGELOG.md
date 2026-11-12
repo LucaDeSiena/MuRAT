@@ -103,6 +103,43 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 - `Murat_inputToba.m`, `Murat_inputMSH.m`, `Murat_inputRomania.m` — the
   inversion section named the genetic-algorithm option `Genetic`; the code
   expects `'Global'`. Added `Tests/TestInputMethods.m`.
+- `bin/Murat_smoothing.m` — coordinate columns were swapped; the function
+  expected [lat lon z] but received [lon lat z], affecting non-Tikhonov
+  smoothing. Fixed column assignment and updated documentation.
+- `bin/Murat_checks.m` — third consecutive run deleted earlier results by
+  unconditionally removing the `_old` backup folder. Now uses numbered
+  backups (`_old1`, `_old2`, etc.) to preserve run history.
+- `bin/Murat_inversion.m` — checkerboard and spike test inversions overwrote
+  L-curve figures from main inversions. Each test type now saves to separate
+  output directories (e.g., `L-curve_Qc_Checkerboard_*`, `L-curve_Q_Spike_*`).
+- `bin/Murat_location.m` — undefined variable `listaSac_i` in error messages;
+  now accepts `waveformName` parameter from callers. Also fixed error checking:
+  replaced `find()` with `any()` for detecting missing -12345 sentinel values,
+  and moved ×1000 depth conversion after validation.
+- `bin/Murat_inversionQc.m` — Qc weight matrix applied incorrect double
+  inversion and squaring. Correlation coefficients are now stored directly in
+  `uncertaintyQc`, and weights are computed as correlation² for proper
+  weighting in `Murat_plot.m` line 87.
+- `bin/Murat_plot.m` — crash when peak-delay model contains no negative values
+  (e.g., all positive anomalies). Added empty-array handling for threshold
+  calculations.
+- `bin/Murat_kernels.m` — Peak lapse-time method incorrectly averaged lapse
+  times across frequencies; each frequency now retains its own lapse time for
+  kernel computation.
+- `bin/Murat_declustering.m` — index mismatch after `unique()` operation.
+  Indices from the decimated array were used to index into the original
+  uncertainty array, causing out-of-bounds errors. Fixed by tracking original
+  indices.
+- `bin/Murat_modv1D.m`, `bin/Murat_modv3D.m`, `bin/Murat_imageRays.m` —
+  azimuth computation used `atan()` instead of `atan2()`, giving incorrect
+  results in quadrants 2 and 3. Replaced with proper two-argument arctangent.
+- `MuRAT.m` — `uigetfile` dialog blocked headless/batch operation. Now checks
+  if `inputFile` is pre-defined; interactive mode uses the dialog only if no
+  file is provided.
+- Example input files (`Murat_inputToba.m`, `Murat_inputMSH.m`,
+  `Murat_inputRomania.m`) — added commented example for `dampingSweepValues`
+  to help users understand how to use damping sweeps with the default 0.1
+  damping.
 
 ## [4.0.0] – 2026-10-06
 

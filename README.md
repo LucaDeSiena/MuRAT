@@ -63,6 +63,15 @@ The current version works following these steps:
 
 6. Run MuRAT and select the name of *Murat_input_* file desired.
 
+   For headless/batch operation, pre-define the input file path and run MuRAT without the interactive file dialog:
+   ```matlab
+   inputFile = '/path/to/Murat_inputToba.m'; MuRAT
+   ```
+   or from the system command line:
+   ```bash
+   matlab -r "inputFile = '/path/to/Murat_inputToba.m'; MuRAT; exit"
+   ```
+
 *Workflow*
 --------
 
