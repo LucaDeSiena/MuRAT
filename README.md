@@ -37,7 +37,7 @@ Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing, Mapping
 
 Custom toolboxes not included in standard Matlab installations are also provided with the package. These are:
 
-1. A SAC file reader (`fget_sac.m`) written from scratch by the MuRAT authors (MIT licence), producing an identical header struct to the routines originally published by Zhigang Peng at [his SAC tutorial page](http://geophysics.eas.gatech.edu/classes/SAC/). Sample SAC files from that tutorial are retained for testing.
+1. A SAC file reader (`fget_sac.m`) written from scratch by the MuRAT authors (MIT licence), producing an identical header struct to the routines originally published by Zhigang Peng at [his SAC tutorial page](http://geophysics.eas.gatech.edu/classes/SAC/). The tests read waveforms from the sample datasets included in this repository.
 2. The [Regularization Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/52-regtools?s_tid=prof_contriblnk) was created by Per Christian Hansen and available from Matlab File Exchange.
 
 Three sample datasets (Mount St. Helens, Romania, and Toba) are included and allow the user to obtain sample models. The datasets work with the three corresponding *Murat_input_.m* files that show examples of what the user can get with the code.
@@ -78,7 +78,17 @@ C. ***Understand the output text files***
 
 All the output files (.mat, .txt and .xlsx) and figures are stored in the **TXT** sub-directories in the **Label** folder, created in the working directory. A list of the output files and what they contain is provided in the following. Ascii files contain the models in degrees and UTM. We strongly suggest imaging the TXT files using the [GeophysicalModelGenerator](https://github.com/JuliaGeodynamics/GeophysicalModelGenerator.jl).
 
-D. **Understand the output figure files**
+D. ***Set damping, smoothing and damping sweeps***
+
+The Qc and Q inversions are regularised with one damping and one smoothing value per frequency (*Murat.input.dampingValueQc*, *dampingValueQ*, *smoothingValueQc*, *smoothingValueQ*). In the current version, **damping is relative to the inversion matrix**: the penalty is (damping × ‖A‖)² × ‖m‖², where ‖A‖ is the largest singular value of the (weighted) matrix. A value of 1 weighs model norm and data misfit equally, and the same value acts alike for Qc and Q and across datasets. Values between 0.01 and 1 are a sensible range; left empty, damping is 0.1. Damping values from earlier input files are not interchangeable.
+
+With *Murat.input.inversionMethod = 'Tikhonov'*, the smoothing value is the weight of a first-difference (gradient) regulariser on the model grid, also relative to ‖A‖; leave it empty or 0 for damping only. For *'Particle'*, *'Annealing'* and *'Global'*, it is the correlation length of the model covariance.
+
+To compare damping values, set *Murat.input.dampingSweepValues* (e.g. `[0.03 0.1 0.3]`). Data processing and forward modelling run once; each value is then applied to Qc and Q at all frequencies and inverted separately, with results saved in its own folder (*Label_damp_0p1*, ...) together with a *Murat_damp_0p1.mat* file. Existing folders with the same names are archived as *_old*, *_old_2*, etc. Leave it empty (`[]`) for a normal single run.
+
+Small damping values (below about 0.1) may need more than *Murat.input.MaximumIterations* to converge; MuRAT then prints a warning, and you should increase the iterations or the damping.
+
+E. **Understand the output figure files**
 
 Beware, *.fig* figures are created with the invisible option in Matlab. There are two ways to open them:
 
@@ -180,7 +190,7 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
 *Qc_analysis__*: Relationship between average coda attenuation and frequency across the dataset.
 
-*L_curve__.fig*: L-curves for the Qc and Q inversions necessary to set the damping parameters. The user can ask for a prompt or set the damping parameters. They only appear when using a Tikhonov inversion.
+*L_curve__.fig*: L-curves for the Qc and Q inversions, to help choose the damping parameters (see *Set damping, smoothing and damping sweeps* above). They only appear when using a Tikhonov inversion, and show the effect of damping only, not of smoothing.
 
 *Velocity_model.fig*: The 3D velocity model is also available as a figure in Matlab format. They can be loaded in Matlab and show the vertical and horizontal slices defined in *Figures Sections*.
 
