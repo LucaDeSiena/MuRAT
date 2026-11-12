@@ -41,10 +41,10 @@ smoothTikh  =   useTikhonov && ~isempty(smoothValue) && smoothValue ~= 0 ...
 %Parameter model number
 MQc         =   size(Ac_k,2);
 
-%Covariance matrix for the data
-w           =   1 ./ RZZ_k;
-%w           =   (w - min(w(:))) ./ (max(w(:)) - min(w(:))); 
-W           =   diag(w.^2);
+%Covariance matrix for the data - weight by correlation coefficient squared
+w           =   RZZ_k.^2;
+%w           =   (w - min(w(:))) ./ (max(w(:)) - min(w(:)));
+W           =   diag(w);
 
 
 %Starting model from regionalization
