@@ -12,11 +12,11 @@ function CovM   =   Murat_smoothing(coordPrior,smoothValue,sigmaM)
 
 
 % Prior
-% coordPrior is N-by-3: [lat(deg), lon(deg), z(km)]
+% coordPrior is N-by-3: [lon(m), lat(m), z(km)] in cartesian coordinates
 R           =   6371;    % Earth mean radius in km
 
-lat         =   deg2rad(coordPrior(:,1));   % N-by-1
-lon         =   deg2rad(coordPrior(:,2));   % N-by-1
+lon         =   deg2rad(coordPrior(:,1));   % N-by-1
+lat         =   deg2rad(coordPrior(:,2));   % N-by-1
 z           =   coordPrior(:,3)/1000;       % N-by-1 (km)
 
 % pairwise angular differences (N-by-N)
