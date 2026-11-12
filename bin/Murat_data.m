@@ -107,7 +107,7 @@ for i = 1:nData
     [tempis,sp_i]   =   Murat_envelope(cf,listSac_i,envSmoothTime);
     
     % Locations (deg and meters)
-    [locationDeg_i, locationM_i]    =   Murat_location(origin,SAChdr_i);
+    [locationDeg_i, locationM_i]    =   Murat_location(origin,SAChdr_i,listSac_i);
     locationDeg(i,:)                =   locationDeg_i;
     
     % Checks direct-wave picking 
