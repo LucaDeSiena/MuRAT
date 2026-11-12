@@ -12,7 +12,8 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
   Qc and Q. `smoothingValueQc` and `smoothingValueQ` were not used by the
   Tikhonov branch; they now set the weight `s` of a first-difference
   regulariser on the model grid, so the objective is
-  `norm(A*m-d)^2 + dampingValue^2*norm(m)^2 + s^2*norm(D*m)^2` (m >= 0).
+  `norm(A*m-d)^2 + (dampingValue*norm(A))^2*norm(m)^2 +
+  (s*norm(A))^2*norm(D*m)^2` (m >= 0).
   A uniform model is not penalised by `D`, so the solution is no longer
   pulled towards zero. Empty or 0 keeps the previous behaviour; if smoothing
   is set and `dampingValue*` is empty, damping defaults to 0. Other
@@ -37,6 +38,22 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
   model, shared by `Murat_inversion`, `Murat_lsqlinQmean` and `Murat_plot`.
 
 ### Changed
+- **Damping is now relative to the inversion matrix** (Qc and Q, all
+  inversion methods). The penalty is `(dampingValue·‖A‖)²·‖m‖²`, with ‖A‖
+  the largest singular value of the (weighted) matrix, so a value of 1
+  weighs model norm and data misfit equally and the same value acts alike
+  for Qc and Q. Before, the value was absolute: the Qc matrix has
+  ‖A‖² ≈ 10⁹–10¹¹ for Toba, so damping values up to about 100 had no effect
+  on Qc and damping sweeps returned identical models. Empty damping now
+  defaults to 0.1 for both Qc and Q. The Tikhonov smoothing weight is
+  relative to ‖A‖ in the same way. **Values from earlier input files are
+  not interchangeable**; the MSH, Romania and Toba examples now use the
+  default (`[]`). Added `Tests/TestRelativeDamping.m`.
+- `Murat_tikhonov_nonneg_fista` starts from the regionalised starting
+  model (`opts.x0`) instead of zero, stops on a relative step size, and
+  warns (`MuRAT:fistaMaxIterations`) when it reaches `MaximumIterations`
+  without converging. Relative damping below about 0.1 may need more
+  iterations.
 - `MuRAT.m` delegates nonempty damping sweeps to the new helper while
   preserving the original inversion, plotting and saving blocks for
   normal runs. An empty or absent sweep uses the existing per-frequency
