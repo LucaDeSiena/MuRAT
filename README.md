@@ -80,7 +80,7 @@ All the output files (.mat, .txt and .xlsx) and figures are stored in the **TXT*
 
 D. ***Set damping, smoothing and damping sweeps***
 
-The Qc and Q inversions are regularised with one damping and one smoothing value per frequency (*Murat.input.dampingValueQc*, *dampingValueQ*, *smoothingValueQc*, *smoothingValueQ*). In the current version, **damping is relative to the inversion matrix**: the penalty is (damping × ‖A‖)² × ‖m‖², where ‖A‖ is the largest singular value of the (weighted) matrix. A value of 1 weighs model norm and data misfit equally, and the same value acts alike for Qc and Q and across datasets. Values between 0.01 and 1 are a sensible range; left empty, damping is 0.1. Damping values from earlier input files are not interchangeable.
+The Qc and Q inversions are regularised with one damping and one smoothing value per frequency (*Murat.input.dampingValueQc*, *dampingValueQ*, *smoothingValueQc*, *smoothingValueQ*). In MuRAT4.0, **damping is relative to the inversion matrix**: the penalty is (damping × ‖A‖)² × ‖m‖², where ‖A‖ is the largest singular value of the (weighted) matrix. A value of 1 weighs model norm and data misfit equally, and the same value acts alike for Qc and Q and across datasets. Values between 0.01 and 1 are a sensible range; left empty, damping is 0.1. Damping values from earlier input files are not interchangeable.
 
 With *Murat.input.inversionMethod = 'Tikhonov'*, the smoothing value is the weight of a first-difference (gradient) regulariser on the model grid, also relative to ‖A‖; leave it empty or 0 for damping only. For *'Particle'*, *'Annealing'* and *'Global'*, it is the correlation length of the model covariance.
 
