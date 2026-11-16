@@ -60,22 +60,22 @@ authors:
     affiliation: 15
   - name: Aqeel Abbas
     orcid: 0000-0002-6133-6857
-    affiliation: 16
+    affiliation: "16, 17"
   - name: Yansong Hu
     orcid: 0000-0002-7512-0678
-    affiliation: "1, 17"
+    affiliation: "1, 18"
   - name: Chiara Saturnino
     orcid: 0009-0009-1124-0556
     affiliation: "1, 4"
   - name: Felix Borleanu
     orcid: 0000-0001-8502-1422
-    affiliation: 18
+    affiliation: 19
   - name: Liam Bramwell
     orcid: 0009-0005-5475-8882
     affiliation: 3
   - name: Rachit Gautam
     orcid: 0009-0002-9160-6624
-    affiliation: "19, 3, 20, 21"
+    affiliation: "20, 3, 21, 22"
   - name: Miriam C. Reiss
     orcid: 0000-0002-0250-4988
     affiliation: 3
@@ -110,18 +110,20 @@ affiliations:
     index: 14
   - name: Institute of Geology and Geophysics, Chinese Academy of Sciences, Beijing, China
     index: 15
-  - name: Department of Earth and Space Sciences, Southern University of Science and Technology, Shenzhen, China
+  - name: Shenzhen Research Institute, The Chinese University of Hong Kong, Shenzhen, China
     index: 16
-  - name: Institute of Geophysics, China Earthquake Administration, Beijing, China
+  - name: Department of Earth and Environmental Sciences, The Chinese University of Hong Kong, Shatin, Hong Kong S.A.R, China
     index: 17
-  - name: National Institute for Earth Physics, Ilfov, Romania
+  - name: Institute of Geophysics, China Earthquake Administration, Beijing, China
     index: 18
-  - name: EOST/ITES, Université de Strasbourg/CNRS, Strasbourg, France
+  - name: National Institute for Earth Physics, Ilfov, Romania
     index: 19
-  - name: Ineris ‐ L’Institut national de l’environnement industriel et des risques Campus ARTEM, Nancy Cedex, France
+  - name: EOST/ITES, Université de Strasbourg/CNRS, Strasbourg, France
     index: 20
-  - name: VITO – Vlaamse Instelling voor Technologisch Onderzoek, Mol, Belgium
+  - name: Ineris ‐ L’Institut national de l’environnement industriel et des risques Campus ARTEM, Nancy Cedex, France
     index: 21
+  - name: VITO – Vlaamse Instelling voor Technologisch Onderzoek, Mol, Belgium
+    index: 22
 date: 4 October 2026
 bibliography: paper.bib
 ---
