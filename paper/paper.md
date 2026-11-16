@@ -57,25 +57,25 @@ authors:
     affiliation: 14
   - name: Wei-Mou Zhu
     orcid: 0000-0003-4955-543X
-    affiliation: 15
+    affiliation: "15, 16"
   - name: Aqeel Abbas
     orcid: 0000-0002-6133-6857
-    affiliation: "16, 17"
+    affiliation: "17, 18"
   - name: Yansong Hu
     orcid: 0000-0002-7512-0678
-    affiliation: "1, 18"
+    affiliation: "1, 19"
   - name: Chiara Saturnino
     orcid: 0009-0009-1124-0556
     affiliation: "1, 4"
   - name: Felix Borleanu
     orcid: 0000-0001-8502-1422
-    affiliation: 19
+    affiliation: 20
   - name: Liam Bramwell
     orcid: 0009-0005-5475-8882
     affiliation: 3
   - name: Rachit Gautam
     orcid: 0009-0002-9160-6624
-    affiliation: "20, 3, 21, 22"
+    affiliation: "21, 3, 22, 23"
   - name: Miriam C. Reiss
     orcid: 0000-0002-0250-4988
     affiliation: 3
@@ -108,22 +108,24 @@ affiliations:
     index: 13
   - name: Viridien Singapore, Singapore
     index: 14
-  - name: Institute of Geology and Geophysics, Chinese Academy of Sciences, Beijing, China
+  - name: Department of Earth and Space Sciences, Southern University of Science and Technology, Shenzhen, China
     index: 15
-  - name: Shenzhen Research Institute, The Chinese University of Hong Kong, Shenzhen, China
+  - name: Key Laboratory of Planetary Science and Frontier Technology, Institute of Geology and Geophysics, Chinese Academy of Sciences, Beijing, China
     index: 16
-  - name: Department of Earth and Environmental Sciences, The Chinese University of Hong Kong, Shatin, Hong Kong S.A.R, China
+  - name: Shenzhen Research Institute, The Chinese University of Hong Kong, Shenzhen, China
     index: 17
-  - name: Institute of Geophysics, China Earthquake Administration, Beijing, China
+  - name: Department of Earth and Environmental Sciences, The Chinese University of Hong Kong, Shatin, Hong Kong S.A.R, China
     index: 18
-  - name: National Institute for Earth Physics, Ilfov, Romania
+  - name: Institute of Geophysics, China Earthquake Administration, Beijing, China
     index: 19
-  - name: EOST/ITES, Université de Strasbourg/CNRS, Strasbourg, France
+  - name: National Institute for Earth Physics, Ilfov, Romania
     index: 20
-  - name: Ineris ‐ L’Institut national de l’environnement industriel et des risques Campus ARTEM, Nancy Cedex, France
+  - name: EOST/ITES, Université de Strasbourg/CNRS, Strasbourg, France
     index: 21
-  - name: VITO – Vlaamse Instelling voor Technologisch Onderzoek, Mol, Belgium
+  - name: Ineris ‐ L’Institut national de l’environnement industriel et des risques Campus ARTEM, Nancy Cedex, France
     index: 22
+  - name: VITO – Vlaamse Instelling voor Technologisch Onderzoek, Mol, Belgium
+    index: 23
 date: 4 October 2026
 bibliography: paper.bib
 ---
