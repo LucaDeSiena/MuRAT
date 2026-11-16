@@ -252,9 +252,10 @@ for k = 1:nFreq
     
     Qc_ch           =   modvQc(rcQc_k,6,k);
     re_checkQc      =   Ac_k*Qc_ch;
+    outDirFigureCheckQc = fullfile(outDirFigureBase,['L-curve_Qc_Checkerboard_' fcName '_Hz']);
     [sol,~,~,~,~]   =   Murat_inversionQc(Ac_k,re_checkQc,...
         inversionMethod,iter,iterStall,RZZ_k,coordPriorQc,...
-        dValueQc_k,sValueQc_k,plotI,outDirFigure,DQc_k);
+        dValueQc_k,sValueQc_k,plotI,outDirFigureCheckQc,DQc_k);
     modvQc(rcQc_k,7,k)  =   sol.Qc;
     
     % --- Q: reuse Qc checkerboard parameters ---
@@ -267,10 +268,11 @@ for k = 1:nFreq
 
     [d0c, Q0c, ~]   =   Murat_lsqlinQmean(cf_k,l,time0_k,synthEratio,...
         Qc_k, tCm, te, vS, tl, Dfix_k);
-    
+
+    outDirFigureCheckQ = fullfile(outDirFigureBase,['L-curve_Q_Checkerboard_' fcName '_Hz']);
     [sol,~,~,~,~]   =   Murat_inversionQ(A_k,d0c,rapE_k,...
         inversionMethod,Q0c,iter,iterStall,coordPriorQ,dValueQ_k,...
-        sValueQ_k,plotI,outDirFigure,DQ_k);
+        sValueQ_k,plotI,outDirFigureCheckQ,DQ_k);
         
     modvQ(rcQ_k,7,k)=   sol.Q;
 
@@ -278,9 +280,10 @@ for k = 1:nFreq
     if ~isempty(spike_o)
         Qc_sp           =   modvQc(rcQc_k,8,k);
         re_spikeQc      =   Ac_k*Qc_sp;
+        outDirFigureSpikeQc = fullfile(outDirFigureBase,['L-curve_Qc_Spike_' fcName '_Hz']);
         [sol,~,~,~,~]   =   Murat_inversionQc(Ac_k,re_spikeQc,...
             inversionMethod,iter,iterStall,RZZ_k,coordPriorQc,...
-        dValueQc_k,sValueQc_k,plotI,outDirFigure,DQc_k);
+        dValueQc_k,sValueQc_k,plotI,outDirFigureSpikeQc,DQc_k);
         modvQc(rcQc_k,9,k)  =   sol.Qc;
         
         Q_sp            =   modvQ(rcQ_k,8,k);
@@ -288,13 +291,14 @@ for k = 1:nFreq
         
         %Synthetic energy ratios
         synthEratio     =   exp(2*pi*cf_k*(cSynth + re_spikeQ))./l.^2;
-        
+
         [d0s, Q0s, ~]   =  Murat_lsqlinQmean(cf_k,l,time0_k,synthEratio,...
             Qc_k, tCm, te, vS, tl, Dfix_k);
-        
+
+        outDirFigureSpikeQ = fullfile(outDirFigureBase,['L-curve_Q_Spike_' fcName '_Hz']);
         [sol,~,~,~,~]   =   Murat_inversionQ(A_k,d0s,rapE_k,...
             inversionMethod,Q0s,iter,iterStall,coordPriorQ,dValueQ_k,...
-            sValueQ_k,plotI,outDirFigure,DQ_k);
+            sValueQ_k,plotI,outDirFigureSpikeQ,DQ_k);
 
         modvQ(rcQ_k,9,k)=   sol.Q;
 

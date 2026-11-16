@@ -47,9 +47,8 @@ for i = 1:lcf
 
             if p(1)<0
                 inverseQc_i(i)  =   -p(1);
-                RZZ_k       =   abs(R(1,2));
-                w           =   1 ./ RZZ_k;
-                uncertaintyQc_i(i)  =   w;
+                correlationCoef =   abs(R(1,2));
+                uncertaintyQc_i(i)  =   correlationCoef;
                 
             else
                 inverseQc_i(i)      =   0;

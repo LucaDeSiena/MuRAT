@@ -32,7 +32,7 @@ for i = 1:lrma
     ray(:,3)    =   rma(:,3,i);
     
     d           =   sqrt(ray(:,1).^2 + ray(:,2).^2);
-    az          =   atan(ray(:,1)./ray(:,2))*360/2/pi;
+    az          =   atan2(ray(:,1),ray(:,2))*360/2/pi;
     az(isnan(az)) =   0;
     [lat2,lon2] =   reckon(origin(1),origin(2),d,az,wgs84);
 

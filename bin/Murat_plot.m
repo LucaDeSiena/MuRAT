@@ -190,9 +190,11 @@ for k = 1:lMF(2)
     % using interpolation defined by 'divi'.
     divi            =   5;
     factor          =   5;
-    max_pos         =   max(mPD(mPD >= 0)); 
-    max_neg         =   min(mPD(mPD < 0)); 
-    thresholdPlus   =   (max_pos / 100) * factor; 
+    pos_vals        =   mPD(mPD >= 0);
+    neg_vals        =   mPD(mPD < 0);
+    if isempty(pos_vals), max_pos = 0; else, max_pos = max(pos_vals); end
+    if isempty(neg_vals), max_neg = 0; else, max_neg = min(neg_vals); end
+    thresholdPlus   =   (max_pos / 100) * factor;
     thresholdMinus  =   (max_neg / 100) * factor;  
     keepBinsPositive= mPD > thresholdPlus;  
     keepBinsNegative= mPD < thresholdMinus; 

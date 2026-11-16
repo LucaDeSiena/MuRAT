@@ -107,10 +107,10 @@ parfor (i = 1:nData,workers)
     [tempis,sp_i]   =   Murat_envelope(cf,listSac_i,envSmoothTime);
     
     % Locations (deg and meters)
-    [locationDeg_i, locationM_i]    =   Murat_location(origin,SAChdr_i);
+    [locationDeg_i, locationM_i]    =   Murat_location(origin,SAChdr_i,listSac_i);
     locationDeg(i,:)                =   locationDeg_i;
-    
-    % Checks direct-wave picking 
+
+    % Checks direct-wave picking
     [cursorPick_i, pktime_i, v_i]   =   Murat_picking(tempis,...
         PTime,STime,PorS,vP,vS,srate_i,listSac_i,SAChdr_i);
 

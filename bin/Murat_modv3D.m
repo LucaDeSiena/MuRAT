@@ -62,7 +62,7 @@ zM1             =   sort(linspace(origin(3),ending(3),nzc),'descend');
 
 % Change to lat/lon for plotting
 d               =   sqrt(modvEqSpace(:,1).^2 + modvEqSpace(:,2).^2);
-az              =   atan(modvEqSpace(:,1)./modvEqSpace(:,2))*360/2/pi;
+az              =   atan2(modvEqSpace(:,1),modvEqSpace(:,2))*360/2/pi;
 
 % Condition to avoid NaN
 if any(isnan(az))

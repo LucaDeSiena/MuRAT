@@ -14,7 +14,7 @@ or modifications. Together, these two groups form
 ## Contributors
 The following people contributed major additions or modifications to `MuRAT4` and are listed in alphabetical order:
 
-* Aqeel Abbas, Department of Earth and Space Sciences, Southern University of Science and Technology, Shenzhen, China
+* Aqeel Abbas
 * Martina Avella
 * Francesca Bianco
 * Felix Borleanu
@@ -26,12 +26,12 @@ The following people contributed major additions or modifications to `MuRAT4` an
 * Simona Gabrielli
 * Roberto Guardo
 * Yansong Hu
-* Jesús Ibañez
+* Jesús M. Ibáñez
 * Thomas King
 * Ferdinando Napolitano
 * Chiara Nardoni
 * Janire Prudencio
-* Miriam Reiss
+* Miriam C. Reiss
 * Chiara Saturnino
 * Panayiota Sketsiou
 * Donato Talone

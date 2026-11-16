@@ -47,13 +47,24 @@ if ~isempty(addList)
     addpath(strjoin(addList, pathsep), '-end');
 end
 
-% Ask user for input file
-[file, path]= uigetfile({'*.m;*.mlx','MuRAT input files (*.m, *.mlx)'; '*.*','All Files'});
-if isequal(file,0)
-    error('No input file selected.');
+% Ask user for input file, or use inputFile if already defined (for headless operation)
+if ~exist('inputFile', 'var')
+    % Interactive mode: ask user to select file
+    [file, path] = uigetfile({'*.m;*.mlx','MuRAT input files (*.m, *.mlx)'; '*.*','All Files'});
+    if isequal(file, 0)
+        error('No input file selected.');
+    end
+    inputFile = fullfile(path, file);
+    fprintf('Using input file %s\n', inputFile);
+else
+    % Headless mode: inputFile provided externally
+    fprintf('Using input file: %s\n', inputFile);
 end
-inputFile   = fullfile(path, file);
-fprintf('Using input file %s\n', inputFile);
+
+% Verify file exists
+if ~isfile(inputFile)
+    error('Input file does not exist: %s', inputFile);
+end
 
 % Start each selected input with a fresh configuration.
 clear Murat

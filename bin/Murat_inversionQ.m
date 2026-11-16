@@ -10,16 +10,22 @@ function [sol,fval,exitflag,output,dampValue]=  Murat_inversionQ(A_k,d0,...
 % Input parameters:
 %    A_k:               linearised kernel from ray approximation
 %    d0:                data out of average Q computation
+%    rapsp_k:           energy ratios (no longer used; kept so existing
+%                       calls keep working)
 %    inversionMethod:   choose between three optimizations
 %    Q0:                average Q with variance
 %    iter:              iterations for the non-linear optimization
 %    iterStall:         max iterations for the non-linear optimization
 %    coordPrior:        coords for the starting solution
-%    dampValue:         damping value
+%    dampValue:         damping value, relative to the largest singular
+%                       value of the (weighted) inversion matrix: the
+%                       penalty is (dampValue*norm(A))^2*norm(m)^2, so 1
+%                       weighs model norm and data misfit equally
 %    smoothValue:       smoothing value. For 'Tikhonov' it is the weight
 %                       of the first-difference regulariser D (empty or 0:
-%                       no smoothing); for the other methods it is the
-%                       correlation length used by Murat_smoothing
+%                       no smoothing), also relative to norm(A); for the
+%                       other methods it is the correlation length used
+%                       by Murat_smoothing
 %    PlotI:             plotting iterations during inversion
 %    pathFolder:        folder to save inversion figure for Tikhonov
 %    D:                 (optional) first-difference operator for the
@@ -64,18 +70,23 @@ elseif smoothTikh
     %Smoothing alone regularises the problem
     dampValue   =   0;
 else
-    %Damping is the mean energy ratio
-    dampValue   =   0.1*mean(rapsp_k);
+    %Default relative damping
+    dampValue   =   0.1;
 end
+
+%Damping and smoothing are relative to the largest singular value of the
+%matrix, so the same values act alike for Qc and Q
+normA       =   norm(A_k);
+lambdaDamp  =   dampValue*normA;
 
 Q       =   optimvar('Q',MQ,LowerBound=10^-7);
 x0Q.Q   =   Qmean*ones(MQ,1);
 obj0    =   norm(d0 - A_k*m0Q)^2 + ...
-            dampValue*norm(m0Q)^2 +...
+            lambdaDamp^2*norm(m0Q)^2 +...
             norm(CovM*m0Q);
 
 objQ    =   norm(d0 - A_k*Q)^2 +...
-            dampValue*norm(Q)^2 + ...
+            lambdaDamp^2*norm(Q)^2 + ...
             norm(CovM*Q);
 
 probQ   =   optimproblem('Objective',objQ);
@@ -85,8 +96,8 @@ maxIt   =   'MaxIterations';
 switch inversionMethod
 
     case 'Tikhonov'
-        [sol.Q,fval,~]  =   Murat_tikhonovQ(PlotI,A_k,d0,dampValue,m0Q,iter,...
-            smoothValue,D);
+        [sol.Q,fval,~]  =   Murat_tikhonovQ(PlotI,A_k,d0,lambdaDamp,m0Q,iter,...
+            smoothValue*normA,D);
         sol.Q           =   sol.Q;
         exitflag        =   'Tikhonov';
         output          =   [];

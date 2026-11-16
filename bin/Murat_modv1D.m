@@ -36,7 +36,7 @@ zD                  =   sort(unique(modv(:,3)),'descend');
 % Change to lat/lon for plotting
 wgs84               =   wgs84Ellipsoid("m");
 d                   =   sqrt(modv(:,1).^2 + modv(:,2).^2);
-az                  =   atan(modv(:,1)./modv(:,2))*360/2/pi;
+az                  =   atan2(modv(:,1),modv(:,2))*360/2/pi;
 az(isnan(az))       =   0;
 [lat2,lon2]         =   reckon(origin(1),origin(2),d,az,wgs84);
 modvPlot            =   [lon2 lat2 modv(:,3:4)];

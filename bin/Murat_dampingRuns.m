@@ -6,7 +6,9 @@ function [Murat, dampingRuns, tInv, tPlot] = Murat_dampingRuns(Murat, tempFolder
 % Inputs:
 %   dampingSweepValues: [] for normal processing; otherwise a vector of
 %       nonnegative damping values, one separate run per value. Each value
-%       applies to BOTH Qc and Q at all existing central frequencies.
+%       applies to BOTH Qc and Q at all existing central frequencies and,
+%       like dampingValueQc/Q, is relative to the norm of each inversion
+%       matrix (see Murat_inversionQc and Murat_inversionQ).
 % New sweeps archive existing matching folders as _old, _old_2, etc.
 %
 % With an empty/missing sweep, dampingValueQc and dampingValueQ retain their

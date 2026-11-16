@@ -18,8 +18,9 @@ lat_grid    =   linspace(origin(2),ending(2),lat_step);
 lon_grid    =   linspace(origin(1),ending(1),lon_step);
 z_grid      =   -linspace(origin(3),ending(3),z_step);
 
-% decimate locationsDeg to one entry per event - station pair
-locationsDeg    =   unique(locationsDeg,'rows','stable');
+% decimate locationsDeg to one entry per event - station pair, track original indices
+[locationsDeg_unique, idx_original] = unique(locationsDeg,'rows','stable');
+locationsDeg    =   locationsDeg_unique;
 
 indKeep         =   false(length(uncertainty),1);
 new_locationsDeg=   [];
@@ -39,15 +40,16 @@ for i = 1:lon_step-1
             
             % check out each grid cell, only keep events with highest RZZ
             if ~isempty(find_evs)
-                % get RZZ & events/stations & indice
+                % get RZZ & events/stations & indice, map back to original indices
                 events      =   locationsDeg(find_evs,:);
+                orig_indices =   idx_original(find_evs);
 
                 if isequal(QcM,'Linear')
-                    events(:,7) =   uncertainty(find_evs);
+                    events(:,7) =   uncertainty(orig_indices);
                 else
-                    events(:,7) =   1./uncertainty(find_evs);
+                    events(:,7) =   1./uncertainty(orig_indices);
                 end
-                events(:,8)     =	find_evs;
+                events(:,8)     =	orig_indices;
                 % check if stations are double, if so, only keep
                 % event/station pair with lowest uncertainty on Qc
                 d               =   sortrows(events, [4 7]);
