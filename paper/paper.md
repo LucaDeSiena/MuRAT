@@ -70,7 +70,7 @@ authors:
   - name: Felix Borleanu
     orcid: 0000-0001-8502-1422
     affiliation: 19
-  - name: Liam Bramwell
+  - name: Liam A. Bramwell
     orcid: 0009-0005-5475-8882
     affiliation: 3
   - name: Rachit Gautam
