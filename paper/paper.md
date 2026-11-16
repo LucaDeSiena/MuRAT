@@ -82,15 +82,15 @@ authors:
 affiliations:
   - name: Dipartimento di Fisica e Astronomia "Augusto Righi", Alma Mater Studiorum, University of Bologna, Bologna, Italy
     index: 1
-  - name: Istituto Nazionale di Geofisica e Vulcanologia, Sez. di Napoli - Osservatorio Vesuviano, Napoli, Italy
+  - name: Istituto Nazionale di Geofisica e Vulcanologia (INGV), Osservatorio Vesuviano, Napoli, Italy
     index: 2
   - name: Institute of Geosciences, Johannes Gutenberg University Mainz, Mainz, Germany
     index: 3
-  - name: Istituto Nazionale di Geofisica e Vulcanologia, Sez. di Bologna, Bologna, Italy
+  - name: Istituto Nazionale di Geofisica e Vulcanologia (INGV), Sezione Bologna, Bologna, Italy
     index: 4
   - name: Dipartimento di Scienze, Università degli studi "G. d'Annunzio", Chieti, Italy
     index: 5
-  - name: Istituto Nazionale di Geofisica e Vulcanologia, Sez. di Roma, Roma, Italy
+  - name: Istituto Nazionale di Geofisica e Vulcanologia (INGV), Sezione Roma1, Roma, Italy
     index: 6
   - name: Università degli Studi di Salerno, Salerno, Italy
     index: 7
@@ -100,7 +100,7 @@ affiliations:
     index: 9
   - name: Birmingham Institute for Sustainability and Climate Action, University of Birmingham, Birmingham, United Kingdom
     index: 10
-  - name: Istituto Nazionale di Geofisica e Vulcanologia, Sez. di Catania - Osservatorio Etneo, Catania, Italy
+  - name: Istituto Nazionale di Geofisica e Vulcanologia, Sezione Osservatorio Etneo, Catania, Italy
     index: 11
   - name: Geosciences Barcelona (GEO3BCN), Spanish National Research Council (CSIC), Barcelona, Spain
     index: 12
