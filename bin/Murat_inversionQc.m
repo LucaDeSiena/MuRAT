@@ -72,6 +72,7 @@ end
 %weighted matrix, so the same values act alike for Qc and Q
 normA       =   norm(W*Ac_k);
 lambdaDamp  =   dampValue*normA;
+Murat_printRegularisation('Qc',normA,dampValue,smoothTikh,smoothValue);
 
 
 % --- optimization variables and objective ---

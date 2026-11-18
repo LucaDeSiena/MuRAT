@@ -70,7 +70,7 @@ end
 clear Murat
 
 % Run or load input file safely
-[~,~,ext]   = fileparts(file);
+[~,~,ext]   = fileparts(inputFile);
 switch lower(ext)
     case '.mlx'
         run(inputFile);

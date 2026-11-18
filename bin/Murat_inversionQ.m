@@ -78,6 +78,7 @@ end
 %matrix, so the same values act alike for Qc and Q
 normA       =   norm(A_k);
 lambdaDamp  =   dampValue*normA;
+Murat_printRegularisation('Q',normA,dampValue,smoothTikh,smoothValue);
 
 Q       =   optimvar('Q',MQ,LowerBound=10^-7);
 x0Q.Q   =   Qmean*ones(MQ,1);
