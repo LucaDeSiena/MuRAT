@@ -72,6 +72,13 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
   equations.
 
 ### Fixed
+- Headless runs (`inputFile` defined before running `MuRAT.m`) failed with
+  "Unrecognized function or variable 'file'": the file extension is now
+  read from `inputFile`. Added `Tests/TestHeadlessRun.m`.
+- The Qc and Q inversions print ‖A‖ and the absolute damping and
+  Tikhonov smoothing weights that the relative values correspond to
+  (`bin/Murat_printRegularisation.m`). To reuse an absolute value from an
+  input file older than relative damping, divide it by the printed ‖A‖.
 - Clear the previous `Murat` configuration before loading a selected
   input file, preventing settings from a previous dataset or damping
   sweep from carrying over into the next run.
