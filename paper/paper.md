@@ -126,7 +126,7 @@ affiliations:
     index: 22
   - name: VITO – Vlaamse Instelling voor Technologisch Onderzoek, Mol, Belgium
     index: 23
-date: 4 October 2026
+date: 18 November 2026
 bibliography: paper.bib
 ---
 
@@ -157,7 +157,7 @@ These packages demonstrate the growing availability of open computational tools 
 
 `MuRAT4` implements three complementary measurements and several inversion schemes using [SAC files](https://ds.iris.edu/files/sac-manual/) that can be downloaded from open seismological servers such as IRIS/FDSN and must have populated headers:
 
-* **Direct-wave attenuation:** the coda-normalization (CN) method estimates direct-wave attenuation by dividing frequency-domain direct and coda-wave energies [@aki80a; @yoshimoto93]. The method developed for volcanic tomography [@delpezzo06; @desiena08; @desiena09a] is implemented in `MuRAT4` by using a diffusion approximation and modeling the coda constant, dontaining the diffusion constant, for each path using the measured coda attenuation.
+* **Direct-wave attenuation:** the coda-normalization (CN) method estimates direct-wave attenuation by dividing frequency-domain direct and coda-wave energies [@aki80a; @yoshimoto93]. The method developed for volcanic tomography [@delpezzo06; @desiena08; @desiena09a] is implemented in `MuRAT4` by using a diffusion approximation and modeling the coda constant, containing the diffusion constant, for each path using the measured coda attenuation.
 
 * **Scattering attenuation:** Peak delays (PD) quantify the time difference between the direct-wave arrival and maximum envelope amplitude and are used as markers of scattering [@saito02; @takahashi07; @takahashi09; @tripathi10; @calvet13a; @calvet13b; @desiena16; @sato16]. `MuRAT4` accounts for both conventional far-field scattering and strong-scattering effects, including trapped waves and resonances [@napolitano20; @dimartino22b; @desiena16; @gabrielli20; @king22; @king23].
 
@@ -166,7 +166,7 @@ These packages demonstrate the growing availability of open computational tools 
 * **Inversion framework:** Attenuation and absorption are inverted using a non-negative Tikhonov regularisation and alternative iterative MATLAB optimization solvers. The code uses a damping parameter that is set relative to the largest singular value of the inversion matrix. With Tikhonov, an optional first-difference operator adds smoothness to the model.
 
 ## Example Usage
-`MuRAT4` comes with built-in tests and three tutorials as commented live text files that explain the inputs necessary to perform tomography with the three methods and the rationale to select them. In the following, we present the Toba (Indonesia) test case. Two additional test cases are provided for Mount St. Helens (US) and Romania. The Toba test case is based on a dataset of 860 waveforms recorded in the Toba caldera region in 2008. The input file contains the SAC file paths. These files include all source, station and timing information in their header. The inputs are separated by measurement types, inversion, and plotting options (Fig. 2). The output comprises three-dimensional models of direct-wave attenuation, scattering attenuation, and absorption, and several test figures used to assess the results (Fig. 3). The Toba tutorial completes in approximately 150 s on an 8-core MacBook Air M2 (8 GB RAM) running all three methods sequentially; enabling the Parallel Computing Toolbox reduces runtime for the inversion steps.
+`MuRAT4` comes with built-in tests and three tutorials as commented live text files that explain the inputs necessary to perform tomography with the three methods and the rationale to select them. In the following, we present the Toba (Indonesia) test case. Two additional test cases are provided for Mount St. Helens (US) and Romania. The Toba test case is based on a dataset of 863 three-component recordings in the Toba caldera region in 2008. The input file contains the SAC file paths. These files include all source, station and timing information in their header. The inputs are separated by measurement types, inversion, and plotting options (Fig. 2). The output comprises three-dimensional models of direct-wave attenuation, scattering attenuation, and absorption, and several test figures used to assess the results (Fig. 3). The Toba tutorial completes in approximately 150 s on an 8-core MacBook Air M2 (8 GB RAM) running all three methods sequentially; enabling the Parallel Computing Toolbox reduces runtime for the inversion steps.
 
 ![Example input file for the application of MuRAT4 to Toba.](./Fig2.png){width=100%}
 
@@ -182,7 +182,7 @@ Generative AI tools assisted parts of software development and documentation; th
 
 * Claude Opus 5.5 was used by the lead author since October 2026 for code review and bug fixing, and for improving the Tikhonov inversion strategy, and for updating changelog entries, README sections, and documentation after version v4.0.0.
 
-* Cursor (agent mode) was used by Wei-Mou Zhu for implementing Tikhonov smoothing,  bug fixing and test updates.
+* Cursor (agent mode) was used by Wei-Mou Zhu for implementing Tikhonov smoothing, bug fixing and test updates.
 
 * MATLAB Copilot (MATLAB R2025b) was used during software development of MuRAT4 since December 2025.
 
