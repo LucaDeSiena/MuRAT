@@ -5,7 +5,7 @@ MuRAT - Multi-Resolution seismic Attenuation Tomography
 
 [![test](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml/badge.svg?branch=master)](https://github.com/LucaDeSiena/MuRAT/actions/workflows/run_test.yml)
 [![GitHub release](https://img.shields.io/github/v/release/LucaDeSiena/MuRAT?include_prereleases)](https://github.com/LucaDeSiena/MuRAT/releases)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23170041.svg)](https://doi.org/10.5281/zenodo.23170041)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13996751.svg)](https://doi.org/10.5281/zenodo.13996751)
 [![Citing Papers](https://img.shields.io/badge/citing_papers-OpenAlex-brightgreen)](https://openalex.org/works?filter=referenced_works:W2059002776|W2345084914&sort=publication_year:desc)
 [![MIT License](https://img.shields.io/github/license/LucaDeSiena/MuRAT)](LICENSE.md)
 [![MATLAB](https://img.shields.io/badge/MATLAB-R2021b%2B-orange)](https://www.mathworks.com/products/matlab.html)
@@ -210,7 +210,7 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
 To cite MuRAT, please use the Zenodo DOI:
 
-> Luca De Siena et al. (2026). *MuRAT: a multi-resolution seismic attenuation tomography code* (v4.1.0). Zenodo. <https://doi.org/10.5281/zenodo.23170041>
+> Luca De Siena et al. (2026). *MuRAT: a multi-resolution seismic attenuation tomography code* (v4.1.0). Zenodo. <https://doi.org/10.5281/zenodo.13996751>
 
 A machine-readable citation is available in [CITATION.cff](CITATION.cff). On GitHub, the **Cite this repository** button (top-right of the repository page, under *About*) generates formatted citations automatically from that file.
 
