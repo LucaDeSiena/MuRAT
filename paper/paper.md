@@ -75,7 +75,7 @@ authors:
     affiliation: 3
   - name: Rachit Gautam
     orcid: 0009-0002-9160-6624
-    affiliation: "21, 3, 22, 23"
+    affiliation: "3, 21, 22, 23"
   - name: Miriam C. Reiss
     orcid: 0000-0002-0250-4988
     affiliation: 3
@@ -104,7 +104,7 @@ affiliations:
     index: 11
   - name: Geosciences Barcelona (GEO3BCN), Spanish National Research Council (CSIC), Barcelona, Spain
     index: 12
-  - name: Andalusian Institute of Geophysics, University of Granada, Granada, Spain
+  - name: Instituto Andaluz de Ciencias de la Tierra, Universidad de Granada, Granada, Spain
     index: 13
   - name: Viridien Singapore, Singapore
     index: 14
@@ -114,9 +114,9 @@ affiliations:
     index: 16
   - name: Shenzhen Research Institute, The Chinese University of Hong Kong, Shenzhen, China
     index: 17
-  - name: Department of Earth and Environmental Sciences, The Chinese University of Hong Kong, Shatin, Hong Kong S.A.R, China
+  - name: Shenzhen Research Institute, The Chinese University of Hong Kong, Shenzhen, China
     index: 18
-  - name: Institute of Geophysics, China Earthquake Administration, Beijing, China
+  - name: Department of Earth and Environmental Sciences, The Chinese University of Hong Kong, Shatin, Hong Kong S.A.R, China
     index: 19
   - name: National Institute for Earth Physics, Ilfov, Romania
     index: 20
