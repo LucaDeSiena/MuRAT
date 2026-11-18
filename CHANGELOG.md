@@ -7,6 +7,8 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 
 ## [Unreleased]
 
+## [4.1.0] – 2026-11-18
+
 ### Added
 - First-difference (gradient) smoothing for the `'Tikhonov'` inversions of
   Qc and Q. `smoothingValueQc` and `smoothingValueQ` were not used by the
@@ -254,5 +256,7 @@ Legacy release. Source archived at Zenodo:
 Luca De Siena et al. (2026). LucaDeSiena/MuRAT: Legacy MuRAT3.0 Code
 (v3.26.01.20). <https://doi.org/10.5281/zenodo.18314469>
 
+[Unreleased]: https://github.com/LucaDeSiena/MuRAT/compare/v4.1.0...HEAD
+[4.1.0]: https://github.com/LucaDeSiena/MuRAT/compare/v4.0.1...v4.1.0
 [4.0.0]: https://github.com/LucaDeSiena/MuRAT/compare/v3.26.01.20...v4.0.0
 [3.0.0]: https://github.com/LucaDeSiena/MuRAT/releases/tag/v3.26.01.20
