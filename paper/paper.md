@@ -166,7 +166,7 @@ These packages demonstrate the growing availability of open computational tools 
 * **Inversion framework:** Attenuation and absorption are inverted using a non-negative Tikhonov regularisation and alternative iterative MATLAB optimization solvers. The code uses a damping parameter that is set relative to the largest singular value of the inversion matrix. With Tikhonov, an optional first-difference operator adds smoothness to the model.
 
 ## Example Usage
-`MuRAT4` comes with built-in tests and three tutorials as commented live text files that explain the inputs necessary to perform tomography with the three methods and the rationale to select them. In the following, we present the Toba (Indonesia) test case. Two additional test cases are provided for Mount St. Helens (US) and Romania. The Toba test case is based on a dataset of 863 waveforms recorded in the Toba caldera region in 2008. The input file contains the SAC file paths. These files include all source, station and timing information in their header. The inputs are separated by measurement types, inversion, and plotting options (Fig. 2). The output comprises three-dimensional models of direct-wave attenuation, scattering attenuation, and absorption, and several test figures used to assess the results (Fig. 3). The Toba tutorial completes in approximately 150 s on an 8-core MacBook Air M2 (8 GB RAM) running all three methods sequentially; enabling the Parallel Computing Toolbox reduces runtime for the inversion steps.
+`MuRAT4` comes with built-in tests and three tutorials as commented live text files that explain the inputs necessary to perform tomography with the three methods and the rationale to select them. In the following, we present the Toba (Indonesia) test case. Two additional test cases are provided for Mount St. Helens (US) and Romania. The Toba test case is based on a dataset of 863 three-components recordings in the Toba caldera region in 2008. The input file contains the SAC file paths. These files include all source, station and timing information in their header. The inputs are separated by measurement types, inversion, and plotting options (Fig. 2). The output comprises three-dimensional models of direct-wave attenuation, scattering attenuation, and absorption, and several test figures used to assess the results (Fig. 3). The Toba tutorial completes in approximately 150 s on an 8-core MacBook Air M2 (8 GB RAM) running all three methods sequentially; enabling the Parallel Computing Toolbox reduces runtime for the inversion steps.
 
 ![Example input file for the application of MuRAT4 to Toba.](./Fig2.png){width=100%}
 
@@ -178,9 +178,9 @@ The MuRAT software lineage has been applied across a range of geological environ
 
 # AI Usage Disclosure
 
-Generative AI tools assisted parts of software development and documentation and for copy-editing this manuscript; the scientific content and the manuscript text were written by the authors.
+Generative AI tools assisted parts of software development and documentation, and were used for copy-editing this manuscript; the scientific content and the manuscript text were written by the authors.
 
-* Claude Code (Claude Opus 5.5) was used by the lead author since November 12, 2026 for code review and bug fixing, and for improving the Tikhonov inversion strategy, and for updating changelog entries, README sections, and documentation after version v4.0.0.
+* Claude Code (Claude Opus 5.5) was used by the lead author since 12 November 2026 for code review and bug fixing, and for improving the Tikhonov inversion strategy, and for updating changelog entries, README sections, and documentation after version v4.0.0.
 
 * Cursor (agent mode) was used by Wei-Mou Zhu for implementing Tikhonov smoothing, bug fixing and test updates.
 
