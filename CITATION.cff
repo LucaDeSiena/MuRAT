@@ -14,7 +14,7 @@ keywords:
   - absorption tomography
   - coda waves
 abstract: >-
-  MuRAT4 (Multi-Resolution Seismic Attenuation Tomography, version 4.0) is an open-access, MATLAB-based framework for measuring and imaging three-dimensional spatial variations of seismic attenuation. It provides tools to separate and image three attenuation mechanisms from proxies measured on seismograms: direct-wave attenuation via the coda-normalization method, scattering attenuation via the peak-delay method, and absorption via late-time coda attenuation. Version 4.0 systematizes these capabilities into a reproducible workflow that measures and inverts the three attributes within tomographic frameworks.
+  MuRAT4 (Multi-Resolution Seismic Attenuation Tomography, version 4) is an open-access, MATLAB-based framework for measuring and imaging three-dimensional spatial variations of seismic attenuation. It provides tools to separate and image three attenuation mechanisms from proxies measured on seismograms: direct-wave attenuation via the coda-normalization method, scattering attenuation via the peak-delay method, and absorption via late-time coda attenuation. Version 4 systematizes these capabilities into a reproducible workflow that measures and inverts the three attributes within tomographic frameworks.
 authors:
   - family-names: "De Siena"
     given-names: "Luca"

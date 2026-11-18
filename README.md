@@ -33,7 +33,7 @@ We recorded a Video Tutorial! Just go to the [Volcano Earth Imaging group page](
 
 The program works on Mac, Linux and Windows systems with MATLAB R2021b or higher (from Github Action testing).
 
-Necessary Toolboxes: Signal Processing, Curve Fitting, Image Processing, Mapping, Optimization and Global Optimization. The Parallel Computing Toolbox is recommended for speed.
+Necessary Toolboxes: Signal Processing, Curve Fitting, Mapping, Optimization and Global Optimization. The Parallel Computing Toolbox is recommended for speed.
 
 Custom toolboxes not included in standard Matlab installations are also provided with the package. These are:
 
@@ -53,7 +53,7 @@ The current version works following these steps:
 
 3. Open one of the three input .m files, providing a step-by-step explanation of all inputs (*Murat_inputMSH.m*, *Murat_inputRomania.m*, or *Murat_inputToba.m*) and create your own.
 
-4. Use a velocity model, storing it in the corresponding folder. The format is [Latitude, Longitude, Altitude (meters)]. If haven't one, you can use either iasp91 or Lithos, included in the package.
+4. Use a velocity model, storing it in the corresponding folder. A 3D model has columns [Latitude, Longitude, Altitude (meters), velocity], as in *modvMSH.txt*; a 1D model has columns [depth (km), radius (km), Vp, Vs], as in *iasp91.txt*. If you haven't one, you can use either iasp91 or LITHO1.0, included in the package.
 
 5. MuRAT works with [SAC files](https://ds.iris.edu/files/sac-manual/) that must be stored in a single folder and corrected for the instrument function. The files must have populated headers. Your SAC headers get tested anyway; the result is shown in an Excel file. The code takes from the header the following fields:
 ***a)*** The P-wave picking in the reference time of the waveform (in seconds);
@@ -85,11 +85,11 @@ The Documentation includes a summary of the theory underlying attenuation imagin
 
 C. ***Understand the output text files***
 
-All the output files (.mat, .txt and .xlsx) and figures are stored in the **TXT** sub-directories in the **Label** folder, created in the working directory. A list of the output files and what they contain is provided in the following. Ascii files contain the models in degrees and UTM. We strongly suggest imaging the TXT files using the [GeophysicalModelGenerator](https://github.com/JuliaGeodynamics/GeophysicalModelGenerator.jl).
+All the output files (.mat, .txt and .xlsx) and figures are stored in the **TXT** sub-directories in the **Label** folder, created in the working directory. A list of the output files and what they contain is provided in the following. Ascii files contain the models in degrees (longitude, latitude) and metres (altitude). We strongly suggest imaging the TXT files using the [GeophysicalModelGenerator](https://github.com/JuliaGeodynamics/GeophysicalModelGenerator.jl).
 
 D. ***Set damping, smoothing and damping sweeps***
 
-The Qc and Q inversions are regularised with one damping and one smoothing value per frequency (*Murat.input.dampingValueQc*, *dampingValueQ*, *smoothingValueQc*, *smoothingValueQ*). In MuRAT4.0, **damping is relative to the inversion matrix**: the penalty is (damping × ‖A‖)² × ‖m‖², where ‖A‖ is the largest singular value of the (weighted) matrix. A value of 1 weighs model norm and data misfit equally, and the same value acts alike for Qc and Q and across datasets. Values between 0.01 and 1 are a sensible range; left empty, damping is 0.1. Damping values from earlier input files are not interchangeable.
+The Qc and Q inversions are regularised with one damping and one smoothing value per frequency (*Murat.input.dampingValueQc*, *dampingValueQ*, *smoothingValueQc*, *smoothingValueQ*). Since MuRAT 4.1, **damping is relative to the inversion matrix**: the penalty is (damping × ‖A‖)² × ‖m‖², where ‖A‖ is the largest singular value of the (weighted) matrix. A value of 1 weighs model norm and data misfit equally, and the same value acts alike for Qc and Q and across datasets. Values between 0.01 and 1 are a sensible range; left empty, damping is 0.1. Damping values from earlier input files are not interchangeable.
 
 With *Murat.input.inversionMethod = 'Tikhonov'*, the smoothing value is the weight of a first-difference (gradient) regulariser on the model grid, also relative to ‖A‖; leave it empty or 0 for damping only. For *'Particle'*, *'Annealing'* and *'Global'*, it is the correlation length of the model covariance.
 
@@ -116,7 +116,7 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
 ------------
 
-*peakdelay__.txt*, *Qc__.txt* and *Q__.txt*:  The 3D models of the parameters at different frequencies. The first three columns of all text files correspond to Latitude, Longitude, and altitude. The fourth column is the mapped parameter. They contain a minimum of five columns (for *Peak Delay*) that can be imported to show the locations of the anomalies in a simple (x,y,z) reference system. The fifth column shows blocks hit by at least one ray. Qc and Q are solved with an inversion and thus have (1) the sixth and seventh columns that correspond to the input and output of the checkerboard test; (2) the eighth and ninth columns that correspond to the input and output of the spike test.
+*peakdelay__.txt*, *Qc__.txt* and *Q__.txt*:  The 3D models of the parameters at different frequencies. The first three columns of all text files correspond to Longitude, Latitude, and altitude in metres (negative below sea level; the header calls it *Depth*). The fourth column is the mapped parameter: the logarithm of the peak delay relative to its travel-time trend, inverse Qc, or inverse Q. They contain a minimum of five columns (for *Peak Delay*) that can be imported to show the locations of the anomalies in a simple (x,y,z) reference system. The fifth column shows blocks hit by at least one ray. Qc and Q are solved with an inversion and thus have (1) the sixth and seventh columns that correspond to the input and output of the checkerboard test; (2) the eighth and ninth columns that correspond to the input and output of the spike test.
 
 *Murat.mat*: A Matlab structure containing all inputs and data the code produces.
 
