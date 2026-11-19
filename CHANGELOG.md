@@ -10,8 +10,14 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 ### Changed
 - README: output figure names match what MuRAT writes (`.png` sections
   `_H`, `_SN`, `_WE` instead of `.tif`; `Qc-3D_F_Hz`, `L-curve_Qc_F_Hz`,
-  `ClusteringQc_F_Hz`, `VTest.fig`, ...); `Results/Parameter` is not
-  written by the current pipeline.
+  `ClusteringQc_F_Hz`, `VTest.fig`, ...).
+- Documentation_MuRAT.pdf: output figures are `.fig` and `.png` files.
+
+### Removed
+- `bin/Murat_imageParameters.m`, `bin/Murat_imageParametersMaps.m` and
+  `bin/Murat_image3Dparameters.m`, which the pipeline never called, and the
+  empty `Results/Parameter` output folder. `Murat_imageParameters` was the
+  only user of the Statistics and Machine Learning Toolbox (`fitdist`).
 
 ## [4.1.0] – 2026-11-18
 

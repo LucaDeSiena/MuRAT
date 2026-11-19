@@ -158,10 +158,6 @@ In all file names, *F* is the central frequency, with *_* for the decimal point 
 
 ------------
 
-      Parameter subdirectory
-
-Reserved for parameter maps; the current pipeline does not write figures here.
-
       PeakDelay subdirectory
 
 *Peak-Delay-3D_F_Hz_.fig* and *Peak-Delay-3D_F_Hz__H/SN/WE.png*: Peak delay maps in 3D (*.fig*) and across sections (*.png*).
