@@ -3,7 +3,7 @@ message: "If you use this software, please cite it using the metadata below."
 title: "MuRAT4: A MATLAB Framework for Multi-Resolution Seismic Attenuation Tomography"
 version: 4.1.0
 date-released: 2026-11-18
-doi: 10.5281/zenodo.23170041
+doi: 10.5281/zenodo.13996751
 license: MIT
 repository-code: "https://github.com/LucaDeSiena/MuRAT"
 keywords:
