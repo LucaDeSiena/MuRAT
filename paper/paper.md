@@ -7,7 +7,8 @@ tags:
   - scattering tomography
   - absorption tomography
 authors:
-  - name: Luca De Siena
+  - given-names: Luca
+    surname: De Siena
     orcid: 0000-0002-3615-5923
     affiliation: "1, 2, 3"
   - name: Chiara Nardoni
@@ -31,7 +32,8 @@ authors:
   - name: Panayiota Sketsiou
     orcid: 0000-0002-6575-4538
     affiliation: 8
-  - name: Maria Del Pilar Di Martino
+  - given-names: Maria Del Pilar
+    surname: Di Martino
     orcid: 0000-0002-3600-077X
     affiliation: 9
   - name: Thomas King
@@ -40,7 +42,8 @@ authors:
   - name: Roberto Guardo
     orcid: 0000-0002-2808-9583
     affiliation: "11, 12"
-  - name: Edoardo Del Pezzo
+  - given-names: Edoardo
+    surname: Del Pezzo
     orcid: 0000-0002-6981-5967
     affiliation: "2, 13"
   - name: Francesca Bianco
