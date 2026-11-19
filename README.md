@@ -116,7 +116,9 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
 ------------
 
-*peakdelay__.txt*, *Qc__.txt* and *Q__.txt*:  The 3D models of the parameters at different frequencies. The first three columns of all text files correspond to Longitude, Latitude, and altitude in metres (negative below sea level; the header calls it *Depth*). The fourth column is the mapped parameter: the logarithm of the peak delay relative to its travel-time trend, inverse Qc, or inverse Q. They contain a minimum of five columns (for *Peak Delay*) that can be imported to show the locations of the anomalies in a simple (x,y,z) reference system. The fifth column shows blocks hit by at least one ray. Qc and Q are solved with an inversion and thus have (1) the sixth and seventh columns that correspond to the input and output of the checkerboard test; (2) the eighth and ninth columns that correspond to the input and output of the spike test.
+In all file names, *F* is the central frequency, with *_* for the decimal point (e.g. *1_5* for 1.5 Hz). Map figures are saved as a 3D *.fig* and three *.png* sections (*_H*, *_SN*, *_WE*).
+
+*peakdelay_F_Hz.txt*, *Qc_F_Hz.txt* and *Q_F_Hz.txt*:  The 3D models of the parameters at different frequencies. The first three columns of all text files correspond to Longitude, Latitude, and altitude in metres (negative below sea level; the header calls it *Depth*). The fourth column is the mapped parameter: the logarithm of the peak delay relative to its travel-time trend, inverse Qc, or inverse Q. They contain a minimum of five columns (for *Peak Delay*) that can be imported to show the locations of the anomalies in a simple (x,y,z) reference system. The fifth column shows blocks hit by at least one ray. Qc and Q are solved with an inversion and thus have (1) the sixth and seventh columns that correspond to the input and output of the checkerboard test; (2) the eighth and ninth columns that correspond to the input and output of the spike test.
 
 *Murat.mat*: A Matlab structure containing all inputs and data the code produces.
 
@@ -130,11 +132,15 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
       Qc subdirectory
 
-*Qc-Checkerboard__.tif* and *Qc-Checkerboard__.fig*: These figures show the input and output of the Qc checkerboard test in the 3D space (*.fig*) and through cross-sections (*.tif*).
+*Qc-Checkerboard_F_Hz.fig* and *Qc-Checkerboard_F_Hz_H/SN/WE.png*: These figures show the input and output of the Qc checkerboard test in the 3D space (*.fig*) and through cross-sections (*.png*).
 
       Q subdirectory
 
-*Q-Checkerboard__.tif* and *Q-Checkerboard__.fig*: These figures show the input and output of the Q checkerboard test in the 3D space (*.fig*) and through cross-sections (*.tif*).
+*Q-Checkerboard_F_Hz.fig* and *Q-Checkerboard_F_Hz_H/SN/WE.png*: These figures show the input and output of the Q checkerboard test in the 3D space (*.fig*) and through cross-sections (*.png*).
+
+      PD subdirectory
+
+*PD-HitMap_F_Hz_H/SN/WE.png*: Ray hit maps for the peak-delay regionalisation, which has no checkerboard test.
 
 ------------
 
@@ -142,9 +148,9 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
 ------------
 
-*Rays__.tif*: These figures show how rays develop in 3D for the Peak Delay and Q measurements. It plots them on three slices (WE, SN, Z). The fourth panel shows the location of the area on the Earth.
+*Rays_PeakDelay_F_Hz.png* and *Rays_Q_F_Hz.png*: These figures show how rays develop in 3D for the Peak Delay and Q measurements. It plots them on three slices (WE, SN, Z). The fourth panel shows the location of the area on the Earth.
 
-*Kernel__.tif* and *Kernel__.fig*: Each *.fig* figure has two panels showing the sensitivity kernels in the entire 3D space (left) and the normalised kernels in the chosen inversion grid (right). This reduction implies several hypotheses: the most important is that most energy is still in the grid (the difference is generally < 1% if all sources and stations are in the inversion grid). The *.tif* figures are sections in the WE, SN, and Z directions. Figures are produced for all frequencies.
+*Kernel_F_Hz* figures: Each *.fig* figure has two panels showing the sensitivity kernels in the entire 3D space (left) and the normalised kernels in the chosen inversion grid (right). This reduction implies several hypotheses: the most important is that most energy is still in the grid (the difference is generally < 1% if all sources and stations are in the inversion grid). The *.png* figures are sections in the WE, SN, and Z directions. Figures are produced for all frequencies.
 
 ------------
 
@@ -154,19 +160,21 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
       Parameter subdirectory
 
-*Parameter__.tif* and *Parameter__.fig*: Parameter maps in 3D (*.fig*) and across sections (*.tif*).
+Reserved for parameter maps; the current pipeline does not write figures here.
 
       PeakDelay subdirectory
 
-*Peak-Delay__.tif* and *Peak-Delay__.fig*: Peak delay maps in 3D (*.fig*) and across sections (*.tif*).
+*Peak-Delay-3D_F_Hz_.fig* and *Peak-Delay-3D_F_Hz__H/SN/WE.png*: Peak delay maps in 3D (*.fig*) and across sections (*.png*).
 
       Q subdirectory
 
-*Q__.tif* and *Q__.fig*: Total attenuation maps in 3D (*.fig*) and across sections (*.tif*).
+*Q-3D_F_Hz.fig* and *Q-3D_F_Hz_H/SN/WE.png*: Total attenuation maps in 3D (*.fig*) and across sections (*.png*).
 
       Qc subdirectory
 
-*Qc__.tif* and *Qc__.fig*: Coda attenuation maps in 3D (*.fig*) and across sections (*.tif*).
+*Qc-3D_F_Hz.fig* and *Qc-3D_F_Hz_H/SN/WE.png*: Coda attenuation maps in 3D (*.fig*) and across sections (*.png*).
+
+*Qc_vs_frequency.png*: Relationship between average coda attenuation and frequency across the dataset.
 
 
 
@@ -177,11 +185,11 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 ------------
       Qc subdirectory
 
-*Qc-Spike__.tif* and *Qc-Spike__.fig*: These figures show the input and output of the Qc spike test in the 3D space (*.fig*) and through cross sections (*.tif*).
+*Qc-Spike_F_Hz.fig* and *Qc-Spike_F_Hz_H/SN/WE.png*: These figures show the input and output of the Qc spike test in the 3D space (*.fig*) and through cross sections (*.png*).
 
       Q subdirectory
 
-*Q-Spike__.tif* and *Q-Spike__.fig*: These figures show the input and output of the Q spike test in the 3D space (*.fig*) and through cross sections (*.tif*).
+*Q-Spike_F_Hz.fig* and *Q-Spike_F_Hz_H/SN/WE.png*: These figures show the input and output of the Q spike test in the 3D space (*.fig*) and through cross sections (*.png*).
 
 ------------
 
@@ -189,19 +197,17 @@ All the figures are stored in subdirectories in the **Label** folder, created in
 
 ------------
 
-*Clustering.tif*: This figure shows all rays used on the map (black, discarded) against those after declustering (red).
+*Clustering/ClusteringQc_F_Hz.png* and *ClusteringQ_F_Hz.png*: These figures show all rays used on the map (black, discarded) against those after declustering (red).
 
-*Qc_Analysis__.tif* and *Qc_Analysis__.fig*: Analysis figure showing coda attenuation quality and residuals per frequency.
+*Qc/Qc_analysis_F_Hz.png* and *.fig*: Analysis figure showing coda attenuation quality and residuals per frequency.
 
-*PD_Analysis__.tif* and *PD_Analysis__.fig*: Peak-delay vs travel-time figure for assessing data quality.
+*PeakDelay/PD_analysis_F_Hz.png* and *.fig*: Peak-delay vs travel-time figure for assessing data quality.
 
-*CN_Analysis__.tif* and *CN_Analysis__.fig*: Coda-normalisation figure comparing data to the analytical forward model.
+*Q/CN_analysis_F_Hz.png* and *.fig*: Coda-normalisation figure comparing data to the analytical forward model.
 
-*Qc_analysis__*: Relationship between average coda attenuation and frequency across the dataset.
+*LCurve/L-curve_Qc_F_Hz* and *L-curve_Q_F_Hz* (.fig and .png): L-curves for the Qc and Q inversions, to help choose the damping parameters (see *Set damping, smoothing and damping sweeps* above). They only appear when using a Tikhonov inversion, and show the effect of damping only, not of smoothing. Separate files (*_Checkerboard_*, *_Spike_*) are written for the synthetic tests.
 
-*L_curve__.fig*: L-curves for the Qc and Q inversions, to help choose the damping parameters (see *Set damping, smoothing and damping sweeps* above). They only appear when using a Tikhonov inversion, and show the effect of damping only, not of smoothing.
-
-*Velocity_model.fig*: The 3D velocity model is also available as a figure in Matlab format. They can be loaded in Matlab and show the vertical and horizontal slices defined in *Figures Sections*.
+*VTest.fig*: With a 3D velocity model, the model is also available as a figure in Matlab format. It can be loaded in Matlab and show the vertical and horizontal slices defined in *Figures Sections*.
 
 ------------
 

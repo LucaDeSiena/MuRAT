@@ -7,6 +7,12 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 
 ## [Unreleased]
 
+### Changed
+- README: output figure names match what MuRAT writes (`.png` sections
+  `_H`, `_SN`, `_WE` instead of `.tif`; `Qc-3D_F_Hz`, `L-curve_Qc_F_Hz`,
+  `ClusteringQc_F_Hz`, `VTest.fig`, ...); `Results/Parameter` is not
+  written by the current pipeline.
+
 ## [4.1.0] – 2026-11-18
 
 ### Added
