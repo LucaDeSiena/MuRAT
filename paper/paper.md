@@ -7,7 +7,8 @@ tags:
   - scattering tomography
   - absorption tomography
 authors:
-  - name: Luca De Siena
+  - given-names: Luca
+    surname: De Siena
     orcid: 0000-0002-3615-5923
     affiliation: "1, 2, 3"
   - name: Chiara Nardoni
@@ -31,7 +32,8 @@ authors:
   - name: Panayiota Sketsiou
     orcid: 0000-0002-6575-4538
     affiliation: 8
-  - name: Maria Del Pilar Di Martino
+  - given-names: Maria Del Pilar
+    surname: Di Martino
     orcid: 0000-0002-3600-077X
     affiliation: 9
   - name: Thomas King
@@ -40,7 +42,8 @@ authors:
   - name: Roberto Guardo
     orcid: 0000-0002-2808-9583
     affiliation: "11, 12"
-  - name: Edoardo Del Pezzo
+  - given-names: Edoardo
+    surname: Del Pezzo
     orcid: 0000-0002-6981-5967
     affiliation: "2, 13"
   - name: Francesca Bianco
@@ -166,7 +169,7 @@ These packages demonstrate the growing availability of open computational tools 
 * **Inversion framework:** Attenuation and absorption are inverted using a non-negative Tikhonov regularisation and alternative iterative MATLAB optimization solvers. The code uses a damping parameter that is set relative to the largest singular value of the inversion matrix. With Tikhonov, an optional first-difference operator adds smoothness to the model.
 
 ## Example Usage
-`MuRAT4` comes with built-in tests and three tutorials as commented live text files that explain the inputs necessary to perform tomography with the three methods and the rationale to select them. In the following, we present the Toba (Indonesia) test case. Two additional test cases are provided for Mount St. Helens (US) and Romania. The Toba test case is based on a dataset of 863 three-components recordings in the Toba caldera region in 2008. The input file contains the SAC file paths. These files include all source, station and timing information in their header. The inputs are separated by measurement types, inversion, and plotting options (Fig. 2). The output comprises three-dimensional models of direct-wave attenuation, scattering attenuation, and absorption, and several test figures used to assess the results (Fig. 3). The Toba tutorial completes in approximately 150 s on an 8-core MacBook Air M2 (8 GB RAM) running all three methods sequentially; enabling the Parallel Computing Toolbox reduces runtime for the inversion steps.
+`MuRAT4` comes with built-in tests and three tutorials as commented live text files that explain the inputs necessary to perform tomography with the three methods and the rationale to select them. In the following, we present the Toba (Indonesia) test case. Two additional test cases are provided for Mount St. Helens (US) and Romania. The Toba test case is based on a dataset of 863 three-component recordings in the Toba caldera region in 2008. The input file contains the SAC file paths. These files include all source, station and timing information in their header. The inputs are separated by measurement types, inversion, and plotting options (Fig. 2). The output comprises three-dimensional models of direct-wave attenuation, scattering attenuation, and absorption, and several test figures used to assess the results (Fig. 3). The Toba tutorial completes in approximately 150 s on an 8-core MacBook Air M2 (8 GB RAM) running all three methods sequentially; enabling the Parallel Computing Toolbox reduces runtime for the inversion steps.
 
 ![Example input file for the application of MuRAT4 to Toba.](./Fig2.png){width=100%}
 
