@@ -7,7 +7,7 @@ provided substantial theoretical work as well as computational additions
 or modifications. Together, these two groups form
 "The MuRAT4 Authors".
 
-## Principal Developers
+## Principal Developer
 * [Luca De Siena](https://www.unibo.it/sitoweb/luca.desiena2),
   Alma Mater Studiorum Bologna, Italy
 
@@ -18,12 +18,12 @@ The following people contributed major additions or modifications to `MuRAT4` an
 * Martina Avella
 * Francesca Bianco
 * Felix Borleanu
-* Liam Bramwell
+* Liam A. Bramwell
 * Gaia Caporale
 * Edoardo Del Pezzo
-* Rachit Gautam
 * Maria Del Pilar Di Martino
 * Simona Gabrielli
+* Rachit Gautam
 * Roberto Guardo
 * Yansong Hu
 * Jesús M. Ibáñez
@@ -35,5 +35,5 @@ The following people contributed major additions or modifications to `MuRAT4` an
 * Chiara Saturnino
 * Panayiota Sketsiou
 * Donato Talone
-* Wei-Mou Zhu
 * Yi Zhang
+* Wei-Mou Zhu
