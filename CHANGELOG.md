@@ -12,6 +12,16 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
   `_H`, `_SN`, `_WE` instead of `.tif`; `Qc-3D_F_Hz`, `L-curve_Qc_F_Hz`,
   `ClusteringQc_F_Hz`, `VTest.fig`, ...).
 - Documentation_MuRAT.pdf: output figures are `.fig` and `.png` files.
+- Ray tracing (`Murat_tracing.m`): a ray that reaches the maximum number of
+  points (`max3`) is kept with a `MuRAT:rayPoints` warning instead of
+  stopping the run with an error. 3D velocity models are traced on a grid
+  with half the inversion step, so they reach this limit at coarser grids
+  than 1D models.
+
+### Fixed
+- `Murat_traveling.m` converted the velocity to m/s only for the branch
+  used when the first ray segment is long, so the travel time was in s
+  there and in ms otherwise. Both branches now return ms.
 
 ### Removed
 - `bin/Murat_imageParameters.m`, `bin/Murat_imageParametersMaps.m` and
