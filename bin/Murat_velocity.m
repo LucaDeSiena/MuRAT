@@ -19,11 +19,13 @@ xGrid       =   gridD.x;
 yGrid       =   gridD.y;
 zGrid       =   gridD.z;
 
-[ip,jp,kp,flag]	=   Murat_cornering(xx,yy,zz,gridD);
-if flag>0
-    v       =   pvel(jp,ip,kp);
-    return
-end
+% Outside the grid the velocity is extended from the nearest grid face, so
+%   it stays continuous across the grid boundary.
+xx          =   min(max(xx,min(xGrid)),max(xGrid));
+yy          =   min(max(yy,min(yGrid)),max(yGrid));
+zz          =   min(max(zz,min(zGrid)),max(zGrid));
+
+[ip,jp,kp]  =   Murat_cornering(xx,yy,zz,gridD);
 
 ip1         =   ip+1;
 jp1         =   jp+1;

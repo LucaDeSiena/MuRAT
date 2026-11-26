@@ -35,8 +35,11 @@ zNodes      =   gridP.z;
 dconv       =   sqrt((xNodes(2)-xNodes(1))^2 +...
     (yNodes(2)-yNodes(1))^2 + (zNodes(2)-zNodes(1))^2);
 
-% Time limit, in seconds, pvel is in km
-tlim        =   dconv/mean(mean(mean(pvel*1000))); 
+% Travel-time tolerance, in ms like the travel times from Murat_traveling
+%   (distances in m, pvel in km/s): 1/100 of the time to cross one cell.
+%   It was in s before, so rays had to settle to well below 0.1 ms, less
+%   than the bending jitter of long rays, and kept doubling up to max3.
+tlim        =   dconv/mean(pvel(:))/100;
 
 % Start bending procedure from the extrema of the ray segment
 xtemp       =   [ray(1,1) (ray(1,1)+ray(1,2))/2 ray(1,2)];
@@ -117,6 +120,10 @@ for it = 1:maxit
         end
     end
 end
+% The last iteration may end just after a doubling, which resets ta to
+%   zeros: recompute the travel times along the final ray.
+[ta,~]  =   Murat_traveling(xtemp,ytemp,ztemp,gridP,v,pvel);
+
 % assemble output: columns [index, x, y, z, travel_time_seconds]
 ma      = zeros(n,5);
 ma(:,1) = (1:n)';
