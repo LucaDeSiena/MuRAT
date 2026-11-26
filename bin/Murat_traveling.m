@@ -24,7 +24,8 @@ maxGrid =   max([xGrid(2)-xGrid(1) yGrid(2)-yGrid(1) zGrid(2)-zGrid(1)]);
 
 % Max travel distance limit
 distlim =   5*(maxGrid);
-pvel    =   pvel*1000;
+% pvel stays in km/s, as v does, so that both branches below return the
+%   travel time in ms (Murat_tracing divides it by 1000).
 
 n       =   numel(xtemp);
 

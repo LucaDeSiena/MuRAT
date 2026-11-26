@@ -78,7 +78,13 @@ for it = 1:maxit
             ttsave  =   tra;
             nnew    =   2*n-1;
             if(nnew > max3)
-                error('Too many points, reduce them or increase max3');
+                % Keep the current ray instead of stopping the run. A 3D
+                %   velocity model is traced on a grid with half the
+                %   inversion step, so its rays need more points.
+                warning('MuRAT:rayPoints', ['Ray reached %d points ' ...
+                    'without converging; keeping it. Use a coarser ' ...
+                    'grid or increase maxpoints in Murat_tracing.m.'], n);
+                break
             end
             
             % allocate new arrays
