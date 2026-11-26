@@ -67,6 +67,22 @@ classdef TestRayTracing < matlab.unittest.TestCase
             tc.verifyEqual(ma([1 end], 2:4), ray', 'AbsTol', 1e-9);
         end
 
+        function raysStayInsideGrid(tc)
+            % Velocity grows with depth, so rays between deep points would
+            %   dive below the grid bottom
+            pvel = tc.gradientModel();
+            g = tc.grid;
+            src = [g.x(1) 700 -1900];
+            rec = [g.x(end) 800 -1950; g.x(end) 800 1200];
+            for k = 1:size(rec, 1)
+                ma = Murat_tracing([src' rec(k,:)'], g, pvel);
+                tc.verifyGreaterThanOrEqual(min(ma(:,4)), min(g.z));
+                tc.verifyGreaterThanOrEqual(min(ma(:,2)), min(g.x));
+                tc.verifyLessThanOrEqual(max(ma(:,2)), max(g.x));
+                tc.verifyEqual(ma(end,2:4), rec(k,:), 'AbsTol', 1e-9);
+            end
+        end
+
         function edgeRaysGiveTravelTimes(tc)
             pvel = tc.gradientModel();
             g = tc.grid;
