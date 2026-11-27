@@ -212,7 +212,7 @@ In all file names, *F* is the central frequency, with *_* for the decimal point 
 
 To cite MuRAT, please use the Zenodo DOI:
 
-> Luca De Siena et al. (2026). *MuRAT: a multi-resolution seismic attenuation tomography code* (v4.1.0). Zenodo. <https://doi.org/10.5281/zenodo.13996751>
+> Luca De Siena et al. (2026). *MuRAT: a multi-resolution seismic attenuation tomography code* (v4.1.1). Zenodo. <https://doi.org/10.5281/zenodo.13996751>
 
 A machine-readable citation is available in [CITATION.cff](CITATION.cff). On GitHub, the **Cite this repository** button (top-right of the repository page, under *About*) generates formatted citations automatically from that file.
 
