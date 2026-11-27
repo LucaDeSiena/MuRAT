@@ -24,7 +24,15 @@ uncertaintyQc_i     =   zeros(lcf,1);
 srate_i             =   round(srate_i);
 si                  =   1/srate_i;
 
+% The 'Peak' lapse-time method gives one coda window per frequency
+cStart              =   cursorCodaStart_i;
+cEnd                =   cursorCodaEnd_i;
+tCodaAll            =   tCoda_i;
+
 for i = 1:lcf
+    cursorCodaStart_i   =   cStart(min(i,end));
+    cursorCodaEnd_i     =   cEnd(min(i,end));
+    tCoda_i             =   tCodaAll(min(i,end));
     envelopeC       =   sp_i(cursorCodaStart_i:cursorCodaEnd_i,i);
     lEnvelopeC      =   numel(envelopeC);
     cf_i            =   cf(i);
