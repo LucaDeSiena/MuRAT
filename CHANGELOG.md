@@ -17,8 +17,37 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
   stopping the run with an error. 3D velocity models are traced on a grid
   with half the inversion step, so they reach this limit at coarser grids
   than 1D models.
+- `Murat_inversionQc` takes the data weights (from `Murat_weightQc`)
+  instead of `uncertaintyQc`; `Murat_declustering` takes a quality score
+  instead of `QcMeasurement` and the uncertainty.
 
 ### Fixed
+- **Qc data weights with `QcMeasurement = 'NonLinear'` (regression in
+  4.1.0).** Since 4.1.0 the weight was `uncertaintyQc.^2` for both
+  methods. Murat_Qc stores |R| for `'Linearized'` but the misfit
+  uncertainty σ for `'NonLinear'`, so NonLinear inversions gave the
+  **worst** fits the largest weight. New `bin/Murat_weightQc.m` returns
+  |R|² (Linearized) or 1/σ² (NonLinear, as in 4.0). It is used for the
+  data, checkerboard and spike inversions, the weighted average Qc, the
+  Picard plot and Qc declustering. **Qc models from 4.1.0 with
+  `'NonLinear'` must be recomputed** (the Toba example uses it: its 3 Hz
+  Qc model correlates 0.07 with the 4.1.0 one; Q and peak delay are
+  unchanged). Linearized weights are unchanged.
+- `Murat_retainQc.m` — with `'Linearized'` the test `RZZ < 1/fT` assumed
+  the 4.0 storage 1/|R| and rejected nothing in 4.1.0; it now keeps
+  |R| > `fitTresholdLinear`.
+- `Murat_declustering.m` compared the method with `'Linear'`, which never
+  matched `'Linearized'`, so Linearized declustering kept the worst fit
+  in each sub-cell. It now takes a quality score (larger is better):
+  `Murat_weightQc` for Qc, the coda-to-noise ratio for Q.
+- `Murat_dataWarning.m` — with `'NonLinear'` it flagged uncertainties
+  below the threshold, the opposite of what `Murat_retainQc` keeps.
+- `lapseTimeMethod = 'Peak'`: after kernels stopped averaging the lapse
+  time across frequencies, `Murat_kernels` received a vector in scalar
+  code, and `Murat_Qc` and `Murat_body` used the coda window of the first
+  frequency for all frequencies. Kernels, Qc and coda energies now use
+  the window of each frequency; `Murat_kernels` errors on a vector lapse
+  time. Added `Tests/TestQcWeights.m` and `Tests/TestPeakLapseTime.m`.
 - `Murat_traveling.m` converted the velocity to m/s only for the branch
   used when the first ray segment is long, so the travel time was in s
   there and in ms otherwise. Both branches now return ms.
