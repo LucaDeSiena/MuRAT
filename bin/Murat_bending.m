@@ -24,6 +24,16 @@ function [xtemp,ytemp,ztemp,v]  =...
 xfac                =   1;
 n                   =   length(xtemp);
 
+% Bent points stay inside the propagation grid, widened to include the ray
+%   ends (e.g. stations above the grid top). Outside the grid there is no
+%   velocity information and Murat_segments does not count the ray length.
+xLim                =   [min([gridD.x(:); xtemp(1); xtemp(n)])...
+    max([gridD.x(:); xtemp(1); xtemp(n)])];
+yLim                =   [min([gridD.y(:); ytemp(1); ytemp(n)])...
+    max([gridD.y(:); ytemp(1); ytemp(n)])];
+zLim                =   [min([gridD.z(:); ztemp(1); ztemp(n)])...
+    max([gridD.z(:); ztemp(1); ztemp(n)])];
+
 for k=2:(n-1)
     kk              =   k-1;
     kkk             =   k+1;
@@ -83,7 +93,11 @@ for k=2:(n-1)
         xxk         =   xfac * (xxk-xtemp(k)) + xtemp(k);
         yyk         =   xfac * (yyk-ytemp(k)) + ytemp(k);
         zzk         =   xfac * (zzk-ztemp(k)) + ztemp(k);
-        
+
+        xxk         =   min(max(xxk,xLim(1)),xLim(2));
+        yyk         =   min(max(yyk,yLim(1)),yLim(2));
+        zzk         =   min(max(zzk,zLim(1)),zLim(2));
+
         xtemp(k)    =   xxk;
         ytemp(k)    =   yyk;
         ztemp(k)    =   zzk;

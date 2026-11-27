@@ -19,12 +19,17 @@ xg          =   gridD.x;
 yg          =   gridD.y;
 zg          =   gridD.z;
 
-[ip,jp,kp,flag] =   Murat_cornering(xx,yy,zz,gridD);
+% Outside the grid the velocity is constant along the normal to the nearest
+%   grid face (see Murat_velocity): use the gradient on that face and set
+%   the components along the directions where the point is outside to 0.
+outX        =   xx < min(xg) || xx > max(xg);
+outY        =   yy < min(yg) || yy > max(yg);
+outZ        =   zz < min(zg) || zz > max(zg);
+xx          =   min(max(xx,min(xg)),max(xg));
+yy          =   min(max(yy,min(yg)),max(yg));
+zz          =   min(max(zz,min(zg)),max(zg));
 
-if flag>0
-    vx = 0; vy = 0; vz = 0;
-    return
-end
+[ip,jp,kp]  =   Murat_cornering(xx,yy,zz,gridD);
 
 ip1         =   ip+1;
 jp1         =   jp+1;
@@ -69,5 +74,9 @@ vz = (xf1*yf1*(v001 - v000) + ... % lower y, lower x
     xf*yf1 *(v101 - v100) + ...   % lower y, upper x
     xf1*yf  *(v011 - v010) + ...  % upper y, lower x
     xf*yf  *(v111 - v110)) / zd;  % upper y, upper x
+
+if outX; vx = 0; end
+if outY; vy = 0; end
+if outZ; vz = 0; end
 
 end

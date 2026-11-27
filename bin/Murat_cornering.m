@@ -67,8 +67,10 @@ elseif xx > max(xGrid)
 end
 
 % Finds index - remember convention on shallowest SW point!
-ip          =   find(xGrid<xx,1,'last');
-jp          =   find(yGrid<yy,1,'last');
-kp          =   find(zGrid>zz,1,'last');
+% A point on a grid node (including the west, south and top edges) belongs
+%   to the cell that starts there; the last node maps to the last cell.
+ip          =   min(find(xGrid<=xx,1,'last'),numel(xGrid)-1);
+jp          =   min(find(yGrid<=yy,1,'last'),numel(yGrid)-1);
+kp          =   min(find(zGrid>=zz,1,'last'),numel(zGrid)-1);
 
 end
