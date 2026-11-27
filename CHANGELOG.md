@@ -7,6 +7,11 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 
 ## [Unreleased]
 
+## [4.1.1] – 2026-11-27
+
+Bug-fix release. **If you ran 4.1.0 with `QcMeasurement = 'NonLinear'`,
+recompute your Qc models** (see Fixed).
+
 ### Changed
 - README: output figure names match what MuRAT writes (`.png` sections
   `_H`, `_SN`, `_WE` instead of `.tif`; `Qc-3D_F_Hz`, `L-curve_Qc_F_Hz`,
@@ -51,6 +56,20 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 - `Murat_traveling.m` converted the velocity to m/s only for the branch
   used when the first ray segment is long, so the travel time was in s
   there and in ms otherwise. Both branches now return ms.
+- Ray tracing at the edges of the propagation grid (`Murat_cornering`,
+  `Murat_tracing`, `Murat_velocity`, `Murat_veldicity`, `Murat_bending`):
+  - points exactly on the west, south or top edge got an empty cell index
+    and stopped the run;
+  - the travel-time convergence tolerance was in s while travel times are
+    in ms, so it was below the bending jitter; it is now 1/100 of a cell
+    crossing time in ms;
+  - the velocity outside the grid is continuous, with zero outward
+    gradient;
+  - travel times could be zero when the iterations ended right after a
+    point doubling; they are recomputed at the end;
+  - bent points are kept inside the grid, widened to include the ray ends.
+  Rays far from the edges change little (MSH and Toba models change by
+  ≤ 1.3·10⁻⁴ relative). Added `Tests/TestRayTracing.m`.
 
 ### Removed
 - `bin/Murat_imageParameters.m`, `bin/Murat_imageParametersMaps.m` and
@@ -307,7 +326,8 @@ Legacy release. Source archived at Zenodo:
 Luca De Siena et al. (2026). LucaDeSiena/MuRAT: Legacy MuRAT3.0 Code
 (v3.26.01.20). <https://doi.org/10.5281/zenodo.18314469>
 
-[Unreleased]: https://github.com/LucaDeSiena/MuRAT/compare/v4.1.0...HEAD
+[Unreleased]: https://github.com/LucaDeSiena/MuRAT/compare/v4.1.1...HEAD
+[4.1.1]: https://github.com/LucaDeSiena/MuRAT/compare/v4.1.0...v4.1.1
 [4.1.0]: https://github.com/LucaDeSiena/MuRAT/compare/v4.0.1...v4.1.0
 [4.0.0]: https://github.com/LucaDeSiena/MuRAT/compare/v3.26.01.20...v4.0.0
 [3.0.0]: https://github.com/LucaDeSiena/MuRAT/releases/tag/v3.26.01.20

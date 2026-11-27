@@ -1,6 +1,6 @@
 %[text:tableOfContents]{"heading":"Table of Contents"}
 %[text] %[text:anchor:T_C5277B6D] # INPUT MuRAT - Toba
-%[text] This is an input file for the program Multi-Resolution Attenuation Tomography (MuRAT), version 4.1.0. It refers to the following area:
+%[text] This is an input file for the program Multi-Resolution Attenuation Tomography (MuRAT), version 4.1.1. It refers to the following area:
 %[text] ```
 %[text] TOBA CALDERA
 %[text] ```
