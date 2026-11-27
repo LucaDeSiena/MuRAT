@@ -1,12 +1,17 @@
-function indKeep =  Murat_declustering(origin,ending,x,y,z,QcM,uncertainty,locationsDeg,factor)
-% indKeep =  Murat_declustering(origin,ending,x,y,z,QcM,uncertainty,locationsDeg,factor)
+function indKeep =  Murat_declustering(origin,ending,x,y,z,quality,locationsDeg,factor)
+% indKeep =  Murat_declustering(origin,ending,x,y,z,quality,locationsDeg,factor)
 %
 % SAVES declustered variables efore and after declustering.
 % The declustering is based on dividing the original grid into finer node
-% spacing and selecting those with the least coda uncertainty. 
+% spacing and keeping, for each station in a sub-cell, the pair with the
+% highest quality.
 %
 % Input parameters:
-%    Murat:                Murat structure variable
+%    origin, ending:       grid corners
+%    x, y, z:              grid axes
+%    quality:              one value per waveform, larger is better (e.g.
+%                          Murat_weightQc for Qc, coda-to-noise ratio for Q)
+%    locationsDeg:         event and station locations
 %    factor:               input factor used to divide the original grid
 
 % create smaller grid to cluster events
@@ -22,7 +27,7 @@ z_grid      =   -linspace(origin(3),ending(3),z_step);
 [locationsDeg_unique, idx_original] = unique(locationsDeg,'rows','stable');
 locationsDeg    =   locationsDeg_unique;
 
-indKeep         =   false(length(uncertainty),1);
+indKeep         =   false(length(quality),1);
 new_locationsDeg=   [];
 
 for i = 1:lon_step-1
@@ -38,20 +43,16 @@ for i = 1:lon_step-1
                 locationsDeg(:,3)>z_grid(k) &...
                 locationsDeg(:,3)<z_grid(k+1));
             
-            % check out each grid cell, only keep events with highest RZZ
+            % check out each grid cell, only keep pairs with highest quality
             if ~isempty(find_evs)
-                % get RZZ & events/stations & indice, map back to original indices
+                % get quality & events/stations & indices, map back to original indices
                 events      =   locationsDeg(find_evs,:);
                 orig_indices =   idx_original(find_evs);
 
-                if isequal(QcM,'Linear')
-                    events(:,7) =   uncertainty(orig_indices);
-                else
-                    events(:,7) =   1./uncertainty(orig_indices);
-                end
+                events(:,7)     =   quality(orig_indices);
                 events(:,8)     =	orig_indices;
                 % check if stations are double, if so, only keep
-                % event/station pair with lowest uncertainty on Qc
+                % event/station pair with the highest quality
                 d               =   sortrows(events, [4 7]);
                 [~, ia, ~]      =   unique(d(:,4),'rows','last');
                 to_keep         =   d(ia,:);

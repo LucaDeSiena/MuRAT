@@ -3,6 +3,7 @@ function Murat      =   Murat_plot(Murat)
 
 % Refactored input unpacking and preallocation
 s               =   Murat.input;
+QcM             =   s.QcMeasurement;
 
 % Importing all the necessary inputs and data for plotting
 FLabel          =   s.label;
@@ -84,7 +85,8 @@ for k = 1:lMF(2)
     evst_Q      =   evst(rtQk,:);
     Qm_k        =   Qm(rtQck,k);
     RZZ_k       =   RZZ(rtQck,k);
-    avQcFreq(1,k)   =   sum(RZZ_k.*Qm_k)/sum(RZZ_k);
+    wQc_k       =   Murat_weightQc(RZZ_k,QcM);
+    avQcFreq(1,k)   =   sum(wQc_k.*Qm_k)/sum(wQc_k);
     avQcFreq(2,k)   =   std(Qm_k);
     
     if PlotRays == 1
@@ -133,7 +135,7 @@ for k = 1:lMF(2)
     
 
     Qc_title    =   ['Qc check ' fcName ' Hz'];
-    Qc_analysis =   Murat_imageCheckQc(Qm_k,RZZ_k,residualQc_k,...
+    Qc_analysis =   Murat_imageCheckQc(Qm_k,wQc_k,residualQc_k,...
         luntot_Qc,Ac,sTitle,Qc_title);
     p           =   makePath(storeFolder, ['Qc_analysis_' fcName '_Hz']);
     saveFigureAsImage(p);

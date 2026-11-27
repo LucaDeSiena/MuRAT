@@ -1,8 +1,8 @@
 function [sol,fval,eflag,output,dampValue] = Murat_inversionQc(Ac_k,...
-    Qm_k,inversionMethod,iter,iterStall,RZZ_k,coordPrior,dampValue,...
+    Qm_k,inversionMethod,iter,iterStall,wQc_k,coordPrior,dampValue,...
     smoothValue,PlotI,pathFolder,D)
 % function [sol,fval,eflag,output,dampValue] = Murat_inversionQc(Ac_k,...
-%   Qm_k,inversionMethod,iter,iterStall,RZZ_k,coordPrior,dampValue,...
+%   Qm_k,inversionMethod,iter,iterStall,wQc_k,coordPrior,dampValue,...
 %   smoothValue,PlotI,pathFolder,D)
 %
 % INVERTS spatial values of Qc using pre-compiled kernels
@@ -13,7 +13,8 @@ function [sol,fval,eflag,output,dampValue] = Murat_inversionQc(Ac_k,...
 %    inversionMethod:   choose between three optimizations
 %    iter:              iterations for the non-linear optimization
 %    iterStall:         max iterations for the non-linear optimization
-%    RZZ_k:             std to weight inversion matrix
+%    wQc_k:             data weights (Murat_weightQc): |R|^2 for
+%                       'Linearized', 1/sigma^2 for 'NonLinear'
 %    coordPrior:        coords for the starting solution
 %    dampValue:         damping value, relative to the largest singular
 %                       value of the (weighted) inversion matrix: the
@@ -41,10 +42,8 @@ smoothTikh  =   useTikhonov && ~isempty(smoothValue) && smoothValue ~= 0 ...
 %Parameter model number
 MQc         =   size(Ac_k,2);
 
-%Covariance matrix for the data - weight by correlation coefficient squared
-w           =   RZZ_k.^2;
-%w           =   (w - min(w(:))) ./ (max(w(:)) - min(w(:)));
-W           =   diag(w);
+%Data weights from Murat_weightQc (larger for better measurements)
+W           =   diag(wQc_k);
 
 
 %Starting model from regionalization
