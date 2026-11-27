@@ -43,7 +43,8 @@ if isequal(QcM,'Linearized')
     no_RZZ          =   (RZZ <= fT);
 
 elseif isequal(QcM,'NonLinear')
-    no_RZZ          =   (RZZ < fT);
+    % uncertainties above the threshold (Murat_retainQc keeps RZZ < fT)
+    no_RZZ          =   (fT > 0) & (RZZ >= fT);
 
 end
 

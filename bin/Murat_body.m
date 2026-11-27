@@ -26,12 +26,10 @@ intSamples              =   floor(bodyWindow*srate_i);
 cursorNoise0            =	floor(startNoise*srate_i);
 cursor0Noise1           =   cursorNoise0 + intSamples;
 cursorPS1               =   floor(cursorPick_i + intSamples-1);
-lengthSamples           =   length(cursorCodaStart_i:cursorCodaEnd_i);
 
 % Extract windows (vectorized)
 spPS                    =   sp_i(cursorPick_i:cursorPS1,:);
 spNoise                 =   sp_i(cursorNoise0:cursor0Noise1,:);
-spCoda                  =   sp_i(cursorCodaStart_i:cursorCodaEnd_i,:);
 
 % Integrate using trapz with correct spacing
 dt                      =   1 / srate_i;
@@ -40,9 +38,17 @@ spampNoise              =   trapz((0:dt:dt*(size(spNoise,1)-1)), spNoise);
 
 
 % Normalize coda by relative window length
-differentWindows        =   lengthSamples/intSamples;
-spampCoda               =   ...
-    trapz((0:dt:dt*(size(spCoda,1)-1)), spCoda)./ differentWindows;
+% One coda window per frequency with the 'Peak' lapse-time method
+nF                      =   size(sp_i,2);
+spampCoda               =   zeros(1,nF);
+for k = 1:nF
+    cS                  =   cursorCodaStart_i(min(k,end));
+    cE                  =   cursorCodaEnd_i(min(k,end));
+    spCoda              =   sp_i(cS:cE,k);
+    differentWindows    =   (cE-cS+1)/intSamples;
+    spampCoda(k)        =   ...
+        trapz((0:dt:dt*(numel(spCoda)-1)), spCoda)./ differentWindows;
+end
 
 energyRatioBodyCoda_i   =   spampPS ./  spampCoda;
 energyRatioCodaNoise_i  =   spampCoda ./ spampNoise;

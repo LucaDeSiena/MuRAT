@@ -128,7 +128,7 @@ for i = 1:dataFreq
     if ~isempty(Declust)
         
         indKeepQc       =   Murat_declustering(origin,ending,x,y,z,...
-            QcM,RZZ_i,locationsDeg,Declust);
+            Murat_weightQc(RZZ_i,QcM),locationsDeg,Declust);
         retain_Qc_i     =   retain_Qc_i & indKeepQc;
 
         FName_Cluster   =   ['ClusteringQc_' fcName '_Hz'];
@@ -153,7 +153,7 @@ for i = 1:dataFreq
     if ~isempty(Declust)
         
         indKeepQ        =   Murat_declustering(origin,ending,x,y,z,...
-            QcM,1./rapspcn(:,i),locationsDeg,Declust);
+            rapspcn(:,i),locationsDeg,Declust);
         retain_Q_i      =   retain_Q_i & indKeepQ;
         
         FName_Cluster   =   ['ClusteringQ_' fcName '_Hz'];

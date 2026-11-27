@@ -1,13 +1,13 @@
-function Qc_analysis    =   Murat_imageCheckQc(Qm_k,RZZ_k,...
+function Qc_analysis    =   Murat_imageCheckQc(Qm_k,wQc_k,...
     residualQc_k,luntot_Qc,Ac,sizeTitle,Qc_title)
-% function Qc_analysis  =   Murat_imageCheckQc(Qm_k,RZZ_k,...
+% function Qc_analysis  =   Murat_imageCheckQc(Qm_k,wQc_k,...
 %     residualQc_k,luntot_Qc,Ac,sizeTitle,Qc_title)
 %
 % PLOTS the Qc checks
 %
 % Input parameters:
 %    Qm_k:          inverse Qc data
-%    RZZ_k:         uncertainty on Qc
+%    wQc_k:         data weights from Murat_weightQc
 %    luntot_Qc_k:   total lengths of rays for Qc
 %    Ac:            inverse coda attenuation matrix
 %    sizeTitle:     size of title font
@@ -19,7 +19,7 @@ function Qc_analysis    =   Murat_imageCheckQc(Qm_k,RZZ_k,...
 Qc_analysis     =   myfig(Qc_title);
     
 mQm             =   mean(Qm_k);
-Wc              =   diag((1./RZZ_k).^2)/1e08;
+Wc              =   diag(wQc_k);   % same weights as Murat_inversionQc
 
 Gc              =   Wc*Ac;
 dck             =   Wc*Qm_k;

@@ -49,6 +49,11 @@ function [K_grid,r_grid1]	=...
 % Original creators: Angel De La Torre & Edoardo Del Pezzo
 % Adapted for coda attenuation tomography by De Siena.
 
+if ~isscalar(T)
+    error(['Murat_kernels: T must be a scalar lapse time; call it ' ...
+        'once per frequency for the Peak lapse-time method.'])
+end
+
 DT      =   0.5;
 lR      =   numel(B0);
 %%
@@ -107,7 +112,6 @@ r1_grid =   sqrt(d1xyz(:,1).^2 + d1xyz(:,2).^2 + d1xyz(:,3).^2)/1000;
 r2_grid =   sqrt(d2xyz(:,1).^2 + d2xyz(:,2).^2 + d2xyz(:,3).^2)/1000;
 
 % Elements of the grid inside the ellipsoid
-% For Peak method, each frequency retains its own lapse time (no averaging)
 
 cond_interior   =   r1_grid + r2_grid < T*v;
 

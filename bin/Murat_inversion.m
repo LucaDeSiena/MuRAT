@@ -21,6 +21,7 @@ nyc                 =   numel(y);
 nzc                 =   numel(z);
 nxyzc               =   nxc*nyc*nzc;
 inversionMethod     =   s.inversionMethod;
+QcM                 =   s.QcMeasurement;
 DDcoordinates       =   s.DDcoordinates;
 B0                  =   s.albedo;
 Le_1                =   s.iExtinctionLength;
@@ -166,13 +167,13 @@ for k = 1:nFreq
     rcQc_k          =   rayCrossesQc(:,k);
     rtQc_k          =   retainQc(:,k);
     Ac_k            =   Ac_i(rtQc_k,rcQc_k,k);
-    RZZ_k           =   RZZ(rtQc_k,k);
+    wQc_k           =   Murat_weightQc(RZZ(rtQc_k,k),QcM);
     Qm_k            =   Qm(rtQc_k,k);
     coordPriorQc    =   modvQc(rcQc_k,1:3,k);
     DQc_k           =   restrictOperator(Dgrid,rcQc_k);
     
     [sol,fval,exitflag,output,dValueQc_k]= Murat_inversionQc(Ac_k,Qm_k,...
-        inversionMethod,iter,iterStall,RZZ_k,coordPriorQc,dValueQc_k,...
+        inversionMethod,iter,iterStall,wQc_k,coordPriorQc,dValueQc_k,...
         sValueQc_k,plotI,outDirFigure,DQc_k);
     
     modvQc(rcQc_k,4,k)      =   sol.Qc;
@@ -254,7 +255,7 @@ for k = 1:nFreq
     re_checkQc      =   Ac_k*Qc_ch;
     outDirFigureCheckQc = fullfile(outDirFigureBase,['L-curve_Qc_Checkerboard_' fcName '_Hz']);
     [sol,~,~,~,~]   =   Murat_inversionQc(Ac_k,re_checkQc,...
-        inversionMethod,iter,iterStall,RZZ_k,coordPriorQc,...
+        inversionMethod,iter,iterStall,wQc_k,coordPriorQc,...
         dValueQc_k,sValueQc_k,plotI,outDirFigureCheckQc,DQc_k);
     modvQc(rcQc_k,7,k)  =   sol.Qc;
     
@@ -282,7 +283,7 @@ for k = 1:nFreq
         re_spikeQc      =   Ac_k*Qc_sp;
         outDirFigureSpikeQc = fullfile(outDirFigureBase,['L-curve_Qc_Spike_' fcName '_Hz']);
         [sol,~,~,~,~]   =   Murat_inversionQc(Ac_k,re_spikeQc,...
-            inversionMethod,iter,iterStall,RZZ_k,coordPriorQc,...
+            inversionMethod,iter,iterStall,wQc_k,coordPriorQc,...
         dValueQc_k,sValueQc_k,plotI,outDirFigureSpikeQc,DQc_k);
         modvQc(rcQc_k,9,k)  =   sol.Qc;
         
