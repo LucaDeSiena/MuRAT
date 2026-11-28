@@ -7,6 +7,14 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 
 ## [Unreleased]
 
+### Fixed
+- `Murat_uncertaintyNonLinear` (new in 4.1.2): NaN misfits, which occur
+  when the predictions underflow to 0 for the largest trial Qc⁻¹ (late
+  coda at high frequency, f·t ≳ 1200 s·Hz), made σ NaN and then equal to
+  the grid step, giving those measurements the largest weight. They now
+  have zero probability. The Toba and Mount St. Helens examples are not
+  affected (no σ at the grid step).
+
 ## [4.1.2] – 2026-11-28
 
 Bug-fix release. **If you used `QcMeasurement = 'NonLinear'` (any 4.x

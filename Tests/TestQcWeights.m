@@ -92,6 +92,18 @@ classdef TestQcWeights < matlab.unittest.TestCase
                 1e-5, 'RelTol', 1e-9);
         end
 
+        function nonLinearUncertaintyIgnoresNaNMisfits(tc)
+            % Late coda at high frequency: the predictions underflow to 0
+            % for the largest trial values and give NaN misfits. They have
+            % zero probability; before the fix sigma became NaN and then
+            % the grid step.
+            q = (1e-5:1e-5:1e-2)';
+            E = 10 + 1e3*abs(q - 0.004); E(q > 0.008) = NaN;
+            tc.verifyEqual(Murat_uncertaintyNonLinear(q, E, 50), ...
+                Murat_uncertaintyNonLinear(q(q <= 0.008), E(q <= 0.008), 50), ...
+                'RelTol', 1e-12);
+        end
+
         function inversionWeighsSquaredResidualsByW(tc)
             % Two measurements of one cell: the weighted least-squares
             % solution is sum(w.*Qm)/sum(w), with w = 1/sigma^2.
