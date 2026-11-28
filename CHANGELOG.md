@@ -7,8 +7,11 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 
 ## [Unreleased]
 
-**If you used `QcMeasurement = 'NonLinear'` (any 4.x version), recompute
-your Qc models** (see Fixed).
+## [4.1.2] – 2026-11-28
+
+Bug-fix release. **If you used `QcMeasurement = 'NonLinear'` (any 4.x
+version), recompute your Qc models.** Linearized models change little,
+but runs made with 4.1.0 should be repeated (see 4.1.1).
 
 ### Fixed
 - **NonLinear Qc uncertainty grew weight with misfit (since 4.0).**
@@ -39,6 +42,8 @@ your Qc models** (see Fixed).
   noisy codas the linearized fit has about 1.5 times less scatter than
   the grid search, which normalises the coda by its last 1-s window. The
   JOSS paper's Fig. 3b is made from this setting.
+- `paper/Fig3.png`: panel b (coda attenuation) regenerated from the Toba
+  example with these fixes.
 
 ## [4.1.1] – 2026-11-27
 
@@ -359,7 +364,8 @@ Legacy release. Source archived at Zenodo:
 Luca De Siena et al. (2026). LucaDeSiena/MuRAT: Legacy MuRAT3.0 Code
 (v3.26.01.20). <https://doi.org/10.5281/zenodo.18314469>
 
-[Unreleased]: https://github.com/LucaDeSiena/MuRAT/compare/v4.1.1...HEAD
+[Unreleased]: https://github.com/LucaDeSiena/MuRAT/compare/v4.1.2...HEAD
+[4.1.2]: https://github.com/LucaDeSiena/MuRAT/compare/v4.1.1...v4.1.2
 [4.1.1]: https://github.com/LucaDeSiena/MuRAT/compare/v4.1.0...v4.1.1
 [4.1.0]: https://github.com/LucaDeSiena/MuRAT/compare/v4.0.1...v4.1.0
 [4.0.0]: https://github.com/LucaDeSiena/MuRAT/compare/v3.26.01.20...v4.0.0
