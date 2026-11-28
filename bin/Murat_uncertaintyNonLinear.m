@@ -23,6 +23,9 @@ function sigma = Murat_uncertaintyNonLinear(QValues, Evec, nData)
 
 QValues     =   QValues(:);
 Evec        =   Evec(:);
+% Misfits that are NaN (predictions underflow to 0 for large trial values,
+% late coda at high frequency) have zero probability
+Evec(~isfinite(Evec))   =   Inf;
 dq          =   min(diff(QValues));
 Emin        =   min(Evec);
 
