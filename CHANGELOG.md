@@ -35,6 +35,10 @@ your Qc models** (see Fixed).
 - `Murat_inputMSH.m`: `fitTresholdLinear` 0.006 → 0. The threshold is
   in units of σ, which is now 5–20 times smaller, so 0.006 no longer
   removed anything; selection is left to the weights.
+- `Murat_inputToba.m`: `QcMeasurement` 'NonLinear' → 'Linearized'. On
+  noisy codas the linearized fit has about 1.5 times less scatter than
+  the grid search, which normalises the coda by its last 1-s window. The
+  JOSS paper's Fig. 3b is made from this setting.
 
 ## [4.1.1] – 2026-11-27
 
