@@ -19,7 +19,7 @@ function Qc_analysis    =   Murat_imageCheckQc(Qm_k,wQc_k,...
 Qc_analysis     =   myfig(Qc_title);
     
 mQm             =   mean(Qm_k);
-Wc              =   diag(wQc_k);   % same weights as Murat_inversionQc
+Wc              =   diag(sqrt(wQc_k));   % same weights as Murat_inversionQc
 
 Gc              =   Wc*Ac;
 dck             =   Wc*Qm_k;

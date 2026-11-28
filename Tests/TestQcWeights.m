@@ -65,6 +65,49 @@ classdef TestQcWeights < matlab.unittest.TestCase
             tc.verifyEqual(keep, [true; false]);
         end
 
+        function nonLinearUncertaintyGrowsWithMisfit(tc)
+            % sigma must grow with the noise on the coda and must not
+            % depend on the amplitude scale of the envelope. Before the
+            % fix sigma decreased as the misfit grew.
+            [env, c0, c1, tC, sr, cf] = TestQcWeights.syntheticCoda(0);
+            [q0, s0] = Murat_Qc(cf, env, c0, c1, tC, sr, 'NonLinear');
+            rng(7);
+            [envN, ~] = TestQcWeights.syntheticCoda(0.3);
+            [~, s1] = Murat_Qc(cf, envN, c0, c1, tC, sr, 'NonLinear');
+            [~, s2] = Murat_Qc(cf, 1e6*envN, c0, c1, tC, sr, 'NonLinear');
+            tc.verifyEqual(q0, 0.004, 'AbsTol', 2e-5);
+            tc.verifyGreaterThan(s0, 0);
+            tc.verifyGreaterThan(s1, s0);
+            tc.verifyEqual(s2, s1, 'RelTol', 1e-9);
+        end
+
+        function nonLinearUncertaintyFromMisfitCurve(tc)
+            q = (1e-5:1e-5:1e-2)';
+            E = 10 + 1e4*abs(q - 0.004);       % sharp minimum
+            sSharp = Murat_uncertaintyNonLinear(q, E, 50);
+            sFlat  = Murat_uncertaintyNonLinear(q, 10 + 1e3*abs(q - 0.004), 50);
+            tc.verifyGreaterThan(sFlat, sSharp);
+            % perfect fit: sigma falls back to the grid step, never zero
+            tc.verifyEqual(Murat_uncertaintyNonLinear(q, 1e4*abs(q-0.004), 50), ...
+                1e-5, 'RelTol', 1e-9);
+        end
+
+        function inversionWeighsSquaredResidualsByW(tc)
+            % Two measurements of one cell: the weighted least-squares
+            % solution is sum(w.*Qm)/sum(w), with w = 1/sigma^2.
+            tc.assumeTrue(~isempty(ver('optim')) && ...
+                license('test', 'Optimization_Toolbox'), ...
+                'Optimization Toolbox is required for Murat_inversionQc.');
+            A   = [1; 1];
+            Qm  = [0.004; 0.008];
+            w   = Murat_weightQc([1e-3; 2e-3], 'NonLinear');   % 4:1
+            out = fullfile(tempdir, 'TestQcWeightsLS');
+            tc.addTeardown(@() delete([out '*']));
+            s = Murat_inversionQc(A, Qm, 'Tikhonov', 5000, 10, w, [], ...
+                0, [], 0, out);
+            tc.verifyEqual(s.Qc, sum(w.*Qm)/sum(w), 'RelTol', 1e-3);
+        end
+
         function badMeasurementBarelyMovesTheModel(tc)
             % One outlier with a poor NonLinear fit (large sigma) must have
             % little effect; before the fix it had the largest weight.
@@ -89,6 +132,19 @@ classdef TestQcWeights < matlab.unittest.TestCase
             s = Murat_inversionQc(A, Qm, 'Tikhonov', 5000, 10, w, [], ...
                 0.01, [], 0, out);
             tc.verifyLessThan(max(abs(s.Qc - mTrue))/0.005, 0.1);
+        end
+    end
+
+    methods (Static)
+        function [env, c0, c1, tC, sr, cf] = syntheticCoda(noise)
+            % Single-scattering coda t^-1.5*exp(-2*pi*f*t/Qc), Qc^-1 = 0.004,
+            % 20 s window starting 60 s after origin, optional
+            % multiplicative noise.
+            sr = 20; cf = 3; tC = 60; win = 20;
+            t   = (tC + 1/sr : 1/sr : tC + win)';
+            env = t.^-1.5 .* exp(-2*pi*cf*0.004*t);
+            env = env .* (1 + noise*randn(size(env))).^2;
+            c0  = 1; c1 = numel(env);
         end
     end
 end

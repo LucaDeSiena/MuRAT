@@ -7,6 +7,35 @@ Dates follow ISO 8601 (YYYY-MM-DD). Versions follow [Semantic Versioning](https:
 
 ## [Unreleased]
 
+**If you used `QcMeasurement = 'NonLinear'` (any 4.x version), recompute
+your Qc models** (see Fixed).
+
+### Fixed
+- **NonLinear Qc uncertainty grew weight with misfit (since 4.0).**
+  `Murat_Qc` set σ = |log(Emin/t̄^1.5)|/(2πf t̄). Since the L1 misfit Emin is
+  always smaller than t̄^1.5, σ *decreased* as the misfit grew, and Emin
+  (not normalised) also grew with the coda decay. On Toba the weight
+  1/σ² correlated 0.75 with the measured Qc⁻¹, pulling the inversion
+  towards high attenuation. New `bin/Murat_uncertaintyNonLinear.m` takes
+  σ as the standard deviation of Qc⁻¹ under the misfit's probability
+  density, p ∝ exp(-(E - Emin)/b) with b = Emin/n (Laplace likelihood of
+  an L1 misfit). σ now grows with the misfit and does not depend on the
+  amplitude scale; it is never smaller than the grid step. Qc⁻¹ values
+  are unchanged. On Toba the weight/Qc⁻¹ correlation drops to −0.13 and
+  the NonLinear 3 Hz model correlation with Linearized rises from 0.54 to
+  0.73.
+- **Qc weights were squared in the inversion (since 4.0).**
+  `Murat_inversionQc` minimised norm(W*r)² with W = diag(w), so residuals
+  were weighted by 1/σ⁴ (|R|⁴ for Linearized). W is now diag(sqrt(w)),
+  i.e. weighted least squares with 1/σ² (|R|²). Same change in the Picard
+  plot (`Murat_imageCheckQc`). Linearized models barely change
+  (correlation 0.98).
+
+### Changed
+- `Murat_inputMSH.m`: `fitTresholdLinear` 0.006 → 0. The threshold is
+  in units of σ, which is now 5–20 times smaller, so 0.006 no longer
+  removed anything; selection is left to the weights.
+
 ## [4.1.1] – 2026-11-27
 
 Bug-fix release. **If you ran 4.1.0 with `QcMeasurement = 'NonLinear'`,
