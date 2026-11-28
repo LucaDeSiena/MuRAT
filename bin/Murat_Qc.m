@@ -100,10 +100,10 @@ for i = 1:lcf
             Evec        =   sum(abs(dObserved - dPredicted), 1);
 
             % pick best fit and compute uncertainty
-            [Emin, idx]     =   min(Evec);
+            [~, idx]        =   min(Evec);
             nonLinearFit    =   QValues(idx);
-            uncertaintyFit  =   abs(log(Emin / mean(lapseT_blk)^1.5) /...
-                (2 * pi * cf_i * mean(lapseT_blk)));
+            uncertaintyFit  =   Murat_uncertaintyNonLinear(QValues,Evec,...
+                numel(dObserved));
             
             if nonLinearFit == min(QValues)
                 inverseQc_i(i)      =  0;

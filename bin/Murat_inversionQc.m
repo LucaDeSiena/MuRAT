@@ -13,7 +13,7 @@ function [sol,fval,eflag,output,dampValue] = Murat_inversionQc(Ac_k,...
 %    inversionMethod:   choose between three optimizations
 %    iter:              iterations for the non-linear optimization
 %    iterStall:         max iterations for the non-linear optimization
-%    wQc_k:             data weights (Murat_weightQc): |R|^2 for
+%    wQc_k:             weights of the squared residuals (Murat_weightQc): |R|^2 for
 %                       'Linearized', 1/sigma^2 for 'NonLinear'
 %    coordPrior:        coords for the starting solution
 %    dampValue:         damping value, relative to the largest singular
@@ -42,8 +42,10 @@ smoothTikh  =   useTikhonov && ~isempty(smoothValue) && smoothValue ~= 0 ...
 %Parameter model number
 MQc         =   size(Ac_k,2);
 
-%Data weights from Murat_weightQc (larger for better measurements)
-W           =   diag(wQc_k);
+%Data weights from Murat_weightQc (larger for better measurements).
+%They weigh the squared residuals, so W holds their square root:
+%norm(W*r)^2 = sum(w.*r.^2)
+W           =   diag(sqrt(wQc_k));
 
 
 %Starting model from regionalization
